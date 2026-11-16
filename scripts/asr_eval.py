@@ -62,6 +62,7 @@ def main() -> None:
     ap.add_argument("--session", required=True, help="demo session the recording reads from")
     ap.add_argument("--segments", required=True, help="first-last segment ids read aloud, e.g. 10-12")
     ap.add_argument("--label", required=True)
+    ap.add_argument("--save-as", help="also save the transcript as this session id (simulated), so a note can be drafted from it")
     args = ap.parse_args()
 
     first, last = (int(x) for x in args.segments.split("-"))
@@ -82,6 +83,11 @@ def main() -> None:
         rows.append({"start": s.start, "end": s.end, "text": s.text, "speaker_guess": s.speaker,
                      "script_segment": ref.id, "script_speaker": ref.speaker})
     right = sum(r["speaker_guess"] == r["script_speaker"] for r in rows)
+    if args.save_as:
+        from haven.transcript import save_transcript
+        src = load_transcript(args.session)
+        t.session_id, t.client_id, t.session_no, t.simulated = args.save_as, src.client_id, src.session_no, True
+        print(f"saved {save_transcript(t)}")
 
     report = {
         "label": args.label,
