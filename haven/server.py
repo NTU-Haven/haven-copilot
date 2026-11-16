@@ -16,7 +16,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
-from . import config, files, llm, signing, store
+from . import config, crypto, files, llm, signing, store
 from .agents.verifier import VERIFIER_VERSION, Verifier
 from .models import to_dict
 from .orchestrator import Orchestrator, get_client, load_clients
@@ -630,7 +630,7 @@ def _reserve_upload(session_id: str, client_id: str) -> int:
         numbers = [no for cid, no in UPLOADING.values() if cid == client_id]
         for sid in client.get("sessions", []):
             try:
-                numbers.append(int(json.loads((config.SESSIONS_DIR / f"{sid}.json").read_text(encoding="utf-8"))["session_no"]))
+                numbers.append(int(json.loads(files.read_private(config.SESSIONS_DIR / f"{sid}.json"))["session_no"]))
             except (OSError, ValueError, KeyError, TypeError):
                 continue
         session_no = max(numbers, default=0) + 1
@@ -651,6 +651,9 @@ def serve() -> None:
     global ORCH
     os.umask(0o077)  # whatever Haven creates is for this account only
     files.secure_data_dir()
+    line = crypto.start()
+    if line:
+        print(line)
     leftover = files.clear_temp()
     if leftover:
         print(f"Haven: removed {leftover} recording(s) left in {files.temp_dir()} by an earlier run that did not finish")

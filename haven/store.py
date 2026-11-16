@@ -1,8 +1,10 @@
 """Local SQLite store for pipeline results, signed notes and an audit log.
 
-The file is NOT encrypted. It is created with mode 0600 (this account only);
-SQLCipher is planned and not built (README, Limitations). Use full-disk
-encryption on the machine.
+The file is created with mode 0600 (this account only). With HAVEN_ENCRYPT=1
+the session content in it (results, signed notes, addenda, cached verdicts) is
+encrypted value by value (haven/crypto.py); ids, times, signer names, hashes
+and the audit log stay readable so the chain can be checked without the key.
+Without HAVEN_ENCRYPT, nothing is encrypted: use full-disk encryption.
 
 The audit log is a hash chain: each row stores the hash of the row before it,
 so changing or deleting a row in the middle is detected by ``verify_audit``.
@@ -21,7 +23,7 @@ import threading
 from contextlib import contextmanager
 from datetime import datetime, timezone
 
-from . import config
+from . import config, crypto
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS results (session_id TEXT PRIMARY KEY, payload TEXT NOT NULL, created_at TEXT NOT NULL);
@@ -145,14 +147,14 @@ def save_result(session_id: str, payload: dict) -> None:
     with connect() as c:
         c.execute(
             "INSERT OR REPLACE INTO results VALUES (?, ?, ?)",
-            (session_id, json.dumps(payload, ensure_ascii=False), _now()),
+            (session_id, crypto.seal(json.dumps(payload, ensure_ascii=False)), _now()),
         )
 
 
 def get_result(session_id: str) -> dict | None:
     with connect() as c:
         row = c.execute("SELECT payload FROM results WHERE session_id = ?", (session_id,)).fetchone()
-    return json.loads(row[0]) if row else None
+    return json.loads(crypto.open_(row[0])) if row else None
 
 
 def sign_note(session_id: str, note: dict, signed_by: str, confirmed: int = 0, *, transcript_sha256: str = "",
@@ -168,7 +170,7 @@ def sign_note(session_id: str, note: dict, signed_by: str, confirmed: int = 0, *
             c.execute(
                 "INSERT INTO signed_notes (session_id, note, signed_by, signed_at, transcript_sha256, note_sha256, verifier_version)"
                 " VALUES (?, ?, ?, ?, ?, ?, ?)",
-                (session_id, json.dumps(note, ensure_ascii=False), signed_by, signed_at, transcript_sha256, note_sha256, verifier_version),
+                (session_id, crypto.seal(json.dumps(note, ensure_ascii=False)), signed_by, signed_at, transcript_sha256, note_sha256, verifier_version),
             )
             _audit(c, "sign_note", f"{session_id} by {signed_by}; {confirmed} flagged sentence(s) kept by therapist; "
                                    f"note_sha256={note_sha256[:16]} transcript_sha256={transcript_sha256[:16]} verifier={verifier_version}")
@@ -184,7 +186,7 @@ def sign_note(session_id: str, note: dict, signed_by: str, confirmed: int = 0, *
 def get_signed_note(session_id: str) -> dict | None:
     with connect() as c:
         row = c.execute("SELECT note FROM signed_notes WHERE session_id = ?", (session_id,)).fetchone()
-    return json.loads(row[0]) if row else None
+    return json.loads(crypto.open_(row[0])) if row else None
 
 
 def get_signature(session_id: str) -> dict | None:
@@ -205,7 +207,7 @@ def add_addendum(session_id: str, text: str, author: str) -> list[dict]:
     with connect() as c:
         if not c.execute("SELECT 1 FROM signed_notes WHERE session_id = ?", (session_id,)).fetchone():
             raise NotSignedError(session_id)
-        c.execute("INSERT INTO addenda (session_id, text, author, created_at) VALUES (?, ?, ?, ?)", (session_id, text, author, _now()))
+        c.execute("INSERT INTO addenda (session_id, text, author, created_at) VALUES (?, ?, ?, ?)", (session_id, crypto.seal(text), author, _now()))
         _audit(c, "addendum", f"{session_id} by {author}; {len(text)} characters")
     return get_addenda(session_id)
 
@@ -213,7 +215,7 @@ def add_addendum(session_id: str, text: str, author: str) -> list[dict]:
 def get_addenda(session_id: str) -> list[dict]:
     with connect() as c:
         rows = c.execute("SELECT text, author, created_at FROM addenda WHERE session_id = ? ORDER BY id", (session_id,)).fetchall()
-    return [{"text": r[0], "author": r[1], "created_at": r[2]} for r in rows]
+    return [{"text": crypto.open_(r[0]), "author": r[1], "created_at": r[2]} for r in rows]
 
 
 def save_verdicts(session_id: str, transcript_sha256: str, verifier_version: str, verdicts: dict[tuple[str, str], dict]) -> None:
@@ -222,7 +224,7 @@ def save_verdicts(session_id: str, transcript_sha256: str, verifier_version: str
     with connect() as c:
         c.executemany(
             "INSERT OR REPLACE INTO verdicts VALUES (?, ?, ?, ?, ?, ?)",
-            [(session_id, transcript_sha256, verifier_version, text, evidence, json.dumps(v, ensure_ascii=False))
+            [(session_id, transcript_sha256, verifier_version, *_verdict_row(text, evidence, v))
              for (text, evidence), v in verdicts.items()],
         )
 
@@ -233,7 +235,21 @@ def get_verdicts(session_id: str, transcript_sha256: str, verifier_version: str)
             "SELECT text, evidence, verdict FROM verdicts WHERE session_id = ? AND transcript_sha256 = ? AND verifier_version = ?",
             (session_id, transcript_sha256, verifier_version),
         ).fetchall()
-    return {(r[0], r[1]): json.loads(r[2]) for r in rows}
+    out = {}
+    for text, evidence, verdict in rows:
+        if crypto.is_sealed(verdict):
+            # Encrypted row: the text column holds a keyed hash; the sentence is inside.
+            text, v = json.loads(crypto.open_(verdict))
+        else:
+            v = json.loads(verdict)
+        out[(text, evidence)] = v
+    return out
+
+
+def _verdict_row(text: str, evidence: str, v: dict) -> tuple[str, str, str]:
+    if not crypto.enabled():
+        return text, evidence, json.dumps(v, ensure_ascii=False)
+    return crypto.lookup(text), evidence, crypto.seal(json.dumps([text, v], ensure_ascii=False))
 
 
 def recent_audit(limit: int = 20) -> list[dict]:

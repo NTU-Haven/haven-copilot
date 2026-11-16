@@ -15,7 +15,9 @@ from .models import Segment, Transcript
 
 def load_transcript(session_id: str) -> Transcript:
     path = config.SESSIONS_DIR / f"{session_id}.json"
-    raw = json.loads(path.read_text(encoding="utf-8"))
+    from .files import read_private
+
+    raw = json.loads(read_private(path))
     return Transcript(
         session_id=raw["session_id"],
         client_id=raw["client_id"],

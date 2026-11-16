@@ -29,7 +29,11 @@ class BadNote(ValueError):
 
 
 def transcript_sha256(session_id: str) -> str:
-    return hashlib.sha256((config.SESSIONS_DIR / f"{session_id}.json").read_bytes()).hexdigest()
+    """Hash of the transcript's text, not of the file: the same whether the file
+    is encrypted or not, so encrypting old data keeps old signatures valid."""
+    from .files import read_private
+
+    return hashlib.sha256(read_private(config.SESSIONS_DIR / f"{session_id}.json").encode("utf-8")).hexdigest()
 
 
 def note_sha256(note: dict) -> str:

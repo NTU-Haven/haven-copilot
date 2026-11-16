@@ -5,7 +5,7 @@ from __future__ import annotations
 import json
 import time
 
-from . import config, signing, store
+from . import config, files, signing, store
 from .agents.memory import CaseMemory
 from .agents.outcome import OutcomeAgent
 from .agents.risk import RiskAgent
@@ -22,7 +22,7 @@ SHORT_TRANSCRIPT = 60
 
 
 def load_clients() -> list[dict]:
-    return json.loads(config.CLIENTS_FILE.read_text(encoding="utf-8"))
+    return json.loads(files.read_private(config.CLIENTS_FILE))
 
 
 def get_client(client_id: str) -> dict:

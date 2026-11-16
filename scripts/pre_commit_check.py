@@ -34,6 +34,10 @@ def problem(path: str) -> str:
         return "database file"
     if AUDIO.search(path) or (path.startswith("data/audio/") and not path.endswith(".gitkeep")):
         return "recording"
+    if path.startswith("data/") or path.endswith("key.json"):
+        head = subprocess.run(["git", "show", f":{path}"], capture_output=True).stdout[:5]
+        if head == b"enc1:" or path.endswith("key.json"):
+            return "encrypted Haven data or key file"
     if path.endswith(".json") and (path.startswith("data/sessions/") or "/sessions/" in path):
         blob = subprocess.run(["git", "show", f":{path}"], capture_output=True).stdout
         try:

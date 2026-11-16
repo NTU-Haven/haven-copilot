@@ -112,7 +112,7 @@ One clip, 23.0 s, three utterances, on the B70 (2026-11-10, before the fixes): c
 
 | Measurement | Why it matters |
 | --- | --- |
-| Clinical review of the batch-9 review sheets (`*-20261114-0742-review.csv`) | Separates real errors from correct sentences held back |
+| Clinical review of the review sheets from the batch-9 rerun (`*-20261114-0906-review.csv`) | Separates real errors from correct sentences held back |
 | A 50-minute session through Whisper while the note model runs | Speech-to-text was loaded in batch 9 but not exercised |
 | A recording of 10 minutes or more through Whisper | Real-time factor, error rate, recording-to-draft time |
 | Packet capture with the network cable pulled | The "0 outbound connections" target |
