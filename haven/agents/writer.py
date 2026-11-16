@@ -12,7 +12,9 @@ sentence limit or by the model.
 from __future__ import annotations
 
 import json
+import os
 import re
+from concurrent.futures import ThreadPoolExecutor
 
 from ..llm import DATA_ONLY
 from ..models import CONFIRMED, Note, NoteSentence, Segment, Transcript
@@ -67,6 +69,10 @@ MAX_TOKENS = 2000
 # Segments per request. A 50-minute session is several hundred segments: one request
 # would overrun the model's context, and the note would cover only the opening minutes.
 CHUNK = 60
+# Parts written at the same time. Measured on the B70 (batch 9 rerun): one room
+# used the card at about a quarter of what four rooms did, because a 50-minute
+# session's parts went one after another. The server batches them instead.
+PARALLEL = max(1, int(os.environ.get("HAVEN_WRITE_PARALLEL", "4")))
 FALLBACK_ENGINE = "規則引擎（本機模型未回應）"
 
 
@@ -84,8 +90,17 @@ def _prompt(t: Transcript, template: str, segments: list[Segment] | None = None,
     return (
         f"第 {t.session_no} 次會談逐字稿{where}，每行一段（id 是段落編號）：\n" + "\n".join(lines)
         + f"\n\n請撰寫 {template} 格式紀錄，各欄位意義：\n{sections}\n"
-        + f"R 以外每欄 2 到 5 句，每句簡短。只輸出 JSON：{{{keys}}}"
+        + f"R 以外每欄 {_per_part(part)} 句，每句簡短，只寫這段最重要的內容。只輸出 JSON：{{{keys}}}"
     )
+
+
+def _per_part(part: tuple[int, int] | None) -> str:
+    """Sentences per section in one part. Parts are joined, so a 50-minute
+    session at 2–5 per part became a 120–150 sentence note (batch 9 rerun);
+    fewer per part keeps the whole note readable and the draft faster."""
+    if not part or part[1] <= 2:
+        return "2 到 5"
+    return "1 到 3"
 
 
 def _evidence(value) -> list[int]:
@@ -228,12 +243,19 @@ class NoteWriter:
         parts = [t.segments[i : i + CHUNK] for i in range(0, len(t.segments), CHUNK)] or [[]]
         sections: dict[str, list[NoteSentence]] = {k: [] for k in TEMPLATES[template]}
         failed: list[int] = []
-        for n, segments in enumerate(parts, start=1):
-            parsed = None
-            if self.llm is not None:
-                parsed = _parse(self._ask(_prompt(t, template, segments, (n, len(parts)) if len(parts) > 1 else None)), template)
-                if parsed is None:
-                    failed.append(n)
+        replies: list[dict | None] = [None] * len(parts)
+        if self.llm is not None:
+            prompts = [_prompt(t, template, segments, (n, len(parts)) if len(parts) > 1 else None)
+                       for n, segments in enumerate(parts, start=1)]
+            if len(parts) == 1 or PARALLEL == 1:
+                replies = [_parse(self._ask(p), template) for p in prompts]
+            else:
+                with ThreadPoolExecutor(max_workers=min(PARALLEL, len(parts))) as pool:
+                    replies = list(pool.map(lambda p: _parse(self._ask(p), template), prompts))
+        # Joined in transcript order whatever order the replies came back in.
+        for n, (segments, parsed) in enumerate(zip(parts, replies), start=1):
+            if parsed is None and self.llm is not None:
+                failed.append(n)
             if parsed is None:
                 parsed = _rule_based(t, template, segments)
             for key, items in parsed.items():

@@ -278,6 +278,38 @@ class FallbackTest(ServerCase, unittest.TestCase):
         self.assertGreater(max(cited), len(t.segments) - CHUNK)
 
 
+class ParallelPartsTest(unittest.TestCase):
+    """Batch 9 rerun: one room's parts ran one after another (writer 278 s of 297 s)."""
+
+    def test_parts_overlap_and_join_in_transcript_order(self):
+        import re as _re
+        import threading
+        import time
+        live, peak, lock = [0], [0], threading.Lock()
+
+        def answer(prompt):
+            n = int(_re.search(r"這是第 (\d+) 段", prompt).group(1))
+            with lock:
+                live[0] += 1
+                peak[0] = max(peak[0], live[0])
+            time.sleep(0.05 * (5 - n))  # later parts answer first
+            with lock:
+                live[0] -= 1
+            first = int(_re.search(r'"id": (\d+)', prompt).group(1))
+            return {"S": [{"text": f"第{n}段", "evidence": [first]}]}
+        note = NoteWriter(FakeLLM(answer)).run(long_transcript())
+        self.assertGreater(peak[0], 1)
+        self.assertEqual([s.text for s in note.sections["S"]], ["第1段", "第2段", "第3段", "第4段"])
+
+    def test_long_sessions_ask_for_fewer_sentences_per_part(self):
+        prompts = []
+        NoteWriter(FakeLLM(lambda p: prompts.append(p))).run(long_transcript())
+        self.assertTrue(all("每欄 1 到 3 句" in p for p in prompts))
+        short = []
+        NoteWriter(FakeLLM(lambda p: short.append(p))).run(transcript(("client", "最近睡不好。")))
+        self.assertIn("每欄 2 到 5 句", short[0])
+
+
 class RuleEngineRiskTest(unittest.TestCase):
     """2.7, 2.8: CLN-7, CLN-8, CLN-17, CLN-21, CLN-I4."""
 
