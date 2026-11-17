@@ -31,6 +31,9 @@
 #                         model repository. Default 0: Qwen3 and Whisper are built into
 #                         vLLM and should not need it. Measured value: 1.
 #
+# Audio limits: up to 200 MB and 3 hours per recording (vLLM refuses anything over
+# 600 s by default; batch 10 hit that with a 45-minute session).
+#
 # Always set now: VLLM_NO_USAGE_STATS=1 and DO_NOT_TRACK=1 (vLLM otherwise reports
 # hardware and model type to stats.vllm.ai) and HF_HUB_DISABLE_TELEMETRY=1.
 #
@@ -54,7 +57,7 @@ docker run -d --name "$CONTAINER" --net=host --ipc=host --shm-size=16g $PRIV_ARG
   --device /dev/dri:/dev/dri -v /dev/dri/by-path:/dev/dri/by-path \
   -v "$HOME/hf:/root/.cache/huggingface" \
   -e ZE_AFFINITY_MASK="$CARD" -e VLLM_WORKER_MULTIPROC_METHOD=spawn \
-  -e VLLM_MAX_AUDIO_CLIP_FILESIZE_MB=200 \
+  -e VLLM_MAX_AUDIO_CLIP_FILESIZE_MB=200 -e VLLM_MAX_AUDIO_DECODE_DURATION_S=10800 \
   -e VLLM_NO_USAGE_STATS=1 -e DO_NOT_TRACK=1 -e HF_HUB_DISABLE_TELEMETRY=1 \
   -e HF_HUB_OFFLINE="$OFFLINE" -e TRANSFORMERS_OFFLINE="$OFFLINE" \
   --entrypoint bash vllm/vllm-openai-xpu:v0.26.0 \

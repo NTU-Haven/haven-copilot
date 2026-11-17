@@ -575,8 +575,10 @@ class Handler(BaseHTTPRequestHandler):
                 raise HttpError(HTTPStatus.NOT_IMPLEMENTED, "faster-whisper is not installed",
                                 "這台電腦還沒有安裝語音轉寫模組（faster-whisper）。") from None
             except ASRError as e:
+                too_long = "maximum allowed duration" in str(e)
                 raise HttpError(HTTPStatus.BAD_GATEWAY, f"speech-to-text server at {config.ASR_URL}: {e}",
-                                "本機語音轉寫服務沒有回傳可用的逐字稿，請確認錄音檔格式後再試。") from None
+                                "錄音超過本機語音轉寫服務允許的長度。請調高伺服器的 VLLM_MAX_AUDIO_DECODE_DURATION_S，或把錄音分段上傳。"
+                                if too_long else "本機語音轉寫服務沒有回傳可用的逐字稿，請確認錄音檔格式後再試。") from None
             except llm.NonLocalEndpointError:
                 raise HttpError(HTTPStatus.BAD_GATEWAY, "the speech-to-text endpoint is not local; nothing was sent",
                                 "語音轉寫服務的位址不是本機或診所區域網路，錄音沒有送出。請檢查設定。") from None

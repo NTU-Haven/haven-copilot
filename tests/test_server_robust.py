@@ -232,6 +232,13 @@ class ConcurrentUploadTest(UploadMixin, ServerCase, unittest.TestCase):
         self.assertEqual(self.upload("C001-S84", "這週過得怎麼樣？\n不太好。")[0], 200)
         self.assertFalse(list((config.DATA_DIR / "tmp").iterdir()))
 
+    def test_too_long_recording_says_so(self):
+        err = transcript.ASRError("HTTP 400: Audio exceeds maximum allowed duration of 600s (file contains 2701.2s at 16000Hz).")
+        with mock.patch.object(server, "transcribe_audio", side_effect=err):
+            status, r = self.upload("C001-S85", "x")
+        self.assertEqual(status, 502)
+        self.assertIn("長度", r["message_zh"])
+
 
 class EmptyUploadTest(UploadMixin, ServerCase, unittest.TestCase):
     """ENG-15 and backlog 4.6."""

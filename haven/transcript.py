@@ -98,6 +98,17 @@ def _faster_whisper(audio_path: Path) -> list[tuple[float, float, str]]:
     return [(s.start, s.end, s.text) for s in raw_segments]
 
 
+def _server_reason(e: urllib.error.HTTPError) -> str:
+    """The server's own one-line reason (vLLM puts it in error.message), so a refused
+    upload says why, e.g. "Audio exceeds maximum allowed duration of 600s"."""
+    try:
+        out = json.loads(e.read(4096) or b"{}")
+        msg = out.get("error", {}).get("message") if isinstance(out.get("error"), dict) else out.get("error")
+    except (ValueError, AttributeError, OSError):
+        return ""
+    return f": {' '.join(str(msg).split())[:300]}" if msg else ""
+
+
 def _openai_server(audio_path: Path) -> list[tuple[float, float, str]]:
     """Sends the audio to a local server with the OpenAI transcription API (vLLM serving
     Whisper on the B70). The same local-only rule as the note model applies.
@@ -128,7 +139,7 @@ def _openai_server(audio_path: Path) -> list[tuple[float, float, str]]:
         with _OPENER.open(req, timeout=config.ASR_TIMEOUT) as r:
             out = json.load(r)
     except urllib.error.HTTPError as e:  # an answer, not a connection failure
-        raise ASRError(f"HTTP {e.code}") from e
+        raise ASRError(f"HTTP {e.code}" + _server_reason(e)) from e
     except (json.JSONDecodeError, UnicodeDecodeError) as e:
         raise ASRError("reply is not JSON") from e
     if not isinstance(out, dict):

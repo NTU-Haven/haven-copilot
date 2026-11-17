@@ -70,6 +70,16 @@ class OpenAITranscriptionTest(unittest.TestCase):
             with self.assertRaises(transcript.ASRError, msg=str(reply)):
                 transcript.transcribe_audio(self.audio, "T-S01", "C001", 1, "2026-11-08")
 
+    def test_the_servers_reason_is_kept(self):
+        FakeWhisper.reply = (400, {"error": {"message": "Audio exceeds maximum allowed duration of 600s (file contains 2701.2s)", "code": 400}})
+        with self.assertRaises(transcript.ASRError) as cm:
+            transcript.transcribe_audio(self.audio, "T-S01", "C001", 1, "2026-11-08")
+        self.assertIn("HTTP 400: Audio exceeds maximum allowed duration of 600s", str(cm.exception))
+        FakeWhisper.reply = (500, b"<html>oops</html>")
+        with self.assertRaises(transcript.ASRError) as cm:
+            transcript.transcribe_audio(self.audio, "T-S01", "C001", 1, "2026-11-08")
+        self.assertEqual(str(cm.exception), "HTTP 500")
+
     def test_text_without_timestamps_is_split_into_sentences(self):
         FakeWhisper.reply = (200, {"text": "最近睡不好。這些想法多常出現？大概每天晚上。", "duration": 12.0})
         t = transcript.transcribe_audio(self.audio, "T-S01", "C001", 1, "2026-11-08")
