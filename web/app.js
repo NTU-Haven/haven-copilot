@@ -1,4 +1,6 @@
 "use strict";
+// Shown after an upload: the clinic needs the note, not the recording (interviewed psychologist, 2026-11-17).
+const KEEP_NO_AUDIO = "逐字稿已產生；原始錄音若不再需要，請從錄音設備和這台電腦上刪除。";
 
 // Haven therapist UI. Talks only to the local Haven server (same origin).
 // No inline styles or scripts and nothing from another origin: the server's
@@ -367,10 +369,10 @@ async function openClient(id) {
         await loadClients();
         markActive(id);
         if (my !== nav) { // the therapist went elsewhere while it ran: say so, do not take the screen
-          toast(`${r.session_id} 已轉寫完成，可以從個案頁開啟。`);
+          toast(`${r.session_id} 已轉寫完成，可以從個案頁開啟。${KEEP_NO_AUDIO}`);
           return;
         }
-        upMsg.textContent = "完成。Haven 不保存錄音，暫存檔已刪除。";
+        upMsg.textContent = `完成。Haven 不保存錄音，暫存檔已刪除。${KEEP_NO_AUDIO}`;
         ++nav;
         renderSession(r);
       } catch (err) {

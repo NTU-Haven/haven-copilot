@@ -41,6 +41,7 @@ REPORT_FAMILY = REPORT + "家庭暴力"
 REPORT_CHILD = REPORT + "兒少保護"
 REPORT_ELDER = REPORT + "老人／身心障礙保護"
 REPORT_SEXUAL = REPORT + "性侵害"
+BULLYING = "霸凌"
 SUBSTANCE = "物質使用"
 FUNCTIONING = "嚴重失功能"
 
@@ -82,7 +83,7 @@ LEXICON: dict[str, tuple[str, list[str]]] = {
     FILICIDE: ("critical", [rf"帶著?(?:{_CHILD}|他們).{{0,2}}(?:一起|一塊)(?:走|死|離開)(?![路去進到出])", rf"{_CHILD}.{{0,8}}活不下去", "一起帶走"]),
     # 待心理師確認 (CLN-4): mandated-reporting cues. Prompts only; nothing is reported automatically.
     REPORT_FAMILY: ("critical", [
-        "家暴", "動手打", "被打", "摔東西", r"打我(?!的?(?:手機|電話)|們)", r"打(?:我媽|我爸|媽媽|爸爸|小孩|孩子)",
+        "家暴", "動手打", r"被打(?!擾|斷|敗|針|卡|折|分|開|醒|包|電話|疫苗)", "摔東西", r"打我(?!的?(?:手機|電話)|們)", r"打(?:我媽|我爸|媽媽|爸爸|小孩|孩子)",
         r"(?:用|拿)皮帶", "皮帶抽", r"(?:用|拿)衣架", "藤條", "抽我", r"掐我|掐(?:住|著)?.{0,2}脖子", r"勒我|勒住", "踹", r"拿刀.{0,4}(?:對|指|威脅|追|要)",
         r"要殺了?我|殺了我|殺了你", r"威脅(?:我|要(?:殺|打|傷害)|說要(?:殺|打|傷害))", "恐嚇", r"跟蹤我|被跟蹤", "不讓我出門", r"控制.{0,3}錢",
     ]),
@@ -90,7 +91,15 @@ LEXICON: dict[str, tuple[str, list[str]]] = {
     REPORT_ELDER: ("high", [rf"{_ELDER}.{{0,8}}(?:被.{{0,4}}打|被虐|挨打)", r"看護.{0,3}(?:打|虐|罵)", "被看護", r"拿走.{0,8}(?:退休金|存款|年金)",
                             r"(?:退休金|存款|年金).{0,6}拿走", "老不死", "遺棄", "丟著不管"]),
     REPORT_SEXUAL: ("critical", ["性侵", "強暴", "迷姦", "猥褻", "性騷擾", r"強迫.{0,6}(?:發生關係|上床|做愛|性)", r"趁.{0,6}(?:喝醉|睡著)", r"摸我(?!的?頭)",
-                                 r"摸.{0,3}(?:身體|下面|胸)", r"(?:十[一二三四五]|1[0-5])歲.{0,24}(?:發生關係|上床|做愛)"]),
+                                 r"摸.{0,3}(?:身體|下面|胸)", "硬上", "裸照", "私密照", "性影像",
+                                 r"偷拍.{0,6}(?:我|裙底|洗澡|換衣服|上廁所)", r"(?:十[一二三四五]|1[0-5])歲.{0,24}(?:發生關係|上床|做愛)"]),
+    # Suggested by the interviewed psychologist (2026-11-17). 待心理師確認: the wording below.
+    BULLYING: ("high", [
+        "霸凌", r"被.{0,4}欺負", "被排擠", "被孤立", "被勒索", "被肉搜", "被公審",
+        r"(?:欺負|排擠|孤立|勒索|肉搜)我(?![弟妹哥姊姐爸媽家們的])",  # not 「我會欺負我弟弟」
+        r"(?:同學|學長|學姊|學姐|學弟|學妹|同事|室友).{0,6}(?:嘲笑我|罵我|打我|踢我|推我|拿走我|不理我|聯合)",
+        r"(?:群組|網路上|網上|IG|臉書|Dcard|限動).{0,8}(?:罵我|笑我|嘲笑|造謠|貼我|傳我|公開我)",
+    ]),
     SUBSTANCE: ("review", [
         "喝醉", "喝很多酒", r"吃很多.{0,3}(?:藥|普拿疼)", "嗑",
         # 待心理師確認 (CLN-14)
@@ -118,7 +127,10 @@ NOTES = {
     EXPOSURE: "說的是別人的自殺或自傷，不是個案本人的意念。身邊的人自殺是重大失落，也是風險因子：可詢問與當事人的關係，以及個案自己是否有過這樣的念頭。",
     HYPNOTICS: "提到安眠藥：可順帶詢問取得方式與手邊存量。",
     INDIRECT: "間接的說法，不一定指自殺：請直接詢問個案的意思。",
+    BULLYING: ("提及霸凌：可了解持續多久、發生在哪裡（學校、職場、網路）、目前是否安全。被霸凌是自殺與自傷的風險因子，"
+               "可詢問個案是否有過傷害自己的念頭。系統不會自動通報。"),
 }
+MINOR_BULLYING = "個案未滿 18 歲：發生在校園時，可與個案及家長討論是否告知學校，學校依校園霸凌防制準則處理。"
 MINOR_SUBSTANCE = "個案未滿 18 歲：未成年人使用酒精或藥物，請依" + LAW[REPORT_CHILD] + "評估是否通報。系統不會自動通報。"
 REFLECTION = "這是心理師複述的內容，請確認個案是否同意這個描述。"
 
@@ -272,6 +284,8 @@ def _note(category: str, age: int | None) -> str:
         return REPORT_PROMPT.format(law=LAW[category])
     if category == SUBSTANCE and age is not None and age < 18:
         return MINOR_SUBSTANCE
+    if category == BULLYING and age is not None and age < 18:
+        return NOTES[BULLYING] + MINOR_BULLYING
     return NOTES.get(category, "")
 
 

@@ -28,7 +28,7 @@ from haven.models import Note, NoteSentence, Segment, Transcript  # noqa: E402
 from haven.transcript import load_transcript  # noqa: E402
 
 FLOOR = 0.8  # backlog 3.1; before the change the reviewer measured about 22%
-FULL = {"通報義務線索", "物質使用"}  # backlog 3.3 and 3.8: every sentence
+FULL = {"通報義務線索", "物質使用", "性侵與霸凌（受訪心理師）"}  # backlog 3.3 and 3.8: every sentence
 
 
 def transcript(*lines, source="script", age=None):
@@ -136,6 +136,17 @@ class ReportingCueTest(unittest.TestCase):
         f = flags("我最近開始抽大麻。", age=16)[0]
         self.assertEqual(f.level, "high")
         self.assertIn("未滿 18 歲", f.note)
+
+    def test_bullying_is_a_risk_cue_with_its_own_note(self):
+        # Suggested by the interviewed psychologist (2026-11-17).
+        found = [f for f in flags("我在學校被霸凌，班上同學都在排擠我。", age=15) if f.category == R.BULLYING]
+        self.assertEqual(len(found), 1)
+        self.assertEqual(found[0].level, "high")
+        self.assertIn("傷害自己的念頭", found[0].note)
+        self.assertIn("校園霸凌防制準則", found[0].note)
+        self.assertIn("不會自動通報", found[0].note)
+        adult = [f for f in flags("同事聯合起來孤立我。") if f.category == R.BULLYING]
+        self.assertNotIn("校園霸凌防制準則", adult[0].note)
 
     def test_phone_call_is_not_violence(self):
         self.assertEqual(flags("他昨天一直打我手機。"), [])
