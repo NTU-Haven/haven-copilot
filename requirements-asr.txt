@@ -1,3 +1,5 @@
 faster-whisper>=1.0
-# Optional: converts Simplified characters in a transcript to Traditional (Taiwan).
+# Needed with either speech-to-text backend: Whisper often writes Simplified characters
+# (all of batch 10's 45-minute recording), and the risk lexicon is Traditional.
+# Converts them to Traditional (Taiwan). Pure Python, Apache-2.0.
 opencc-python-reimplemented>=0.1.7

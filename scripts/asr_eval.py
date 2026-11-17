@@ -25,7 +25,7 @@ sys.path.insert(0, str(ROOT))
 from haven import config  # noqa: E402
 from haven.agents.speakers import SpeakerAgent  # noqa: E402
 from haven.llm import get_llm  # noqa: E402
-from haven.transcript import asr_prompt, load_transcript, transcribe_audio  # noqa: E402
+from haven.transcript import asr_prompt, converts_to_traditional, load_transcript, transcribe_audio  # noqa: E402
 
 _KEEP = re.compile(r"[^一-鿿A-Za-z0-9]")
 
@@ -94,6 +94,7 @@ def main() -> None:
         "date": datetime.now().astimezone().isoformat(timespec="seconds"),
         "asr": f"{config.ASR_BACKEND}:{config.ASR_MODEL}",
         "asr_prompt": asr_prompt(),
+        "to_traditional": converts_to_traditional(),
         "speaker_model": llm.label if llm else None,
         "reference": f"{args.session} segments {first}-{last}",
         "audio_seconds": round(audio_seconds, 1),
@@ -113,6 +114,7 @@ def main() -> None:
         f"# Speech-to-text check: {args.label}", "",
         f"- Speech-to-text: `{report['asr']}`" + (f", prompt 「{asr_prompt()}」" if asr_prompt() else ", no prompt"),
         f"- Speaker guessing: `{report['speaker_model']}`",
+        f"- Simplified → Traditional conversion: {'on (opencc s2twp)' if report['to_traditional'] else 'OFF (opencc not installed): Simplified characters count as errors'}",
         f"- Date: {report['date']}",
         f"- Recording: {report['reference']} read aloud, {report['audio_seconds']} s. The recording is not in the repository.",
         f"- Reference: the script ({report['reference_characters']} characters). A reader who strays from the script counts as an error.", "",

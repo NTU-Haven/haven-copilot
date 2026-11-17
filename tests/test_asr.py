@@ -155,6 +155,19 @@ class SpeakerAgentTest(unittest.TestCase):
         self.assertEqual(SpeakerAgent(LLM()).run(t), 0)
 
 
+@unittest.skipUnless(transcript.converts_to_traditional(), "opencc not installed")
+class SimplifiedTranscriptTest(unittest.TestCase):
+    """Batch 10: Whisper wrote a 45-minute session in Simplified characters."""
+
+    setUp, tearDown = OpenAITranscriptionTest.setUp, OpenAITranscriptionTest.tearDown
+
+    def test_simplified_disclosure_is_converted_and_flagged(self):
+        FakeWhisper.reply = (200, {"segments": [{"start": 0, "end": 4, "text": "我上周买了木炭，想过自杀。"}]})
+        t = transcript.transcribe_audio(self.audio, "T-S01", "C001", 1, "2026-11-08")
+        self.assertEqual(t.segments[0].text, "我上週買了木炭，想過自殺。")
+        self.assertTrue(RiskAgent().run(t).flags)
+
+
 class GuessedSpeakerRiskTest(unittest.TestCase):
     def test_guessed_therapist_label_does_not_hide_a_disclosure(self):
         t = _transcript("有時候會覺得活著好累，會想說如果消失算了。")

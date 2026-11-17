@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import re
+import sys
 import urllib.error
 import uuid
 import urllib.request
@@ -60,11 +61,22 @@ def _clean(text: str) -> str:
     text = _HALF_RE.sub(lambda m: _HALF[m.group()], text.strip())
     if _opencc is None:
         try:
-            from opencc import OpenCC  # optional: pip install opencc-python-reimplemented
+            from opencc import OpenCC  # pip install -r requirements-asr.txt
             _opencc = OpenCC("s2twp").convert
         except ImportError:
             _opencc = False
+            # Measured in batch 10: Whisper wrote the whole 45-minute session in Simplified
+            # characters. Without the converter 「自杀」 does not match the risk lexicon's 「自殺」.
+            print("WARNING: opencc is not installed, so Simplified characters from speech-to-text stay "
+                  "Simplified and risk words written in Traditional may be missed. "
+                  "Install it: pip install -r requirements-asr.txt", file=sys.stderr)
     return _opencc(text) if _opencc else text
+
+
+def converts_to_traditional() -> bool:
+    """Whether transcripts are brought to Traditional characters (opencc installed)."""
+    _clean("")
+    return bool(_opencc)
 
 
 # Characters per second of conversational Mandarin, used only to estimate
