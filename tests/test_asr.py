@@ -121,6 +121,27 @@ class SpeakerAgentTest(unittest.TestCase):
         self.assertEqual([(s.speaker, s.speaker_source) for s in t.segments],
                          [("therapist", "model"), ("client", "model"), ("unknown", "none")])
 
+    def test_long_recordings_are_labelled_in_parallel_and_in_order(self):
+        import threading
+        import time
+        active, peak, lock = [0], [0], threading.Lock()
+
+        class SlowLLM:
+            def generate_json(self, system, prompt, max_tokens=None):
+                with lock:
+                    active[0] += 1
+                    peak[0] = max(peak[0], active[0])
+                time.sleep(0.05)
+                ids = [json.loads(l)["id"] for l in prompt.split("\n\n")[0].splitlines()]
+                with lock:
+                    active[0] -= 1
+                return {"speakers": [{"id": i, "speaker": "therapist" if i % 2 else "client"} for i in ids]}
+        t = _transcript(*[f"第{i}句" for i in range(1, 241)])  # 4 chunks of 60
+        self.assertEqual(SpeakerAgent(SlowLLM()).run(t), 240)
+        self.assertGreater(peak[0], 1)
+        self.assertEqual([s.speaker for s in t.segments[:4]], ["therapist", "client", "therapist", "client"])
+        self.assertEqual(t.segments[-1].speaker, "client")
+
     def test_no_model_leaves_speakers_unknown(self):
         t = _transcript("這週過得怎麼樣？")
         self.assertEqual(SpeakerAgent(None).run(t), 0)
