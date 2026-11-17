@@ -272,6 +272,8 @@ class FilePermissionTest(unittest.TestCase):
             self.assertEqual(self.mode(config.CLIENTS_FILE), 0o600)
 
     def test_gitignore_covers_what_haven_writes(self):
+        if subprocess.run(["git", "rev-parse", "--git-dir"], cwd=REPO, capture_output=True).returncode != 0:
+            self.skipTest("not a git checkout (for example a copy synced to the B70 machine)")
         def ignored(path):
             return subprocess.run(["git", "check-ignore", "-q", path], cwd=REPO).returncode == 0
         for path in ("data/sessions/C001-S99.json", "data/sessions/C001-S99.json.tmp", "data/clients.json.tmp", "data/haven.db",
