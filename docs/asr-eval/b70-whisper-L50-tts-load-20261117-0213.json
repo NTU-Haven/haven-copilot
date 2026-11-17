@@ -1,0 +1,4442 @@
+{
+  "label": "b70-whisper-L50-tts-load-20261117-0213",
+  "date": "2026-11-17T02:33:26+00:00",
+  "asr": "openai:whisper",
+  "asr_prompt": "",
+  "speaker_model": "openai-compat:qwen3-32b-awq",
+  "reference": "C002-L50 segments 1-339",
+  "audio_seconds": 2755.7,
+  "asr_seconds": 20.1,
+  "speaker_seconds": 380.1,
+  "reference_characters": 10519,
+  "cer": 0.3526,
+  "segments": 553,
+  "speakers_labelled": 553,
+  "speakers_right": 505,
+  "rows": [
+    {
+      "start": 0.0,
+      "end": 1.5,
+      "text": "嗨，最近过得怎么样？",
+      "speaker_guess": "therapist",
+      "script_segment": 1,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 2.1,
+      "end": 6.1,
+      "text": "听说你们这两周刚好是期中考，应该很辛苦吧？",
+      "speaker_guess": "therapist",
+      "script_segment": 1,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 7.2,
+      "end": 11.4,
+      "text": "对啊，真的超累的，我几乎每天都在熬夜准备，",
+      "speaker_guess": "client",
+      "script_segment": 2,
+      "script_speaker": "client"
+    },
+    {
+      "start": 11.8,
+      "end": 15.3,
+      "text": "结果还是一提提看不下去，压力很大。",
+      "speaker_guess": "client",
+      "script_segment": 2,
+      "script_speaker": "client"
+    },
+    {
+      "start": 16.0,
+      "end": 17.5,
+      "text": "听起来真的很辛苦。",
+      "speaker_guess": "therapist",
+      "script_segment": 3,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 18.2,
+      "end": 21.1,
+      "text": "那考试结束后，心情有什么变化吗？",
+      "speaker_guess": "therapist",
+      "script_segment": 3,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 22.2,
+      "end": 26.9,
+      "text": "考试结束后反而更空虚了，好像一下子没事做了，",
+      "speaker_guess": "client",
+      "script_segment": 4,
+      "script_speaker": "client"
+    },
+    {
+      "start": 26.9,
+      "end": 29.8,
+      "text": "又开始觉得自己什么都没做好。",
+      "speaker_guess": "client",
+      "script_segment": 4,
+      "script_speaker": "client"
+    },
+    {
+      "start": 30.0,
+      "end": 32.2,
+      "text": "那种感觉很熟悉啊？",
+      "speaker_guess": "therapist",
+      "script_segment": 5,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 33.3,
+      "end": 42.0,
+      "text": "嗯，每次考试完都这样，我总觉得自己应该做得更好，但实际上又做不到，就开始自我怀疑",
+      "speaker_guess": "client",
+      "script_segment": 6,
+      "script_speaker": "client"
+    },
+    {
+      "start": 42.0,
+      "end": 46.0,
+      "text": "你提到应该做得更好，这是不是一种压力来源？",
+      "speaker_guess": "therapist",
+      "script_segment": 7,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 47.1,
+      "end": 56.1,
+      "text": "对，我总是觉得自己不够努力，明明可以做得更好，却总是拖延，等到最后一刻才开始动手",
+      "speaker_guess": "client",
+      "script_segment": 8,
+      "script_speaker": "client"
+    },
+    {
+      "start": 56.1,
+      "end": 59.2,
+      "text": "拖延对你来说，是不是一种逃避？",
+      "speaker_guess": "therapist",
+      "script_segment": 9,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 60.0,
+      "end": 68.4,
+      "text": "我想是吧，我常常觉得压力太大，就宁愿什么都不做，反正最后一刻再来处理。",
+      "speaker_guess": "client",
+      "script_segment": 10,
+      "script_speaker": "client"
+    },
+    {
+      "start": 69.1,
+      "end": 70.3,
+      "text": "那种感觉像什么？",
+      "speaker_guess": "therapist",
+      "script_segment": 11,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 71.4,
+      "end": 79.0,
+      "text": "像是被困住了一样，明明知道该做，但就是动不了，有时候连打开笔电都觉得好难。",
+      "speaker_guess": "client",
+      "script_segment": 12,
+      "script_speaker": "client"
+    },
+    {
+      "start": 79.7,
+      "end": 82.4,
+      "text": "那种动不了的感觉，会持续多久？",
+      "speaker_guess": "therapist",
+      "script_segment": 13,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 83.2,
+      "end": 88.9,
+      "text": "有时候是一天，有时候是一周，尤其当我觉得事情太多。",
+      "speaker_guess": "client",
+      "script_segment": 14,
+      "script_speaker": "client"
+    },
+    {
+      "start": 90.0,
+      "end": 93.2,
+      "text": "压力太大的时候，就特别容易这样。",
+      "speaker_guess": "client",
+      "script_segment": 14,
+      "script_speaker": "client"
+    },
+    {
+      "start": 93.9,
+      "end": 97.4,
+      "text": "那考试期间，你有事处调整这种情况吗？",
+      "speaker_guess": "therapist",
+      "script_segment": 15,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 98.5,
+      "end": 108.0,
+      "text": "有事过，但总是失败，我会设定计划，但常常做不到，然后就开始责怪自己，觉得自己不够自律。",
+      "speaker_guess": "client",
+      "script_segment": 16,
+      "script_speaker": "client"
+    },
+    {
+      "start": 108.7,
+      "end": 110.8,
+      "text": "责怪自己会让情况更糟吗？",
+      "speaker_guess": "therapist",
+      "script_segment": 17,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 111.8,
+      "end": 117.9,
+      "text": "我想是的，我越责怪自己，就越不想动，好像在跟自己对抗一样。",
+      "speaker_guess": "client",
+      "script_segment": 18,
+      "script_speaker": "client"
+    },
+    {
+      "start": 118.2,
+      "end": 119.1,
+      "text": "那你先？",
+      "speaker_guess": "therapist",
+      "script_segment": 19,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 120.0,
+      "end": 121.5,
+      "text": "现在对自己有什么期待？",
+      "speaker_guess": "therapist",
+      "script_segment": 19,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 122.6,
+      "end": 126.3,
+      "text": "我希望自己能更自律，能更早开始准备，",
+      "speaker_guess": "client",
+      "script_segment": 20,
+      "script_speaker": "client"
+    },
+    {
+      "start": 126.7,
+      "end": 131.5,
+      "text": "而不是等到最后一课，我也希望考试后不会那么空虚。",
+      "speaker_guess": "client",
+      "script_segment": 20,
+      "script_speaker": "client"
+    },
+    {
+      "start": 132.2,
+      "end": 134.3,
+      "text": "听起来你很清楚自己的问题。",
+      "speaker_guess": "therapist",
+      "script_segment": 21,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 135.6,
+      "end": 138.6,
+      "text": "是啊，但我就是不知道该怎么改变，",
+      "speaker_guess": "client",
+      "script_segment": 22,
+      "script_speaker": "client"
+    },
+    {
+      "start": 138.9,
+      "end": 143.1,
+      "text": "每次想改变，都好像被什么东西拉回去一样。",
+      "speaker_guess": "client",
+      "script_segment": 22,
+      "script_speaker": "client"
+    },
+    {
+      "start": 143.7,
+      "end": 146.2,
+      "text": "那种被拉回去的感觉，像什么？",
+      "speaker_guess": "therapist",
+      "script_segment": 23,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 147.0,
+      "end": 149.4,
+      "text": "像是有一种声音在说，",
+      "speaker_guess": "client",
+      "script_segment": 24,
+      "script_speaker": "client"
+    },
+    {
+      "start": 150.0,
+      "end": 169.4,
+      "text": "反正你也不会做得好，不如就别做了，那种声音很熟悉，每次压力大的时候就会出现。我觉得那声音好像一直以来都跟着我，从高中开始就这样，每次想努力的时候，它就会出现，让我觉得自己做不到。",
+      "speaker_guess": "client",
+      "script_segment": 25,
+      "script_speaker": "client"
+    },
+    {
+      "start": 170.1,
+      "end": 172.7,
+      "text": "那声音出现时，你会怎么反应？",
+      "speaker_guess": "therapist",
+      "script_segment": 26,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 180.0,
+      "end": 185.0,
+      "text": "但最后还是会觉得对他说的对，反正我就是不行。",
+      "speaker_guess": "client",
+      "script_segment": 27,
+      "script_speaker": "client"
+    },
+    {
+      "start": 185.0,
+      "end": 188.0,
+      "text": "你说对他说的对，那是什么感觉？",
+      "speaker_guess": "therapist",
+      "script_segment": 28,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 188.0,
+      "end": 200.0,
+      "text": "那种感觉很奇怪，像是有一种无力感，好像我真的被他说服了，即使我知道他不对，但就是控制不了自己不去相信他。",
+      "speaker_guess": "client",
+      "script_segment": 29,
+      "script_speaker": "client"
+    },
+    {
+      "start": 200.0,
+      "end": 204.0,
+      "text": "那种声音出现时，你会有什么身体反应？",
+      "speaker_guess": "therapist",
+      "script_segment": 30,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 204.0,
+      "end": 209.4,
+      "text": "我会觉得胸口很压，呼吸变浅，有时候会觉得很难，",
+      "speaker_guess": "client",
+      "script_segment": 31,
+      "script_speaker": "client"
+    },
+    {
+      "start": 210.0,
+      "end": 215.0,
+      "text": "然后还会胃痛，那种感觉很不舒服，但又好像躲不开。",
+      "speaker_guess": "client",
+      "script_segment": 31,
+      "script_speaker": "client"
+    },
+    {
+      "start": 215.7,
+      "end": 219.8,
+      "text": "听起来这声音不准是心理上的，也会影响你的身体。",
+      "speaker_guess": "therapist",
+      "script_segment": 32,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 220.9,
+      "end": 227.1,
+      "text": "对，我常常觉得自己不是不想改变，而是身体好像被他控制住了。",
+      "speaker_guess": "client",
+      "script_segment": 33,
+      "script_speaker": "client"
+    },
+    {
+      "start": 227.7,
+      "end": 231.3,
+      "text": "你说身体好像被他控制住了，可以举个例子吗？",
+      "speaker_guess": "therapist",
+      "script_segment": 34,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 232.4,
+      "end": 239.7,
+      "text": "比如说我决定早点睡觉，结果躺在床上就是睡不着，脑子里一直在想明天的",
+      "speaker_guess": "client",
+      "script_segment": 35,
+      "script_speaker": "client"
+    },
+    {
+      "start": 240.0,
+      "end": 243.1,
+      "text": "事情，然后不知不觉就又熬夜了。",
+      "speaker_guess": "client",
+      "script_segment": 35,
+      "script_speaker": "client"
+    },
+    {
+      "start": 243.7,
+      "end": 246.0,
+      "text": "那种情况下，你会怎么想？",
+      "speaker_guess": "therapist",
+      "script_segment": 36,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 247.1,
+      "end": 254.7,
+      "text": "我会想说，反正我已经睡不好了，不如就继续熬夜吧，反正明天也一定会起步来。",
+      "speaker_guess": "client",
+      "script_segment": 37,
+      "script_speaker": "client"
+    },
+    {
+      "start": 255.4,
+      "end": 259.7,
+      "text": "你说反正明天也一定会起步来，那是怎么形成的想法？",
+      "speaker_guess": "therapist",
+      "script_segment": 38,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 260.6,
+      "end": 269.5,
+      "text": "因为我过去真的常常起步来，每次设定闹钟都没用，我觉得自己就是个起步来的人，不管怎么努力，",
+      "speaker_guess": "client",
+      "script_segment": 39,
+      "script_speaker": "client"
+    },
+    {
+      "start": 270.0,
+      "end": 274.9,
+      "text": "那种想法出现时，你会有什么证据支持他？",
+      "speaker_guess": "therapist",
+      "script_segment": 40,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 276.0,
+      "end": 285.8,
+      "text": "我有证据啊，比如说我这学期已经迟到三次了，而且每次都是因为起不来，我试过很多方法，但都没用。",
+      "speaker_guess": "client",
+      "script_segment": 41,
+      "script_speaker": "client"
+    },
+    {
+      "start": 286.5,
+      "end": 288.2,
+      "text": "那你有没有证据反驳他？",
+      "speaker_guess": "therapist",
+      "script_segment": 42,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 289.3,
+      "end": 299.2,
+      "text": "嗯，其实有一次我提前睡觉，第二天居然准时起床了，那一次我觉得很惊讶，因为我真的以为自己做不到。",
+      "speaker_guess": "client",
+      "script_segment": 43,
+      "script_speaker": "client"
+    },
+    {
+      "start": 300.0,
+      "end": 303.0,
+      "text": "那次的经验对你来说有什么意义？",
+      "speaker_guess": "therapist",
+      "script_segment": 44,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 304.1,
+      "end": 310.7,
+      "text": "那次经验让我觉得，也许我真的不是做不到，而是我一直在告诉自己做不到。",
+      "speaker_guess": "client",
+      "script_segment": 45,
+      "script_speaker": "client"
+    },
+    {
+      "start": 311.4,
+      "end": 313.9,
+      "text": "听起来你开始看到一些可能性了。",
+      "speaker_guess": "therapist",
+      "script_segment": 46,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 315.0,
+      "end": 321.7,
+      "text": "对，我开始觉得，也许我可以试着改变那个声音，而不是一直听他的话。",
+      "speaker_guess": "client",
+      "script_segment": 47,
+      "script_speaker": "client"
+    },
+    {
+      "start": 322.4,
+      "end": 326.1,
+      "text": "你说试着改变那个声音，可以说说看怎么做吗？",
+      "speaker_guess": "therapist",
+      "script_segment": 48,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 330.0,
+      "end": 332.1,
+      "text": "每次那个声音出现时",
+      "speaker_guess": "client",
+      "script_segment": 49,
+      "script_speaker": "client"
+    },
+    {
+      "start": 332.1,
+      "end": 333.6,
+      "text": "我都写下来",
+      "speaker_guess": "client",
+      "script_segment": 49,
+      "script_speaker": "client"
+    },
+    {
+      "start": 333.6,
+      "end": 334.9,
+      "text": "然后问自己",
+      "speaker_guess": "therapist",
+      "script_segment": 4,
+      "script_speaker": "client"
+    },
+    {
+      "start": 334.9,
+      "end": 336.1,
+      "text": "这是真的吗",
+      "speaker_guess": "therapist",
+      "script_segment": 49,
+      "script_speaker": "client"
+    },
+    {
+      "start": 336.1,
+      "end": 337.2,
+      "text": "有证据吗",
+      "speaker_guess": "therapist",
+      "script_segment": 1,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 337.2,
+      "end": 339.8,
+      "text": "这样也许可以慢慢改变它",
+      "speaker_guess": "therapist",
+      "script_segment": 49,
+      "script_speaker": "client"
+    },
+    {
+      "start": 339.8,
+      "end": 343.8,
+      "text": "其实我这几天都有试着去做这个练习",
+      "speaker_guess": "client",
+      "script_segment": 50,
+      "script_speaker": "client"
+    },
+    {
+      "start": 343.8,
+      "end": 347.2,
+      "text": "虽然有时候还是会觉得压力很大",
+      "speaker_guess": "client",
+      "script_segment": 50,
+      "script_speaker": "client"
+    },
+    {
+      "start": 347.2,
+      "end": 350.6,
+      "text": "但至少我开始学会觉察那个声音",
+      "speaker_guess": "client",
+      "script_segment": 50,
+      "script_speaker": "client"
+    },
+    {
+      "start": 350.6,
+      "end": 352.9,
+      "text": "而不是直接被它牵着走",
+      "speaker_guess": "client",
+      "script_segment": 50,
+      "script_speaker": "client"
+    },
+    {
+      "start": 352.9,
+      "end": 353.9,
+      "text": "很好",
+      "speaker_guess": "therapist",
+      "script_segment": 51,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 353.9,
+      "end": 355.8,
+      "text": "觉察是改变的第一步",
+      "speaker_guess": "therapist",
+      "script_segment": 51,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 355.8,
+      "end": 358.0,
+      "text": "不过我发现",
+      "speaker_guess": "client",
+      "script_segment": 1,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 358.0,
+      "end": 359.4,
+      "text": "当我在课堂",
+      "speaker_guess": "client",
+      "script_segment": 52,
+      "script_speaker": "client"
+    },
+    {
+      "start": 360.0,
+      "end": 361.5,
+      "text": "上准备发问时",
+      "speaker_guess": "client",
+      "script_segment": 1,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 361.5,
+      "end": 363.9,
+      "text": "那个声音会特别强烈",
+      "speaker_guess": "client",
+      "script_segment": 1,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 363.9,
+      "end": 366.5,
+      "text": "像是你说了会不会很尴尬",
+      "speaker_guess": "client",
+      "script_segment": 52,
+      "script_speaker": "client"
+    },
+    {
+      "start": 366.5,
+      "end": 368.4,
+      "text": "别人会不会笑你",
+      "speaker_guess": "client",
+      "script_segment": 52,
+      "script_speaker": "client"
+    },
+    {
+      "start": 368.4,
+      "end": 371.0,
+      "text": "这些想法会让我停下来",
+      "speaker_guess": "client",
+      "script_segment": 52,
+      "script_speaker": "client"
+    },
+    {
+      "start": 371.0,
+      "end": 372.2,
+      "text": "不敢举手",
+      "speaker_guess": "client",
+      "script_segment": 52,
+      "script_speaker": "client"
+    },
+    {
+      "start": 372.2,
+      "end": 374.2,
+      "text": "这些想法很常见",
+      "speaker_guess": "therapist",
+      "script_segment": 53,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 374.2,
+      "end": 377.0,
+      "text": "你有没有事注用证据来挑战他们",
+      "speaker_guess": "therapist",
+      "script_segment": 15,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 377.0,
+      "end": 378.3,
+      "text": "有",
+      "speaker_guess": "client",
+      "script_segment": 1,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 378.3,
+      "end": 379.6,
+      "text": "我写下来了",
+      "speaker_guess": "client",
+      "script_segment": 1,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 379.6,
+      "end": 381.0,
+      "text": "比如我问自己",
+      "speaker_guess": "client",
+      "script_segment": 54,
+      "script_speaker": "client"
+    },
+    {
+      "start": 381.0,
+      "end": 384.3,
+      "text": "我真的有证据证明别人会笑我吗",
+      "speaker_guess": "client",
+      "script_segment": 54,
+      "script_speaker": "client"
+    },
+    {
+      "start": 384.3,
+      "end": 385.4,
+      "text": "结果发现",
+      "speaker_guess": "client",
+      "script_segment": 1,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 385.4,
+      "end": 387.9,
+      "text": "我从来没有实际被笑过",
+      "speaker_guess": "client",
+      "script_segment": 54,
+      "script_speaker": "client"
+    },
+    {
+      "start": 387.9,
+      "end": 389.0,
+      "text": "只是自己",
+      "speaker_guess": "client",
+      "script_segment": 54,
+      "script_speaker": "client"
+    },
+    {
+      "start": 390.0,
+      "end": 391.1,
+      "text": "假设会这样",
+      "speaker_guess": "client",
+      "script_segment": 1,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 391.1,
+      "end": 393.3,
+      "text": "这是一个很好的练习",
+      "speaker_guess": "therapist",
+      "script_segment": 55,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 393.3,
+      "end": 395.5,
+      "text": "而且我发现",
+      "speaker_guess": "client",
+      "script_segment": 56,
+      "script_speaker": "client"
+    },
+    {
+      "start": 395.5,
+      "end": 399.1,
+      "text": "当我问自己最坏的情况会是什么时",
+      "speaker_guess": "client",
+      "script_segment": 56,
+      "script_speaker": "client"
+    },
+    {
+      "start": 399.1,
+      "end": 401.4,
+      "text": "答案通常是我会尴尬",
+      "speaker_guess": "client",
+      "script_segment": 56,
+      "script_speaker": "client"
+    },
+    {
+      "start": 401.4,
+      "end": 404.4,
+      "text": "但其实那也不是什么大不了的事",
+      "speaker_guess": "client",
+      "script_segment": 56,
+      "script_speaker": "client"
+    },
+    {
+      "start": 404.4,
+      "end": 405.6,
+      "text": "我还活着",
+      "speaker_guess": "client",
+      "script_segment": 1,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 405.6,
+      "end": 407.8,
+      "text": "而且课还是继续上了",
+      "speaker_guess": "client",
+      "script_segment": 56,
+      "script_speaker": "client"
+    },
+    {
+      "start": 407.8,
+      "end": 410.7,
+      "text": "你开始看到事情的真实性了",
+      "speaker_guess": "therapist",
+      "script_segment": 57,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 410.7,
+      "end": 412.0,
+      "text": "对",
+      "speaker_guess": "client",
+      "script_segment": 1,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 412.0,
+      "end": 413.3,
+      "text": "我开始觉得",
+      "speaker_guess": "client",
+      "script_segment": 1,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 413.3,
+      "end": 416.1,
+      "text": "那个声音其实是在保护我",
+      "speaker_guess": "client",
+      "script_segment": 58,
+      "script_speaker": "client"
+    },
+    {
+      "start": 416.1,
+      "end": 418.1,
+      "text": "但它的方式太过头了",
+      "speaker_guess": "client",
+      "script_segment": 58,
+      "script_speaker": "client"
+    },
+    {
+      "start": 418.1,
+      "end": 419.4,
+      "text": "我需要学会",
+      "speaker_guess": "client",
+      "script_segment": 58,
+      "script_speaker": "client"
+    },
+    {
+      "start": 420.0,
+      "end": 422.6,
+      "text": "跟他沟通，而不是被他吓跑。",
+      "speaker_guess": "client",
+      "script_segment": 58,
+      "script_speaker": "client"
+    },
+    {
+      "start": 423.3,
+      "end": 427.2,
+      "text": "你说的对，那个声音是想保护你，这样发誓不对。",
+      "speaker_guess": "therapist",
+      "script_segment": 59,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 428.4,
+      "end": 433.8,
+      "text": "所以这几天我有试着在心里跟他说，我知道你是在保护我，",
+      "speaker_guess": "client",
+      "script_segment": 60,
+      "script_speaker": "client"
+    },
+    {
+      "start": 434.1,
+      "end": 437.7,
+      "text": "但我不想一直躲着，我想学会表达自己。",
+      "speaker_guess": "client",
+      "script_segment": 60,
+      "script_speaker": "client"
+    },
+    {
+      "start": 438.4,
+      "end": 439.8,
+      "text": "这是一个很棒的对话。",
+      "speaker_guess": "therapist",
+      "script_segment": 61,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 440.7,
+      "end": 446.8,
+      "text": "而且我发现，当我这样做的时候，那个声音反而会慢慢变小，",
+      "speaker_guess": "client",
+      "script_segment": 62,
+      "script_speaker": "client"
+    },
+    {
+      "start": 447.2,
+      "end": 448.8,
+      "text": "不像以前那样强烈。",
+      "speaker_guess": "client",
+      "script_segment": 62,
+      "script_speaker": "client"
+    },
+    {
+      "start": 450.0,
+      "end": 452.7,
+      "text": "这代表你在建立新的对话方式。",
+      "speaker_guess": "therapist",
+      "script_segment": 63,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 453.8,
+      "end": 460.4,
+      "text": "对，我开始觉得，我其实可以选择要不要听那个声音，而不是被他控制。",
+      "speaker_guess": "client",
+      "script_segment": 64,
+      "script_speaker": "client"
+    },
+    {
+      "start": 461.0,
+      "end": 462.5,
+      "text": "你正在建立自主权。",
+      "speaker_guess": "therapist",
+      "script_segment": 65,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 463.7,
+      "end": 475.8,
+      "text": "而且我发现，当我真的举手发问时，虽然还是会紧张，但至少我完成了，而且老师还回应了我，这让我觉得自己其实可以做到。",
+      "speaker_guess": "client",
+      "script_segment": 66,
+      "script_speaker": "client"
+    },
+    {
+      "start": 476.4,
+      "end": 477.9,
+      "text": "这是一个重要的经验。",
+      "speaker_guess": "therapist",
+      "script_segment": 67,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 478.7,
+      "end": 479.2,
+      "text": "我和老师的经验。",
+      "speaker_guess": "client",
+      "script_segment": 1,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 480.0,
+      "end": 491.0,
+      "text": "我还记录了发问前后的焦虑分数，发问前是7分，发问后反而降到4分，这让我觉得，其实行动真的能减轻焦虑。",
+      "speaker_guess": "client",
+      "script_segment": 68,
+      "script_speaker": "client"
+    },
+    {
+      "start": 491.7,
+      "end": 494.0,
+      "text": "行动确实能扰破焦虑的循环。",
+      "speaker_guess": "therapist",
+      "script_segment": 69,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 495.2,
+      "end": 506.7,
+      "text": "所以我想，接下来我可以继续练习，不只是在课堂上发问，也可以在小组讨论时多说几句话，慢慢扩展我的舒适圈。",
+      "speaker_guess": "client",
+      "script_segment": 70,
+      "script_speaker": "client"
+    },
+    {
+      "start": 507.1,
+      "end": 508.8,
+      "text": "这是一个很好的目标。",
+      "speaker_guess": "therapist",
+      "script_segment": 71,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 510.0,
+      "end": 522.2,
+      "text": "而且我觉得，如果我能改变那个声音，也许我也能改变拖延的习惯，因为拖延好像也是因为害怕失败，所以一直逃避。",
+      "speaker_guess": "client",
+      "script_segment": 72,
+      "script_speaker": "client"
+    },
+    {
+      "start": 522.8,
+      "end": 525.3,
+      "text": "你开始看到拖延和焦虑的连结了。",
+      "speaker_guess": "therapist",
+      "script_segment": 73,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 540.0,
+      "end": 542.6,
+      "text": "当时你有没有察觉到这个想法？",
+      "speaker_guess": "therapist",
+      "script_segment": 75,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 543.7,
+      "end": 559.3,
+      "text": "有啊，而且那个声音特别清楚，好像有一个人一直在我脑子里说，你这样问，别人会笑你，我甚至还想，万一老师也觉得我问得太简单，会不会影响他对我的印象？",
+      "speaker_guess": "client",
+      "script_segment": 76,
+      "script_speaker": "client"
+    },
+    {
+      "start": 560.0,
+      "end": 562.0,
+      "text": "那种声音听起来很熟悉",
+      "speaker_guess": "therapist",
+      "script_segment": 5,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 562.7,
+      "end": 569.8,
+      "text": "对啊，就是那种老声音，我试着告诉自己，这只是我的想法，不是事实",
+      "speaker_guess": "client",
+      "script_segment": 78,
+      "script_speaker": "client"
+    },
+    {
+      "start": 570.0,
+      "end": 572.5,
+      "text": "可是当下还是很难克服",
+      "speaker_guess": "client",
+      "script_segment": 78,
+      "script_speaker": "client"
+    },
+    {
+      "start": 572.5,
+      "end": 574.6,
+      "text": "你有没有事注问自己",
+      "speaker_guess": "therapist",
+      "script_segment": 79,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 574.6,
+      "end": 576.6,
+      "text": "这个想法有证据啊",
+      "speaker_guess": "therapist",
+      "script_segment": 79,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 576.6,
+      "end": 578.5,
+      "text": "我有想过",
+      "speaker_guess": "client",
+      "script_segment": 80,
+      "script_speaker": "client"
+    },
+    {
+      "start": 578.5,
+      "end": 580.3,
+      "text": "但当时太紧张了",
+      "speaker_guess": "client",
+      "script_segment": 1,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 580.3,
+      "end": 581.9,
+      "text": "脑子一片空白",
+      "speaker_guess": "client",
+      "script_segment": 80,
+      "script_speaker": "client"
+    },
+    {
+      "start": 581.9,
+      "end": 583.5,
+      "text": "我记得我当时想",
+      "speaker_guess": "client",
+      "script_segment": 64,
+      "script_speaker": "client"
+    },
+    {
+      "start": 583.5,
+      "end": 584.8,
+      "text": "如果我问了",
+      "speaker_guess": "client",
+      "script_segment": 72,
+      "script_speaker": "client"
+    },
+    {
+      "start": 584.8,
+      "end": 587.6,
+      "text": "别人会不会觉得我很不成熟",
+      "speaker_guess": "client",
+      "script_segment": 80,
+      "script_speaker": "client"
+    },
+    {
+      "start": 587.6,
+      "end": 589.2,
+      "text": "可是我真的不知道",
+      "speaker_guess": "client",
+      "script_segment": 80,
+      "script_speaker": "client"
+    },
+    {
+      "start": 589.2,
+      "end": 591.6,
+      "text": "因为我从来没有问过",
+      "speaker_guess": "client",
+      "script_segment": 1,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 591.6,
+      "end": 593.7,
+      "text": "这正是我们练习的部分",
+      "speaker_guess": "therapist",
+      "script_segment": 81,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 593.7,
+      "end": 595.1,
+      "text": "对",
+      "speaker_guess": "client",
+      "script_segment": 1,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 595.1,
+      "end": 596.9,
+      "text": "我觉得如果我问了",
+      "speaker_guess": "client",
+      "script_segment": 72,
+      "script_speaker": "client"
+    },
+    {
+      "start": 596.9,
+      "end": 599.8,
+      "text": "也许会发现其实没什么大不了",
+      "speaker_guess": "client",
+      "script_segment": 56,
+      "script_speaker": "client"
+    },
+    {
+      "start": 600.0,
+      "end": 601.5,
+      "text": "可是我就是怕",
+      "speaker_guess": "client",
+      "script_segment": 82,
+      "script_speaker": "client"
+    },
+    {
+      "start": 601.5,
+      "end": 603.2,
+      "text": "他自己表现不好",
+      "speaker_guess": "client",
+      "script_segment": 82,
+      "script_speaker": "client"
+    },
+    {
+      "start": 603.2,
+      "end": 605.7,
+      "text": "怕别人对我的看法改变",
+      "speaker_guess": "client",
+      "script_segment": 82,
+      "script_speaker": "client"
+    },
+    {
+      "start": 605.7,
+      "end": 607.5,
+      "text": "你说得很清楚",
+      "speaker_guess": "therapist",
+      "script_segment": 83,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 607.5,
+      "end": 609.8,
+      "text": "而且我发现",
+      "speaker_guess": "client",
+      "script_segment": 56,
+      "script_speaker": "client"
+    },
+    {
+      "start": 609.8,
+      "end": 612.0,
+      "text": "这种害怕失败的感觉",
+      "speaker_guess": "client",
+      "script_segment": 84,
+      "script_speaker": "client"
+    },
+    {
+      "start": 612.0,
+      "end": 613.8,
+      "text": "不只是在课堂上",
+      "speaker_guess": "client",
+      "script_segment": 70,
+      "script_speaker": "client"
+    },
+    {
+      "start": 613.8,
+      "end": 616.4,
+      "text": "还会影响我做很多事情",
+      "speaker_guess": "therapist",
+      "script_segment": 84,
+      "script_speaker": "client"
+    },
+    {
+      "start": 616.4,
+      "end": 617.4,
+      "text": "比如说",
+      "speaker_guess": "client",
+      "script_segment": 35,
+      "script_speaker": "client"
+    },
+    {
+      "start": 617.4,
+      "end": 619.7,
+      "text": "我常常拖到最后一刻",
+      "speaker_guess": "client",
+      "script_segment": 84,
+      "script_speaker": "client"
+    },
+    {
+      "start": 619.7,
+      "end": 621.2,
+      "text": "才开始写报告",
+      "speaker_guess": "client",
+      "script_segment": 1,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 621.2,
+      "end": 623.0,
+      "text": "因为我怕写不好",
+      "speaker_guess": "client",
+      "script_segment": 84,
+      "script_speaker": "client"
+    },
+    {
+      "start": 623.0,
+      "end": 626.0,
+      "text": "这是不是和你刚才说的声音有关",
+      "speaker_guess": "therapist",
+      "script_segment": 85,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 626.0,
+      "end": 627.3,
+      "text": "对",
+      "speaker_guess": "client",
+      "script_segment": 1,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 627.3,
+      "end": 629.8,
+      "text": "我觉得那种声音一直在告",
+      "speaker_guess": "client",
+      "script_segment": 86,
+      "script_speaker": "client"
+    },
+    {
+      "start": 630.0,
+      "end": 635.0,
+      "text": "告诉我，你会搞砸的，所以我宁愿不做，也不要做不好。",
+      "speaker_guess": "client",
+      "script_segment": 86,
+      "script_speaker": "client"
+    },
+    {
+      "start": 635.7,
+      "end": 638.4,
+      "text": "你有没有想过，不做其实也是重失败？",
+      "speaker_guess": "therapist",
+      "script_segment": 87,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 639.5,
+      "end": 648.4,
+      "text": "嗯，我从来没有这样想过，我总是觉得拖延是为了保护自己，但其实可能只是让事情变得更糟。",
+      "speaker_guess": "client",
+      "script_segment": 88,
+      "script_speaker": "client"
+    },
+    {
+      "start": 649.1,
+      "end": 651.4,
+      "text": "你开始看到拖延背后的重心了？",
+      "speaker_guess": "therapist",
+      "script_segment": 89,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 652.2,
+      "end": 659.4,
+      "text": "对，我觉得如果我能改变那个声音，也许我就不用再拖延了，可是问题是，",
+      "speaker_guess": "client",
+      "script_segment": 90,
+      "script_speaker": "client"
+    },
+    {
+      "start": 660.0,
+      "end": 664.2,
+      "text": "那个声音太强了，我常常听不到自己的声音。",
+      "speaker_guess": "client",
+      "script_segment": 90,
+      "script_speaker": "client"
+    },
+    {
+      "start": 664.8,
+      "end": 667.4,
+      "text": "你有没有试过用另一个声音来对话？",
+      "speaker_guess": "therapist",
+      "script_segment": 91,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 668.5,
+      "end": 674.4,
+      "text": "我试过，但有时候会觉得那种声音很假，好像不是真的属于我，",
+      "speaker_guess": "client",
+      "script_segment": 92,
+      "script_speaker": "client"
+    },
+    {
+      "start": 674.4,
+      "end": 680.7,
+      "text": "我想要找到一个属于自己的声音，而不是一直被那个害怕的声音控制。",
+      "speaker_guess": "client",
+      "script_segment": 92,
+      "script_speaker": "client"
+    },
+    {
+      "start": 681.4,
+      "end": 682.6,
+      "text": "你可以慢慢练习。",
+      "speaker_guess": "therapist",
+      "script_segment": 93,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 683.7,
+      "end": 689.1,
+      "text": "我知道这需要时间，但我愿意是，我觉得每一次这样的练习，",
+      "speaker_guess": "client",
+      "script_segment": 94,
+      "script_speaker": "client"
+    },
+    {
+      "start": 690.0,
+      "end": 692.2,
+      "text": "都让我离那个声音远一点。",
+      "speaker_guess": "client",
+      "script_segment": 1,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 692.9,
+      "end": 694.2,
+      "text": "你已经在前进了。",
+      "speaker_guess": "therapist",
+      "script_segment": 95,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 695.3,
+      "end": 699.0,
+      "text": "对，我觉得我现在至少知道问题在哪里了，",
+      "speaker_guess": "client",
+      "script_segment": 96,
+      "script_speaker": "client"
+    },
+    {
+      "start": 699.2,
+      "end": 702.1,
+      "text": "以前我总是觉得自己就是不够好，",
+      "speaker_guess": "client",
+      "script_segment": 96,
+      "script_speaker": "client"
+    },
+    {
+      "start": 702.5,
+      "end": 705.5,
+      "text": "现在我知道，那是那个声音在说。",
+      "speaker_guess": "client",
+      "script_segment": 96,
+      "script_speaker": "client"
+    },
+    {
+      "start": 706.2,
+      "end": 708.5,
+      "text": "你越来越清楚自己的内在对话了。",
+      "speaker_guess": "therapist",
+      "script_segment": 97,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 709.5,
+      "end": 711.4,
+      "text": "不过，我还是会想，",
+      "speaker_guess": "client",
+      "script_segment": 1,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 711.8,
+      "end": 715.2,
+      "text": "如果我在课堂上问了一个很基本的问题，",
+      "speaker_guess": "client",
+      "script_segment": 98,
+      "script_speaker": "client"
+    },
+    {
+      "start": 715.7,
+      "end": 717.7,
+      "text": "大家会不会觉得我很笨，",
+      "speaker_guess": "client",
+      "script_segment": 98,
+      "script_speaker": "client"
+    },
+    {
+      "start": 717.7,
+      "end": 719.2,
+      "text": "我常常在想。",
+      "speaker_guess": "client",
+      "script_segment": 98,
+      "script_speaker": "client"
+    },
+    {
+      "start": 720.0,
+      "end": 725.8,
+      "text": "这样问出来是不是会让老师失望，或者让同学看不起我？",
+      "speaker_guess": "client",
+      "script_segment": 98,
+      "script_speaker": "client"
+    },
+    {
+      "start": 725.8,
+      "end": 728.7,
+      "text": "这是一个很常见的想法。",
+      "speaker_guess": "therapist",
+      "script_segment": 99,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 728.7,
+      "end": 732.8,
+      "text": "对，而且这个想法常常在课堂上出现，",
+      "speaker_guess": "client",
+      "script_segment": 100,
+      "script_speaker": "client"
+    },
+    {
+      "start": 732.8,
+      "end": 736.4,
+      "text": "尤其是在老师讲到比较复杂的内容时，",
+      "speaker_guess": "client",
+      "script_segment": 100,
+      "script_speaker": "client"
+    },
+    {
+      "start": 736.4,
+      "end": 742.2,
+      "text": "我会想，如果我不懂，是不是代表我根本跟不上课程？",
+      "speaker_guess": "client",
+      "script_segment": 100,
+      "script_speaker": "client"
+    },
+    {
+      "start": 742.2,
+      "end": 747.5,
+      "text": "你有没有注意到这个想法出现时，是基于什么样的情境？",
+      "speaker_guess": "therapist",
+      "script_segment": 101,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 747.5,
+      "end": 749.4,
+      "text": "通常是当我听不懂老师的课程，",
+      "speaker_guess": "client",
+      "script_segment": 102,
+      "script_speaker": "client"
+    },
+    {
+      "start": 750.0,
+      "end": 760.1,
+      "text": "或者看到其他同学好像都懂了，那时候我会觉得自己落后了，而且怕问问题会暴露自己的无知。",
+      "speaker_guess": "client",
+      "script_segment": 102,
+      "script_speaker": "client"
+    },
+    {
+      "start": 760.8,
+      "end": 765.6,
+      "text": "那我们可以来看看这个想法。问问问题大家会看不起我。",
+      "speaker_guess": "therapist",
+      "script_segment": 103,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 766.6,
+      "end": 777.3,
+      "text": "嗯，我觉得这个想法很真实，因为我常常会看到有人笑别人问问题，或者有人会说这不是应该知道的吗？这种话。",
+      "speaker_guess": "client",
+      "script_segment": 104,
+      "script_speaker": "client"
+    },
+    {
+      "start": 777.6,
+      "end": 779.6,
+      "text": "那我们可以一起找找看。",
+      "speaker_guess": "therapist",
+      "script_segment": 105,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 780.0,
+      "end": 782.0,
+      "text": "有那些证据支持这个想法？",
+      "speaker_guess": "therapist",
+      "script_segment": 40,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 783.1,
+      "end": 787.8,
+      "text": "比如说，有一次我在课堂上问了一个很基本的问题，",
+      "speaker_guess": "client",
+      "script_segment": 106,
+      "script_speaker": "client"
+    },
+    {
+      "start": 788.3,
+      "end": 792.8,
+      "text": "结果有几个同学笑了，虽然他们可能不是针对我，",
+      "speaker_guess": "client",
+      "script_segment": 106,
+      "script_speaker": "client"
+    },
+    {
+      "start": 793.1,
+      "end": 798.5,
+      "text": "但我当时真的觉得自己很尴尬，而且之后就不太敢问问题了。",
+      "speaker_guess": "client",
+      "script_segment": 106,
+      "script_speaker": "client"
+    },
+    {
+      "start": 799.2,
+      "end": 801.2,
+      "text": "那有没有证据反对这个想法？",
+      "speaker_guess": "therapist",
+      "script_segment": 107,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 802.3,
+      "end": 805.6,
+      "text": "嗯，有一次我鼓起勇气问了一个问题，",
+      "speaker_guess": "client",
+      "script_segment": 108,
+      "script_speaker": "client"
+    },
+    {
+      "start": 805.6,
+      "end": 809.5,
+      "text": "结果老师说这个问题很好，而且还不知，",
+      "speaker_guess": "client",
+      "script_segment": 108,
+      "script_speaker": "client"
+    },
+    {
+      "start": 810.0,
+      "end": 817.3,
+      "text": "我衷了一些内容，那时候我觉得问问题其实是有帮助的，而且老师也没有看不起我。",
+      "speaker_guess": "client",
+      "script_segment": 108,
+      "script_speaker": "client"
+    },
+    {
+      "start": 817.9,
+      "end": 818.4,
+      "text": "还有吗？",
+      "speaker_guess": "therapist",
+      "script_segment": 1,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 819.5,
+      "end": 834.6,
+      "text": "还有，有一次我没有问问题，结果课后自己花了很多时间查资料，才发现其实那个问题很常见，很多人都会搞错，如果当时问了，可能可以省很多时间。",
+      "speaker_guess": "client",
+      "script_segment": 110,
+      "script_speaker": "client"
+    },
+    {
+      "start": 835.3,
+      "end": 838.8,
+      "text": "所以，这个想法问问问题大家会看不起我。",
+      "speaker_guess": "therapist",
+      "script_segment": 111,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 840.0,
+      "end": 841.5,
+      "text": "并不是总是正确的。",
+      "speaker_guess": "therapist",
+      "script_segment": 111,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 842.6,
+      "end": 849.6,
+      "text": "对，我开始觉得这个想法可能只是我脑中那个声音在吓唬我，而不是现实。",
+      "speaker_guess": "client",
+      "script_segment": 112,
+      "script_speaker": "client"
+    },
+    {
+      "start": 850.3,
+      "end": 851.7,
+      "text": "你怎么看待这个声音？",
+      "speaker_guess": "therapist",
+      "script_segment": 113,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 852.8,
+      "end": 859.7,
+      "text": "我觉得它是在保护我，不想让我受伤，但它也让我错过了很多学习的机会。",
+      "speaker_guess": "client",
+      "script_segment": 114,
+      "script_speaker": "client"
+    },
+    {
+      "start": 860.4,
+      "end": 863.0,
+      "text": "你愿意试着对这个声音说些什么吗？",
+      "speaker_guess": "therapist",
+      "script_segment": 115,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 863.9,
+      "end": 869.3,
+      "text": "我想对它说，我知道问问题是学习的一部分，而且问问题是学习的一部分，",
+      "speaker_guess": "client",
+      "script_segment": 116,
+      "script_speaker": "client"
+    },
+    {
+      "start": 870.0,
+      "end": 877.0,
+      "text": "问问题不代表我不够聪明，如果我真的不知道，那问问题就是最好的方式。",
+      "speaker_guess": "client",
+      "script_segment": 116,
+      "script_speaker": "client"
+    },
+    {
+      "start": 877.0,
+      "end": 879.0,
+      "text": "这是一个很有意思的回应。",
+      "speaker_guess": "therapist",
+      "script_segment": 117,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 879.0,
+      "end": 891.0,
+      "text": "对，而且我发现，当我问问题时，其实大家并没有特别看不起我，他们可能只是专注在自己的事情上，而不是在评价我。",
+      "speaker_guess": "client",
+      "script_segment": 118,
+      "script_speaker": "client"
+    },
+    {
+      "start": 891.0,
+      "end": 897.0,
+      "text": "你越来越能辨识自己的自动化想法，并开始挑战他们了。",
+      "speaker_guess": "therapist",
+      "script_segment": 119,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 897.0,
+      "end": 899.2,
+      "text": "对，我觉得这是一个。",
+      "speaker_guess": "client",
+      "script_segment": 2,
+      "script_speaker": "client"
+    },
+    {
+      "start": 900.0,
+      "end": 908.1,
+      "text": "很重要的进步，虽然我还是会有那个声音，但我现在知道，我可以选择要不要听他的话。",
+      "speaker_guess": "client",
+      "script_segment": 120,
+      "script_speaker": "client"
+    },
+    {
+      "start": 908.8,
+      "end": 910.0,
+      "text": "你已经在改变了。",
+      "speaker_guess": "therapist",
+      "script_segment": 121,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 911.0,
+      "end": 920.9,
+      "text": "不过，我还是有点担心，如果我真的在课堂上提问，会不会还是会觉得尴尬，或者别人会觉得我很蠢。",
+      "speaker_guess": "client",
+      "script_segment": 122,
+      "script_speaker": "client"
+    },
+    {
+      "start": 920.9,
+      "end": 926.6,
+      "text": "我之前不是说过，我总是预设别人会对我有负面评价吗？",
+      "speaker_guess": "therapist",
+      "script_segment": 122,
+      "script_speaker": "client"
+    },
+    {
+      "start": 927.2,
+      "end": 928.8,
+      "text": "是的，你说得很不准。",
+      "speaker_guess": "client",
+      "script_segment": 123,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 930.0,
+      "end": 945.0,
+      "text": "所以我想，我们是不是可以设计一个行为实验，比如说，下周课堂上我真的提问一次，然后观察大家的反应，再来比较我原本的预测和实际发生的事。",
+      "speaker_guess": "client",
+      "script_segment": 124,
+      "script_speaker": "client"
+    },
+    {
+      "start": 945.7,
+      "end": 947.0,
+      "text": "这是个很好的想法。",
+      "speaker_guess": "therapist",
+      "script_segment": 125,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 948.0,
+      "end": 959.3,
+      "text": "我觉得这样做会很有帮助，因为我总是靠想象来决定要不要行动，而不是靠实际经验，如果我真的去做了，就能知道世界上的事情。",
+      "speaker_guess": "client",
+      "script_segment": 126,
+      "script_speaker": "client"
+    },
+    {
+      "start": 960.0,
+      "end": 962.8,
+      "text": "这件事情是不是真的像我想的那样糟糕？",
+      "speaker_guess": "therapist",
+      "script_segment": 126,
+      "script_speaker": "client"
+    },
+    {
+      "start": 963.5,
+      "end": 964.5,
+      "text": "你说得很对。",
+      "speaker_guess": "therapist",
+      "script_segment": 43,
+      "script_speaker": "client"
+    },
+    {
+      "start": 965.6,
+      "end": 968.9,
+      "text": "那我可以先写下我对这次提问的预测，",
+      "speaker_guess": "client",
+      "script_segment": 128,
+      "script_speaker": "client"
+    },
+    {
+      "start": 969.3,
+      "end": 971.4,
+      "text": "比如说，我会觉得尴尬，",
+      "speaker_guess": "client",
+      "script_segment": 35,
+      "script_speaker": "client"
+    },
+    {
+      "start": 971.7,
+      "end": 974.5,
+      "text": "别人会笑我，老师会不耐烦，",
+      "speaker_guess": "client",
+      "script_segment": 128,
+      "script_speaker": "client"
+    },
+    {
+      "start": 975.0,
+      "end": 977.6,
+      "text": "或者我说错话会让大家尴尬。",
+      "speaker_guess": "client",
+      "script_segment": 128,
+      "script_speaker": "client"
+    },
+    {
+      "start": 978.3,
+      "end": 981.7,
+      "text": "很好，写下来会让你更清楚自己的想法。",
+      "speaker_guess": "therapist",
+      "script_segment": 129,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 982.8,
+      "end": 985.0,
+      "text": "然后，我真的去提问后，",
+      "speaker_guess": "client",
+      "script_segment": 130,
+      "script_speaker": "client"
+    },
+    {
+      "start": 985.4,
+      "end": 987.3,
+      "text": "再写下实际发生的事，",
+      "speaker_guess": "client",
+      "script_segment": 124,
+      "script_speaker": "client"
+    },
+    {
+      "start": 987.4,
+      "end": 989.6,
+      "text": "比如说，老师有没有好事？",
+      "speaker_guess": "client",
+      "script_segment": 35,
+      "script_speaker": "client"
+    },
+    {
+      "start": 990.0,
+      "end": 998.8,
+      "text": "反应，同学有没有笑，我自己有没有觉得尴尬，这样我就能看到，我的预测和现实之间的差距。",
+      "speaker_guess": "client",
+      "script_segment": 130,
+      "script_speaker": "client"
+    },
+    {
+      "start": 999.4,
+      "end": 1001.1,
+      "text": "这就是行为实验的核心。",
+      "speaker_guess": "therapist",
+      "script_segment": 131,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1002.3,
+      "end": 1017.0,
+      "text": "我觉得这方法很实用，因为我常常因为害怕尴尬而什么都不做，结果反而让自己更焦虑，如果我真的去做了，不管结果如何，至少我证明了自己可以面对恐惧。",
+      "speaker_guess": "client",
+      "script_segment": 132,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1017.7,
+      "end": 1018.7,
+      "text": "你说得很对。",
+      "speaker_guess": "therapist",
+      "script_segment": 43,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1020.0,
+      "end": 1032.4,
+      "text": "而且，如果我真的提问了，不管别人怎么想，我都会知道，我并没有被否定，也没有被嘲笑，这对我来说是一个很重要的经验。",
+      "speaker_guess": "client",
+      "script_segment": 134,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1032.7,
+      "end": 1035.5,
+      "text": "你正在学习用行动来改变信念？",
+      "speaker_guess": "therapist",
+      "script_segment": 135,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1036.3,
+      "end": 1049.4,
+      "text": "对，我觉得这比一直告诉自己不要害怕有用多了，因为光靠想，我还是会觉得害怕，但实际去做，反而让我发现事情没有我想得那么糟。",
+      "speaker_guess": "client",
+      "script_segment": 136,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1050.0,
+      "end": 1052.0,
+      "text": "行动确实能再来改变。",
+      "speaker_guess": "therapist",
+      "script_segment": 1,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1053.2,
+      "end": 1058.0,
+      "text": "所以我想，这个行为实验可以帮助我慢慢减少拖延，",
+      "speaker_guess": "client",
+      "script_segment": 138,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1058.4,
+      "end": 1062.0,
+      "text": "因为我总是因为害怕尴尬而什么都不做，",
+      "speaker_guess": "client",
+      "script_segment": 138,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1062.4,
+      "end": 1065.9,
+      "text": "结果事情就一直拖着，如果我真的去做了，",
+      "speaker_guess": "client",
+      "script_segment": 138,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1066.3,
+      "end": 1070.6,
+      "text": "不管结果如何，我都会觉得自己完成了该做的事。",
+      "speaker_guess": "client",
+      "script_segment": 138,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1071.2,
+      "end": 1074.7,
+      "text": "你已经开始看到行为和情绪之间的关系了。",
+      "speaker_guess": "therapist",
+      "script_segment": 139,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1075.4,
+      "end": 1079.3,
+      "text": "对，我觉得这是一个很好的练习，而且，",
+      "speaker_guess": "client",
+      "script_segment": 140,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1080.0,
+      "end": 1089.2,
+      "text": "如果我真的去做，我也可以把这个经验分享给你，让我们一起看看，我的预测和实际结果之间的差异。",
+      "speaker_guess": "client",
+      "script_segment": 140,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1089.9,
+      "end": 1092.2,
+      "text": "很好，我们下周再谈谈结果。",
+      "speaker_guess": "therapist",
+      "script_segment": 141,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1093.3,
+      "end": 1102.4,
+      "text": "我会尽力去做，而且我会记得写下我的预测，我相信这会是一个很重要的经验，帮助我继续往前走。",
+      "speaker_guess": "client",
+      "script_segment": 142,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1103.0,
+      "end": 1104.3,
+      "text": "你已经在前进了。",
+      "speaker_guess": "therapist",
+      "script_segment": 95,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1105.1,
+      "end": 1109.3,
+      "text": "对，我觉得我越来越能掌控自己的想法了。",
+      "speaker_guess": "client",
+      "script_segment": 144,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1110.0,
+      "end": 1117.0,
+      "text": "雖然還是會有那個聲音，但我現在知道，我可以選擇要不要聽它的話。",
+      "speaker_guess": "client",
+      "script_segment": 144,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1117.0,
+      "end": 1119.0,
+      "text": "你已經在改變了。",
+      "speaker_guess": "therapist",
+      "script_segment": 121,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1119.0,
+      "end": 1136.0,
+      "text": "不過，我還是想談談番茄中的事情，我這幾天真的試著用它來安排讀書時間，但手機還是會一直干擾我，我總覺得要看一下訊息或社群，結果就完全沒辦法專注。",
+      "speaker_guess": "client",
+      "script_segment": 146,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1136.0,
+      "end": 1139.0,
+      "text": "嗯？這是很常見的經驗。",
+      "speaker_guess": "therapist",
+      "script_segment": 147,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1140.0,
+      "end": 1154.5,
+      "text": "对，我试着把手机放在另一个房间，但有时候还是会忍不住去拿，我发现自己好像对手机有一种强烈的依赖感，好像不看一下就会错过什么重要的事情。",
+      "speaker_guess": "client",
+      "script_segment": 148,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1155.3,
+      "end": 1158.2,
+      "text": "你觉察到这一点，已经是很大在进步了。",
+      "speaker_guess": "therapist",
+      "script_segment": 149,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1170.0,
+      "end": 1173.5,
+      "text": "这样至少不会在专注的时候被打断。",
+      "speaker_guess": "client",
+      "script_segment": 150,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1173.5,
+      "end": 1175.5,
+      "text": "这个想法很实际。",
+      "speaker_guess": "therapist",
+      "script_segment": 53,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1175.5,
+      "end": 1189.4,
+      "text": "我也在想，是不是可以把手机设成灰阶模式，这样看起来就没有那么吸引人。我之前听说过有人这样做，说是会减少使用手机的冲动。",
+      "speaker_guess": "client",
+      "script_segment": 152,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1189.4,
+      "end": 1191.2,
+      "text": "你可以试试看。",
+      "speaker_guess": "therapist",
+      "script_segment": 93,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1191.2,
+      "end": 1199.4,
+      "text": "另外，我发现自己在番茄中的最后几分钟特别容易分心，好像脑子里会想。",
+      "speaker_guess": "client",
+      "script_segment": 154,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1200.0,
+      "end": 1201.6,
+      "text": "反正时间快到了",
+      "speaker_guess": "client",
+      "script_segment": 154,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1201.6,
+      "end": 1204.0,
+      "text": "不如就看一下手机好了",
+      "speaker_guess": "client",
+      "script_segment": 154,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1204.0,
+      "end": 1205.7,
+      "text": "这其实是个陷阱",
+      "speaker_guess": "therapist",
+      "script_segment": 154,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1205.7,
+      "end": 1206.5,
+      "text": "我知道",
+      "speaker_guess": "client",
+      "script_segment": 29,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1206.5,
+      "end": 1208.7,
+      "text": "但还是会掉进去",
+      "speaker_guess": "client",
+      "script_segment": 1,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1208.7,
+      "end": 1210.5,
+      "text": "你说的很不准确",
+      "speaker_guess": "therapist",
+      "script_segment": 3,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1210.5,
+      "end": 1212.5,
+      "text": "所以我想",
+      "speaker_guess": "client",
+      "script_segment": 70,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1212.5,
+      "end": 1216.2,
+      "text": "是不是可以在番茄中结束前五分钟",
+      "speaker_guess": "client",
+      "script_segment": 156,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1216.2,
+      "end": 1219.1,
+      "text": "提醒自己不要提前放弃专注",
+      "speaker_guess": "client",
+      "script_segment": 156,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1219.1,
+      "end": 1219.7,
+      "text": "或者",
+      "speaker_guess": "client",
+      "script_segment": 98,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1219.7,
+      "end": 1223.8,
+      "text": "我可以把番茄中的时间拆成更小的单位",
+      "speaker_guess": "client",
+      "script_segment": 156,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1223.8,
+      "end": 1226.6,
+      "text": "比如说先试着做15分钟",
+      "speaker_guess": "client",
+      "script_segment": 35,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1226.6,
+      "end": 1228.4,
+      "text": "成功后再延长",
+      "speaker_guess": "client",
+      "script_segment": 156,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1228.4,
+      "end": 1229.5,
+      "text": "就个方",
+      "speaker_guess": "client",
+      "script_segment": 1,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1230.0,
+      "end": 1231.7,
+      "text": "这种方法很适合你目前的阶段。",
+      "speaker_guess": "therapist",
+      "script_segment": 157,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1232.9,
+      "end": 1247.8,
+      "text": "我也在想，是不是可以把番茄中的完成次数当作一种成就感的累积，比如说完成五次就可以给自己一个小奖励，像是看一集喜欢的影集或吃点喜欢的零食。",
+      "speaker_guess": "client",
+      "script_segment": 158,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1248.5,
+      "end": 1249.9,
+      "text": "这听起来很可行。",
+      "speaker_guess": "therapist",
+      "script_segment": 159,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1250.6,
+      "end": 1259.1,
+      "text": "不过，我还是会担心，如果我失败了，是不是就代表我没有进步，有时候我会觉得自己是不错的。",
+      "speaker_guess": "client",
+      "script_segment": 160,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1260.0,
+      "end": 1263.5,
+      "text": "做得不够好，然后就完全不想继续了。",
+      "speaker_guess": "client",
+      "script_segment": 160,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1264.1,
+      "end": 1266.2,
+      "text": "你有这样的担心，很正常。",
+      "speaker_guess": "therapist",
+      "script_segment": 161,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1267.4,
+      "end": 1272.0,
+      "text": "对，我开始学着告诉自己，失败只是学习的一部分，",
+      "speaker_guess": "client",
+      "script_segment": 162,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1272.5,
+      "end": 1276.0,
+      "text": "不代表我没有进步，而且，每一次尝试，",
+      "speaker_guess": "client",
+      "script_segment": 162,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1276.4,
+      "end": 1278.8,
+      "text": "其实都在帮助我更了解自己。",
+      "speaker_guess": "client",
+      "script_segment": 162,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1279.5,
+      "end": 1281.6,
+      "text": "你已经学会了很重要的东西。",
+      "speaker_guess": "therapist",
+      "script_segment": 163,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1282.5,
+      "end": 1286.3,
+      "text": "我觉得我现在对拖延的态度也比较不同了，",
+      "speaker_guess": "client",
+      "script_segment": 164,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1286.6,
+      "end": 1289.1,
+      "text": "以前我总是觉得拖延是坏事，",
+      "speaker_guess": "client",
+      "script_segment": 164,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1290.0,
+      "end": 1295.1,
+      "text": "现在则是把它当作一个信号，告诉我哪里需要调整。",
+      "speaker_guess": "client",
+      "script_segment": 164,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1295.7,
+      "end": 1296.9,
+      "text": "这是很大的转变。",
+      "speaker_guess": "therapist",
+      "script_segment": 149,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1298.0,
+      "end": 1304.7,
+      "text": "对，我开始相信，只要我愿意去面对，就一定能找到适合自己的方法，",
+      "speaker_guess": "client",
+      "script_segment": 166,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1305.0,
+      "end": 1311.0,
+      "text": "而且，我也越来越相信，改变不是一粗可击的，而是慢慢累积的。",
+      "speaker_guess": "client",
+      "script_segment": 166,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1311.6,
+      "end": 1313.6,
+      "text": "你已经走在正确的路上了。",
+      "speaker_guess": "therapist",
+      "script_segment": 167,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1314.6,
+      "end": 1319.2,
+      "text": "谢谢你一直以来的陪伴，我知道这段旅程还很长。",
+      "speaker_guess": "client",
+      "script_segment": 168,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1320.0,
+      "end": 1322.4,
+      "text": "但我已经开始看到希望了。",
+      "speaker_guess": "client",
+      "script_segment": 168,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1323.0,
+      "end": 1324.3,
+      "text": "你值得这样的希望？",
+      "speaker_guess": "therapist",
+      "script_segment": 169,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1325.4,
+      "end": 1328.0,
+      "text": "说到这里，我想起一件事，",
+      "speaker_guess": "client",
+      "script_segment": 170,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1328.4,
+      "end": 1332.9,
+      "text": "最近我晚上睡觉的时候常常被室友的声音吵醒，",
+      "speaker_guess": "client",
+      "script_segment": 170,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1333.2,
+      "end": 1339.1,
+      "text": "他晚上常常开着电视看剧，或者跟朋友讲电话，声音很大，",
+      "speaker_guess": "client",
+      "script_segment": 170,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1339.1,
+      "end": 1346.1,
+      "text": "我是过跟他说，但总是觉得不好意思，怕他会生气或者觉得我太挑剔。",
+      "speaker_guess": "client",
+      "script_segment": 170,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1346.7,
+      "end": 1348.6,
+      "text": "嗯？这听起来很真实？",
+      "speaker_guess": "therapist",
+      "script_segment": 104,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1350.0,
+      "end": 1366.7,
+      "text": "对，我总是想，他可能只是习惯这样，或者他也有他的理由，但每次我被吵醒，我就会很烦躁，甚至开始讨厌自己，觉得我是不是太敏感了，是不是应该忍一忍就好？",
+      "speaker_guess": "client",
+      "script_segment": 172,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1367.4,
+      "end": 1369.5,
+      "text": "你有觉察到自己的情绪反应？",
+      "speaker_guess": "therapist",
+      "script_segment": 173,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1370.3,
+      "end": 1379.8,
+      "text": "对，我常常会想，如果我跟他说了，他会不会觉得我太小气，或者他会不会觉得我是在针对他？",
+      "speaker_guess": "client",
+      "script_segment": 174,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1380.0,
+      "end": 1381.8,
+      "text": "我总是担心冲突",
+      "speaker_guess": "client",
+      "script_segment": 1,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1381.8,
+      "end": 1383.7,
+      "text": "所以就选择沉默",
+      "speaker_guess": "client",
+      "script_segment": 174,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1383.7,
+      "end": 1386.5,
+      "text": "但这样其实对我来说很辛苦",
+      "speaker_guess": "client",
+      "script_segment": 1,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1386.5,
+      "end": 1389.3,
+      "text": "你又觉察到自己的逃避行为",
+      "speaker_guess": "therapist",
+      "script_segment": 175,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1389.3,
+      "end": 1390.7,
+      "text": "是的",
+      "speaker_guess": "client",
+      "script_segment": 18,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1390.7,
+      "end": 1391.8,
+      "text": "我发现",
+      "speaker_guess": "client",
+      "script_segment": 1,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1391.8,
+      "end": 1395.6,
+      "text": "我总是把不好意思当成不去行动的理由",
+      "speaker_guess": "client",
+      "script_segment": 176,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1395.6,
+      "end": 1396.5,
+      "text": "但其实",
+      "speaker_guess": "client",
+      "script_segment": 56,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1396.5,
+      "end": 1399.6,
+      "text": "我真正想要的是能安静地睡觉",
+      "speaker_guess": "client",
+      "script_segment": 176,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1399.6,
+      "end": 1403.4,
+      "text": "而不是让自己一直处在焦虑和不满中",
+      "speaker_guess": "client",
+      "script_segment": 176,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1403.4,
+      "end": 1405.8,
+      "text": "你又觉察到自己的需求",
+      "speaker_guess": "therapist",
+      "script_segment": 177,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1405.8,
+      "end": 1407.1,
+      "text": "对",
+      "speaker_guess": "client",
+      "script_segment": 1,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1407.1,
+      "end": 1408.4,
+      "text": "我开始想",
+      "speaker_guess": "client",
+      "script_segment": 150,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1408.4,
+      "end": 1409.6,
+      "text": "如果我真的是",
+      "speaker_guess": "client",
+      "script_segment": 80,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1410.0,
+      "end": 1422.7,
+      "text": "说了，是不是会有什么不好的结果，或者，是不是其实他会理解，我开始想练习怎么用比较温和的方式去表达我的需求，而不是一直压抑。",
+      "speaker_guess": "client",
+      "script_segment": 178,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1423.4,
+      "end": 1425.1,
+      "text": "你有觉察到自己的选择？",
+      "speaker_guess": "therapist",
+      "script_segment": 173,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1425.9,
+      "end": 1439.7,
+      "text": "对，我想到可以用我的语句，比如说我晚上睡觉的时候比较需要安静的环境，而不是直接说你声音太大了，这样可能比较不会让他觉得被攻击。",
+      "speaker_guess": "client",
+      "script_segment": 180,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1440.0,
+      "end": 1442.6,
+      "text": "你有觉察到自己的表达方式？",
+      "speaker_guess": "therapist",
+      "script_segment": 181,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1443.7,
+      "end": 1447.0,
+      "text": "对，我觉得这是一个可以练习的机会，",
+      "speaker_guess": "client",
+      "script_segment": 47,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1447.3,
+      "end": 1449.3,
+      "text": "虽然还是会有点紧张，",
+      "speaker_guess": "client",
+      "script_segment": 1,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1449.7,
+      "end": 1451.4,
+      "text": "但我已经开始相信，",
+      "speaker_guess": "client",
+      "script_segment": 182,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1451.8,
+      "end": 1454.2,
+      "text": "我有权利去表达自己的需求，",
+      "speaker_guess": "client",
+      "script_segment": 182,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1454.6,
+      "end": 1458.0,
+      "text": "而不是一直让自己处在不舒服的状态里。",
+      "speaker_guess": "client",
+      "script_segment": 182,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1458.6,
+      "end": 1460.3,
+      "text": "你有觉察到自己的信念？",
+      "speaker_guess": "therapist",
+      "script_segment": 183,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1461.1,
+      "end": 1463.1,
+      "text": "对，我开始相信，",
+      "speaker_guess": "client",
+      "script_segment": 166,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1463.5,
+      "end": 1465.7,
+      "text": "表达自己的需求不是自私，",
+      "speaker_guess": "client",
+      "script_segment": 184,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1466.1,
+      "end": 1467.4,
+      "text": "而是对自己负责，",
+      "speaker_guess": "client",
+      "script_segment": 33,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1467.8,
+      "end": 1469.8,
+      "text": "而且，如果我真的说了，",
+      "speaker_guess": "client",
+      "script_segment": 134,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1470.0,
+      "end": 1472.8,
+      "text": "最坏的情况也不过是被拒绝",
+      "speaker_guess": "client",
+      "script_segment": 184,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1472.8,
+      "end": 1474.4,
+      "text": "或者他不理解",
+      "speaker_guess": "client",
+      "script_segment": 184,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1474.4,
+      "end": 1476.0,
+      "text": "但至少我是过了",
+      "speaker_guess": "client",
+      "script_segment": 50,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1476.0,
+      "end": 1479.2,
+      "text": "而不是一直让自己处在不满中",
+      "speaker_guess": "client",
+      "script_segment": 182,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1479.2,
+      "end": 1481.5,
+      "text": "你有觉察到自己的勇气？",
+      "speaker_guess": "therapist",
+      "script_segment": 185,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1482.6,
+      "end": 1482.7,
+      "text": "对",
+      "speaker_guess": "client",
+      "script_segment": 1,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1482.7,
+      "end": 1485.7,
+      "text": "我觉得这是我可以慢慢练习的",
+      "speaker_guess": "client",
+      "script_segment": 186,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1485.7,
+      "end": 1487.3,
+      "text": "也许第一次说了",
+      "speaker_guess": "client",
+      "script_segment": 186,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1487.3,
+      "end": 1489.1,
+      "text": "他不会马上改变",
+      "speaker_guess": "client",
+      "script_segment": 186,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1489.1,
+      "end": 1491.5,
+      "text": "但我已经迈出了第一步",
+      "speaker_guess": "client",
+      "script_segment": 186,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1491.5,
+      "end": 1492.0,
+      "text": "而且",
+      "speaker_guess": "client",
+      "script_segment": 41,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1492.0,
+      "end": 1493.2,
+      "text": "我发现",
+      "speaker_guess": "client",
+      "script_segment": 1,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1493.2,
+      "end": 1495.9,
+      "text": "当我开始表达自己的需求时",
+      "speaker_guess": "client",
+      "script_segment": 186,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1495.9,
+      "end": 1498.4,
+      "text": "我反而会觉得比较轻松",
+      "speaker_guess": "client",
+      "script_segment": 186,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1500.0,
+      "end": 1501.7,
+      "text": "你又觉察到自己的改变？",
+      "speaker_guess": "therapist",
+      "script_segment": 187,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1502.8,
+      "end": 1515.8,
+      "text": "对，我开始相信，改变不是一蹴可击的，而是慢慢累积的，而且，我也越来越相信，只要我愿意去面对，就一定能找到适合自己的方法。",
+      "speaker_guess": "client",
+      "script_segment": 166,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1516.1,
+      "end": 1518.4,
+      "text": "你已经走在正确的路上了。",
+      "speaker_guess": "therapist",
+      "script_segment": 167,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1519.3,
+      "end": 1526.6,
+      "text": "谢谢你一直以来的陪伴，我知道这段旅程还很长，但我已经开始看到希望了。",
+      "speaker_guess": "client",
+      "script_segment": 168,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1527.3,
+      "end": 1528.4,
+      "text": "你值得这样的希望？",
+      "speaker_guess": "therapist",
+      "script_segment": 169,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1530.0,
+      "end": 1543.6,
+      "text": "对，我开始相信，只要我愿意去面对，就一定能找到适合自己的方法，而且，我也越来越相信，改变不是一蹴可击的，而是慢慢累积的。",
+      "speaker_guess": "client",
+      "script_segment": 166,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1544.2,
+      "end": 1546.2,
+      "text": "你已经走在正确的路上了。",
+      "speaker_guess": "therapist",
+      "script_segment": 167,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1560.0,
+      "end": 1561.7,
+      "text": "去表达我的请求",
+      "speaker_guess": "client",
+      "script_segment": 178,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1561.7,
+      "end": 1563.0,
+      "text": "而不是逃避",
+      "speaker_guess": "client",
+      "script_segment": 194,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1563.0,
+      "end": 1564.0,
+      "text": "很好",
+      "speaker_guess": "therapist",
+      "script_segment": 51,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1564.0,
+      "end": 1565.9,
+      "text": "这是一个很棒的练习",
+      "speaker_guess": "therapist",
+      "script_segment": 61,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1565.9,
+      "end": 1568.3,
+      "text": "我会先想一下",
+      "speaker_guess": "client",
+      "script_segment": 196,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1568.3,
+      "end": 1569.5,
+      "text": "如果我说",
+      "speaker_guess": "client",
+      "script_segment": 72,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1569.5,
+      "end": 1572.3,
+      "text": "你可以帮我整理一下房间吗",
+      "speaker_guess": "client",
+      "script_segment": 196,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1572.3,
+      "end": 1573.8,
+      "text": "我最近有点忙",
+      "speaker_guess": "client",
+      "script_segment": 196,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1573.8,
+      "end": 1575.8,
+      "text": "真的需要一点空间",
+      "speaker_guess": "client",
+      "script_segment": 196,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1575.8,
+      "end": 1577.7,
+      "text": "这样会不会太直接",
+      "speaker_guess": "client",
+      "script_segment": 196,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1577.7,
+      "end": 1580.5,
+      "text": "还是我该用比较委婉的方式",
+      "speaker_guess": "client",
+      "script_segment": 196,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1580.5,
+      "end": 1583.4,
+      "text": "你已经很清楚自己的需求了",
+      "speaker_guess": "therapist",
+      "script_segment": 197,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1583.4,
+      "end": 1585.8,
+      "text": "但我还是会想",
+      "speaker_guess": "client",
+      "script_segment": 22,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1585.8,
+      "end": 1588.2,
+      "text": "万一他觉得我在指责他",
+      "speaker_guess": "client",
+      "script_segment": 198,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1588.2,
+      "end": 1589.4,
+      "text": "或者觉得我",
+      "speaker_guess": "client",
+      "script_segment": 98,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1590.0,
+      "end": 1595.0,
+      "text": "那会不会让我们的关系变差？我总是担心别人对我的看法。",
+      "speaker_guess": "client",
+      "script_segment": 198,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1595.0,
+      "end": 1597.0,
+      "text": "这是你惯性的佳妞。",
+      "speaker_guess": "therapist",
+      "script_segment": 199,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1597.0,
+      "end": 1611.0,
+      "text": "我知道，但这感觉很真实，我会想，如果我说了，他可能会觉得我是在抱怨他不帮忙，其实我只是希望房间干净一点，并不是针对他。",
+      "speaker_guess": "client",
+      "script_segment": 200,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1611.0,
+      "end": 1616.0,
+      "text": "你已经能分辨自己的需求和他人可能的反应了。",
+      "speaker_guess": "therapist",
+      "script_segment": 201,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1616.0,
+      "end": 1619.4,
+      "text": "对，我觉得我可以用比较的。",
+      "speaker_guess": "client",
+      "script_segment": 202,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1620.0,
+      "end": 1622.0,
+      "text": "这样的表达方式很吓到。",
+      "speaker_guess": "therapist",
+      "script_segment": 203,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1622.0,
+      "end": 1632.0,
+      "text": "我也可以准备好应对他可能的反应，比如他说：我最近也很忙，那我就可以说：没关系，我们可以一起找时间，这样我就不会觉得被拒绝了。",
+      "speaker_guess": "client",
+      "script_segment": 204,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1632.0,
+      "end": 1640.0,
+      "text": "我可以说：我最近也很忙，那我就可以说：没关系，我们可以一起找时间，这样我就不会觉得被拒绝了。",
+      "speaker_guess": "client",
+      "script_segment": 204,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1640.0,
+      "end": 1649.0,
+      "text": "我可以说：我最近也很忙，那我就可以说：没关系，我们可以一起找时间，这样我就不会觉得被拒绝了。",
+      "speaker_guess": "client",
+      "script_segment": 204,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1650.0,
+      "end": 1652.4,
+      "text": "你已经在练习弹性命对了。",
+      "speaker_guess": "therapist",
+      "script_segment": 95,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1653.5,
+      "end": 1665.6,
+      "text": "而且，如果他真的拒绝了，我也会告诉自己，这不代表我有什么问题，只是他现在不方便，我已经学会用不同的方式看待拒绝了。",
+      "speaker_guess": "client",
+      "script_segment": 206,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1666.2,
+      "end": 1667.8,
+      "text": "你正在建立新的信念。",
+      "speaker_guess": "therapist",
+      "script_segment": 207,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1680.0,
+      "end": 1709.2,
+      "text": "也不会有什么大不了的后果。你正在改变最尴尬的体验。而且，如果我真的说了，不管结果如何，我都会告诉自己，我已经完成了这一步，这对我来说就是一种胜利。你已经在前进了。我觉得这样的练习让我更有信心去面对其他类似的情境，比如说，我也可以试着请室友帮我买东西，或者一起去做。",
+      "speaker_guess": "client",
+      "script_segment": 210,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1710.0,
+      "end": 1712.2,
+      "text": "讨论房间的使用规则",
+      "speaker_guess": "client",
+      "script_segment": 212,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1712.2,
+      "end": 1715.0,
+      "text": "你正在扩张你的行动范围",
+      "speaker_guess": "therapist",
+      "script_segment": 213,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1715.0,
+      "end": 1720.2,
+      "text": "对，我觉得这对我来说是一个很重要的转变",
+      "speaker_guess": "client",
+      "script_segment": 120,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1720.2,
+      "end": 1722.7,
+      "text": "我不再觉得自己一定要完美",
+      "speaker_guess": "client",
+      "script_segment": 214,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1722.7,
+      "end": 1725.1,
+      "text": "才能去请求别人的帮助",
+      "speaker_guess": "client",
+      "script_segment": 214,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1725.1,
+      "end": 1726.6,
+      "text": "我已经学会了",
+      "speaker_guess": "client",
+      "script_segment": 37,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1726.6,
+      "end": 1729.4,
+      "text": "请求帮助是一种正常的互动",
+      "speaker_guess": "client",
+      "script_segment": 214,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1729.4,
+      "end": 1732.2,
+      "text": "你正在建立健康的互动模式",
+      "speaker_guess": "therapist",
+      "script_segment": 215,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1732.2,
+      "end": 1736.8,
+      "text": "我真的很感谢你一直以来的陪伴和引导",
+      "speaker_guess": "client",
+      "script_segment": 216,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1736.8,
+      "end": 1739.3,
+      "text": "我觉得自己越来越能掌握",
+      "speaker_guess": "client",
+      "script_segment": 216,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1740.0,
+      "end": 1743.8,
+      "text": "自己的生活，而不是被焦虑和拖延控制。",
+      "speaker_guess": "client",
+      "script_segment": 216,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1744.5,
+      "end": 1745.8,
+      "text": "你真的这样的穷爪？",
+      "speaker_guess": "therapist",
+      "script_segment": 2,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1746.9,
+      "end": 1752.1,
+      "text": "其实我最近有在考虑加入一个社团，是关于公益服务的，",
+      "speaker_guess": "client",
+      "script_segment": 218,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1752.4,
+      "end": 1757.1,
+      "text": "我一直很喜欢帮助别人，但每次想到要自我介绍，",
+      "speaker_guess": "client",
+      "script_segment": 218,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1757.5,
+      "end": 1761.1,
+      "text": "我就会开始紧张，甚至连想都不敢想。",
+      "speaker_guess": "client",
+      "script_segment": 218,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1761.8,
+      "end": 1763.0,
+      "text": "这是很自然的反应。",
+      "speaker_guess": "therapist",
+      "script_segment": 219,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1764.0,
+      "end": 1769.4,
+      "text": "我知道这对我来说是一个很好的机会，可以练习与人互动，",
+      "speaker_guess": "client",
+      "script_segment": 220,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1770.0,
+      "end": 1783.1,
+      "text": "也能把注意力从自己身上转移出去，但每次想到要站在一群人面前说出自己的名字，兴趣，我就觉得自己会说错话，表现得很尴尬。",
+      "speaker_guess": "client",
+      "script_segment": 220,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1783.8,
+      "end": 1787.1,
+      "text": "你又觉察到自己的焦虑，这已经是很大在进步。",
+      "speaker_guess": "therapist",
+      "script_segment": 221,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1788.0,
+      "end": 1799.1,
+      "text": "我试着用我们之前练习的挑战自动想法方法，告诉自己自我介绍只是简单的介绍，不是考试，但有时候还是会背。",
+      "speaker_guess": "client",
+      "script_segment": 222,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1800.0,
+      "end": 1806.6,
+      "text": "负面想法打断，比如他们会不会觉得我很无聊，我是不是说的太少了。",
+      "speaker_guess": "client",
+      "script_segment": 222,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1807.2,
+      "end": 1811.3,
+      "text": "这些想法很常见，但你可以选择不让他们控制你。",
+      "speaker_guess": "therapist",
+      "script_segment": 223,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1812.4,
+      "end": 1823.0,
+      "text": "我也在想，能不能先在家里练习自我介绍，把内容写下来，甚至录音听听看，这样至少能减少当下的慌乱感。",
+      "speaker_guess": "client",
+      "script_segment": 224,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1823.7,
+      "end": 1825.2,
+      "text": "这是很好的具体行动。",
+      "speaker_guess": "therapist",
+      "script_segment": 225,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1826.3,
+      "end": 1829.7,
+      "text": "另外，我还想问问你，如果我在社会上，",
+      "speaker_guess": "client",
+      "script_segment": 226,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1830.0,
+      "end": 1837.6,
+      "text": "在团里真的表现得很紧张，是不是代表我做错了什么，还是只是我还在学习的过程中？",
+      "speaker_guess": "client",
+      "script_segment": 226,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1838.3,
+      "end": 1841.1,
+      "text": "学习的过程中，紧张是很正常的。",
+      "speaker_guess": "therapist",
+      "script_segment": 227,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1842.2,
+      "end": 1853.9,
+      "text": "我觉得自己已经比以前勇敢多了，以前连上课发言都不敢，现在至少愿意考虑加入社团，这是不是代表我在慢慢走出舒适圈？",
+      "speaker_guess": "client",
+      "script_segment": 228,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1854.6,
+      "end": 1858.1,
+      "text": "你正在走出舒适圈，而且走得很比我觉察。",
+      "speaker_guess": "therapist",
+      "script_segment": 229,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1860.0,
+      "end": 1871.3,
+      "text": "我想我可以先去参加社团的说明会，不需要马上自我介绍，这样我可以先观察环境，认识一些人，再慢慢准备。",
+      "speaker_guess": "client",
+      "script_segment": 230,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1872.0,
+      "end": 1873.4,
+      "text": "这是一个很好的策略。",
+      "speaker_guess": "therapist",
+      "script_segment": 231,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1874.6,
+      "end": 1886.9,
+      "text": "我也在想，如果我真的在自我介绍时表现得很不自在，是不是可以请社团的干部先帮我介绍，或者用简短的方式说，不用太详细。",
+      "speaker_guess": "client",
+      "script_segment": 232,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1887.3,
+      "end": 1889.4,
+      "text": "你正在规划被选方案。",
+      "speaker_guess": "therapist",
+      "script_segment": 233,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1890.0,
+      "end": 1891.2,
+      "text": "这很有帮助。",
+      "speaker_guess": "therapist",
+      "script_segment": 117,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1892.3,
+      "end": 1901.6,
+      "text": "我觉得自己越来越能接受不完美的自己了，即使表现得不完美，我也知道这不代表我不好，而是我在学习。",
+      "speaker_guess": "client",
+      "script_segment": 234,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1902.2,
+      "end": 1904.3,
+      "text": "你正在建立对我建议的基础。",
+      "speaker_guess": "therapist",
+      "script_segment": 235,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1905.4,
+      "end": 1918.9,
+      "text": "我想我可以先设定一个小目标，比如至少去一次说明会，而不是一定要加入社团，这样压力会比较小，也能让我更专注在过程而不是结果上。",
+      "speaker_guess": "client",
+      "script_segment": 236,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1920.0,
+      "end": 1921.8,
+      "text": "这个目标设定很实际。",
+      "speaker_guess": "therapist",
+      "script_segment": 237,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1923.0,
+      "end": 1932.3,
+      "text": "我也想请你帮我看看，我写的自我介绍稿，看看是不是太长，太复杂，或者有什么地方可以简化。",
+      "speaker_guess": "client",
+      "script_segment": 238,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1933.0,
+      "end": 1935.3,
+      "text": "当然可以，我们可以一起练习。",
+      "speaker_guess": "therapist",
+      "script_segment": 239,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1936.4,
+      "end": 1946.9,
+      "text": "我真的很期待能有这样的机会，不只是为了社交，也是为了证明给自己看，我可以在害怕的情况下，还是选择行动。",
+      "speaker_guess": "client",
+      "script_segment": 240,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1947.3,
+      "end": 1949.4,
+      "text": "你正在证明给自己看。",
+      "speaker_guess": "therapist",
+      "script_segment": 241,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1950.0,
+      "end": 1951.2,
+      "text": "不过",
+      "speaker_guess": "client",
+      "script_segment": 1,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1951.2,
+      "end": 1953.7,
+      "text": "每次想到要面对人群",
+      "speaker_guess": "client",
+      "script_segment": 242,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1953.7,
+      "end": 1956.1,
+      "text": "我还是会觉得胸口很压",
+      "speaker_guess": "client",
+      "script_segment": 31,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1956.1,
+      "end": 1958.9,
+      "text": "好像有一种声音一直在说",
+      "speaker_guess": "client",
+      "script_segment": 242,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1958.9,
+      "end": 1960.4,
+      "text": "你会搞砸的",
+      "speaker_guess": "client",
+      "script_segment": 86,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1960.4,
+      "end": 1961.6,
+      "text": "不如别试了",
+      "speaker_guess": "client",
+      "script_segment": 24,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1961.6,
+      "end": 1963.1,
+      "text": "那是什么声音",
+      "speaker_guess": "therapist",
+      "script_segment": 28,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1963.1,
+      "end": 1966.6,
+      "text": "我不知道是不是我自己的声音",
+      "speaker_guess": "client",
+      "script_segment": 244,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1966.6,
+      "end": 1968.3,
+      "text": "但感觉很熟悉",
+      "speaker_guess": "client",
+      "script_segment": 244,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1968.3,
+      "end": 1970.0,
+      "text": "可能是我小时候",
+      "speaker_guess": "client",
+      "script_segment": 244,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1970.0,
+      "end": 1971.9,
+      "text": "每次考试考不好",
+      "speaker_guess": "client",
+      "script_segment": 244,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1971.9,
+      "end": 1973.6,
+      "text": "我爸妈就会说",
+      "speaker_guess": "client",
+      "script_segment": 244,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1973.6,
+      "end": 1975.6,
+      "text": "你这样下去会怎么样",
+      "speaker_guess": "client",
+      "script_segment": 2,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1975.6,
+      "end": 1977.2,
+      "text": "那是什么感觉",
+      "speaker_guess": "therapist",
+      "script_segment": 28,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1977.2,
+      "end": 1979.1,
+      "text": "那种感觉",
+      "speaker_guess": "client",
+      "script_segment": 1,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1980.0,
+      "end": 2009.3,
+      "text": "我感到很难受，像是被否定，然后自己也开始怀疑自己，我开始觉得，我永远都不够好，永远都达不到他们的期望。你现在还会这样想吗？有时候会，特别是在我觉得自己做得不够好的时候，我会想，如果我考不好，他们会失望，会觉得我让他们失望了。你觉得他们会失望吗？我不知道，我从来不够。",
+      "speaker_guess": "client",
+      "script_segment": 248,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2010.0,
+      "end": 2018.2,
+      "text": "我都不敢问他们，也不敢说出自己的感受，我怕他们会说我太软弱，或者说我太不负责任。",
+      "speaker_guess": "client",
+      "script_segment": 250,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2018.9,
+      "end": 2022.4,
+      "text": "你有没有想过，他们其实也希望你能过得开心？",
+      "speaker_guess": "therapist",
+      "script_segment": 251,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 2023.5,
+      "end": 2033.8,
+      "text": "我有试过这样想，但每次一想到他们对我的期待，我就觉得压力很大，我好像永远都做不到他们想要的那种成功。",
+      "speaker_guess": "client",
+      "script_segment": 252,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2034.4,
+      "end": 2035.7,
+      "text": "你觉得成功是什么？",
+      "speaker_guess": "therapist",
+      "script_segment": 253,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 2036.5,
+      "end": 2039.7,
+      "text": "对我来说，成功就是能让他们成功。",
+      "speaker_guess": "client",
+      "script_segment": 254,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2040.0,
+      "end": 2045.5,
+      "text": "我觉得我值得骄傲，但我也知道，这可能不是他们真正想要的。",
+      "speaker_guess": "client",
+      "script_segment": 254,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2046.1,
+      "end": 2046.8,
+      "text": "你怎么知道？",
+      "speaker_guess": "therapist",
+      "script_segment": 255,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 2048.0,
+      "end": 2062.6,
+      "text": "因为我从来没有真正和他们谈过，我总是假设他们想要的是我考第一名，找到好工作，过得很稳定，但我从来没有问过他们，他们希望我过什么样的生活。",
+      "speaker_guess": "client",
+      "script_segment": 256,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2063.3,
+      "end": 2064.6,
+      "text": "你有想过要问吗？",
+      "speaker_guess": "therapist",
+      "script_segment": 87,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 2065.3,
+      "end": 2069.2,
+      "text": "有，但我怕他们会失望，我怕他们会对我。",
+      "speaker_guess": "client",
+      "script_segment": 258,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2070.0,
+      "end": 2073.7,
+      "text": "我觉得我太自私，或者说我太不负责任。",
+      "speaker_guess": "client",
+      "script_segment": 258,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2074.3,
+      "end": 2076.4,
+      "text": "你觉得那是他们的真实想法吗？",
+      "speaker_guess": "therapist",
+      "script_segment": 259,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 2077.5,
+      "end": 2084.0,
+      "text": "我不知道，我只是觉得，如果我说出自己的想法，他们会觉得我不够努力。",
+      "speaker_guess": "client",
+      "script_segment": 260,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2084.7,
+      "end": 2087.5,
+      "text": "你有没有想过，他们也可能会有压力？",
+      "speaker_guess": "therapist",
+      "script_segment": 261,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 2088.6,
+      "end": 2097.5,
+      "text": "我从来没有这样想过，我一直觉得压力都是我自己的，但我现在开始觉得，他们可能也有他们的压力。",
+      "speaker_guess": "client",
+      "script_segment": 262,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2100.0,
+      "end": 2112.0,
+      "text": "我开始觉得，他们可能也希望我过得开心，而不是只是成功，只是我从来没有这样想过，因为我总是太在意他们的期待。",
+      "speaker_guess": "client",
+      "script_segment": 264,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2112.6,
+      "end": 2114.1,
+      "text": "你现在有什么感觉？",
+      "speaker_guess": "therapist",
+      "script_segment": 265,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 2115.0,
+      "end": 2128.6,
+      "text": "我觉得有点释怀，好像开始看到一些新的可能性，我开始觉得，也许我也可以试着和他们谈谈，不只是关于成绩，而是关于我真正想要的生活。",
+      "speaker_guess": "client",
+      "script_segment": 266,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2130.0,
+      "end": 2152.2,
+      "text": "其实我还记得小学的时候，有一次考试我只考了第三名，回家后我妈就问我，为什么不是第一名，那时我还小，我说我已经很努力了，但她说，努力没有用，结果才重要，从那时起，我就开始觉得，如果做不到最好，就是失败。",
+      "speaker_guess": "client",
+      "script_segment": 267,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2152.9,
+      "end": 2155.3,
+      "text": "那种感觉，是不是一直跟着你？",
+      "speaker_guess": "therapist",
+      "script_segment": 268,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 2160.0,
+      "end": 2172.7,
+      "text": "我报名了跳远，结果只拿到第三名，我妈就说，你连这个都拿不到第一，还能做什么？那时我真的觉得很难过，甚至不想再参加比赛了。",
+      "speaker_guess": "client",
+      "script_segment": 269,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2173.3,
+      "end": 2176.5,
+      "text": "那种话，对你来说，像是一种否定吗？",
+      "speaker_guess": "therapist",
+      "script_segment": 270,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 2177.6,
+      "end": 2187.2,
+      "text": "对，我觉得他不是在否定我跳得不好，而是在否定我本身，好像只要我做不到最好，我就不是一个好孩子。",
+      "speaker_guess": "client",
+      "script_segment": 271,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2187.9,
+      "end": 2188.7,
+      "text": "那种感觉。",
+      "speaker_guess": "therapist",
+      "script_segment": 1,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 2190.0,
+      "end": 2191.9,
+      "text": "是不是让你对失败特别应该？",
+      "speaker_guess": "therapist",
+      "script_segment": 7,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 2193.1,
+      "end": 2195.9,
+      "text": "对，我觉得我现在对失败的恐惧，",
+      "speaker_guess": "client",
+      "script_segment": 273,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2196.3,
+      "end": 2198.6,
+      "text": "其实就是从那种否定来的，",
+      "speaker_guess": "client",
+      "script_segment": 273,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2198.8,
+      "end": 2201.7,
+      "text": "我总是觉得，如果我做不到最好，",
+      "speaker_guess": "client",
+      "script_segment": 273,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2201.7,
+      "end": 2203.8,
+      "text": "别人就会看不起我，",
+      "speaker_guess": "client",
+      "script_segment": 273,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2204.1,
+      "end": 2206.4,
+      "text": "连我自己也会看不起自己。",
+      "speaker_guess": "client",
+      "script_segment": 273,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2207.0,
+      "end": 2209.6,
+      "text": "那种想法，现在还影响你呢？",
+      "speaker_guess": "therapist",
+      "script_segment": 38,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 2210.7,
+      "end": 2213.7,
+      "text": "当然会，比如说我现在写报告，",
+      "speaker_guess": "client",
+      "script_segment": 35,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2214.1,
+      "end": 2216.3,
+      "text": "如果我觉得自己写得不够好，",
+      "speaker_guess": "client",
+      "script_segment": 160,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2216.7,
+      "end": 2219.7,
+      "text": "我就会拖延，因为我不想让别人看，",
+      "speaker_guess": "client",
+      "script_segment": 275,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2220.0,
+      "end": 2221.9,
+      "text": "看到我不够好的一面。",
+      "speaker_guess": "client",
+      "script_segment": 275,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2222.6,
+      "end": 2225.1,
+      "text": "那种拖延，是不是一种自我保护？",
+      "speaker_guess": "therapist",
+      "script_segment": 276,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 2226.2,
+      "end": 2230.3,
+      "text": "对，我觉得如果我不交报告，至少我还能说，",
+      "speaker_guess": "client",
+      "script_segment": 277,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2230.7,
+      "end": 2235.9,
+      "text": "我只是还没写完，而不是我写得不好，这样我就不会被否定。",
+      "speaker_guess": "client",
+      "script_segment": 277,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2236.5,
+      "end": 2238.6,
+      "text": "你觉得很熟悉这种感觉吗？",
+      "speaker_guess": "therapist",
+      "script_segment": 278,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 2239.4,
+      "end": 2245.1,
+      "text": "真的太熟悉了，我从小学开始就这样，我总是想做到完美，",
+      "speaker_guess": "client",
+      "script_segment": 279,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2245.4,
+      "end": 2249.3,
+      "text": "因为我知道，只要我不完美，就会被否定。",
+      "speaker_guess": "client",
+      "script_segment": 279,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2250.0,
+      "end": 2253.5,
+      "text": "那种否定，是不是来自于你内心的声音？",
+      "speaker_guess": "therapist",
+      "script_segment": 280,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 2254.6,
+      "end": 2268.3,
+      "text": "对，我觉得我内心有一个声音，一直在说，如果你做不到最好，你就什么都不是，那声音很像我妈的语气，但我现在才发现，那是我内心学来的。",
+      "speaker_guess": "client",
+      "script_segment": 281,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2268.9,
+      "end": 2271.5,
+      "text": "你现在对那个声音有什么心的理解？",
+      "speaker_guess": "therapist",
+      "script_segment": 282,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 2272.3,
+      "end": 2279.7,
+      "text": "我开始觉得，那个声音不是真的爱我，而是想控制我，它让我觉得只有做到最好。",
+      "speaker_guess": "client",
+      "script_segment": 283,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2280.0,
+      "end": 2287.1,
+      "text": "才值得被爱，但其实，我早就知道，我妈爱我，不只是因为我成功。",
+      "speaker_guess": "client",
+      "script_segment": 283,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2287.8,
+      "end": 2288.7,
+      "text": "你怎么知道的？",
+      "speaker_guess": "therapist",
+      "script_segment": 284,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 2289.8,
+      "end": 2296.8,
+      "text": "因为有一次我生病了，她没有问我成绩，而是问我有没有吃药，有没有休息，",
+      "speaker_guess": "client",
+      "script_segment": 285,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2297.2,
+      "end": 2302.0,
+      "text": "那时我才发现，她其实在乎的是我，而不是我的表现。",
+      "speaker_guess": "client",
+      "script_segment": 285,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2302.7,
+      "end": 2305.2,
+      "text": "那种发现，对你来说有什么意义？",
+      "speaker_guess": "therapist",
+      "script_segment": 3,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 2310.0,
+      "end": 2320.6,
+      "text": "不只是因为我成功，而是因为我是我，这对我来说很重要，因为我以前总是觉得，只有做到最好，才值得存在。",
+      "speaker_guess": "client",
+      "script_segment": 287,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2321.2,
+      "end": 2323.6,
+      "text": "你现在对最好有什么新的想法？",
+      "speaker_guess": "therapist",
+      "script_segment": 288,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 2324.4,
+      "end": 2334.3,
+      "text": "我开始觉得，最好不是一个固定的标准，而是我自己的选择，我可以选择努力，但不需要逼自己做到完美。",
+      "speaker_guess": "client",
+      "script_segment": 289,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2335.0,
+      "end": 2338.2,
+      "text": "你觉得这样的改变，会影响你未来的决定吗？",
+      "speaker_guess": "therapist",
+      "script_segment": 290,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 2340.0,
+      "end": 2349.5,
+      "text": "会的，我觉得我可以开始接受自己不是第一名，也可以过得很好，这对我来说，是一个很大的转变。",
+      "speaker_guess": "client",
+      "script_segment": 291,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2350.3,
+      "end": 2364.4,
+      "text": "今天我学到很多，尤其是关于最好这件事，以前我总是觉得，如果不做到最好，就没有价值，但现在我知道，这只是我脑中的一个想法，而不是事实。",
+      "speaker_guess": "client",
+      "script_segment": 292,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2365.1,
+      "end": 2367.3,
+      "text": "嗯，这是一个很重要的觉察。",
+      "speaker_guess": "therapist",
+      "script_segment": 120,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2370.0,
+      "end": 2381.0,
+      "text": "拖延并不是懒惰，而是我对失败的恐惧，当我觉得事情做不到最好时，我就会逃避，这样反而让事情变得更糟。\"",
+      "speaker_guess": "client",
+      "script_segment": 294,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2381.0,
+      "end": 2386.1,
+      "text": "你能这样说，代表你对自己的行为有了更深的认识？",
+      "speaker_guess": "therapist",
+      "script_segment": 295,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 2386.1,
+      "end": 2399.1,
+      "text": "我还学到了挑战自动想法的方法，比如，当我觉得我一定会搞砸时，我可以问自己，有证据支持这个想法吗？有没有其他可能性？这让我",
+      "speaker_guess": "client",
+      "script_segment": 296,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2400.0,
+      "end": 2402.6,
+      "text": "我不再那么容易陷入负面情绪",
+      "speaker_guess": "client",
+      "script_segment": 296,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2402.6,
+      "end": 2403.6,
+      "text": "很好",
+      "speaker_guess": "therapist",
+      "script_segment": 51,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 2403.6,
+      "end": 2406.5,
+      "text": "这正是认知行为治疗的核心技巧",
+      "speaker_guess": "therapist",
+      "script_segment": 297,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 2406.5,
+      "end": 2410.1,
+      "text": "我也开始练习设定小目标",
+      "speaker_guess": "client",
+      "script_segment": 298,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2410.1,
+      "end": 2412.8,
+      "text": "而不是一下子就想做到完美",
+      "speaker_guess": "client",
+      "script_segment": 298,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2412.8,
+      "end": 2415.9,
+      "text": "比如今天我完成了报告的一部分",
+      "speaker_guess": "client",
+      "script_segment": 298,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2415.9,
+      "end": 2418.1,
+      "text": "虽然不是最好的版本",
+      "speaker_guess": "client",
+      "script_segment": 298,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2418.1,
+      "end": 2419.9,
+      "text": "但我已经完成了",
+      "speaker_guess": "client",
+      "script_segment": 298,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2419.9,
+      "end": 2422.5,
+      "text": "这让我更有信心继续下去",
+      "speaker_guess": "client",
+      "script_segment": 298,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2422.5,
+      "end": 2424.0,
+      "text": "你做得很好",
+      "speaker_guess": "therapist",
+      "script_segment": 299,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 2424.0,
+      "end": 2426.5,
+      "text": "这样子改变需要时间和练习",
+      "speaker_guess": "therapist",
+      "script_segment": 310,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2426.5,
+      "end": 2429.2,
+      "text": "我还学会了用更有",
+      "speaker_guess": "client",
+      "script_segment": 300,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2430.0,
+      "end": 2439.7,
+      "text": "不善的语言对待自己，以前我总是用我真烂，我永远做不到这种话，现在我知道，这样只会让自己更沮丧。",
+      "speaker_guess": "client",
+      "script_segment": 300,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2440.4,
+      "end": 2443.4,
+      "text": "你愿意改变对自己的态度，这很不容易。",
+      "speaker_guess": "therapist",
+      "script_segment": 301,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 2444.6,
+      "end": 2454.9,
+      "text": "我也开始练习自我接纳，我不再逼自己一定要做到完美，而是接受自己有时候会犯错，这让我感觉轻松了很多。",
+      "speaker_guess": "client",
+      "script_segment": 302,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2455.6,
+      "end": 2457.0,
+      "text": "这是一个很大最进步。",
+      "speaker_guess": "therapist",
+      "script_segment": 2,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2460.0,
+      "end": 2473.5,
+      "text": "拖延并不是坏事，它其实是在告诉我，我对某件事有压力或焦虑，所以，我现在会先问自己，我为什么不想做这件事，而不是一昧地责怪自己。",
+      "speaker_guess": "client",
+      "script_segment": 304,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2474.2,
+      "end": 2476.4,
+      "text": "你越来越能觉察自己的情绪了。",
+      "speaker_guess": "therapist",
+      "script_segment": 305,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 2477.4,
+      "end": 2487.7,
+      "text": "我也开始相信，失败并不代表我就是失败的人，每一次的失败，其实都是学习的机会，这让我对未来更有希望。",
+      "speaker_guess": "client",
+      "script_segment": 306,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2488.1,
+      "end": 2489.2,
+      "text": "你对失败的事情？",
+      "speaker_guess": "therapist",
+      "script_segment": 35,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2490.0,
+      "end": 2492.3,
+      "text": "看法中在转变，这很关键。",
+      "speaker_guess": "therapist",
+      "script_segment": 82,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2493.5,
+      "end": 2505.8,
+      "text": "我觉得自己现在更有能力去面对困难，而不是逃避，虽然还是会有时候想拖延，但我已经知道那是我的旧习惯，而不是我真正的选择。",
+      "speaker_guess": "client",
+      "script_segment": 308,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2506.4,
+      "end": 2508.9,
+      "text": "你已经学会分辨习惯和选择了。",
+      "speaker_guess": "therapist",
+      "script_segment": 201,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 2509.7,
+      "end": 2519.3,
+      "text": "我也开始相信，我可以慢慢来，不需要一下子改变所有事情，只要每天进步一点点，我就离我想着。",
+      "speaker_guess": "client",
+      "script_segment": 310,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2520.0,
+      "end": 2521.4,
+      "text": "成为的人更近了",
+      "speaker_guess": "client",
+      "script_segment": 310,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2521.4,
+      "end": 2523.9,
+      "text": "你已经走在改变的路上了",
+      "speaker_guess": "therapist",
+      "script_segment": 311,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 2523.9,
+      "end": 2526.9,
+      "text": "今天我最大的收获是",
+      "speaker_guess": "client",
+      "script_segment": 312,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2526.9,
+      "end": 2529.1,
+      "text": "我发现我不需要完美",
+      "speaker_guess": "client",
+      "script_segment": 312,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2529.1,
+      "end": 2530.8,
+      "text": "也可以过得很好",
+      "speaker_guess": "client",
+      "script_segment": 291,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2530.8,
+      "end": 2533.2,
+      "text": "这让我对未来更有信心",
+      "speaker_guess": "client",
+      "script_segment": 212,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2533.2,
+      "end": 2536.5,
+      "text": "也更有动力去面对生活中的挑战",
+      "speaker_guess": "client",
+      "script_segment": 312,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2536.5,
+      "end": 2538.3,
+      "text": "你已经在改变了",
+      "speaker_guess": "therapist",
+      "script_segment": 121,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 2538.3,
+      "end": 2539.2,
+      "text": "这很棒",
+      "speaker_guess": "therapist",
+      "script_segment": 61,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 2539.2,
+      "end": 2544.3,
+      "text": "我觉得自己越来越能掌控自己的想法和行为了",
+      "speaker_guess": "client",
+      "script_segment": 314,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2544.3,
+      "end": 2547.1,
+      "text": "虽然还有很多要练习的地方",
+      "speaker_guess": "client",
+      "script_segment": 314,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2547.1,
+      "end": 2549.4,
+      "text": "但我已经看到了改变的",
+      "speaker_guess": "client",
+      "script_segment": 314,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2550.0,
+      "end": 2550.4,
+      "text": "可能。",
+      "speaker_guess": "client",
+      "script_segment": 46,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 2551.2,
+      "end": 2555.2,
+      "text": "你已经走得很远了，继续这样下去，会越来越好的。",
+      "speaker_guess": "therapist",
+      "script_segment": 315,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 2556.4,
+      "end": 2561.0,
+      "text": "其实我今天也想了一下，关于我之前说的那个作业，",
+      "speaker_guess": "client",
+      "script_segment": 316,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2561.4,
+      "end": 2566.1,
+      "text": "我决定先跟室友说一下，请他帮我检查一下格式，",
+      "speaker_guess": "client",
+      "script_segment": 316,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2566.5,
+      "end": 2569.4,
+      "text": "这样我就可以比较安心地交作业了。",
+      "speaker_guess": "client",
+      "script_segment": 316,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2570.0,
+      "end": 2574.6,
+      "text": "这个想法很好，你愿意主动请求帮助，是很早在进步。",
+      "speaker_guess": "therapist",
+      "script_segment": 317,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 2575.4,
+      "end": 2578.8,
+      "text": "我有点紧张，怕他会觉得我很烦。",
+      "speaker_guess": "client",
+      "script_segment": 318,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2580.0,
+      "end": 2590.0,
+      "text": "但我想我可以用比较轻松的方式跟他说，比如说开个玩笑，说我快被作业逼疯了，需要他帮忙看一下。",
+      "speaker_guess": "client",
+      "script_segment": 318,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2590.7,
+      "end": 2594.9,
+      "text": "用幽默的方式表达请求，会让对方比较容易接受。",
+      "speaker_guess": "therapist",
+      "script_segment": 319,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 2595.7,
+      "end": 2608.9,
+      "text": "我也想试着每天用番茄钟来安排时间，虽然我以前总是拖到最后一刻才开始，但这次我想试着每天至少完成两个番茄钟的作业。",
+      "speaker_guess": "client",
+      "script_segment": 320,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2610.0,
+      "end": 2612.7,
+      "text": "两个番茄钟是个很好的提点。",
+      "speaker_guess": "therapist",
+      "script_segment": 321,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 2613.9,
+      "end": 2626.7,
+      "text": "我已经下载了番茄钟的App，而且设定了一个提醒，每完成一个番茄钟就给自己一点小奖励，像是吃点喜欢的零食或者看一集喜欢的影集。",
+      "speaker_guess": "client",
+      "script_segment": 322,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2627.5,
+      "end": 2629.5,
+      "text": "这样的对我奖励方式很有效。",
+      "speaker_guess": "client",
+      "script_segment": 323,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 2630.4,
+      "end": 2639.5,
+      "text": "我也想安排一下我们下次见面的时间，因为我觉得这段时间的练习对我帮助很大，我希望可以持续。",
+      "speaker_guess": "client",
+      "script_segment": 324,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2640.0,
+      "end": 2669.3,
+      "text": "请不吝点赞 订阅 转发 打赏支持明镜与点点栏目",
+      "speaker_guess": "therapist",
+      "script_segment": 40,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 2670.0,
+      "end": 2699.1,
+      "text": "你已经学会了很多重要的技巧。",
+      "speaker_guess": "therapist",
+      "script_segment": 331,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 2700.0,
+      "end": 2711.3,
+      "text": "我想请你帮我看看我这段时间的练习笔记，看看我是不是有什么地方可以再加强的，或者是不是有什么习惯还没有养成。",
+      "speaker_guess": "client",
+      "script_segment": 332,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2712.0,
+      "end": 2714.9,
+      "text": "当然可以，我们下次见面时一起讨论。",
+      "speaker_guess": "therapist",
+      "script_segment": 333,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 2716.1,
+      "end": 2726.1,
+      "text": "我觉得这段时间的治疗对我帮助很大，我学会了怎么面对自己的焦虑，也学会了怎么安排时间，让自己不再拖延。",
+      "speaker_guess": "client",
+      "script_segment": 334,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2726.8,
+      "end": 2728.1,
+      "text": "你已经改变了很多。",
+      "speaker_guess": "therapist",
+      "script_segment": 331,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 2730.0,
+      "end": 2739.9,
+      "text": "我也希望未来能继续这样练习下去，让自己变得更自信，更有条理，也能更享受学习和生活的过程。",
+      "speaker_guess": "client",
+      "script_segment": 336,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2740.6,
+      "end": 2742.5,
+      "text": "你已经走在正确的路上了。",
+      "speaker_guess": "therapist",
+      "script_segment": 167,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 2743.6,
+      "end": 2752.4,
+      "text": "谢谢你这段时间的陪伴和指导，我觉得自己变得更清楚自己的想法，也更有动力去面对未来的挑战。",
+      "speaker_guess": "client",
+      "script_segment": 338,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2753.1,
+      "end": 2755.7,
+      "text": "很高兴能陪你一起走过这段旅程。",
+      "speaker_guess": "therapist",
+      "script_segment": 339,
+      "script_speaker": "therapist"
+    }
+  ]
+}

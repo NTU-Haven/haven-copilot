@@ -1,0 +1,13 @@
+- 02:36:42 monitor: xpu-smi on card 0 -> docs/b70-batch10/20261117-0236/monitor.csv
+- 02:36:42 idle baseline: 30 s
+- 02:37:12 starting Whisper (OFFLINE=1 PRIVILEGED=0)
+- 02:39:13 Whisper ready
+- 02:39:13 starting qwen3-32b-awq: 32k context, fp8 context cache
+- 02:41:14 qwen3-32b-awq ready (OFFLINE=1 PRIVILEGED=0)
+- 02:41:34 step asr-L50-alone: python3 scripts/asr_eval.py /home/devcloud/L50-tts.ogg --session C002-L50 --segments 1-339 --save-as C002-T50 --label b70-whisper-L50-tts-20261117-0236
+- 02:43:53 step asr-L50-alone finished (exit 0)
+- 02:43:53 step qwen3-32b-awq-draft-from-recording: python3 scripts/benchmark.py --sessions C002-T50 --label b70-qwen3-32b-awq-T50-20261117-0236
+- 02:46:09 step qwen3-32b-awq-draft-from-recording finished (exit 0)
+- 02:46:09 step asr-under-load: recording transcribed while 4 rooms draft
+- 02:50:44 step asr-under-load finished
+- 02:50:44 done: docs/b70-batch10/20261117-0236/summary.md

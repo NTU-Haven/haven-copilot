@@ -1,0 +1,999 @@
+{
+  "label": "b70-qwen3-32b-awq-L50-4rooms-asrload-20261116-1803",
+  "date": "2026-11-16T18:21:29+00:00",
+  "engine": "openai-compat:qwen3-32b-awq",
+  "llm_endpoint": "http://127.0.0.1:8000",
+  "machine": {
+    "system": "Linux-7.0.0-34-generic-x86_64-with-glibc2.43",
+    "processor": ""
+  },
+  "repeats": 1,
+  "sequential": [
+    {
+      "session_id": "C002-L50",
+      "repeats": 1,
+      "speech_seconds": 2967.4,
+      "total_seconds": 109.4,
+      "agents_ms": {
+        "asr": 0.9,
+        "writer": 88889.8,
+        "verifier": 20443.1,
+        "risk": 14.0,
+        "outcome": 0.0
+      },
+      "output_tokens_per_second": 22.2,
+      "sentences_supported": 116,
+      "sentences_supported_range": [
+        116,
+        116
+      ],
+      "sentences_total": 141,
+      "runs": [
+        {
+          "session_id": "C002-L50",
+          "speech_seconds": 2967.4,
+          "total_seconds": 109.4,
+          "agents_ms": {
+            "asr": 0.9,
+            "writer": 88889.8,
+            "verifier": 20443.1,
+            "risk": 14.0,
+            "outcome": 0.0
+          },
+          "llm_calls": 7,
+          "prompt_tokens": 23670,
+          "completion_tokens": 7569,
+          "output_tokens_per_second": 22.2,
+          "sentences_supported": 116,
+          "sentences_total": 141,
+          "sentences_weak": 12,
+          "sentences_unsupported": 13,
+          "risk_level": "critical",
+          "flagged": [
+            {
+              "section": "S",
+              "sentence": "個案提到，內心有一種聲音讓自己懷疑自己，覺得永遠都不夠好，達不到父母的期望。",
+              "status": "weak",
+              "reason": "本機模型判斷引用段落不足以支持此句",
+              "must_confirm": true,
+              "cited": "[246] client: 那種感覺很難受，像是被否定，然後自己也開始懷疑自己。我開始覺得，我永遠都不夠好，永遠都達不到他們的期望。"
+            },
+            {
+              "section": "O",
+              "sentence": "個案在談到壓力和身體反應時語氣中透露出無力感。",
+              "status": "unsupported",
+              "reason": "本機模型判斷引用段落不足以支持此句",
+              "must_confirm": false,
+              "cited": "[31] client: 我會覺得胸口很壓，呼吸變淺，有時候還會胃痛。那種感覺很不舒服，但又好像躲不開。"
+            },
+            {
+              "section": "O",
+              "sentence": "個案在談到自己的改變時，語氣中透露出較高的自信與希望感。",
+              "status": "unsupported",
+              "reason": "本機模型判斷引用段落不足以支持此句",
+              "must_confirm": false,
+              "cited": "[190] client: 謝謝你一直以來的陪伴。我知道這段旅程還很長，但我已經開始看到希望了。 / [212] client: 我覺得這樣的練習讓我更有信心去面對其他類似的情境。比如說，我也可以試著請室友幫我買東西，或者一起討論房間的使用規則。"
+            },
+            {
+              "section": "O",
+              "sentence": "個案在談到社團參與時，語氣中透露出對未來的期待與擔憂。",
+              "status": "unsupported",
+              "reason": "本機模型判斷引用段落不足以支持此句",
+              "must_confirm": false,
+              "cited": "[218] client: 其實我最近有在考慮加入一個社團，是關於公益服務的。我一直很喜歡幫助別人，但每次想到要自我介紹，我就會開始緊張，甚至連想都不敢想。 / [220] client: 我知道這對我來說是一個很好的機會，可以練習與人互動，也能把注意力從自己身上轉移出去。但每次想到要站在一群人面前說出自己的名字、興趣，我就覺得自己會說錯話、表現得很尷尬。"
+            },
+            {
+              "section": "A",
+              "sentence": "心理師觀察到個案對自己的負面評價是一種壓力來源。",
+              "status": "weak",
+              "reason": "本機模型判斷引用段落不足以支持此句",
+              "must_confirm": true,
+              "cited": "[7] therapist: 你提到「應該做得更好」，這是不是一種壓力來源？"
+            },
+            {
+              "section": "A",
+              "sentence": "心理師指出個案的拖延行為可能是一種逃避，並提議探討其背後的感受。",
+              "status": "unsupported",
+              "reason": "本機模型判斷引用段落不足以支持此句",
+              "must_confirm": false,
+              "cited": "[9] therapist: 拖延對你來說，是不是一種逃避？"
+            },
+            {
+              "section": "A",
+              "sentence": "心理師認為覺察是改變的第一步，並肯定個案開始學會質疑負面想法。",
+              "status": "weak",
+              "reason": "本機模型判斷引用段落不足以支持此句",
+              "must_confirm": true,
+              "cited": "[51] therapist: 很好，覺察是改變的第一步。"
+            },
+            {
+              "section": "A",
+              "sentence": "心理師認為個案已經在改變，並肯定其進步。",
+              "status": "weak",
+              "reason": "本機模型判斷引用段落不足以支持此句",
+              "must_confirm": true,
+              "cited": "[121] therapist: 你已經在改變了。 / [143] therapist: 你已經在前進了。 / [145] therapist: 你已經在改變了。"
+            },
+            {
+              "section": "A",
+              "sentence": "心理師認為個案提出的行為實驗方法是很好的想法，並肯定其邏輯與實用性。",
+              "status": "unsupported",
+              "reason": "本機模型判斷引用段落不足以支持此句",
+              "must_confirm": false,
+              "cited": "[125] therapist: 這是個很好的想法。 / [127] therapist: 你說得很對。 / [131] therapist: 這就是行為實驗的核心。 / [135] therapist: 你正在學習用行動來改變信念。 / [137] therapist: 行動確實能帶來改變。"
+            },
+            {
+              "section": "A",
+              "sentence": "心理師認為個案已經開始覺察自己的行為與情緒之間的關係，並肯定其對手機依賴的覺察。",
+              "status": "weak",
+              "reason": "本機模型判斷引用段落不足以支持此句",
+              "must_confirm": true,
+              "cited": "[139] therapist: 你已經開始看到行為和情緒之間的關係了。 / [149] therapist: 你覺察到這一點，已經是很大的進步了。"
+            },
+            {
+              "section": "A",
+              "sentence": "心理師觀察到個案正在建立新的信念，並改變對尷尬的體驗。",
+              "status": "weak",
+              "reason": "本機模型判斷引用段落不足以支持此句",
+              "must_confirm": true,
+              "cited": "[207] therapist: 你正在建立新的信念。 / [209] therapist: 你正在改變對尷尬的體驗。"
+            },
+            {
+              "section": "A",
+              "sentence": "心理師提議讓個案思考父母是否也希望個案過得開心。",
+              "status": "weak",
+              "reason": "本機模型判斷引用段落不足以支持此句",
+              "must_confirm": true,
+              "cited": "[251] therapist: 你有沒有想過，他們其實也希望你能過得開心？"
+            },
+            {
+              "section": "A",
+              "sentence": "心理師提議讓個案思考父母是否也有壓力。",
+              "status": "unsupported",
+              "reason": "本機模型判斷引用段落不足以支持此句",
+              "must_confirm": false,
+              "cited": "[261] therapist: 你有沒有想過，他們也可能會有壓力？"
+            },
+            {
+              "section": "A",
+              "sentence": "心理師提議讓個案思考『最好』是否是固定的標準。",
+              "status": "unsupported",
+              "reason": "本機模型判斷引用段落不足以支持此句",
+              "must_confirm": false,
+              "cited": "[288] therapist: 你現在對『最好』有什麼新的想法？"
+            },
+            {
+              "section": "P",
+              "sentence": "心理師提議個案繼續記錄負面聲音，並質疑其真實性。",
+              "status": "unsupported",
+              "reason": "本機模型判斷引用段落不足以支持此句",
+              "must_confirm": false,
+              "cited": "[48] therapist: 你說「試著改變那個聲音」，可以說說看怎麼做嗎？"
+            },
+            {
+              "section": "P",
+              "sentence": "心理師提議下週再談行為實驗的結果。",
+              "status": "weak",
+              "reason": "本機模型判斷引用段落不足以支持此句",
+              "must_confirm": true,
+              "cited": "[141] therapist: 很好，我們下週再談談結果。"
+            },
+            {
+              "section": "P",
+              "sentence": "心理師建議個案可以嘗試設定手機休息時間、使用灰階模式、拆分番茄鐘時間、設定小獎勵等方法。",
+              "status": "unsupported",
+              "reason": "本機模型判斷引用段落不足以支持此句",
+              "must_confirm": false,
+              "cited": "[151] therapist: 這個想法很實際。 / [153] therapist: 你可以試試看。 / [157] therapist: 這個方法很適合你目前的階段。 / [159] therapist: 這聽起來很可行。"
+            },
+            {
+              "section": "P",
+              "sentence": "心理師建議個案可以用「我」的語句表達需求，以減少衝突。",
+              "status": "unsupported",
+              "reason": "本機模型判斷引用段落不足以支持此句",
+              "must_confirm": false,
+              "cited": "[179] therapist: 你有覺察到自己的選擇。"
+            },
+            {
+              "section": "P",
+              "sentence": "心理師提議與個案一起練習自我介紹稿。",
+              "status": "weak",
+              "reason": "本機模型判斷引用段落不足以支持此句",
+              "must_confirm": true,
+              "cited": "[239] therapist: 當然可以，我們可以一起練習。"
+            },
+            {
+              "section": "P",
+              "sentence": "心理師提議讓個案思考父母是否也希望個案過得開心。",
+              "status": "weak",
+              "reason": "本機模型判斷引用段落不足以支持此句",
+              "must_confirm": true,
+              "cited": "[251] therapist: 你有沒有想過，他們其實也希望你能過得開心？"
+            },
+            {
+              "section": "P",
+              "sentence": "心理師提議讓個案思考父母是否也有壓力。",
+              "status": "unsupported",
+              "reason": "本機模型判斷引用段落不足以支持此句",
+              "must_confirm": false,
+              "cited": "[261] therapist: 你有沒有想過，他們也可能會有壓力？"
+            },
+            {
+              "section": "P",
+              "sentence": "心理師提議讓個案思考『最好』是否是固定的標準。",
+              "status": "unsupported",
+              "reason": "本機模型判斷引用段落不足以支持此句",
+              "must_confirm": false,
+              "cited": "[288] therapist: 你現在對『最好』有什麼新的想法？"
+            },
+            {
+              "section": "P",
+              "sentence": "心理師提議安排兩週後的會談。",
+              "status": "weak",
+              "reason": "本機模型判斷引用段落不足以支持此句",
+              "must_confirm": true,
+              "cited": "[325] therapist: 當然可以，我們可以安排在兩週後。"
+            },
+            {
+              "section": "P",
+              "sentence": "心理師提議個案在這段時間內持續練習，並記錄自己的進度。",
+              "status": "unsupported",
+              "reason": "句子寫心理師的看法或建議，但引用的都是個案的話",
+              "must_confirm": false,
+              "cited": "[326] client: 那我會在這兩週內持續練習，並記錄自己的進度，包括我跟室友的互動、番茄鐘的使用情況，還有我對自己的想法和情緒的覺察。"
+            },
+            {
+              "section": "P",
+              "sentence": "心理師提議個案在下次會談時一起討論練習筆記。",
+              "status": "weak",
+              "reason": "本機模型判斷引用段落不足以支持此句",
+              "must_confirm": true,
+              "cited": "[333] therapist: 當然可以，我們下次見面時一起討論。"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "median_session_seconds": 109.4,
+  "concurrent": {
+    "rooms": 4,
+    "wall_seconds": 135.1,
+    "slowest_session_seconds": 135.1,
+    "aggregate_output_tokens_per_second": 182.7,
+    "runs": [
+      {
+        "session_id": "C002-L50",
+        "speech_seconds": 2967.4,
+        "total_seconds": 127.2,
+        "agents_ms": {
+          "asr": 2.8,
+          "writer": 102317.9,
+          "verifier": 24832.4,
+          "risk": 20.0,
+          "outcome": 0.0
+        },
+        "llm_calls": 7,
+        "prompt_tokens": 22844,
+        "completion_tokens": 5674,
+        "output_tokens_per_second": 16.9,
+        "sentences_supported": 117,
+        "sentences_total": 129,
+        "sentences_weak": 3,
+        "sentences_unsupported": 9,
+        "risk_level": "critical",
+        "flagged": [
+          {
+            "section": "S",
+            "sentence": "個案表示他越來越能辨識自己的自動化想法，並開始挑戰它們。",
+            "status": "unsupported",
+            "reason": "句子寫個案表示，但引用的都是心理師的話",
+            "must_confirm": false,
+            "cited": "[119] therapist: 你越來越能辨識自己的自動化想法，並開始挑戰它們了。"
+          },
+          {
+            "section": "P",
+            "sentence": "心理師提議個案記錄那個聲音出現時的內容，並問自己「這是真的嗎？有證據嗎？」",
+            "status": "unsupported",
+            "reason": "本機模型判斷引用段落不足以支持此句",
+            "must_confirm": false,
+            "cited": "[48] therapist: 你說「試著改變那個聲音」，可以說說看怎麼做嗎？"
+          },
+          {
+            "section": "P",
+            "sentence": "心理師提議個案在課堂上準備發問時，用證據來挑戰自己的想法。",
+            "status": "weak",
+            "reason": "本機模型判斷引用段落不足以支持此句",
+            "must_confirm": true,
+            "cited": "[53] therapist: 這些想法很常見，你有沒有試著用證據來挑戰它們？"
+          },
+          {
+            "section": "P",
+            "sentence": "心理師提議個案繼續練習，不只是在課堂上發問，也可以在小組討論時多說幾句話，慢慢擴展舒適圈。",
+            "status": "unsupported",
+            "reason": "句子寫心理師的看法或建議，但引用的都是個案的話",
+            "must_confirm": false,
+            "cited": "[70] client: 所以我想，接下來我可以繼續練習，不只是在課堂上發問，也可以在小組討論時多說幾句話，慢慢擴展我的舒適圈。"
+          },
+          {
+            "section": "P",
+            "sentence": "心理師提議下週再談談行為實驗的結果。",
+            "status": "weak",
+            "reason": "本機模型判斷引用段落不足以支持此句",
+            "must_confirm": true,
+            "cited": "[141] therapist: 很好，我們下週再談談結果。"
+          },
+          {
+            "section": "P",
+            "sentence": "心理師建議個案可以試著設定「手機休息時間」，並把手機設成灰階模式。",
+            "status": "unsupported",
+            "reason": "本機模型判斷引用段落不足以支持此句",
+            "must_confirm": false,
+            "cited": "[151] therapist: 這個想法很實際。 / [153] therapist: 你可以試試看。"
+          },
+          {
+            "section": "P",
+            "sentence": "心理師建議個案可以用「我」的語句來表達需求，而不是直接批評他人。",
+            "status": "unsupported",
+            "reason": "代名詞「他」不在引用的逐字稿中，請確認指的是誰",
+            "must_confirm": false,
+            "cited": "[179] therapist: 你有覺察到自己的選擇。"
+          },
+          {
+            "section": "P",
+            "sentence": "心理師提議與個案一起練習自我介紹稿。",
+            "status": "weak",
+            "reason": "本機模型判斷引用段落不足以支持此句",
+            "must_confirm": true,
+            "cited": "[239] therapist: 當然可以，我們可以一起練習。"
+          },
+          {
+            "section": "P",
+            "sentence": "心理師提議個案思考『最好』是否是固定的標準。",
+            "status": "unsupported",
+            "reason": "本機模型判斷引用段落不足以支持此句",
+            "must_confirm": false,
+            "cited": "[288] therapist: 你現在對『最好』有什麼新的想法？"
+          },
+          {
+            "section": "P",
+            "sentence": "心理師提議安排下次會談在兩週後。",
+            "status": "unsupported",
+            "reason": "時間詞「下次」不在引用的逐字稿中",
+            "must_confirm": false,
+            "cited": "[325] therapist: 當然可以，我們可以安排在兩週後。"
+          },
+          {
+            "section": "P",
+            "sentence": "心理師提議與個案一起討論練習筆記，看看是否有可以加強或習慣尚未養成的地方。",
+            "status": "unsupported",
+            "reason": "本機模型判斷引用段落不足以支持此句",
+            "must_confirm": false,
+            "cited": "[333] therapist: 當然可以，我們下次見面時一起討論。"
+          },
+          {
+            "section": "P",
+            "sentence": "心理師提議個案在這段時間內持續練習，並記錄自己的進度。",
+            "status": "unsupported",
+            "reason": "句子寫心理師的看法或建議，但引用的都是個案的話",
+            "must_confirm": false,
+            "cited": "[326] client: 那我會在這兩週內持續練習，並記錄自己的進度，包括我跟室友的互動、番茄鐘的使用情況，還有我對自己的想法和情緒的覺察。"
+          }
+        ]
+      },
+      {
+        "session_id": "C002-L50",
+        "speech_seconds": 2967.4,
+        "total_seconds": 129.7,
+        "agents_ms": {
+          "asr": 2.6,
+          "writer": 104855.4,
+          "verifier": 24843.2,
+          "risk": 16.1,
+          "outcome": 0.0
+        },
+        "llm_calls": 7,
+        "prompt_tokens": 23574,
+        "completion_tokens": 6398,
+        "output_tokens_per_second": 17.1,
+        "sentences_supported": 117,
+        "sentences_total": 142,
+        "sentences_weak": 7,
+        "sentences_unsupported": 18,
+        "risk_level": "critical",
+        "flagged": [
+          {
+            "section": "S",
+            "sentence": "個案提到那種聲音出現時會有胸口壓迫、呼吸變淺、胃痛等身體反應。",
+            "status": "unsupported",
+            "reason": "本機模型判斷引用段落不足以支持此句",
+            "must_confirm": false,
+            "cited": "[31] client: 我會覺得胸口很壓，呼吸變淺，有時候還會胃痛。那種感覺很不舒服，但又好像躲不開。"
+          },
+          {
+            "section": "O",
+            "sentence": "心理師觀察到個案在談到壓力時語氣中透露出無力感。",
+            "status": "unsupported",
+            "reason": "句子寫心理師的看法或建議，但引用的都是個案的話",
+            "must_confirm": false,
+            "cited": "[10] client: 我想是吧。我常常覺得壓力太大，就寧願什麼都不做，反正最後一刻再來處理。"
+          },
+          {
+            "section": "O",
+            "sentence": "心理師觀察到個案在談到身體反應時語氣中透露出不適感。",
+            "status": "unsupported",
+            "reason": "句子寫心理師的看法或建議，但引用的都是個案的話",
+            "must_confirm": false,
+            "cited": "[31] client: 我會覺得胸口很壓，呼吸變淺，有時候還會胃痛。那種感覺很不舒服，但又好像躲不開。"
+          },
+          {
+            "section": "A",
+            "sentence": "心理師認為個案清楚自己的問題，並開始看到一些改變的可能性。",
+            "status": "weak",
+            "reason": "本機模型判斷引用段落不足以支持此句",
+            "must_confirm": true,
+            "cited": "[21] therapist: 聽起來你很清楚自己的問題。 / [46] therapist: 聽起來你開始看到一些可能性了。"
+          },
+          {
+            "section": "A",
+            "sentence": "心理師觀察到個案開始學會覺察那個聲音，並用證據挑戰它，這是改變的第一步。",
+            "status": "weak",
+            "reason": "本機模型判斷引用段落不足以支持此句",
+            "must_confirm": true,
+            "cited": "[51] therapist: 很好，覺察是改變的第一步。"
+          },
+          {
+            "section": "A",
+            "sentence": "心理師認為這正是他們練習的部分。",
+            "status": "unsupported",
+            "reason": "代名詞「他」不在引用的逐字稿中，請確認指的是誰",
+            "must_confirm": false,
+            "cited": "[81] therapist: 這正是我們練習的部分。"
+          },
+          {
+            "section": "A",
+            "sentence": "心理師認為個案已經在改變，並肯定其對行為實驗的想法。",
+            "status": "unsupported",
+            "reason": "本機模型判斷引用段落不足以支持此句",
+            "must_confirm": false,
+            "cited": "[121] therapist: 你已經在改變了。 / [125] therapist: 這是個很好的想法。 / [127] therapist: 你說得很對。"
+          },
+          {
+            "section": "A",
+            "sentence": "心理師認為個案覺察到對手機的依賴，並肯定其提出的解決方法。",
+            "status": "unsupported",
+            "reason": "本機模型判斷引用段落不足以支持此句",
+            "must_confirm": false,
+            "cited": "[149] therapist: 你覺察到這一點，已經是很大的進步了。 / [151] therapist: 這個想法很實際。 / [153] therapist: 你可以試試看。"
+          },
+          {
+            "section": "A",
+            "sentence": "心理師認為個案已經學會了很重要的東西，並肯定其對拖延態度的轉變。",
+            "status": "weak",
+            "reason": "本機模型判斷引用段落不足以支持此句",
+            "must_confirm": true,
+            "cited": "[163] therapist: 你已經學會了很重要的東西。 / [165] therapist: 這是很大的轉變。"
+          },
+          {
+            "section": "A",
+            "sentence": "心理師認為個案正在建立新的信念，並改變對尷尬的體驗。",
+            "status": "weak",
+            "reason": "本機模型判斷引用段落不足以支持此句",
+            "must_confirm": true,
+            "cited": "[207] therapist: 你正在建立新的信念。 / [209] therapist: 你正在改變對尷尬的體驗。"
+          },
+          {
+            "section": "A",
+            "sentence": "心理師觀察到個案對失敗的恐懼影響行為，例如拖延。",
+            "status": "unsupported",
+            "reason": "本機模型判斷引用段落不足以支持此句",
+            "must_confirm": false,
+            "cited": "[276] therapist: 那種拖延，是不是一種自我保護？"
+          },
+          {
+            "section": "A",
+            "sentence": "心理師建議個案設定小目標，而不是一下子就想做到完美。",
+            "status": "unsupported",
+            "reason": "本機模型判斷引用段落不足以支持此句",
+            "must_confirm": false,
+            "cited": "[299] therapist: 你做得很好，這樣的改變需要時間和練習。"
+          },
+          {
+            "section": "P",
+            "sentence": "心理師提議個案繼續記錄那個聲音出現時的情況，並用證據挑戰它。",
+            "status": "unsupported",
+            "reason": "本機模型判斷引用段落不足以支持此句",
+            "must_confirm": false,
+            "cited": "[48] therapist: 你說「試著改變那個聲音」，可以說說看怎麼做嗎？"
+          },
+          {
+            "section": "P",
+            "sentence": "心理師提議個案在課堂上繼續練習與那個聲音溝通，並問自己「最壞的情況會是什麼」。",
+            "status": "unsupported",
+            "reason": "本機模型判斷引用段落不足以支持此句",
+            "must_confirm": false,
+            "cited": "[53] therapist: 這些想法很常見，你有沒有試著用證據來挑戰它們？"
+          },
+          {
+            "section": "P",
+            "sentence": "心理師提議下週再談行為實驗的結果。",
+            "status": "weak",
+            "reason": "本機模型判斷引用段落不足以支持此句",
+            "must_confirm": true,
+            "cited": "[141] therapist: 很好，我們下週再談談結果。"
+          },
+          {
+            "section": "P",
+            "sentence": "心理師建議個案可以嘗試設定手機休息時間、灰階模式，並拆分番茄鐘時間。",
+            "status": "unsupported",
+            "reason": "本機模型判斷引用段落不足以支持此句",
+            "must_confirm": false,
+            "cited": "[151] therapist: 這個想法很實際。 / [153] therapist: 你可以試試看。 / [157] therapist: 這個方法很適合你目前的階段。"
+          },
+          {
+            "section": "P",
+            "sentence": "心理師建議個案可以用「我」的語句表達需求，以減少衝突。",
+            "status": "unsupported",
+            "reason": "本機模型判斷引用段落不足以支持此句",
+            "must_confirm": false,
+            "cited": "[179] therapist: 你有覺察到自己的選擇。"
+          },
+          {
+            "section": "P",
+            "sentence": "心理師提議與個案一起練習自我介紹稿。",
+            "status": "weak",
+            "reason": "本機模型判斷引用段落不足以支持此句",
+            "must_confirm": true,
+            "cited": "[239] therapist: 當然可以，我們可以一起練習。"
+          },
+          {
+            "section": "P",
+            "sentence": "心理師提議個案設定小目標，並練習用更友善的語言對待自己。",
+            "status": "weak",
+            "reason": "本機模型判斷引用段落不足以支持此句",
+            "must_confirm": true,
+            "cited": "[299] therapist: 你做得很好，這樣的改變需要時間和練習。 / [300] client: 我還學會了用更友善的語言對待自己。以前我總是用「我真爛」、「我永遠做不到」這種話，現在我知道，這樣只會讓自己更沮喪。"
+          },
+          {
+            "section": "P",
+            "sentence": "心理師提議安排下次會談在兩週後。",
+            "status": "unsupported",
+            "reason": "時間詞「下次」不在引用的逐字稿中",
+            "must_confirm": false,
+            "cited": "[325] therapist: 當然可以，我們可以安排在兩週後。"
+          },
+          {
+            "section": "P",
+            "sentence": "心理師提議個案在這兩週內持續練習，並記錄自己的進度。",
+            "status": "unsupported",
+            "reason": "句子寫心理師的看法或建議，但引用的都是個案的話",
+            "must_confirm": false,
+            "cited": "[326] client: 那我會在這兩週內持續練習，並記錄自己的進度，包括我跟室友的互動、番茄鐘的使用情況，還有我對自己的想法和情緒的覺察。"
+          },
+          {
+            "section": "P",
+            "sentence": "心理師提議個案遇到焦慮時，先停下來問自己「我在想什麼？」、「這個想法真實嗎？」，再決定要不要行動。",
+            "status": "unsupported",
+            "reason": "句子寫心理師的看法或建議，但引用的都是個案的話",
+            "must_confirm": false,
+            "cited": "[328] client: 我也想試著在這段時間裡，遇到焦慮的時候，先停下來問自己：「我在想什麼？」「這個想法真實嗎？」然後再決定要不要行動。"
+          },
+          {
+            "section": "P",
+            "sentence": "心理師提議個案請室友幫忙檢查作業格式。",
+            "status": "unsupported",
+            "reason": "句子寫心理師的看法或建議，但引用的都是個案的話",
+            "must_confirm": false,
+            "cited": "[316] client: 其實我今天也想了一下，關於我之前說的那個作業，我決定先跟室友說一下，請他幫我檢查一下格式，這樣我就可以比較安心地交作業了。"
+          },
+          {
+            "section": "P",
+            "sentence": "心理師提議個案每天至少完成兩個番茄鐘的作業。",
+            "status": "unsupported",
+            "reason": "句子寫心理師的看法或建議，但引用的都是個案的話",
+            "must_confirm": false,
+            "cited": "[320] client: 我也想試著每天用番茄鐘來安排時間，雖然我以前總是拖到最後一刻才開始，但這次我想試著每天至少完成兩個番茄鐘的作業。"
+          },
+          {
+            "section": "P",
+            "sentence": "心理師提議個案使用番茄鐘 App 並設定提醒，每完成一個番茄鐘就給自己一點小獎勵。",
+            "status": "unsupported",
+            "reason": "句子寫心理師的看法或建議，但引用的都是個案的話",
+            "must_confirm": false,
+            "cited": "[322] client: 我已經下載了番茄鐘的 App，而且設定了一個提醒，每完成一個番茄鐘就給自己一點小獎勵，像是吃點喜歡的零食或者看一集喜歡的影集。"
+          }
+        ]
+      },
+      {
+        "session_id": "C002-L50",
+        "speech_seconds": 2967.4,
+        "total_seconds": 133.1,
+        "agents_ms": {
+          "asr": 9.0,
+          "writer": 117120.8,
+          "verifier": 15938.6,
+          "risk": 18.9,
+          "outcome": 0.0
+        },
+        "llm_calls": 7,
+        "prompt_tokens": 23438,
+        "completion_tokens": 6870,
+        "output_tokens_per_second": 17.1,
+        "sentences_supported": 103,
+        "sentences_total": 122,
+        "sentences_weak": 8,
+        "sentences_unsupported": 11,
+        "risk_level": "critical",
+        "flagged": [
+          {
+            "section": "S",
+            "sentence": "個案表示對手機有強烈依賴感，即使試著將手機放在另一個房間，還是會忍不住去拿，並提到自己設想了一些方法來減少手機干擾，例如設定手機休息時間、灰階模式、拆分番茄鐘時間等。",
+            "status": "weak",
+            "reason": "風險相關句只有本機模型判斷支持，請心理師對照原句確認",
+            "must_confirm": true,
+            "cited": "[146] client: 不過，我還是想談談番茄鐘的事情。我這幾天真的試著用它來安排讀書時間，但手機還是會一直干擾我，我總覺得要看一下訊息或社群，結果就完全沒辦法專注。 / [148] client: 對，我試著把手機放在另一個房間，但有時候還是會忍不住去拿。我發現自己好像對手機有一種強烈的依賴感，好像不看一下就會錯過什麼重要的事情。 / [150] client: 是啊，我開始想，是不是可以設定一個「手機休息時間」，比如說番茄鐘結束後，才允許自己看一下手機。這樣至少不會在專注的時候被打斷。 / [152] client: 我也在想，是不是可以把手機設成灰階模式，這樣看起來就沒有那麼吸引人。我之前聽說過有人這樣做，說是會減少使用手機的衝動。 / [156] client: 所以我想，是不是可以在番茄鐘結束前五分鐘，提醒自己不要提前放棄專注。或者，我可以把番茄鐘的時間拆成更小的單位，比如說先試著做十五分鐘，成功後再延長。 / [158] client: 我也在想，是不是可以把番茄鐘的完成次數當作一種「成就感」的累積，比如說完成五次就可以給自己一個小獎勵，像是看一集喜歡的影集或吃點喜歡的零食。"
+          },
+          {
+            "section": "O",
+            "sentence": "心理師觀察到個案在談到壓力和拖延時，語氣中透露出無力感和自我懷疑。",
+            "status": "unsupported",
+            "reason": "本機模型判斷引用段落不足以支持此句",
+            "must_confirm": false,
+            "cited": "[3] therapist: 聽起來真的很辛苦。那考試結束後，心情有什麼變化嗎？ / [7] therapist: 你提到「應該做得更好」，這是不是一種壓力來源？ / [17] therapist: 責怪自己會讓情況更糟嗎？ / [28] therapist: 你說「對它說得對」，那是什麼感覺？ / [38] therapist: 你說「反正明天也一定會起不來」，那是怎麼形成的想法？"
+          },
+          {
+            "section": "O",
+            "sentence": "個案與心理師的對話中未提及哭泣、沉默或笑的行為。",
+            "status": "unsupported",
+            "reason": "沒有引用任何逐字稿段落",
+            "must_confirm": false,
+            "cited": ""
+          },
+          {
+            "section": "A",
+            "sentence": "心理師認為個案清楚自己的問題，並開始看到改變的可能性。",
+            "status": "weak",
+            "reason": "本機模型判斷引用段落不足以支持此句",
+            "must_confirm": true,
+            "cited": "[21] therapist: 聽起來你很清楚自己的問題。 / [46] therapist: 聽起來你開始看到一些可能性了。"
+          },
+          {
+            "section": "A",
+            "sentence": "心理師指出個案提到的聲音可能是過度保護的表現，但方式不對。",
+            "status": "weak",
+            "reason": "本機模型判斷引用段落不足以支持此句",
+            "must_confirm": true,
+            "cited": "[59] therapist: 你說得對，那個聲音是想保護你，但方式不對。"
+          },
+          {
+            "section": "A",
+            "sentence": "心理師提議覺察和記錄負面聲音，並用證據挑戰其真實性，作為介入重點。",
+            "status": "unsupported",
+            "reason": "本機模型判斷引用段落不足以支持此句",
+            "must_confirm": false,
+            "cited": "[40] therapist: 那種想法出現時，你會有什麼證據支持它？ / [42] therapist: 那你有沒有證據反駁它？ / [53] therapist: 這些想法很常見，你有沒有試著用證據來挑戰它們？"
+          },
+          {
+            "section": "A",
+            "sentence": "心理師認為個案有覺察到自己的情緒反應、逃避行為、需求與選擇。",
+            "status": "weak",
+            "reason": "本機模型判斷引用段落不足以支持此句",
+            "must_confirm": true,
+            "cited": "[173] therapist: 你有覺察到自己的情緒反應。 / [175] therapist: 你有覺察到自己的逃避行為。 / [177] therapist: 你有覺察到自己的需求。 / [179] therapist: 你有覺察到自己的選擇。"
+          },
+          {
+            "section": "A",
+            "sentence": "心理師認為個案正在建立新的信念，並改變對尷尬的體驗。",
+            "status": "weak",
+            "reason": "本機模型判斷引用段落不足以支持此句",
+            "must_confirm": true,
+            "cited": "[207] therapist: 你正在建立新的信念。 / [209] therapist: 你正在改變對尷尬的體驗。"
+          },
+          {
+            "section": "A",
+            "sentence": "心理師提議：『我們來擬安全計畫，好嗎？』",
+            "status": "unsupported",
+            "reason": "沒有引用任何逐字稿段落",
+            "must_confirm": false,
+            "cited": ""
+          },
+          {
+            "section": "P",
+            "sentence": "心理師提議繼續記錄負面聲音，並質疑其真實性，以幫助個案改變對自己的看法。",
+            "status": "unsupported",
+            "reason": "本機模型判斷引用段落不足以支持此句",
+            "must_confirm": false,
+            "cited": "[48] therapist: 你說「試著改變那個聲音」，可以說說看怎麼做嗎？"
+          },
+          {
+            "section": "P",
+            "sentence": "心理師提議下週再談談行為實驗的結果。",
+            "status": "weak",
+            "reason": "本機模型判斷引用段落不足以支持此句",
+            "must_confirm": true,
+            "cited": "[141] therapist: 很好，我們下週再談談結果。"
+          },
+          {
+            "section": "P",
+            "sentence": "心理師建議個案可以試試看將手機設成灰階模式。",
+            "status": "weak",
+            "reason": "本機模型判斷引用段落不足以支持此句",
+            "must_confirm": true,
+            "cited": "[153] therapist: 你可以試試看。"
+          },
+          {
+            "section": "P",
+            "sentence": "心理師建議個案可以設定「手機休息時間」，並拆分番茄鐘時間。",
+            "status": "unsupported",
+            "reason": "句子寫心理師的看法或建議，但引用的都是個案的話",
+            "must_confirm": false,
+            "cited": "[150] client: 是啊，我開始想，是不是可以設定一個「手機休息時間」，比如說番茄鐘結束後，才允許自己看一下手機。這樣至少不會在專注的時候被打斷。 / [156] client: 所以我想，是不是可以在番茄鐘結束前五分鐘，提醒自己不要提前放棄專注。或者，我可以把番茄鐘的時間拆成更小的單位，比如說先試著做十五分鐘，成功後再延長。"
+          },
+          {
+            "section": "P",
+            "sentence": "心理師建議個案可以用「我」的語句來表達需求，例如「我晚上睡覺的時候比較需要安靜的環境」。",
+            "status": "unsupported",
+            "reason": "句子寫心理師的看法或建議，但引用的都是個案的話",
+            "must_confirm": false,
+            "cited": "[178] client: 對，我開始想，如果我真的說了，是不是會有什麼不好的結果？或者，是不是其實他會理解？我開始想練習怎麼用比較溫和的方式去表達我的需求，而不是一直壓抑。"
+          },
+          {
+            "section": "P",
+            "sentence": "心理師提議與個案一起練習自我介紹稿。",
+            "status": "weak",
+            "reason": "本機模型判斷引用段落不足以支持此句",
+            "must_confirm": true,
+            "cited": "[239] therapist: 當然可以，我們可以一起練習。"
+          },
+          {
+            "section": "P",
+            "sentence": "心理師提議：『我們來擬安全計畫，好嗎？』",
+            "status": "unsupported",
+            "reason": "沒有引用任何逐字稿段落",
+            "must_confirm": false,
+            "cited": ""
+          },
+          {
+            "section": "P",
+            "sentence": "心理師建議個案設定小目標，並練習用友善的語言對待自己。",
+            "status": "unsupported",
+            "reason": "句子寫心理師的看法或建議，但引用的都是個案的話",
+            "must_confirm": false,
+            "cited": "[298] client: 我也開始練習設定小目標，而不是一下子就想做到完美。比如今天我完成了報告的一部分，雖然不是最好的版本，但我已經完成了，這讓我更有信心繼續下去。 / [300] client: 我還學會了用更友善的語言對待自己。以前我總是用「我真爛」、「我永遠做不到」這種話，現在我知道，這樣只會讓自己更沮喪。"
+          },
+          {
+            "section": "P",
+            "sentence": "心理師提議安排兩週後的下次會談。",
+            "status": "unsupported",
+            "reason": "時間詞「下次」不在引用的逐字稿中",
+            "must_confirm": false,
+            "cited": "[325] therapist: 當然可以，我們可以安排在兩週後。"
+          },
+          {
+            "section": "P",
+            "sentence": "心理師提議與個案討論練習筆記，看看是否有可以加強的地方或尚未養成的習慣。",
+            "status": "unsupported",
+            "reason": "本機模型判斷引用段落不足以支持此句",
+            "must_confirm": false,
+            "cited": "[333] therapist: 當然可以，我們下次見面時一起討論。"
+          }
+        ]
+      },
+      {
+        "session_id": "C002-L50",
+        "speech_seconds": 2967.4,
+        "total_seconds": 135.1,
+        "agents_ms": {
+          "asr": 2.7,
+          "writer": 109251.3,
+          "verifier": 25845.1,
+          "risk": 15.3,
+          "outcome": 0.0
+        },
+        "llm_calls": 7,
+        "prompt_tokens": 23795,
+        "completion_tokens": 5747,
+        "output_tokens_per_second": 17.0,
+        "sentences_supported": 103,
+        "sentences_total": 127,
+        "sentences_weak": 15,
+        "sentences_unsupported": 9,
+        "risk_level": "critical",
+        "flagged": [
+          {
+            "section": "S",
+            "sentence": "個案提到自己總是拖延，等到最後一刻才開始動手，並認為這是逃避。",
+            "status": "weak",
+            "reason": "風險相關句只有本機模型判斷支持，請心理師對照原句確認",
+            "must_confirm": true,
+            "cited": "[8] client: 對，我總是覺得自己不夠努力，明明可以做得更好，卻總是拖延，等到最後一刻才開始動手。 / [10] client: 我想是吧。我常常覺得壓力太大，就寧願什麼都不做，反正最後一刻再來處理。"
+          },
+          {
+            "section": "O",
+            "sentence": "心理師觀察到個案在談到壓力和拖延時語氣中透露出無力感。",
+            "status": "unsupported",
+            "reason": "句子寫心理師的看法或建議，但引用的都是個案的話",
+            "must_confirm": false,
+            "cited": "[12] client: 像是被困住了一樣，明明知道該做，但就是動不了。有時候連打開筆電都覺得好難。 / [29] client: 那種感覺很奇怪，像是有一種無力感，好像我真的被它說服了。即使我知道它不對，但就是控制不了自己不去相信它。"
+          },
+          {
+            "section": "A",
+            "sentence": "心理師認為個案清楚自己的問題，並開始看到改變的可能性。",
+            "status": "weak",
+            "reason": "本機模型判斷引用段落不足以支持此句",
+            "must_confirm": true,
+            "cited": "[21] therapist: 聽起來你很清楚自己的問題。 / [46] therapist: 聽起來你開始看到一些可能性了。"
+          },
+          {
+            "section": "A",
+            "sentence": "心理師觀察到個案開始學會覺察那個聲音，並嘗試用證據挑戰它。",
+            "status": "unsupported",
+            "reason": "本機模型判斷引用段落不足以支持此句",
+            "must_confirm": false,
+            "cited": "[55] therapist: 這是一個很好的練習。"
+          },
+          {
+            "section": "A",
+            "sentence": "心理師認為這是一個很棒的對話，並肯定個案的進展。",
+            "status": "weak",
+            "reason": "本機模型判斷引用段落不足以支持此句",
+            "must_confirm": true,
+            "cited": "[61] therapist: 這是一個很棒的對話。"
+          },
+          {
+            "section": "A",
+            "sentence": "心理師認為這是一個很好的目標，並肯定個案計畫擴展舒適圈。",
+            "status": "weak",
+            "reason": "本機模型判斷引用段落不足以支持此句",
+            "must_confirm": true,
+            "cited": "[71] therapist: 這是一個很好的目標。"
+          },
+          {
+            "section": "A",
+            "sentence": "心理師認為個案已經在改變，並肯定其對行為實驗的想法。",
+            "status": "unsupported",
+            "reason": "本機模型判斷引用段落不足以支持此句",
+            "must_confirm": false,
+            "cited": "[121] therapist: 你已經在改變了。 / [125] therapist: 這是個很好的想法。"
+          },
+          {
+            "section": "A",
+            "sentence": "心理師認為個案已經學會了很重要的東西，並肯定其對拖延態度的轉變。",
+            "status": "weak",
+            "reason": "本機模型判斷引用段落不足以支持此句",
+            "must_confirm": true,
+            "cited": "[163] therapist: 你已經學會了很重要的東西。 / [165] therapist: 這是很大的轉變。"
+          },
+          {
+            "section": "A",
+            "sentence": "心理師認為個案有覺察到自己的需求與逃避行為，並肯定其對表達方式的思考。",
+            "status": "weak",
+            "reason": "本機模型判斷引用段落不足以支持此句",
+            "must_confirm": true,
+            "cited": "[173] therapist: 你有覺察到自己的情緒反應。 / [175] therapist: 你有覺察到自己的逃避行為。 / [177] therapist: 你有覺察到自己的需求。 / [179] therapist: 你有覺察到自己的選擇。"
+          },
+          {
+            "section": "A",
+            "sentence": "心理師認為個案正在建立新的信念，並改變對尷尬的體驗。",
+            "status": "weak",
+            "reason": "本機模型判斷引用段落不足以支持此句",
+            "must_confirm": true,
+            "cited": "[207] therapist: 你正在建立新的信念。 / [209] therapist: 你正在改變對尷尬的體驗。"
+          },
+          {
+            "section": "A",
+            "sentence": "心理師認為個案正在擴展行動範圍，並建立健康的互動模式。",
+            "status": "weak",
+            "reason": "本機模型判斷引用段落不足以支持此句",
+            "must_confirm": true,
+            "cited": "[213] therapist: 你正在擴展你的行動範圍。 / [215] therapist: 你正在建立健康的互動模式。"
+          },
+          {
+            "section": "A",
+            "sentence": "心理師提議個案思考父母是否也希望其過得開心。",
+            "status": "weak",
+            "reason": "本機模型判斷引用段落不足以支持此句",
+            "must_confirm": true,
+            "cited": "[251] therapist: 你有沒有想過，他們其實也希望你能過得開心？"
+          },
+          {
+            "section": "A",
+            "sentence": "心理師認為個案對失敗的恐懼來自於內在的否定聲音。",
+            "status": "weak",
+            "reason": "本機模型判斷引用段落不足以支持此句",
+            "must_confirm": true,
+            "cited": "[280] therapist: 那種否定，是不是來自於你內心的聲音？"
+          },
+          {
+            "section": "P",
+            "sentence": "心理師提議個案繼續記錄那個聲音出現時的內容，並用證據挑戰它。",
+            "status": "unsupported",
+            "reason": "本機模型判斷引用段落不足以支持此句",
+            "must_confirm": false,
+            "cited": "[48] therapist: 你說「試著改變那個聲音」，可以說說看怎麼做嗎？"
+          },
+          {
+            "section": "P",
+            "sentence": "心理師提議與個案一起找證據支持與反對「問笨問題大家會看不起我」的想法。",
+            "status": "unsupported",
+            "reason": "本機模型判斷引用段落不足以支持此句",
+            "must_confirm": false,
+            "cited": "[105] therapist: 那我們可以一起找找看，有哪些證據支持這個想法？ / [107] therapist: 那有沒有證據反對這個想法？"
+          },
+          {
+            "section": "P",
+            "sentence": "心理師提議個案繼續練習與那個聲音對話。",
+            "status": "unsupported",
+            "reason": "本機模型判斷引用段落不足以支持此句",
+            "must_confirm": false,
+            "cited": "[93] therapist: 你可以慢慢練習。"
+          },
+          {
+            "section": "P",
+            "sentence": "心理師提議下週再談行為實驗的結果。",
+            "status": "weak",
+            "reason": "本機模型判斷引用段落不足以支持此句",
+            "must_confirm": true,
+            "cited": "[141] therapist: 很好，我們下週再談談結果。"
+          },
+          {
+            "section": "P",
+            "sentence": "心理師建議個案可以嘗試設定「手機休息時間」、將手機設為灰階模式，以及拆分番茄鐘時間。",
+            "status": "unsupported",
+            "reason": "本機模型判斷引用段落不足以支持此句",
+            "must_confirm": false,
+            "cited": "[151] therapist: 這個想法很實際。 / [153] therapist: 你可以試試看。 / [157] therapist: 這個方法很適合你目前的階段。"
+          },
+          {
+            "section": "P",
+            "sentence": "心理師建議個案可以用「我」的語句來表達需求，以減少衝突。",
+            "status": "unsupported",
+            "reason": "本機模型判斷引用段落不足以支持此句",
+            "must_confirm": false,
+            "cited": "[179] therapist: 你有覺察到自己的選擇。"
+          },
+          {
+            "section": "P",
+            "sentence": "心理師提議與個案一起練習自我介紹稿。",
+            "status": "weak",
+            "reason": "本機模型判斷引用段落不足以支持此句",
+            "must_confirm": true,
+            "cited": "[239] therapist: 當然可以，我們可以一起練習。"
+          },
+          {
+            "section": "P",
+            "sentence": "心理師提議個案思考父母的真實想法。",
+            "status": "weak",
+            "reason": "本機模型判斷引用段落不足以支持此句",
+            "must_confirm": true,
+            "cited": "[259] therapist: 你覺得那是他們的真實想法嗎？"
+          },
+          {
+            "section": "P",
+            "sentence": "心理師提議個案設定小目標，並練習友善對待自己。",
+            "status": "unsupported",
+            "reason": "句子寫心理師的看法或建議，但引用的都是個案的話",
+            "must_confirm": false,
+            "cited": "[298] client: 我也開始練習設定小目標，而不是一下子就想做到完美。比如今天我完成了報告的一部分，雖然不是最好的版本，但我已經完成了，這讓我更有信心繼續下去。 / [300] client: 我還學會了用更友善的語言對待自己。以前我總是用「我真爛」、「我永遠做不到」這種話，現在我知道，這樣只會讓自己更沮喪。"
+          },
+          {
+            "section": "P",
+            "sentence": "心理師提議安排兩週後的會談。",
+            "status": "weak",
+            "reason": "本機模型判斷引用段落不足以支持此句",
+            "must_confirm": true,
+            "cited": "[325] therapist: 當然可以，我們可以安排在兩週後。"
+          },
+          {
+            "section": "P",
+            "sentence": "心理師提議下次會談時一起討論個案的練習筆記。",
+            "status": "weak",
+            "reason": "本機模型判斷引用段落不足以支持此句",
+            "must_confirm": true,
+            "cited": "[333] therapist: 當然可以，我們下次見面時一起討論。"
+          }
+        ]
+      }
+    ]
+  }
+}

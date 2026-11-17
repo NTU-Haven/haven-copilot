@@ -1,0 +1,3 @@
+engine: openai-compat:qwen3-32b-awq
+  C002-L50 run 1: 98.1s, 19.0 tok/s, 103/116 supported
+wrote docs/benchmarks/b70-qwen3-32b-awq-L50-20261116-1803.json, .md and -review.csv (13 flagged sentences)

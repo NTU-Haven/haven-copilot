@@ -6,7 +6,7 @@ Haven turns a therapy session into a draft progress note, risk cues and outcome-
 
 What this does and does not claim is spelled out under "Privacy and safety guards in the code" and "Limitations". In short: the address check covers Haven's own requests, not what a model server does afterwards; a network capture during a session has not been done yet; and data on disk is not encrypted yet.
 
-> All data in this repository is **scripted, simulated sessions** written by the team. No real client information. The transcripts are scripts, not recordings: only a 23-second excerpt (C001-S04, lines #10–#12) was read aloud by two people, for the speech-to-text test. The "Speech" column in the benchmark files is the length given by the script's timestamps, not the length of a recording.
+> All data in this repository is **scripted, simulated sessions** written by the team. No real client information. The transcripts are scripts, not recordings: only a 23-second excerpt (C001-S04, lines #10–#12) was read aloud by two people, for the speech-to-text test, and the 49.5-minute script C002-L50 was read by two synthetic voices (macOS `say`) for the long recording test; neither recording is in the repository. The "Speech" column in the benchmark files is the length given by the script's timestamps, not the length of a recording.
 
 ## Why on-device
 
@@ -22,7 +22,7 @@ What this does and does not claim is spelled out under "Privacy and safety guard
 
   This is our reading of each vendor's public site in October 2026 and has not been checked with the vendors.
 - **The record has to last.** The Psychologists Act (Art. 25) requires practice records to be kept for at least 10 years. Notes that are wrong or invented stay wrong for a decade, so every sentence must be traceable.
-- **One card has to hold the whole system.** The case for a 32 GB card is not that a bigger model writes better notes: on our three short sessions the 8B model was faster than the 32B one and had more sentences pass the verifier (see [docs/RESULTS.md](docs/RESULTS.md)), and that count does not measure note quality either way. The case is that speech-to-text, the note model and the context of several 50-minute sessions must sit on one card at the same time. **Measured on 2026-11-14 (batch 9):** Whisper and Qwen3-32B (4-bit) loaded together on one B70 with a 32k context and an fp8 context cache; four 49.5-minute sessions drafted at once all finished in 280 s (one alone: 245 s); after the 2026-11-14 verifier and prompt fixes the notes are longer and four rooms took 365 s, two rooms 284 s. Peak card memory 30.8 GiB, card power about 230 W. Speech-to-text was loaded but not exercised in that run. Details in [docs/RESULTS.md](docs/RESULTS.md).
+- **One card has to hold the whole system.** The case for a 32 GB card is not that a bigger model writes better notes: on our three short sessions the 8B model was faster than the 32B one and had more sentences pass the verifier (see [docs/RESULTS.md](docs/RESULTS.md)), and that count does not measure note quality either way. The case is that speech-to-text, the note model and the context of several 50-minute sessions must sit on one card at the same time. **Measured on 2026-11-14 (batch 9):** Whisper and Qwen3-32B (4-bit) loaded together on one B70 with a 32k context and an fp8 context cache; four 49.5-minute sessions drafted at once all finished in 280 s (one alone: 245 s); after the 2026-11-14 verifier and prompt fixes the notes were longer and four rooms took 365 s. **Batch 10 (2026-11-16/17)** writes the parts of a long note at once: one 49.5-minute session in 98 s, four at once in 149 s, and a 46-minute recording through Whisper, speaker labels and the draft in 4.4 minutes, on the same card. Peak card memory 30.8 GiB, card power about 230 W. Details in [docs/RESULTS.md](docs/RESULTS.md).
 
 ## How it works
 
@@ -76,7 +76,7 @@ The memory figures are from the launcher's measured notes (`scripts/b70-vllm.sh`
 | Notes on a laptop | qwen2.5:7b through Ollama | 7B, Ollama's default 4-bit | not measured | Ollama default | Apache-2.0 |
 | Speech-to-text on a laptop | faster-whisper `small` | int8, CPU | not measured | – | MIT |
 
-Served by vLLM 0.26.0 (`vllm/vllm-openai-xpu:v0.26.0`). The writer works in parts of 60 segments, so a 50-minute session never needs one long request. Batch 9 (2026-11-14) ran with `--max-model-len 32768 --kv-cache-dtype fp8`, which both Qwen3-32B and Qwen3-8B accepted with Whisper on the same card.
+Served by vLLM 0.26.0 (`vllm/vllm-openai-xpu:v0.26.0`). The writer works in parts of 60 segments, so a 50-minute session never needs one long request. Batch 9 (2026-11-14) ran with `--max-model-len 32768 --kv-cache-dtype fp8`, which both Qwen3-32B and Qwen3-8B accepted with Whisper on the same card. Batch 10 sends up to 4 parts at once (`HAVEN_WRITE_PARALLEL`) and ran both servers with `OFFLINE=1 PRIVILEGED=0`. Whisper needs `VLLM_MAX_AUDIO_DECODE_DURATION_S` raised for recordings over 10 minutes (the launcher sets 3 hours).
 
 | Agent | What it does | Where |
 | --- | --- | --- |
@@ -201,10 +201,11 @@ Runs the verifier on 48 note sentences about the simulated sessions: 18 correct 
 | --- | --- | --- | --- | --- |
 | Rule layers only, no model | 2026-11-12 | 28/30 | 2/18 | current |
 | qwen2.5:7b, laptop | 2026-11-08 | 27/30 | 1/18 | current definition, rules before the 2026-11-12 fixes |
+| Qwen3-32B, B70 | 2026-11-16 | 30/30 | 1/18 | current (batch 10; the same in both batch-9 runs) |
 | Qwen3-14B, B70 | 2026-11-07 | 26/30 | 0/18 | before the fixes: old definition, old rules |
 | Qwen3-32B, B70 | 2026-11-07 | 26/30 | 0/18 | before the fixes: old definition, old rules |
 
-The runs with a model have not been repeated since the fixes; re-running them on the B70 is pending. The cases were written by the team, so treat these numbers as a regression check, not an independent accuracy figure.
+Qwen3-32B has been re-run under the current rules on the B70 (batches 9 and 10); the other models have not. The cases were written by the team, so treat these numbers as a regression check, not an independent accuracy figure.
 
 ### Transcribing real audio
 
@@ -225,9 +226,9 @@ until curl -s 127.0.0.1:8000/v1/models | grep -q qwen3; do sleep 3; done
 HAVEN_LLM=openai HAVEN_MODEL=qwen3-32b-awq HAVEN_ASR=openai python3 -m haven
 ```
 
-Start Whisper first and wait for it: two servers loading at once fail each other's memory check. With Whisper loaded, 24.5 of the card's 30.3 GiB stay free, which is why the note model runs at `UTIL=0.8`.
+Start Whisper first and wait for it: two servers loading at once fail each other's memory check. With Whisper loaded, 24.5 of the card's 30.3 GiB stay free, which is why the note model runs at `UTIL=0.8`. Install `requirements-asr.txt` on the machine that runs Haven here too: Whisper often answers in Simplified characters, and `opencc` turns them into Traditional before the risk check reads them (Haven warns if it is missing).
 
-**Measured once on the B70** (week of 2026-11-10, whisper-large-v3-turbo through vLLM, no prompt): C001-S04 lines #10–#12 read aloud by two people, 23.0 s of audio, transcribed in 0.5 s with a character error rate of 14.1%; Qwen3-32B-AWQ then guessed the speaker of all three segments correctly in 2.3 s. Three segments from one clip is a smoke test, not an accuracy figure, and 14.1% is above the 10% target. Result files: [docs/asr-eval/b70-whisper-turbo-real-voices.md](docs/asr-eval/b70-whisper-turbo-real-voices.md). One simulated 36-minute session (C002-L50) was drafted and verified in 63.9 s by Qwen3-32B on the same card, before the 2026-11-12 fixes and in one run: see [docs/RESULTS.md](docs/RESULTS.md).
+**Measured once on the B70** (week of 2026-11-10, whisper-large-v3-turbo through vLLM, no prompt): C001-S04 lines #10–#12 read aloud by two people, 23.0 s of audio, transcribed in 0.5 s with a character error rate of 14.1%; Qwen3-32B-AWQ then guessed the speaker of all three segments correctly in 2.3 s. Three segments from one clip is a smoke test, not an accuracy figure, and 14.1% is above the 10% target. Result files: [docs/asr-eval/b70-whisper-turbo-real-voices.md](docs/asr-eval/b70-whisper-turbo-real-voices.md). **A 46-minute recording** (batch 10, 2026-11-17): the C002-L50 script read by two synthetic voices, transcribed in 9.6 s, 7.5% character error rate after conversion to Traditional, speakers guessed right in 530 of 553 segments in 116 s, note drafted in 136 s: 4.4 minutes in all. Synthetic speech is cleaner than a real room. Of the 130 sentences drafted straight from it, 90 wait for the therapist to confirm the guessed speakers; with the guesses confirmed, 95 of 140 pass. Details in [docs/RESULTS.md](docs/RESULTS.md).
 
 Recordings are streamed to a temp file, sent to the local server, and deleted after transcription. Then the local LLM guesses from the words who is speaking (one therapist, one client). There is no acoustic diarization yet, so the guesses are shown as 「（推測）」 and treated with care:
 
@@ -298,21 +299,21 @@ Targets, with what has been measured so far. A target without a measurement is a
 
 | Metric | Target | Measured |
 | --- | --- | --- |
-| 50-minute session to draft note, including speech-to-text | ≤ 5 minutes | draft note 297 s from the finished transcript (32B, current code); with speech-to-text pending |
-| Concurrent rooms, 50-minute sessions, Whisper on the same card | ≥ 4 | 4 rooms in 365 s, 2 rooms in 284 s (32B, current code, from finished transcripts; speech-to-text loaded but idle) |
+| 50-minute session to draft note, including speech-to-text | ≤ 5 minutes | 4.4 min for a 46-minute synthetic recording (Whisper 10 s, speaker labels 116 s, draft 136 s; 32B, one card). A real recording is pending |
+| Concurrent rooms, 50-minute sessions, Whisper on the same card | ≥ 4 | 4 rooms in 149 s from finished transcripts; 134 s while Whisper transcribed the recording beside them |
 | Peak memory and power draw under that load | – | 30.8 GiB of 32, about 230 W for the card (57 W idle) |
-| Character error rate | ≤ 10% | 14.1% on one 23-second clip; a longer recording is pending |
+| Character error rate | ≤ 10% | 7.5% on the 46-minute synthetic recording (after Simplified→Traditional conversion); 14.1% on one 23-second clip read by people |
 | Note sentences backed by the transcript, as judged by a clinician | ≥ 95% | pending (needs the clinician's reading of flagged sentences) |
 | Risk-cue recall vs. psychologist labels | ≥ 90% | pending (no psychologist-labelled set yet; see Limitations) |
-| Outbound network connections during a session | 0 (packet capture) | pending |
+| Outbound network connections during a session | 0 (packet capture) | sockets listed by process once a second during batch 10: none from vLLM, Whisper or Haven (the cloud machine's own Grafana, apt, clock and JupyterLab did connect); a capture with the cable pulled is pending |
 
 ## Limitations
 
 - **Risk detection is word matching and its lists are 待心理師確認.** `tests/test_risk_recall.py` reports recall per category on the 64 sentences from the 2026-11-12 clinical review (before: about 22% on the suicide sentences; now 64/64). The lists were written with those sentences in view, so that figure is a regression check, not accuracy. On 16 risk sentences written afterwards and not used to build the lists, 3 were flagged (19%); six everyday sentences such as 「想到期末考就想死」 still raise a high-level flag. "No cue found" never means "no risk". A local-LLM pass that can only add flags, and a psychologist-labelled test set, are still to do.
 - The reporting cues quote article numbers as given in the review; check them against 全國法規資料庫 before relying on them. Haven has no reporting workflow yet: it shows the prompt and, at signing, requires the cue to be in the note or left out with a reason.
-- **No encryption at rest and no accounts.** Anyone with this user account or the disk can read everything; the audit log does not say who acted; `signed_by` is a name typed into a dialog. Haven is not presented as compliant with the Personal Data Protection Act: consent versions and withdrawal, retention and deletion after 10 years, data-subject requests and handling of minors are not built.
-- **Loopback is not a security boundary.** Any program on the machine can call the API with the `X-Haven` header, including a model container started with `--net=host` (as `scripts/b70-vllm.sh` does). The launcher is a demonstration script: its hardening options are untested on the B70.
-- **Draft edits are saved when they are verified**, which happens a moment after each change (with the confirmations, written bases and risk-cue reasons). A sentence still being typed is not saved yet; the page asks before leaving. 「還原成 AI 原稿」 discards the working draft. The saved draft sits in `data/haven.db` unencrypted, like everything else there.
+- **Encryption at rest is optional and off by default, and there are no accounts.** Without `HAVEN_ENCRYPT=1` anyone with the disk can read everything; with it, anyone using the running machine under the therapist's account still can. The audit log does not say who acted; `signed_by` is a name typed into a dialog. Haven is not presented as compliant with the Personal Data Protection Act: consent versions and withdrawal, retention and deletion after 10 years, data-subject requests and handling of minors are not built.
+- **Loopback is not a security boundary.** Any program on the machine can call the API with the `X-Haven` header, including a model container started with `--net=host` (as `scripts/b70-vllm.sh` does). The launcher is a demonstration script: `OFFLINE=1 PRIVILEGED=0` worked on the B70 in batch 10; `--net=host`, `--ipc=host` and the image tag (not digest) remain.
+- **Draft edits are saved when they are verified**, which happens a moment after each change (with the confirmations, written bases and risk-cue reasons). A sentence still being typed is not saved yet; the page asks before leaving. 「還原成 AI 原稿」 discards the working draft. The saved draft sits in `data/haven.db`, encrypted only when `HAVEN_ENCRYPT=1`.
 - The rule-based engine is for the prototype.
 - The verifier's bigram overlap is a first filter. Paraphrased sentences are sent to the local LLM for a second check when one is running. Without a model, a sentence with an unmatched clause is marked weak but does not block signing unless it is about risk.
 - Writing long sessions in parts of 60 segments has been tested with a stand-in model only, not yet on the B70; each part is written without seeing the others.

@@ -1,0 +1,32 @@
+Traceback (most recent call last):
+  File "/home/devcloud/haven/haven/transcript.py", line 128, in _openai_server
+    with _OPENER.open(req, timeout=config.ASR_TIMEOUT) as r:
+         ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/python/3.13/lib/python3.13/urllib/request.py", line 495, in open
+    response = meth(req, response)
+  File "/opt/python/3.13/lib/python3.13/urllib/request.py", line 604, in http_response
+    response = self.parent.error(
+        'http', request, response, code, msg, hdrs)
+  File "/opt/python/3.13/lib/python3.13/urllib/request.py", line 533, in error
+    return self._call_chain(*args)
+           ~~~~~~~~~~~~~~~~^^^^^^^
+  File "/opt/python/3.13/lib/python3.13/urllib/request.py", line 466, in _call_chain
+    result = func(*args)
+  File "/opt/python/3.13/lib/python3.13/urllib/request.py", line 613, in http_error_default
+    raise HTTPError(req.full_url, code, msg, hdrs, fp)
+urllib.error.HTTPError: HTTP Error 400: Bad Request
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/devcloud/haven/scripts/asr_eval.py", line 132, in <module>
+    main()
+    ~~~~^^
+  File "/home/devcloud/haven/scripts/asr_eval.py", line 72, in main
+    t = transcribe_audio(args.audio, "ASR-EVAL", "C000", 1, "2026-01-01")
+  File "/home/devcloud/haven/haven/transcript.py", line 153, in transcribe_audio
+    raw = _openai_server(audio_path) if config.ASR_BACKEND == "openai" else _faster_whisper(audio_path)
+          ~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/home/devcloud/haven/haven/transcript.py", line 131, in _openai_server
+    raise ASRError(f"HTTP {e.code}") from e
+haven.transcript.ASRError: HTTP 400

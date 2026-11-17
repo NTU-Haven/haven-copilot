@@ -72,6 +72,60 @@ Sources: `benchmarks/b70-qwen3-32b-awq-*-20261114-0906.md` (+ .json, -review.csv
 
 The model still rejects 0–24 sentences per run, now mostly in the assessment section: a therapist's question written as the therapist's view (「是不是一種逃避？」 → 「心理師認為…是一種逃避」) or praise extended with content the therapist did not say. These look like real catches, but only a clinician's reading of the review sheets can say so. Notes are longer after the fix (up to 151 sentences), and four rooms at once took 365 s, over the 5-minute target even before speech-to-text; with two rooms everything finished in under 5 minutes. Still one session and nine runs; not an accuracy figure.
 
+## Batch 10: parallel writing, and a 46-minute recording through Whisper (2026-11-16/17)
+
+Same card and settings as batch 9 (Qwen3-32B AWQ at `UTIL=0.8`, Whisper large-v3-turbo at `0.12`, 32k context, fp8 cache). New: the writer sends its parts of 60 segments at once (4 at a time) and asks for 1–3 sentences per field in long sessions; both servers started with `OFFLINE=1 PRIVILEGED=0` (no network fetches, no privileged container), which worked on the first try. Three runs:
+
+- **18:03** (commit a91c85e): long session, demo sessions, verifier test set ([summary](b70-batch10/20261116-1803/summary.md)). The recording step failed: vLLM refuses audio over 600 s by default (fixed in 8eb605c).
+- **02:13** (commit 8eb605c): the recording went through, but the speaker agent labelled 60-segment chunks one after another, and the B70 had no Simplified→Traditional converter ([summary](b70-batch10/20261117-0213/summary.md)).
+- **02:36** (commit 9c8a857): speaker chunks in parallel, converter installed ([summary](b70-batch10/20261117-0236/summary.md)).
+
+### Writing in parallel (18:03)
+
+| C002-L50 (49.5 min, 339 segments), Qwen3-32B | Batch 9 rerun (0906) | Batch 10 (1803) |
+| --- | --- | --- |
+| One room, draft note time | 297.0 s (writer 277.6 s) | **98.1 s** (writer 82.9 s) |
+| 2 rooms at once, all done | 283.7 s | 104.6 s |
+| 4 rooms at once, all done | 365.0 s | **148.5 s** |
+| Passed the verifier, 9 runs | 75–93%, median 84% | 74–94%, median 80% |
+| Sentences per note | 83–151 | 88–123 |
+| Card power while drafting, peak memory | about 230 W, 30.8 GiB | 228–241 W, 30.6 GiB |
+| Demo sessions, median of 3 | 27.4 / 29.2 / 15.9 s | 29.4 / 26.7 / 16.3 s |
+| Verifier test set | 30/30, 1/18 | 30/30, 1/18 |
+
+Sources: `benchmarks/b70-qwen3-32b-awq-{L50,L50-2rooms,L50-4rooms,repeat3}-20261116-1803.md` (+ .json, -review.csv), `verifier-eval/b70-qwen3-32b-awq-20261116-1803.md`.
+
+Energy for one 49.5-minute session alone: 228 W × 98 s ≈ 6.2 Wh of card energy (batch 9: 15.7 Wh); four at once: 230 W × 149 s ÷ 4 ≈ 2.4 Wh each. Card only.
+
+### A 46-minute recording (02:13 and 02:36)
+
+The recording is C002-L50 read by two macOS voices (`say`, Taiwanese Mandarin), 2,755.7 s, Ogg Opus 16 kHz, 7.3 MB. Synthetic speech: cleaner than a real room, so the error rate is a lower bound. Not in the repository.
+
+| | 02:13 (no converter, chunks in sequence) | 02:36 (converter, chunks at once) |
+| --- | --- | --- |
+| Whisper, alone | 9.1 s (about 300× real time) | 9.6 s |
+| Character error rate against the script | 35.3% | **7.5%** |
+| Speaker labels right | 505/553 segments, 322 s | **530/553 (96%), 116 s** |
+| Draft from the recording (writer + verifier) | 158.6 s, 5/141 passed | 135.8 s, 12/130 passed |
+| The same draft after the therapist confirms the guessed speakers | – | 131.6 s, **95/140 passed** |
+| **Recording to draft, one room** (Whisper + speakers + draft) | 490 s | **262 s (4.4 min)** |
+| Whisper while 4 rooms draft the long session | 20.1 s, speakers 380 s | 20.0 s, speakers 141 s |
+| 4 rooms at once while the recording is transcribed, all done | 147.0 s | 133.9 s |
+
+Sources: `asr-eval/b70-whisper-L50-tts{,-load}-20261117-{0213,0236}.md` (+ .json), `benchmarks/b70-qwen3-32b-awq-{T50,L50-4rooms-asrload}-20261117-{0213,0236}.md`, `benchmarks/b70-qwen3-32b-awq-T51-confirmed-20261117-0236.md` (+ .json, -review.csv).
+
+What this run found:
+
+1. **Whisper writes Simplified characters.** The whole recording came back in Simplified Chinese. Without a converter the transcript stays that way; the error rate counts every Simplified character, and the risk lexicon, written in Traditional, would not match 「自杀」. With `opencc` (s2twp) the same words score 7.5%. `opencc` is now listed as needed for speech-to-text, and Haven prints a warning when it is missing.
+2. **Speaker guesses hold most of the note until the therapist confirms them, as designed.** Of the 130 sentences drafted straight from the recording, 90 were held only because they cite speakers the model guessed, and most of the 28 unsupported ones hit the pronoun rule, which relaxes only for confirmed speakers. The 95/140 row is the same transcript with the model's labels marked confirmed (including its 23 wrong ones), drafted again; it stands for a therapist who accepts the guesses without correcting them.
+3. **68% is lower than the 80% on the script.** Whisper splits the session into 553 shorter segments (the script has 339), so a sentence often cites a fragment. The held sentences are in the -review.csv for clinical reading.
+
+The 0213 timing for 4 rooms was taken with a Whisper container left over from a manual test, which shows as 5.0 GiB in that run's idle line; the 0236 run started clean.
+
+### Network during the runs
+
+The batch logger listed new outside addresses in every run, including one Google Cloud address about a minute after the servers started. A second logger with process names ([net-by-process.md](b70-batch10/20261117-0236/net-by-process.md)) showed that every outside connection belonged to the cloud machine's own services: Grafana (the Google Cloud address), apt checking for updates, clock synchronisation, and JupyterLab. None came from vLLM, Whisper or Haven. Sampled once a second; still not a capture with the cable pulled.
+
 ## One long session on the B70 (2026-11-10, before the fixes)
 
 The run's file reports 2181.5 s (36.4 minutes) of speech; the copy of C002-L50 now in the repository ends at 2967.4 s (49.5 minutes, 339 segments), so this run used an earlier version of the session. It was written by Qwen3-32B with `scripts/make_long_session.py` ([data/sessions/C002-L50.json](../data/sessions/C002-L50.json)). Qwen3-32B AWQ drafted and verified the note from the finished transcript in **63.9 s** (writer 52.0 s, verifier 11.9 s, 21.8 output tok/s); 10 of 25 sentences passed the verifier. Source: [benchmarks/tmp-l36.md](benchmarks/tmp-l36.md) (+ .json, and the 15 held sentences in `tmp-l36-review.csv`, not yet judged by a clinician).
@@ -108,13 +162,12 @@ Reported by `tests/test_risk_recall.py` on every run: 64 of 64 on the reviewer's
 
 One clip, 23.0 s, three utterances, on the B70 (2026-11-10, before the fixes): character error rate 14.1%, 0.5 s to transcribe, 3 of 3 speakers guessed. Source: [asr-eval/b70-whisper-turbo-real-voices.md](asr-eval/b70-whisper-turbo-real-voices.md) (+ .json); notes in [asr-eval/README.md](asr-eval/README.md).
 
+A 46-minute synthetic recording (batch 10, above): 9.6 s to transcribe, 7.5% character error rate after Simplified→Traditional conversion, speakers right in 530 of 553 segments, 4.4 minutes from recording to draft.
+
 ## Pending (needs the B70, which is available until 2026-12-02)
 
 | Measurement | Why it matters |
 | --- | --- |
-| Clinical review of the review sheets from the batch-9 rerun (`*-20261114-0906-review.csv`) | Separates real errors from correct sentences held back |
-| A 50-minute session through Whisper while the note model runs | Speech-to-text was loaded in batch 9 but not exercised |
-| A recording of 10 minutes or more through Whisper | Real-time factor, error rate, recording-to-draft time |
-| Packet capture with the network cable pulled | The "0 outbound connections" target |
-| The launcher's new options (`OFFLINE`, `PRIVILEGED=0`, no `--trust-remote-code`) | They are untested |
-| Long-session writing in parts of 60 segments, and the JSON prompt format | Only tested with a stand-in model |
+| Clinical review of the review sheets (`*-20261116-1803-review.csv`, and `*-T51-confirmed-20261117-0236-review.csv` for the recording) | Separates real errors from correct sentences held back |
+| A real recording (people, not synthetic voices) of 10 minutes or more | The 7.5% error rate is from clean synthetic speech |
+| Packet capture with the network cable pulled | The "0 outbound connections" target; batch 10 listed sockets by process instead |

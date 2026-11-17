@@ -1,0 +1,21 @@
+- 18:03:39 monitor: xpu-smi on card 0 -> docs/b70-batch10/20261116-1803/monitor.csv
+- 18:03:39 idle baseline: 30 s
+- 18:04:09 starting Whisper (OFFLINE=1 PRIVILEGED=0)
+- 18:06:10 Whisper ready
+- 18:06:10 starting qwen3-32b-awq: 32k context, fp8 context cache
+- 18:08:16 qwen3-32b-awq ready (OFFLINE=1 PRIVILEGED=0)
+- 18:08:36 step qwen3-32b-awq-long-1room: python3 scripts/benchmark.py --sessions C002-L50 --label b70-qwen3-32b-awq-L50-20261116-1803
+- 18:10:14 step qwen3-32b-awq-long-1room finished (exit 0)
+- 18:10:14 step qwen3-32b-awq-long-2rooms: python3 scripts/benchmark.py --sessions C002-L50 --rooms 2 --label b70-qwen3-32b-awq-L50-2rooms-20261116-1803
+- 18:13:20 step qwen3-32b-awq-long-2rooms finished (exit 0)
+- 18:13:20 step qwen3-32b-awq-long-4rooms: python3 scripts/benchmark.py --sessions C002-L50 --rooms 4 --label b70-qwen3-32b-awq-L50-4rooms-20261116-1803
+- 18:17:24 step qwen3-32b-awq-long-4rooms finished (exit 0)
+- 18:17:24 step asr-L50-alone: python3 scripts/asr_eval.py /home/devcloud/L50-tts.ogg --session C002-L50 --segments 1-339 --save-as C002-T50 --label b70-whisper-L50-tts-20261116-1803
+- 18:17:24 step asr-L50-alone finished (exit 1)
+- 18:17:24 step asr-under-load: recording transcribed while 4 rooms draft
+- 18:21:29 step asr-under-load finished
+- 18:21:29 step qwen3-32b-awq-repeat3: python3 scripts/benchmark.py --repeat 3 --label b70-qwen3-32b-awq-repeat3-20261116-1803
+- 18:25:04 step qwen3-32b-awq-repeat3 finished (exit 0)
+- 18:25:04 step qwen3-32b-awq-verifier: python3 scripts/verifier_eval.py --label b70-qwen3-32b-awq-20261116-1803
+- 18:25:15 step qwen3-32b-awq-verifier finished (exit 0)
+- 18:25:15 done: docs/b70-batch10/20261116-1803/summary.md

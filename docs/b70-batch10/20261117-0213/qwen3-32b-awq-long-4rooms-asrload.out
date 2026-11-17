@@ -1,0 +1,4 @@
+engine: openai-compat:qwen3-32b-awq
+  C002-L50 run 1: 129.6s, 17.5 tok/s, 86/105 supported
+  4 rooms at once: all done in 147.0s, 153.3 output tok/s in total
+wrote docs/benchmarks/b70-qwen3-32b-awq-L50-4rooms-asrload-20261117-0213.json, .md and -review.csv (19 flagged sentences)
