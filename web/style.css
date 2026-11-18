@@ -301,3 +301,16 @@ body.signed-out .stepper, body.signed-out .layout { display: none; }
 .conflict { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
 .account[hidden], .login[hidden], .record-controls [hidden] { display: none; }
 body.signed-out .status { visibility: hidden; }
+
+/* ---------- admin page (2026-11-18) ---------- */
+#admin-btn[hidden] { display: none; }
+.admin h2 { margin: 0 0 .4rem; font-size: 1.1rem; }
+.admin .lead { margin: 0 0 .8rem; color: var(--muted); font-size: .9rem; }
+.admin table { width: 100%; border-collapse: collapse; font-size: .92rem; }
+.admin th, .admin td { text-align: left; padding: .45rem .5rem; border-bottom: 1px solid var(--line); vertical-align: middle; }
+.admin th { color: var(--muted); font-weight: 600; }
+.admin .tbl { overflow-x: auto; }
+.admin .row-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+.admin form.admin-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: .6rem; align-items: end; margin-top: .9rem; }
+.admin .unassigned { color: var(--warn); font-weight: 600; }
+.admin .admin-msg { min-height: 1.2em; margin: .5rem 0 0; }

@@ -41,6 +41,7 @@ CONNECTION_TIMEOUT = 30
 CONSENT_SCOPE = "v1:recording+local-ai-transcription+speaker-guess+transcript-kept"
 AUDIO_SUFFIXES = {".wav", ".mp3", ".m4a", ".flac", ".ogg", ".opus", ".webm"}
 SESSION_ID = re.compile(r"^[A-Za-z0-9-]{1,40}$")
+CLIENT_ID = re.compile(r"^[A-Z][A-Z0-9]{1,15}$")
 CLIENTS_LOCK = threading.Lock()
 # Uploads being transcribed: session id -> (client id, session number). Guarded by
 # CLIENTS_LOCK. Transcription takes minutes; without the reservation two uploads
@@ -498,6 +499,9 @@ class Handler(BaseHTTPRequestHandler):
             sid = _session_id(parts[2])
             _my_session(sid)
             return self._json(_session_view(sid))
+        if parts == ["api", "admin"]:
+            self._admin()
+            return self._json(_admin_overview())
         if parts == ["api", "audit"]:
             _admin_only()
             store.audit("read_audit", "")
@@ -529,6 +533,8 @@ class Handler(BaseHTTPRequestHandler):
             return self._logout()
         if not self._signed_in_or_401(parts):
             return
+        if parts[:2] == ["api", "admin"]:
+            return self._admin_post(parts[2:])
         if parts == ["api", "recordings"]:
             return self._recording_start()
         if len(parts) == 4 and parts[1] == "recordings":
@@ -771,6 +777,43 @@ class Handler(BaseHTTPRequestHandler):
             raise
         return self._json(_transcribe_and_store(tmp_name, session_id, client_id, session_no, simulated, "transcribe_upload"))
 
+    # ---------- accounts and client assignments (admin, on the main PC) ----------
+
+    def _admin(self) -> dict:
+        user = _user()
+        if not accounts.required() or user is None or user["role"] != "admin":
+            raise HttpError(HTTPStatus.FORBIDDEN, "an admin account is required",
+                            "這裡只有管理者帳號可以使用。第一個管理者帳號請在主機上用 scripts/add_user.py 建立。")
+        if not config.ADMIN_FROM_NETWORK and not self._from_this_machine():
+            raise HttpError(HTTPStatus.FORBIDDEN, "accounts and assignments are managed on the main PC",
+                            f"帳號與個案指派只能在主機上操作：請在主機上開 https://localhost:{config.PORT}。")
+        return user
+
+    def _from_this_machine(self) -> bool:
+        try:
+            ip = ipaddress.ip_address(self.client_address[0].split("%")[0])
+        except ValueError:
+            return False
+        return (getattr(ip, "ipv4_mapped", None) or ip).is_loopback
+
+    def _admin_post(self, rest: list[str]):
+        admin = self._admin()
+        p = self._payload()
+        try:
+            if rest == ["users"]:
+                return self._json(_save_account(p))
+            if len(rest) == 3 and rest[0] == "users" and rest[2] == "remove":
+                if rest[1] == admin["username"]:
+                    raise Refused("an admin cannot remove their own account", "不能刪除自己正在使用的帳號。")
+                return self._json(_remove_account(rest[1]))
+            if rest == ["clients"]:
+                return self._json(_new_client(p))
+            if len(rest) == 3 and rest[0] == "clients" and rest[2] == "assign":
+                return self._json(_assign_client(rest[1], p.get("username")))
+        except accounts.AccountError as e:
+            raise Refused(str(e), str(e)) from None
+        raise HttpError(HTTPStatus.NOT_FOUND, "unknown endpoint")
+
     # ---------- recording in the browser ----------
     # The page records with the device's microphone and sends the audio here every few
     # seconds while the session goes on. Nothing is written on the therapist's device:
@@ -860,6 +903,124 @@ class Handler(BaseHTTPRequestHandler):
             UPLOADING.pop(rec["session_id"], None)
         store.audit("recording_cancelled", f"{rec['session_id']}; audio removed")
         return self._json({"cancelled": True})
+
+
+def _write_clients(clients: list[dict]) -> None:
+    files.write_private(config.CLIENTS_FILE, json.dumps(clients, ensure_ascii=False, indent=2) + "\n")
+
+
+def _admin_overview() -> dict:
+    """Accounts and who each client is assigned to: ids, names and counts only,
+    no clinical content (an admin does not read records)."""
+    clients = load_clients()
+    users = [dict(accounts.public(u), clients=[c["id"] for c in clients if c.get("therapist_user") == u["username"]])
+             for u in accounts.load_users()]
+    return {
+        "users": users,
+        "clients": [{"id": c["id"], "alias": c.get("alias", ""), "therapist_user": c.get("therapist_user") or "",
+                     "therapist": c.get("therapist", ""), "sessions": len(c.get("sessions", []))} for c in clients],
+        "password_min": 10,
+    }
+
+
+def _text(p: dict, key: str, limit: int, required: bool = True) -> str:
+    v = p.get(key)
+    if v is None and not required:
+        return ""
+    if not isinstance(v, str) or (required and not v.strip()) or len(v) > limit:
+        raise BadRequest(f"{key} is required (at most {limit} characters)")
+    return v.strip()
+
+
+def _save_account(p: dict) -> dict:
+    """Adds an account, or changes an existing one's name, role or password."""
+    username = _text(p, "username", 32).lower()
+    display_name = _text(p, "display_name", 40)
+    role = p.get("role", "therapist")
+    password = p.get("password") or ""
+    if not isinstance(password, str) or len(password) > 256:
+        raise BadRequest("password must be text")
+    existing = accounts.get_user(username)
+    if existing is None:
+        if not password:
+            raise Refused("a new account needs a password", "新帳號要設定初始密碼。")
+        user = accounts.set_user(username, display_name, password, role)
+        store.audit("account_added", f"{username} role={role}")
+    else:
+        user = accounts.update_user(username, display_name, role)
+        if password:
+            accounts.set_password(username, password)
+        store.audit("account_changed", f"{username} role={role}" + ("; password reset, signed out everywhere" if password else ""))
+    with CLIENTS_LOCK:  # the name shown on that therapist's clients follows the account
+        clients = load_clients()
+        changed = False
+        for c in clients:
+            if c.get("therapist_user") == username and c.get("therapist") != user["display_name"]:
+                c["therapist"], changed = user["display_name"], True
+        if changed:
+            _write_clients(clients)
+    return _admin_overview()
+
+
+def _remove_account(username: str) -> dict:
+    mine = [c["id"] for c in load_clients() if c.get("therapist_user") == username]
+    if mine:
+        raise Refused("the account still has clients assigned",
+                      f"這個帳號還負責 {len(mine)} 位個案（{'、'.join(mine)}），請先把他們指派給其他心理師再刪除帳號。", clients=mine)
+    if not accounts.remove_user(username):
+        raise HttpError(HTTPStatus.NOT_FOUND, "no such account", "沒有這個帳號。")
+    store.audit("account_removed", username)
+    return _admin_overview()
+
+
+def _assign_client(client_id: str, username) -> dict:
+    """Gives a client to a therapist's account, moves it to another, or leaves it
+    unassigned (nobody can open it then). The previous therapist loses access at once."""
+    if username not in (None, "") and (not isinstance(username, str) or accounts.get_user(username) is None):
+        raise Refused("no such account", "沒有這個帳號。")
+    with CLIENTS_LOCK:
+        clients = load_clients()
+        client = next((c for c in clients if c["id"] == client_id), None)
+        if client is None:
+            raise HttpError(HTTPStatus.NOT_FOUND, "no such client", "找不到這位個案。")
+        before = client.get("therapist_user") or "-"
+        if username:
+            client["therapist_user"] = username
+            client["therapist"] = accounts.get_user(username)["display_name"]
+        else:
+            client.pop("therapist_user", None)
+        _write_clients(clients)
+    store.audit("client_assigned", f"{client_id}: {before} -> {username or '-'}")
+    return _admin_overview()
+
+
+def _new_client(p: dict) -> dict:
+    client_id = _text(p, "id", 16).upper()
+    if not CLIENT_ID.match(client_id):
+        raise BadRequest("id must be a letter followed by letters or digits")
+    alias = _text(p, "alias", 40)
+    concern = _text(p, "presenting_concern", 200, required=False)
+    age = p.get("age")
+    if age in ("", None):
+        age = None
+    elif not isinstance(age, int) or isinstance(age, bool) or not 0 < age < 120:
+        raise BadRequest("age must be a whole number")
+    username = p.get("username") or ""
+    if username and (not isinstance(username, str) or accounts.get_user(username) is None):
+        raise Refused("no such account", "沒有這個帳號。")
+    with CLIENTS_LOCK:
+        clients = load_clients()
+        if any(c["id"] == client_id for c in clients):
+            raise Refused("a client with this id exists", "這個個案編號已經有人使用。")
+        client = {"id": client_id, "alias": alias, "age": age, "presenting_concern": concern,
+                  "therapist": accounts.get_user(username)["display_name"] if username else "",
+                  "consent": {"recording": False}, "scores": {}, "sessions": []}
+        if username:
+            client["therapist_user"] = username
+        clients.append(client)
+        _write_clients(clients)
+    store.audit("client_added", f"{client_id} -> {username or '-'}")  # the alias is not written to the log
+    return _admin_overview()
 
 
 def _abandon_audio(path: str, session_id: str, e: BaseException) -> None:

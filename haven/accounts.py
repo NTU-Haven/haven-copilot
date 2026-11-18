@@ -102,12 +102,42 @@ def set_user(username: str, display_name: str, password: str, role: str = "thera
     return public(record)
 
 
+def update_user(username: str, display_name: str | None = None, role: str | None = None) -> dict:
+    """Changes an account's name or role, keeping its password."""
+    with _LOCK:
+        users = load_users()
+        user = next((u for u in users if u["username"] == username), None)
+        if user is None:
+            raise AccountError("沒有這個帳號")
+        if display_name is not None:
+            if not display_name.strip() or len(display_name) > 40:
+                raise AccountError("請填寫顯示名稱（40 字以內）")
+            user["display_name"] = display_name.strip()
+        if role is not None:
+            if role not in ROLES:
+                raise AccountError(f"角色只能是 {', '.join(ROLES)}")
+            if user["role"] == "admin" and role != "admin" and sum(u["role"] == "admin" for u in users) == 1:
+                raise AccountError("這是最後一個管理者帳號，不能改成心理師；請先新增另一個管理者")
+            user["role"] = role
+        _save_users(users)
+    return public(user)
+
+
+def set_password(username: str, password: str) -> None:
+    user = get_user(username)
+    if user is None:
+        raise AccountError("沒有這個帳號")
+    set_user(username, user["display_name"], password, user["role"])
+
+
 def remove_user(username: str) -> bool:
     with _LOCK:
         users = load_users()
         kept = [u for u in users if u["username"] != username]
         if len(kept) == len(users):
             return False
+        if any(u["username"] == username and u["role"] == "admin" for u in users) and not any(u["role"] == "admin" for u in kept):
+            raise AccountError("這是最後一個管理者帳號，不能刪除")
         _save_users(kept)
         for token in [t for t, s in _SESSIONS.items() if s["username"] == username]:
             del _SESSIONS[token]

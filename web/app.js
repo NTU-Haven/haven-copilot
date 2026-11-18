@@ -242,6 +242,120 @@ async function signOut(why) {
   location.replace(location.pathname + (why === "idle" ? "?idle=1" : ""));
 }
 document.getElementById("logout-btn").addEventListener("click", () => { if (leaveOk()) signOut(); });
+document.getElementById("admin-btn").addEventListener("click", () => { if (leaveOk()) openAdmin(); });
+
+// ---------- accounts and client assignments (admin, on the main PC) ----------
+// Who may open which client is decided here: a client belongs to one therapist's
+// account. The page shows ids, aliases and counts, never clinical content.
+
+const ROLE_NAMES = { therapist: "心理師", admin: "管理者" };
+
+async function openAdmin(message) {
+  const my = ++nav;
+  session = null;
+  edited = false;
+  currentClient = null;
+  markActive(null);
+  const main = document.getElementById("main");
+  main.replaceChildren(loading("載入帳號與個案…"));
+  let data;
+  try {
+    data = await api("/api/admin");
+  } catch (err) {
+    if (my !== nav) return;
+    main.replaceChildren(failed(err.message, () => openAdmin()));
+    return;
+  }
+  if (my !== nav) return;
+  renderAdmin(data, message);
+}
+
+function renderAdmin(data, message) {
+  const main = document.getElementById("main");
+  const msg = el("p", { class: "admin-msg", role: "status", "aria-live": "polite" }, message || "");
+  const say = (text, bad) => { msg.className = bad ? "admin-msg problem" : "admin-msg"; msg.textContent = text; };
+  const act = async (path, body, done) => {
+    try {
+      const out = await post(path, body);
+      renderAdmin(out, done);
+      await loadClients();
+    } catch (err) {
+      say(err.message, true);
+    }
+  };
+  const therapists = data.users;
+  const userOptions = (selected) => [el("option", { value: "" }, "（未指派：沒有人看得到）"),
+    ...therapists.map((u) => el("option", { value: u.username, selected: u.username === selected }, `${u.display_name}（${u.username}）`))];
+
+  // Accounts
+  const userForm = el("form", { class: "admin-form" },
+    el("label", { class: "field" }, el("span", {}, "帳號"), el("input", { name: "username", required: true, maxlength: "32", pattern: "[a-z0-9][a-z0-9._\\-]{1,31}", autocapitalize: "none", spellcheck: "false", placeholder: "例如 wang" })),
+    el("label", { class: "field" }, el("span", {}, "顯示名稱（簽核用）"), el("input", { name: "display_name", required: true, maxlength: "40", placeholder: "例如 王心理師" })),
+    el("label", { class: "field" }, el("span", {}, "角色"), el("select", { name: "role" }, el("option", { value: "therapist" }, "心理師"), el("option", { value: "admin" }, "管理者"))),
+    el("label", { class: "field" }, el("span", {}, `密碼（新帳號必填，至少 ${data.password_min} 字；修改時填了就重設）`), el("input", { name: "password", type: "password", autocomplete: "new-password", maxlength: "256" })),
+    el("button", { type: "submit", class: "primary" }, "儲存帳號"));
+  userForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const f = userForm;
+    const exists = therapists.some((u) => u.username === f.username.value.trim().toLowerCase());
+    act("/api/admin/users", { username: f.username.value, display_name: f.display_name.value, role: f.role.value, password: f.password.value },
+      exists ? `已更新帳號 ${f.username.value}${f.password.value ? "，密碼已重設，該帳號在所有設備上都已登出" : ""}。` : `已新增帳號 ${f.username.value}。`);
+  });
+  const userRows = therapists.map((u) => el("tr", {},
+    el("td", {}, u.username), el("td", {}, u.display_name), el("td", {}, ROLE_NAMES[u.role] || u.role),
+    el("td", {}, u.clients.length ? u.clients.join("、") : "—"),
+    el("td", { class: "row-actions" },
+      el("button", { type: "button", onclick: () => {
+        userForm.username.value = u.username; userForm.display_name.value = u.display_name; userForm.role.value = u.role; userForm.password.value = "";
+        userForm.display_name.focus();
+        say(`修改 ${u.username}：改名稱或角色後按「儲存帳號」；要重設密碼就填新密碼。`);
+      } }, "修改"),
+      u.username === (me.user && me.user.username) ? null : el("button", { type: "button", onclick: () => {
+        if (confirm(`刪除帳號 ${u.username}（${u.display_name}）？`)) act(`/api/admin/users/${encodeURIComponent(u.username)}/remove`, {}, `已刪除帳號 ${u.username}。`);
+      } }, "刪除"))));
+
+  // Clients
+  const clientRows = data.clients.map((c) => {
+    const pick = el("select", { "aria-label": `${c.id} 的負責心理師` }, userOptions(c.therapist_user));
+    pick.addEventListener("change", () => {
+      const to = therapists.find((u) => u.username === pick.value);
+      const text = to ? `把 ${c.id} 指派給 ${to.display_name}？${c.therapist_user ? "原本的心理師會立刻看不到這位個案。" : ""}` : `取消 ${c.id} 的指派？之後沒有人看得到這位個案。`;
+      if (!confirm(text)) { pick.value = c.therapist_user; return; }
+      act(`/api/admin/clients/${encodeURIComponent(c.id)}/assign`, { username: pick.value }, to ? `已把 ${c.id} 指派給 ${to.display_name}。` : `已取消 ${c.id} 的指派。`);
+    });
+    return el("tr", {}, el("td", {}, c.id), el("td", {}, c.alias), el("td", {}, String(c.sessions)),
+      el("td", { class: c.therapist_user ? "" : "unassigned" }, pick));
+  });
+  const clientForm = el("form", { class: "admin-form" },
+    el("label", { class: "field" }, el("span", {}, "個案編號"), el("input", { name: "id", required: true, maxlength: "16", pattern: "[A-Za-z][A-Za-z0-9]{1,15}", placeholder: "例如 C003" })),
+    el("label", { class: "field" }, el("span", {}, "化名"), el("input", { name: "alias", required: true, maxlength: "40", placeholder: "例如 小晴（化名）" })),
+    el("label", { class: "field" }, el("span", {}, "年齡"), el("input", { name: "age", type: "number", min: "1", max: "119" })),
+    el("label", { class: "field" }, el("span", {}, "主訴"), el("input", { name: "presenting_concern", maxlength: "200" })),
+    el("label", { class: "field" }, el("span", {}, "負責心理師"), el("select", { name: "username" }, userOptions(""))),
+    el("button", { type: "submit", class: "primary" }, "新增個案"));
+  clientForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const f = clientForm;
+    act("/api/admin/clients", { id: f.id.value, alias: f.alias.value, age: f.age.value ? Number(f.age.value) : null,
+      presenting_concern: f.presenting_concern.value, username: f.username.value }, `已新增個案 ${f.id.value.toUpperCase()}。`);
+  });
+  const unassigned = data.clients.filter((c) => !c.therapist_user).length;
+
+  main.replaceChildren(el("div", { class: "admin" },
+    el("section", { class: "card" },
+      el("h2", { tabindex: "-1" }, "帳號"),
+      el("p", { class: "lead" }, "每位心理師一個帳號。心理師只看得到指派給自己的個案；管理者管理帳號與指派，看不到紀錄內容。這一頁只能在主機上操作，所有變更都寫入稽核紀錄。"),
+      el("div", { class: "tbl" }, el("table", {}, el("thead", {}, el("tr", {}, ["帳號", "顯示名稱", "角色", "負責個案", ""].map((h) => el("th", {}, h)))), el("tbody", {}, userRows))),
+      userForm),
+    el("section", { class: "card" },
+      el("h2", {}, "個案與負責心理師"),
+      el("p", { class: "lead" }, unassigned ? `有 ${unassigned} 位個案還沒有指派，登入後沒有人看得到他們。` : "每位個案都已指派。換人時，原本的心理師會立刻看不到這位個案，已簽核的紀錄保留不變。"),
+      el("div", { class: "tbl" }, el("table", {}, el("thead", {}, el("tr", {}, ["編號", "化名", "會談數", "負責心理師"].map((h) => el("th", {}, h)))), el("tbody", {}, clientRows))),
+      clientForm),
+    msg));
+  document.getElementById("sim-note").textContent = "";
+  main.querySelector("h2").focus();
+}
 
 let lastActive = Date.now(), lastPing = Date.now();
 for (const ev of ["pointerdown", "keydown", "touchstart", "wheel", "scroll"]) {
@@ -1514,6 +1628,7 @@ function signedIn() {
   if (me.user) {
     document.getElementById("account").hidden = false;
     document.getElementById("account-name").textContent = `${me.user.display_name}（${me.user.username}）`;
+    document.getElementById("admin-btn").hidden = me.user.role !== "admin";
   }
   lastActive = Date.now();
   boot();
@@ -1535,6 +1650,10 @@ loadClients().then((clients) => {
   } else if (clients.length) {
     const wanted = params.get("client");
     openClient(clients.some((c) => c.id === wanted) ? wanted : clients[0].id);
+  } else if (me.user && me.user.role === "admin") {
+    openAdmin();
+  } else if (me.user) {
+    document.getElementById("main").replaceChildren(el("div", { class: "empty" }, "目前沒有指派給您的個案。請管理者在主機的「帳號與個案指派」頁指派。"));
   }
 });
 }

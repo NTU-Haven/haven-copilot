@@ -347,5 +347,69 @@ class ScriptTest(unittest.TestCase):
             self.assertNotEqual(short.returncode, 0)
 
 
+class AdminTest(AccountCase, unittest.TestCase):
+    """The main PC manages accounts and which therapist each client belongs to."""
+
+    def test_only_an_admin_and_only_on_the_main_pc(self):
+        wang, boss = self.login("wang"), self.login("boss")
+        self.assertEqual(self.req("/api/admin", cookie=wang)[0], 403)
+        status, overview, _ = self.req("/api/admin", cookie=boss)
+        self.assertEqual(status, 200)
+        self.assertIn("C001", {u["username"]: u["clients"] for u in overview["users"]}["wang"])
+        self.assertNotIn("scores", json.dumps(overview))  # no clinical content
+        with mock.patch.object(server.Handler, "_from_this_machine", return_value=False):
+            status, body, _ = self.req("/api/admin", cookie=boss)
+            self.assertEqual(status, 403)
+            self.assertIn("主機", body["message_zh"])
+            with mock.patch.object(config, "ADMIN_FROM_NETWORK", True):
+                self.assertEqual(self.req("/api/admin", cookie=boss)[0], 200)
+
+    def test_reassigning_a_client_moves_access_at_once(self):
+        wang, lin, boss = self.login("wang"), self.login("lin"), self.login("boss")
+        self.assertEqual(self.req("/api/clients/C001/brief", cookie=wang)[0], 200)
+        status, _, _ = self.req("/api/admin/clients/C001/assign", {"username": "lin"}, cookie=boss)
+        self.assertEqual(status, 200)
+        self.assertEqual(self.req("/api/clients/C001/brief", cookie=wang)[0], 404)
+        self.assertEqual(self.req("/api/clients/C001/brief", cookie=lin)[0], 200)
+        self.assertIn("client_assigned", [a["action"] for a in store.recent_audit(5)])
+        self.assertIn("C001: wang -> lin", next(a["detail"] for a in store.recent_audit(5) if a["action"] == "client_assigned"))
+        self.req("/api/admin/clients/C001/assign", {"username": ""}, cookie=boss)
+        self.assertEqual(self.req("/api/clients/C001/brief", cookie=lin)[0], 404)  # unassigned: nobody
+        self.req("/api/admin/clients/C001/assign", {"username": "wang"}, cookie=boss)
+        self.assertEqual(self.req("/api/admin/clients/C001/assign", {"username": "nobody"}, cookie=boss)[0], 409)
+
+    def test_accounts_are_added_renamed_reset_and_removed(self):
+        boss = self.login("boss")
+        status, _, _ = self.req("/api/admin/users", {"username": "chen", "display_name": "陳心理師", "role": "therapist"}, cookie=boss)
+        self.assertEqual(status, 409)  # a new account needs a password
+        self.assertEqual(self.req("/api/admin/users", {"username": "chen", "display_name": "陳心理師", "password": "short"}, cookie=boss)[0], 409)
+        self.assertEqual(self.req("/api/admin/users", {"username": "chen", "display_name": "陳心理師", "password": PASSWORD}, cookie=boss)[0], 200)
+        chen = self.login("chen")
+        _, overview, _ = self.req("/api/admin/clients", {"id": "c009", "alias": "測試（化名）", "age": 30, "presenting_concern": "失眠",
+                                                       "username": "chen"}, cookie=boss)
+        self.assertIn("C009", [c["id"] for c in overview["clients"]])
+        self.assertEqual([c["id"] for c in self.req("/api/clients", cookie=chen)[1]], ["C009"])
+        self.assertEqual(self.req("/api/clients/C009/brief", cookie=chen)[0], 200)  # a new client with no sessions opens
+        self.assertEqual(self.req("/api/admin/clients", {"id": "C009", "alias": "重複"}, cookie=boss)[0], 409)
+        self.assertFalse(any("測試（化名）" in a["detail"] for a in store.recent_audit(20)))
+        # Renaming follows onto the client; a password reset signs the account out.
+        self.req("/api/admin/users", {"username": "chen", "display_name": "陳諮商心理師", "password": PASSWORD + "2"}, cookie=boss)
+        self.assertEqual(self.req("/api/me", cookie=chen)[1]["user"], None)
+        _, overview, _ = self.req("/api/admin", cookie=boss)
+        self.assertEqual(next(c for c in overview["clients"] if c["id"] == "C009")["therapist"], "陳諮商心理師")
+        # Removing needs the clients moved first.
+        status, body, _ = self.req("/api/admin/users/chen/remove", {}, cookie=boss)
+        self.assertEqual((status, body["clients"]), (409, ["C009"]))
+        self.req("/api/admin/clients/C009/assign", {"username": "wang"}, cookie=boss)
+        self.assertEqual(self.req("/api/admin/users/chen/remove", {}, cookie=boss)[0], 200)
+        self.assertEqual(self.req("/api/admin/users/boss/remove", {}, cookie=boss)[0], 409)  # not yourself
+
+    def test_the_last_admin_stays_an_admin(self):
+        boss = self.login("boss")
+        status, body, _ = self.req("/api/admin/users", {"username": "boss", "display_name": "所長", "role": "therapist"}, cookie=boss)
+        self.assertEqual(status, 409)
+        self.assertIn("最後一個管理者", body["message_zh"])
+
+
 if __name__ == "__main__":
     unittest.main()

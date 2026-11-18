@@ -38,3 +38,6 @@ PORT = int(os.environ.get("HAVEN_PORT", "8765"))
 TLS_CERT = os.environ.get("HAVEN_TLS_CERT", "")
 TLS_KEY = os.environ.get("HAVEN_TLS_KEY", "")
 HOSTNAMES = [h.strip() for h in os.environ.get("HAVEN_HOSTNAMES", "").split(",") if h.strip()]
+# Accounts and client assignments are managed on the main PC itself (https://localhost:<port>).
+# Set to 1 to allow an admin account to manage them from another device on the clinic network.
+ADMIN_FROM_NETWORK = os.environ.get("HAVEN_ADMIN_FROM_NETWORK") == "1"
