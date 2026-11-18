@@ -40,6 +40,10 @@ CURRENT: ContextVar[dict | None] = ContextVar("haven_user", default=None)
 _LOCK = threading.Lock()
 _SESSIONS: dict[str, dict] = {}  # token -> {"username", "created", "seen"}
 _FAILURES: dict[str, list[float]] = {}
+# Exceptional record access by an admin: (username, client id) -> {"until", "reason"}.
+# In memory only, like sign-ins; each grant is written to the audit log.
+_GRANTS: dict[tuple[str, str], dict] = {}
+ACCESS_SECONDS = 30 * 60
 # Compared against when the account does not exist, so a wrong name takes as long as a wrong password.
 _DUMMY = {"salt": "00" * 16, "hash": "00" * 32, **SCRYPT}
 
@@ -195,7 +199,10 @@ def session_user(token: str | None) -> dict | None:
 
 def sign_out(token: str | None) -> None:
     with _LOCK:
-        _SESSIONS.pop(token or "", None)
+        s = _SESSIONS.pop(token or "", None)
+        if s and not any(o["username"] == s["username"] for o in _SESSIONS.values()):
+            for key in [k for k in _GRANTS if k[0] == s["username"]]:
+                del _GRANTS[key]
 
 
 def reset() -> None:
@@ -203,6 +210,7 @@ def reset() -> None:
     with _LOCK:
         _SESSIONS.clear()
         _FAILURES.clear()
+        _GRANTS.clear()
 
 
 def may_open(user: dict | None, client: dict) -> bool:
@@ -213,3 +221,29 @@ def may_open(user: dict | None, client: dict) -> bool:
     if user is None:
         return not required()
     return client.get("therapist_user") == user["username"]
+
+
+def grant_access(user: dict, client_id: str, reason: str) -> float:
+    """Opens a client's signed records to an admin for ACCESS_SECONDS, read only.
+    The caller checks the reason and writes the audit row."""
+    until = time.time() + ACCESS_SECONDS
+    with _LOCK:
+        _GRANTS[(user["username"], client_id)] = {"until": until, "reason": reason}
+    return until
+
+
+def access_grant(user: dict | None, client_id: str) -> dict | None:
+    """The admin's current grant for this client, or None."""
+    if user is None or user.get("role") != "admin":
+        return None
+    with _LOCK:
+        g = _GRANTS.get((user["username"], client_id))
+        if g and g["until"] < time.time():
+            del _GRANTS[(user["username"], client_id)]
+            g = None
+    return dict(g) if g else None
+
+
+def end_access(user: dict, client_id: str) -> None:
+    with _LOCK:
+        _GRANTS.pop((user["username"], client_id), None)

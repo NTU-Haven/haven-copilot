@@ -255,6 +255,13 @@ def _verdict_row(text: str, evidence: str, v: dict) -> tuple[str, str, str]:
     return crypto.lookup(text), evidence, crypto.seal(json.dumps([text, v], ensure_ascii=False))
 
 
+def audit_rows(action: str, limit: int = 500) -> list[dict]:
+    """The latest rows of one kind, newest first."""
+    with connect() as c:
+        rows = c.execute("SELECT ts, detail FROM audit_log WHERE action = ? ORDER BY id DESC LIMIT ?", (action, limit)).fetchall()
+    return [{"ts": r[0], "detail": r[1]} for r in rows]
+
+
 def recent_audit(limit: int = 20) -> list[dict]:
     with connect() as c:
         rows = c.execute("SELECT ts, action, detail, id, hash FROM audit_log ORDER BY id DESC LIMIT ?", (limit,)).fetchall()

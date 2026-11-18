@@ -294,6 +294,48 @@ def _client_summary(c: dict) -> dict:
     }
 
 
+# Why an admin may open a client's signed records. Following clinical practice an
+# admin keeps the records (心理師法 §15: kept by the practice) but does not read them;
+# opening them is an exception with a stated reason, read only, logged, and shown to
+# the client's therapist. Drafts and transcripts are the therapist's working material
+# and are not shown.
+ACCESS_REASONS = {
+    "client_request": "個案本人申請閱覽或複製紀錄",
+    "legal": "法院、檢察機關或主管機關依法調閱",
+    "handover": "原心理師離職、長假或無法聯繫，需要交接",
+    "safety": "個案或他人有立即安全危險，需要緊急了解",
+    "quality": "督導或品質查核（已取得負責心理師同意）",
+}
+ACCESS_ROW = re.compile(r"^(?:\[(?P<by>[^\]]+)\] )?(?P<client>[A-Z][A-Z0-9]{1,15}) reason=(?P<reason>[a-z_]+); (?P<note>.*)$", re.S)
+
+
+def record_access_log(client_id: str) -> list[dict]:
+    """Every time an admin opened this client's records, newest first."""
+    out = []
+    for row in store.audit_rows("record_access"):
+        m = ACCESS_ROW.match(row["detail"])
+        if m and m["client"] == client_id:
+            out.append({"ts": row["ts"], "by": m["by"] or "", "reason": ACCESS_REASONS.get(m["reason"], m["reason"]), "note": m["note"]})
+    return out
+
+
+def _signed_records(client: dict) -> dict:
+    """A client's signed notes and addenda, for an admin with a grant. Nothing else."""
+    sessions = []
+    for sid in client.get("sessions", []):
+        signature = store.get_signature(sid)
+        if not signature:
+            sessions.append({"session_id": sid, "signed": False})
+            continue
+        note = store.get_signed_note(sid) or {}
+        sessions.append({"session_id": sid, "signed": True, "signed_by": signature["signed_by"],
+                         "signed_at": signature["signed_at"], "template": note.get("template", ""),
+                         "sections": {k: [s.get("text", "") for s in v] for k, v in note.get("sections", {}).items()},
+                         "addenda": store.get_addenda(sid)})
+    return {"client": {"id": client["id"], "alias": client.get("alias", ""), "therapist": client.get("therapist", "")},
+            "sessions": sessions}
+
+
 class Handler(BaseHTTPRequestHandler):
     server_version = "Haven/0.1"
     timeout = CONNECTION_TIMEOUT
@@ -345,9 +387,12 @@ class Handler(BaseHTTPRequestHandler):
         morsel = jar.get(accounts.COOKIE)
         return morsel.value if morsel else None
 
-    def _cookie(self, token: str, max_age: int) -> str:
+    def _cookie(self, token: str, max_age: int | None) -> str:
+        """``max_age`` None: a browser-session cookie, gone when the browser closes
+        (the page also asks for the password each time it is opened)."""
         secure = "; Secure" if isinstance(self.connection, ssl.SSLSocket) else ""
-        return f"{accounts.COOKIE}={token}; Path=/; HttpOnly; SameSite=Strict; Max-Age={max_age}{secure}"
+        age = "" if max_age is None else f"; Max-Age={max_age}"
+        return f"{accounts.COOKIE}={token}; Path=/; HttpOnly; SameSite=Strict{age}{secure}"
 
     def _begin(self) -> bool:
         """Checks that every request passes before its route runs, and sets the
@@ -395,7 +440,7 @@ class Handler(BaseHTTPRequestHandler):
             return self._error(HTTPStatus.UNAUTHORIZED, "sign-in refused", str(e))
         accounts.CURRENT.set(user)
         store.audit("sign_in", f"from {self.client_address[0]}")
-        return self._json({"user": user, "idle_minutes": accounts.IDLE_SECONDS // 60}, cookie=self._cookie(token, accounts.MAX_SECONDS))
+        return self._json({"user": user, "idle_minutes": accounts.IDLE_SECONDS // 60}, cookie=self._cookie(token, None))
 
     def _logout(self):
         if _user():
@@ -494,7 +539,8 @@ class Handler(BaseHTTPRequestHandler):
         if len(parts) == 4 and parts[1] == "clients" and parts[3] == "brief":
             client = _my_client(parts[2])
             store.audit("read_brief", client["id"])
-            return self._json(ORCH.brief(client["id"]))
+            # The therapist sees every time an admin opened this client's records.
+            return self._json(dict(ORCH.brief(client["id"]), record_access=record_access_log(client["id"])))
         if len(parts) == 3 and parts[1] == "sessions":
             sid = _session_id(parts[2])
             _my_session(sid)
@@ -502,6 +548,14 @@ class Handler(BaseHTTPRequestHandler):
         if parts == ["api", "admin"]:
             self._admin()
             return self._json(_admin_overview())
+        if len(parts) == 5 and parts[:3] == ["api", "admin", "clients"] and parts[4] == "records":
+            admin = self._admin()
+            client = _client(parts[3])
+            if accounts.access_grant(admin, client["id"]) is None:
+                raise HttpError(HTTPStatus.FORBIDDEN, "state a reason before opening a client's records",
+                                "調閱紀錄前要先選擇事由；調閱有效 30 分鐘，逾時請重新申請。")
+            store.audit("read_records", client["id"])
+            return self._json(_signed_records(client))
         if parts == ["api", "audit"]:
             _admin_only()
             store.audit("read_audit", "")
@@ -810,6 +864,12 @@ class Handler(BaseHTTPRequestHandler):
                 return self._json(_new_client(p))
             if len(rest) == 3 and rest[0] == "clients" and rest[2] == "assign":
                 return self._json(_assign_client(rest[1], p.get("username")))
+            if len(rest) == 3 and rest[0] == "clients" and rest[2] == "access":
+                return self._json(_open_records(admin, rest[1], p))
+            if len(rest) == 4 and rest[0] == "clients" and rest[2:] == ["access", "end"]:
+                accounts.end_access(admin, _client(rest[1])["id"])
+                store.audit("record_access_ended", rest[1])
+                return self._json(_admin_overview())
         except accounts.AccountError as e:
             raise Refused(str(e), str(e)) from None
         raise HttpError(HTTPStatus.NOT_FOUND, "unknown endpoint")
@@ -909,17 +969,32 @@ def _write_clients(clients: list[dict]) -> None:
     files.write_private(config.CLIENTS_FILE, json.dumps(clients, ensure_ascii=False, indent=2) + "\n")
 
 
+def _open_records(admin: dict, client_id: str, p: dict) -> dict:
+    client = _client(client_id)
+    reason = p.get("reason")
+    if reason not in ACCESS_REASONS:
+        raise BadRequest(f"reason must be one of {', '.join(ACCESS_REASONS)}")
+    note = _text(p, "note", 200)
+    accounts.grant_access(admin, client["id"], reason)
+    store.audit("record_access", f"{client['id']} reason={reason}; {' '.join(note.split())}")
+    return {"until_seconds": accounts.ACCESS_SECONDS, **_signed_records(client)}
+
+
 def _admin_overview() -> dict:
     """Accounts and who each client is assigned to: ids, names and counts only,
-    no clinical content (an admin does not read records)."""
+    no clinical content (an admin reads records only through _open_records)."""
+    admin = _user()
     clients = load_clients()
     users = [dict(accounts.public(u), clients=[c["id"] for c in clients if c.get("therapist_user") == u["username"]])
              for u in accounts.load_users()]
     return {
         "users": users,
         "clients": [{"id": c["id"], "alias": c.get("alias", ""), "therapist_user": c.get("therapist_user") or "",
-                     "therapist": c.get("therapist", ""), "sessions": len(c.get("sessions", []))} for c in clients],
+                     "therapist": c.get("therapist", ""), "sessions": len(c.get("sessions", [])),
+                     "access_open": accounts.access_grant(admin, c["id"]) is not None} for c in clients],
         "password_min": 10,
+        "access_reasons": ACCESS_REASONS,
+        "access_minutes": accounts.ACCESS_SECONDS // 60,
     }
 
 

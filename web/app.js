@@ -324,8 +324,33 @@ function renderAdmin(data, message) {
       act(`/api/admin/clients/${encodeURIComponent(c.id)}/assign`, { username: pick.value }, to ? `已把 ${c.id} 指派給 ${to.display_name}。` : `已取消 ${c.id} 的指派。`);
     });
     return el("tr", {}, el("td", {}, c.id), el("td", {}, c.alias), el("td", {}, String(c.sessions)),
-      el("td", { class: c.therapist_user ? "" : "unassigned" }, pick));
+      el("td", { class: c.therapist_user ? "" : "unassigned" }, pick),
+      el("td", { class: "row-actions" }, el("button", { type: "button", onclick: () => askAccess(c) }, c.access_open ? "繼續調閱" : "調閱紀錄")));
   });
+  // Opening a client's records is an exception: a reason, 30 minutes, read only, logged, shown to the therapist.
+  const accessBox = el("div", { class: "access-box", hidden: true });
+  function askAccess(c) {
+    const form = el("form", { class: "admin-form" },
+      el("p", { class: "lead" }, `調閱 ${c.id}（${c.alias}）的已簽核紀錄。管理者平常不看紀錄內容；調閱要寫明事由，只能閱讀、不能修改，${data.access_minutes} 分鐘後失效。事由會寫進稽核紀錄，負責心理師也會在個案頁看到。草稿和逐字稿不會顯示。`),
+      el("label", { class: "field" }, el("span", {}, "事由"), el("select", { name: "reason", required: true },
+        el("option", { value: "" }, "請選擇"), ...Object.entries(data.access_reasons).map(([k, v]) => el("option", { value: k }, v)))),
+      el("label", { class: "field" }, el("span", {}, "說明（200 字內，例如公文字號、申請日期；不要寫個案的個人資訊）"), el("input", { name: "note", required: true, maxlength: "200" })),
+      el("div", { class: "row-actions" },
+        el("button", { type: "submit", class: "primary" }, "確認調閱"),
+        el("button", { type: "button", onclick: () => { accessBox.hidden = true; } }, "取消")));
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      try {
+        const out = await post(`/api/admin/clients/${encodeURIComponent(c.id)}/access`, { reason: form.reason.value, note: form.note.value });
+        renderRecords(out);
+      } catch (err) {
+        say(err.message, true);
+      }
+    });
+    accessBox.replaceChildren(el("h3", {}, `調閱 ${c.id} 的紀錄`), form);
+    accessBox.hidden = false;
+    form.reason.focus();
+  }
   const clientForm = el("form", { class: "admin-form" },
     el("label", { class: "field" }, el("span", {}, "個案編號"), el("input", { name: "id", required: true, maxlength: "16", pattern: "[A-Za-z][A-Za-z0-9]{1,15}", placeholder: "例如 C003" })),
     el("label", { class: "field" }, el("span", {}, "化名"), el("input", { name: "alias", required: true, maxlength: "40", placeholder: "例如 小晴（化名）" })),
@@ -350,10 +375,36 @@ function renderAdmin(data, message) {
     el("section", { class: "card" },
       el("h2", {}, "個案與負責心理師"),
       el("p", { class: "lead" }, unassigned ? `有 ${unassigned} 位個案還沒有指派，登入後沒有人看得到他們。` : "每位個案都已指派。換人時，原本的心理師會立刻看不到這位個案，已簽核的紀錄保留不變。"),
-      el("div", { class: "tbl" }, el("table", {}, el("thead", {}, el("tr", {}, ["編號", "化名", "會談數", "負責心理師"].map((h) => el("th", {}, h)))), el("tbody", {}, clientRows))),
+      el("div", { class: "tbl" }, el("table", {}, el("thead", {}, el("tr", {}, ["編號", "化名", "會談數", "負責心理師", ""].map((h) => el("th", {}, h)))), el("tbody", {}, clientRows))),
+      accessBox,
       clientForm),
     msg));
   document.getElementById("sim-note").textContent = "";
+  main.querySelector("h2").focus();
+}
+
+// A client's signed records, opened by an admin with a stated reason. Read only.
+function renderRecords(data) {
+  const main = document.getElementById("main");
+  const c = data.client;
+  const end = el("button", { type: "button", class: "primary", onclick: async () => {
+    try { await post(`/api/admin/clients/${encodeURIComponent(c.id)}/access/end`, {}); } catch (err) { /* it lapses on its own */ }
+    openAdmin(`已結束調閱 ${c.id}。`);
+  } }, "結束調閱");
+  const items = data.sessions.map((s) => s.signed
+    ? el("section", { class: "card record" },
+        el("h3", {}, `${s.session_id}（${s.template}）`),
+        el("p", { class: "muted" }, `${s.signed_by} 簽核於 ${fmtDateTime(s.signed_at)}`),
+        ...Object.entries(s.sections).map(([k, lines]) => el("div", { class: "record-section" }, el("h4", {}, k), ...lines.map((t) => el("p", {}, t)))),
+        s.addenda.length ? el("div", { class: "record-section" }, el("h4", {}, "補充說明"),
+          ...s.addenda.map((a) => el("p", {}, `${fmtDateTime(a.created_at)} ${a.author}：${a.text}`))) : null)
+    : el("section", { class: "card record" }, el("h3", {}, s.session_id), el("p", { class: "muted" }, "尚未簽核：草稿屬於心理師的工作資料，不在調閱範圍內。")));
+  main.replaceChildren(el("div", { class: "admin" },
+    el("section", { class: "card" },
+      el("h2", { tabindex: "-1" }, `調閱：${c.id}（${c.alias}）`),
+      el("p", { class: "lead" }, `負責心理師：${c.therapist || "未指派"}。只能閱讀，${Math.round((data.until_seconds || 1800) / 60)} 分鐘內有效；每次開啟都寫入稽核紀錄，負責心理師會在個案頁看到這次調閱。`),
+      el("div", { class: "row-actions" }, end, el("button", { type: "button", onclick: () => openAdmin() }, "回到帳號與個案指派"))),
+    ...(items.length ? items : [el("p", { class: "muted" }, "這位個案還沒有會談紀錄。")])));
   main.querySelector("h2").focus();
 }
 
@@ -513,6 +564,10 @@ async function openClient(id) {
   const review = alerts.find((a) => a.review);
   if (review) frag.querySelector(".alerts").append(el("div", { class: "review" }, `建議：${review.review}`));
   frag.querySelector(".charts").append(...brief.outcome.measures.map(chart));
+  for (const r of [...(brief.record_access || [])].reverse()) { // newest ends up first, above the measures
+    frag.querySelector(".alerts").prepend(el("div", { class: "alert access" }, el("b", {}, "紀錄調閱　"),
+      `${fmtDateTime(r.ts)}，管理者 ${r.by} 調閱了這位個案的已簽核紀錄。事由：${r.reason}（${r.note}）`));
+  }
 
   const plan = frag.querySelector(".last-plan");
   if ((brief.not_processed || []).length) {
@@ -1613,6 +1668,12 @@ async function start() {
     document.getElementById("status").replaceChildren(el("span", { class: "pill bad" }, err.message),
       el("button", { type: "button", onclick: start }, "重試"));
     return;
+  }
+  if (me.login_required && me.user) {
+    // Opening Haven always asks for the password, even if this browser is still
+    // signed in (a laptop shared by the rooms, a browser that restores its tabs).
+    try { await post("/api/logout", {}); } catch (err) { /* the sign-in screen follows anyway */ }
+    me = Object.assign({}, me, { user: null });
   }
   if (me.login_required && !me.user) {
     const idle = new URLSearchParams(location.search).get("idle") === "1";

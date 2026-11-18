@@ -98,6 +98,7 @@ class SignInTest(AccountCase, unittest.TestCase):
         self.assertIn("HttpOnly", cookie)
         self.assertIn("SameSite=Strict", cookie)
         self.assertNotIn("Secure", cookie)  # plain http on loopback; https adds it (TlsTest)
+        self.assertNotIn("Max-Age", cookie)  # gone when the browser closes
 
     def test_sign_out_ends_the_session(self):
         token = self.login()
@@ -403,6 +404,40 @@ class AdminTest(AccountCase, unittest.TestCase):
         self.req("/api/admin/clients/C009/assign", {"username": "wang"}, cookie=boss)
         self.assertEqual(self.req("/api/admin/users/chen/remove", {}, cookie=boss)[0], 200)
         self.assertEqual(self.req("/api/admin/users/boss/remove", {}, cookie=boss)[0], 409)  # not yourself
+
+    def test_an_admin_opens_records_only_with_a_reason_read_only_and_logged(self):
+        wang, boss = self.login("wang"), self.login("boss")
+        self.assertEqual(self.req("/api/admin/clients/C001/records", cookie=boss)[0], 403)  # no reason given yet
+        self.assertEqual(self.req("/api/admin/clients/C001/access", {"reason": "curious", "note": "x"}, cookie=boss)[0], 400)
+        self.assertEqual(self.req("/api/admin/clients/C001/access", {"reason": "legal"}, cookie=boss)[0], 400)  # a note is required
+        self.assertEqual(self.req("/api/admin/clients/C001/access", {"reason": "legal", "note": "x"}, cookie=wang)[0], 403)
+        status, body, _ = self.req("/api/admin/clients/C001/access", {"reason": "legal", "note": "地院函 123 號"}, cookie=boss)
+        self.assertEqual(status, 200)
+        self.assertEqual(body["client"]["id"], "C001")
+        self.assertTrue(body["sessions"])
+        for s in body["sessions"]:  # signed notes only: no transcript, no draft
+            self.assertNotIn("segments", s)
+            self.assertNotIn("transcript", json.dumps(s))
+        self.assertEqual(self.req("/api/admin/clients/C001/records", cookie=boss)[0], 200)
+        row = next(a for a in store.recent_audit(5) if a["action"] == "record_access")
+        self.assertEqual(row["detail"], "[boss] C001 reason=legal; 地院函 123 號")
+        # Still read only: the working pages stay closed to the admin.
+        self.assertEqual(self.req("/api/clients/C001/brief", cookie=boss)[0], 404)
+        self.assertEqual(self.req("/api/sessions/C001-S04", cookie=boss)[0], 404)
+        # The therapist sees it on the client's page.
+        _, brief, _ = self.req("/api/clients/C001/brief", cookie=wang)
+        self.assertEqual(brief["record_access"][0]["by"], "boss")
+        self.assertIn("依法調閱", brief["record_access"][0]["reason"])
+        _, overview, _ = self.req("/api/admin", cookie=boss)
+        self.assertTrue(next(c for c in overview["clients"] if c["id"] == "C001")["access_open"])
+        # Ending it, or letting it lapse, closes the records again.
+        self.req("/api/admin/clients/C001/access/end", {}, cookie=boss)
+        self.assertEqual(self.req("/api/admin/clients/C001/records", cookie=boss)[0], 403)
+        self.req("/api/admin/clients/C001/access", {"reason": "handover", "note": "交接"}, cookie=boss)
+        with mock.patch("time.time", return_value=time.time() + accounts.ACCESS_SECONDS + 1):
+            self.assertIsNone(accounts.access_grant(accounts.get_user("boss"), "C001"))
+        with mock.patch.object(server.Handler, "_from_this_machine", return_value=False):
+            self.assertEqual(self.req("/api/admin/clients/C001/records", cookie=boss)[0], 403)  # main PC only
 
     def test_the_last_admin_stays_an_admin(self):
         boss = self.login("boss")
