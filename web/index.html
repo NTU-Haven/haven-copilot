@@ -12,8 +12,26 @@
       <div class="brand"><span lang="en">Haven</span> <span class="zh">心港</span></div>
       <p class="tagline">心理師的本機 AI 紀錄助理：會談錄音 → 每句都引用逐字稿的紀錄草稿 → 風險線索提示 → 心理師核對後簽核</p>
     </div>
-    <div class="status" id="status" role="status" aria-live="polite">連線中…</div>
+    <div class="topbar-right">
+      <div class="status" id="status" role="status" aria-live="polite">連線中…</div>
+      <div class="account" id="account" hidden>
+        <span id="account-name"></span>
+        <button type="button" id="logout-btn">登出</button>
+      </div>
+    </div>
   </header>
+  <section class="login" id="login" hidden aria-labelledby="login-title">
+    <form id="login-form" class="card login-card">
+      <h1 id="login-title">登入 Haven</h1>
+      <p class="login-note" id="login-note">每位心理師用自己的帳號登入，只看得到自己的個案。閒置一段時間會自動登出。</p>
+      <label class="field"><span>帳號</span>
+        <input type="text" name="username" autocomplete="username" required maxlength="32" autocapitalize="none" spellcheck="false"></label>
+      <label class="field"><span>密碼</span>
+        <input type="password" name="password" autocomplete="current-password" required maxlength="256"></label>
+      <p class="problem" id="login-error" role="alert"></p>
+      <button type="submit" class="primary">登入</button>
+    </form>
+  </section>
   <ol class="stepper" id="stepper" aria-label="使用流程">
     <li data-step="1">會談前摘要</li>
     <li data-step="2">逐字稿與風險線索</li>
@@ -80,7 +98,23 @@
       <h3>會談 <small lang="en">Sessions</small></h3>
       <div class="session-buttons"></div>
       <details class="upload">
-        <summary>上傳會談錄音（本機轉寫；Haven 不保存錄音，暫存檔轉寫後刪除）</summary>
+        <summary>錄音或上傳錄音（在主機轉寫；Haven 不保存錄音，轉寫後刪除）</summary>
+        <form class="record-form">
+          <h4>在這裡錄音</h4>
+          <p class="record-note">用這台設備的麥克風錄音，每幾秒就把錄到的聲音送到主機，這台設備不存任何錄音檔。錄音期間請保持這個頁面開著、連著診所網路。</p>
+          <label class="field"><span>會談編號</span>
+            <input type="text" name="session_id" placeholder="例如 C001-S05" required pattern="[A-Za-z0-9\-]{1,40}"></label>
+          <label class="check"><input type="checkbox" name="consent" required> 已取得個案書面同意：錄音、本機 AI 轉寫與說話者推測、逐字稿保存</label>
+          <label class="check"><input type="checkbox" name="simulated"> 這是模擬會談（非真實個案）。不勾選就當作真實個案資料。</label>
+          <div class="record-controls">
+            <button type="submit" class="primary record-start">開始錄音</button>
+            <button type="button" class="record-stop" hidden>結束並產生紀錄</button>
+            <button type="button" class="record-cancel" hidden>放棄這段錄音</button>
+            <span class="record-time" aria-live="off"></span>
+          </div>
+          <p class="record-msg" role="status" aria-live="polite"></p>
+        </form>
+        <h4>或上傳錄音檔</h4>
         <form class="upload-form">
           <label class="field"><span>會談編號</span>
             <input type="text" name="session_id" placeholder="例如 C001-S05" required pattern="[A-Za-z0-9\-]{1,40}"></label>

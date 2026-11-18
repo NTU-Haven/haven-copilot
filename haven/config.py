@@ -31,3 +31,10 @@ ASR_PROMPT = os.environ.get("HAVEN_ASR_PROMPT")
 
 HOST = os.environ.get("HAVEN_HOST", "127.0.0.1")
 PORT = int(os.environ.get("HAVEN_PORT", "8765"))
+
+# Clinic network use (one main PC, therapists' laptops or tablets in the rooms). HAVEN_HOST
+# other than loopback needs accounts, a certificate and the names the devices use for this
+# machine; Haven refuses to start without them. See scripts/add_user.py, scripts/make_cert.py.
+TLS_CERT = os.environ.get("HAVEN_TLS_CERT", "")
+TLS_KEY = os.environ.get("HAVEN_TLS_KEY", "")
+HOSTNAMES = [h.strip() for h in os.environ.get("HAVEN_HOSTNAMES", "").split(",") if h.strip()]

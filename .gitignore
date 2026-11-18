@@ -15,6 +15,10 @@ data/*.db-*
 data/*.tmp
 data/**/*.tmp
 data/tmp/
+# Accounts (password hashes), the encryption key file and the HTTPS certificate and key.
+data/users.json
+data/key.json
+data/tls/
 data/audio/*
 !data/audio/.gitkeep
 # Written on the B70 copy by the sync, so results there name the commit they ran on.

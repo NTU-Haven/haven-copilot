@@ -30,6 +30,8 @@ def staged() -> list[str]:
 
 
 def problem(path: str) -> str:
+    if path.endswith("users.json") or path.startswith("data/tls/") or path.endswith((".pem", ".key")):
+        return "account file, certificate or private key"
     if DB.search(path):
         return "database file"
     if AUDIO.search(path) or (path.startswith("data/audio/") and not path.endswith(".gitkeep")):

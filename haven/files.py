@@ -60,7 +60,7 @@ def secure_data_dir() -> None:
     for directory in (config.DATA_DIR, config.SESSIONS_DIR, config.DATA_DIR / "audio"):
         if directory.is_dir():
             os.chmod(directory, PRIVATE_DIR)
-    files = [config.CLIENTS_FILE, *config.DATA_DIR.glob("*.db*"), *config.SESSIONS_DIR.glob("*.json")]
+    files = [config.CLIENTS_FILE, config.DATA_DIR / "users.json", *config.DATA_DIR.glob("*.db*"), *config.SESSIONS_DIR.glob("*.json")]
     for file in files:
         if file.is_file():
             os.chmod(file, PRIVATE_FILE)

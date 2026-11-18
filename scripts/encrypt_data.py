@@ -26,7 +26,8 @@ def main() -> int:
         return 2
     print(crypto.start())
     counts = {"files": 0, "results": 0, "signed_notes": 0, "addenda": 0, "verdicts": 0}
-    for path in [config.CLIENTS_FILE, *sorted(config.SESSIONS_DIR.glob("*.json"))]:
+    users = config.DATA_DIR / "users.json"
+    for path in [config.CLIENTS_FILE, *([users] if users.exists() else []), *sorted(config.SESSIONS_DIR.glob("*.json"))]:
         if path.is_file() and not crypto.is_sealed(path.read_text(encoding="utf-8")):
             files.write_private(path, path.read_text(encoding="utf-8"))
             counts["files"] += 1

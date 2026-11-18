@@ -48,6 +48,9 @@ let verifying = false;
 let verifyAgain = false;
 let verifyTimer = null;
 let serverStatus = null;
+let me = { login_required: false, user: null, idle_minutes: 15 }; // who is signed in (GET /api/me)
+let rec = null;              // the recording in progress, or null
+let leaving = false;         // signing out on purpose: no "unsaved changes" prompt
 const confirmed = new Set(); // keys of flagged sentences the therapist checked and kept
 const keepReasons = new Map(); // key -> what a kept sentence with no citation is based on
 const dismissed = new Map(); // segment id -> reason, for high-level risk cues left out of the note
@@ -93,6 +96,9 @@ async function api(path, opts = {}) {
     throw new Error("連不上本機的 Haven 伺服器，請確認程式還在執行。");
   }
   try { data = await res.json(); } catch (err) { /* not JSON */ }
+  if (res.status === 401 && data.login && !path.startsWith("/api/login")) {
+    showLogin("閒置太久或已在別處登出，請重新登入。");
+  }
   if (!res.ok) {
     // The server sends a Chinese message for the therapist; the English one stays in the console.
     const e = new Error(data.message_zh || HTTP_MESSAGES[res.status] || `操作沒有完成（代碼 ${res.status}）。`);
@@ -185,12 +191,71 @@ function setStep(n) {
 // Leaving a session with edits, confirmations or reasons loses them: the draft
 // lives in this page until it is signed.
 function leaveOk() {
+  if (rec) { alert("正在錄音。請先按「結束並產生紀錄」或「放棄這段錄音」。"); return false; }
   if (!session || session.signed || !edited) return true;
   return confirm("有修改還沒驗證，所以還沒存檔。離開後這些修改會遺失（已驗證過的草稿已存檔）。確定離開？");
 }
 window.addEventListener("beforeunload", (e) => {
-  if (session && !session.signed && edited) { e.preventDefault(); e.returnValue = ""; }
+  if (leaving) return;
+  if (rec || (session && !session.signed && edited)) { e.preventDefault(); e.returnValue = ""; }
 });
+
+// ---------- signing in and out ----------
+// With accounts, nothing of a client is on screen until someone signs in, and an
+// unattended device signs itself out: the page is reloaded, so what was shown is gone.
+
+function showLogin(note) {
+  document.body.classList.add("signed-out");
+  document.getElementById("login").hidden = false;
+  document.getElementById("account").hidden = true;
+  document.getElementById("main").replaceChildren();
+  document.getElementById("client-list").replaceChildren();
+  session = null;
+  edited = false;
+  if (note) document.getElementById("login-note").textContent = note;
+  document.querySelector("#login-form [name=username]").focus();
+}
+
+document.getElementById("login-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const form = e.currentTarget;
+  const err = document.getElementById("login-error");
+  err.textContent = "";
+  await busy(form.querySelector("button"), "登入中", async () => {
+    try {
+      const r = await post("/api/login", { username: form.username.value, password: form.password.value });
+      form.password.value = "";
+      me = { ...me, login_required: true, user: r.user, idle_minutes: r.idle_minutes };
+      history.replaceState(null, "", location.pathname + location.search.replace(/[?&]idle=1/, ""));
+      signedIn();
+    } catch (error) {
+      err.textContent = error.message;
+      form.password.value = "";
+    }
+  });
+});
+
+async function signOut(why) {
+  if (session && !session.signed && edited) { try { await reverify(); } catch (err) { /* saved as far as it got */ } }
+  try { await post("/api/logout"); } catch (err) { /* signed out on the server already */ }
+  leaving = true;
+  location.replace(location.pathname + (why === "idle" ? "?idle=1" : ""));
+}
+document.getElementById("logout-btn").addEventListener("click", () => { if (leaveOk()) signOut(); });
+
+let lastActive = Date.now(), lastPing = Date.now();
+for (const ev of ["pointerdown", "keydown", "touchstart", "wheel", "scroll"]) {
+  window.addEventListener(ev, () => {
+    lastActive = Date.now();
+    // Reading counts as activity on the server too, not only saving.
+    if (me.user && Date.now() - lastPing > 120000) { lastPing = Date.now(); api("/api/me").catch(() => {}); }
+  }, { passive: true, capture: true });
+}
+setInterval(() => {
+  if (!me.user) return;
+  if (rec) { lastActive = Date.now(); return; } // a session being recorded is not an unattended screen
+  if (Date.now() - lastActive > me.idle_minutes * 60000) signOut("idle");
+}, 15000);
 
 // ---------- status & client list ----------
 
@@ -356,6 +421,7 @@ async function openClient(id) {
   const upMsg = frag.querySelector(".upload-msg");
   const numbers = meta.map((m) => m.session_no || 0);
   upForm.session_id.value = `${id}-S${String(Math.max(0, ...numbers) + 1).padStart(2, "0")}`;
+  setUpRecording(frag.querySelector(".record-form"), id, upForm.session_id.value);
   upForm.addEventListener("submit", async (e) => {
     e.preventDefault();
     const file = upForm.audio.files[0];
@@ -437,6 +503,7 @@ function askResult(r) {
 // ---------- session workspace ----------
 
 async function openSession(sid, focusSeg, btn) {
+  if (rec) { alert("正在錄音。請先按「結束並產生紀錄」或「放棄這段錄音」。"); return; }
   if (!SESSION_ID.test(sid)) {
     document.getElementById("main").replaceChildren(el("div", { class: "empty", role: "alert" }, "會談編號的格式不正確。"));
     return;
@@ -1048,12 +1115,13 @@ async function confirmSpeakers(btn) {
   const my = nav, sid = session.session_id;
   await busy(btn, "重新查核中", async () => {
     try {
-      const r = await post(`/api/sessions/${encodeURIComponent(sid)}/speakers`, { speakers });
+      const r = await post(`/api/sessions/${encodeURIComponent(sid)}/speakers`, { speakers, base_revision: session.revision || 0 });
       if (my !== nav) return;
       renderSession(r);
       showMessage(left ? `已確認 ${Object.keys(speakers).length} 段；還有 ${left} 段未確認。` : "說話者已全部確認，風險判讀和查核已重算。");
     } catch (err) {
-      if (my === nav) showMessage(`沒有更新說話者：${err.message}`, true);
+      if (my === nav && err.data && err.data.conflict) showConflict(err.message);
+      else if (my === nav) showMessage(`沒有更新說話者：${err.message}`, true);
     }
   });
 }
@@ -1063,13 +1131,29 @@ async function restoreDraft(btn) {
   const my = nav, sid = session.session_id;
   await busy(btn, "還原中", async () => {
     try {
-      const r = await post(`/api/sessions/${encodeURIComponent(sid)}/restore`);
+      const r = await post(`/api/sessions/${encodeURIComponent(sid)}/restore`, { base_revision: session.revision || 0 });
       if (my !== nav) return;
       renderSession(r);
     } catch (err) {
-      if (my === nav) showMessage(`沒有還原：${err.message}`, true);
+      if (my === nav && err.data && err.data.conflict) showConflict(err.message);
+      else if (my === nav) showMessage(`沒有還原：${err.message}`, true);
     }
   });
+}
+
+// Another screen saved this draft after this page loaded. Nothing more is saved from
+// here (it would overwrite theirs) until the therapist reloads.
+function showConflict(text) {
+  if (!session) return;
+  session.conflict = true;
+  clearTimeout(verifyTimer);
+  const sid = session.session_id;
+  const box = document.getElementById("sign-status");
+  if (box) {
+    box.replaceChildren(el("div", { class: "conflict problem" }, text,
+      el("button", { type: "button", onclick: () => { edited = false; openSession(sid); } }, "重新載入（這個畫面還沒存的修改會捨棄）")));
+  }
+  toast(text);
 }
 
 function showMessage(text, bad) {
@@ -1086,7 +1170,8 @@ function signedBox(r) {
   draw(r.addenda || []);
   const form = el("form", { class: "addendum-form" },
     el("textarea", { name: "text", rows: "2", required: true, maxlength: "4000", placeholder: "補充說明（只能新增，不會改動已簽核的紀錄）", "aria-label": "補充說明" }),
-    el("input", { type: "text", name: "author", required: true, maxlength: "80", value: sig.signed_by, "aria-label": "姓名" }),
+    el("input", { type: "text", name: "author", required: true, maxlength: "80", value: me.user ? me.user.display_name : sig.signed_by,
+      readOnly: !!me.user, "aria-label": "姓名" }),
     el("button", { type: "submit" }, "新增補充說明"),
   );
   form.addEventListener("submit", async (e) => {
@@ -1117,7 +1202,7 @@ function scheduleVerify() {
 }
 
 async function reverify() {
-  if (!session || session.signed) return false;
+  if (!session || session.signed || session.conflict) return false;
   if (verifying) { verifyAgain = true; return false; }
   clearTimeout(verifyTimer);
   const my = nav, sid = session.session_id;
@@ -1131,7 +1216,7 @@ async function reverify() {
   renderSummary();
   let r = null, error = null;
   try {
-    r = await post(`/api/sessions/${encodeURIComponent(sid)}/verify`, sent.payload);
+    r = await post(`/api/sessions/${encodeURIComponent(sid)}/verify`, { ...sent.payload, base_revision: session.revision || 0 });
   } catch (err) {
     error = err;
   }
@@ -1142,10 +1227,12 @@ async function reverify() {
   if (btn && btn.isConnected) { btn.disabled = false; btn.removeAttribute("aria-busy"); }
   if (error) {
     renderSummary();
+    if (error.data && error.data.conflict) { showConflict(error.message); return false; }
     showMessage(`無法重新驗證：${error.message}`, true);
     if (error.status === 409) openSession(sid); // signed elsewhere: show the record
     return false;
   }
+  session.revision = r.revision;
   syncFromDom();
   for (const [key, keys] of Object.entries(sent.keys)) {
     const answer = (r.note.sections[key] || []);
@@ -1196,7 +1283,8 @@ async function sign() {
     dismissed.size ? el("div", { class: "kept-title" }, "未納入紀錄的風險線索：") : null,
     dismissed.size ? el("ul", {}, [...dismissed].map(([seg, reason]) => el("li", {}, `#${seg}：${reason}`))) : null,
   );
-  form.signed_by.value = session.therapist || "";
+  form.signed_by.value = me.user ? me.user.display_name : (session.therapist || "");
+  form.signed_by.readOnly = !!me.user; // with accounts the server signs as the signed-in account
   form.checked.checked = false;
   document.getElementById("sign-error").textContent = "";
   document.getElementById("sign-cancel").onclick = () => dlg.close();
@@ -1210,7 +1298,7 @@ async function sign() {
     const confirmBtn = document.getElementById("sign-confirm");
     try {
       await busy(confirmBtn, "簽核中", () => post(`/api/sessions/${encodeURIComponent(sid)}/sign`, {
-        signed_by: by, note: notePayload().payload,
+        signed_by: by, note: notePayload().payload, base_revision: session.revision || 0,
         risk_dismissals: [...dismissed].map(([segment_id, reason]) => ({ segment_id, reason })),
       }));
       dlg.close();
@@ -1224,6 +1312,7 @@ async function sign() {
         if (my === nav) await openSession(sid);
         return;
       }
+      if (err.data && err.data.conflict) { dlg.close(); showConflict(err.message); return; }
       document.getElementById("sign-error").textContent = `沒有簽核：${err.message}`;
       if (err.data && err.data.risk_uncovered && my === nav) {
         session.risk_uncovered = err.data.risk_uncovered;
@@ -1241,8 +1330,198 @@ async function sign() {
   form.signed_by.focus();
 }
 
+// ---------- recording in the browser ----------
+// The microphone is recorded in pieces of a few seconds. Each piece is sent to the
+// main PC as soon as it exists and dropped from memory once the PC has it; nothing
+// is written to this device. If the network drops, unsent pieces wait in memory and
+// are sent again in order.
+
+const PIECE_MS = 5000;
+
+function setUpRecording(form, clientId, defaultId) {
+  form.session_id.value = defaultId;
+  const msg = form.querySelector(".record-msg");
+  if (!window.isSecureContext || !navigator.mediaDevices || !window.MediaRecorder) {
+    form.querySelector(".record-start").disabled = true;
+    msg.className = "record-msg problem";
+    msg.textContent = "這個連線不能使用麥克風：瀏覽器只在 HTTPS（或主機自己的 localhost）允許錄音。請用主機的 https 網址開啟，或改用下方上傳錄音檔。";
+    return;
+  }
+  form.addEventListener("submit", (e) => { e.preventDefault(); startRecording(form, clientId); });
+  form.querySelector(".record-stop").addEventListener("click", () => finishRecording(form));
+  form.querySelector(".record-cancel").addEventListener("click", () => cancelRecording(form));
+}
+
+function recordingUi(form, on) {
+  form.querySelector(".record-start").hidden = on;
+  form.querySelector(".record-stop").hidden = !on;
+  form.querySelector(".record-cancel").hidden = !on;
+  for (const name of ["session_id", "consent", "simulated"]) form[name].disabled = on;
+  const t = form.querySelector(".record-time");
+  t.classList.toggle("live", on);
+  if (!on) t.textContent = "";
+}
+
+function recordingStatus(form, text, bad) {
+  const msg = form.querySelector(".record-msg");
+  msg.className = bad ? "record-msg problem" : "record-msg";
+  msg.textContent = text;
+}
+
+async function startRecording(form, clientId) {
+  if (rec) return;
+  let stream;
+  try {
+    stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+  } catch (err) {
+    recordingStatus(form, "無法使用麥克風：請允許這個網頁使用麥克風，或確認設備有麥克風。", true);
+    return;
+  }
+  const mime = ["audio/webm;codecs=opus", "audio/ogg;codecs=opus", "audio/mp4"].find((m) => MediaRecorder.isTypeSupported(m)) || "";
+  let started;
+  try {
+    started = await post("/api/recordings", { client: clientId, session_id: form.session_id.value, consent: form.consent.checked,
+      simulated: form.simulated.checked, mime });
+  } catch (err) {
+    stream.getTracks().forEach((t) => t.stop());
+    recordingStatus(form, `沒有開始錄音：${err.message}`, true);
+    return;
+  }
+  const mr = new MediaRecorder(stream, mime ? { mimeType: mime } : {});
+  rec = { id: started.recording_id, sid: started.session_id, clientId, mr, stream, next: 0, queue: [], sending: false, sent: 0,
+          retries: 0, failed: null, t0: Date.now(), timer: null, wake: null, stopped: null };
+  rec.stopped = new Promise((resolve) => { mr.onstop = resolve; });
+  mr.ondataavailable = (e) => {
+    if (!rec || !e.data || !e.data.size) return;
+    rec.queue.push({ seq: rec.next++, blob: e.data });
+    pump(form);
+  };
+  mr.start(PIECE_MS);
+  try { rec.wake = await navigator.wakeLock.request("screen"); } catch (err) { /* the screen may dim; recording goes on */ }
+  recordingUi(form, true);
+  recordingStatus(form, `錄音中（${rec.sid}）。錄到的聲音每 ${PIECE_MS / 1000} 秒送到主機一次。`);
+  const t = form.querySelector(".record-time");
+  rec.timer = setInterval(() => { if (rec) t.textContent = fmtTime((Date.now() - rec.t0) / 1000); }, 1000);
+}
+
+async function pump(form) {
+  const r = rec;
+  if (!r || r.sending) return;
+  r.sending = true;
+  while (rec === r && r.queue.length && !r.failed) {
+    const item = r.queue[0];
+    try {
+      const out = await api(`/api/recordings/${encodeURIComponent(r.id)}/chunk?seq=${encodeURIComponent(item.seq)}`,
+        { method: "POST", headers: { "Content-Type": "application/octet-stream" }, body: item.blob });
+      r.queue.shift();
+      r.sent = out.received;
+      r.retries = 0;
+      if (r.mr.state === "recording") recordingStatus(form, `錄音中（${r.sid}）。已送到主機 ${out.received} 段，這台設備沒有存檔。`);
+    } catch (err) {
+      if (err.status === 409 && err.data && Number.isInteger(err.data.expected)) {
+        // The PC has everything before `expected`: drop what it already holds.
+        while (r.queue.length && r.queue[0].seq < err.data.expected) r.queue.shift();
+        if (r.queue.length && r.queue[0].seq > err.data.expected) { r.failed = err; break; }
+        continue;
+      }
+      if (err.status && err.status !== 502 && err.status !== 503 && err.status !== 408) { r.failed = err; break; }
+      recordingStatus(form, `和主機的連線中斷，錄音還在進行；恢復連線後會補送（尚未送出 ${r.queue.length} 段，只暫存在記憶體）。`, true);
+      await new Promise((ok) => setTimeout(ok, Math.min(10000, 1000 * 2 ** r.retries++)));
+    }
+  }
+  r.sending = false;
+  if (r.failed && rec === r) recordingStatus(form, `錄音無法再送到主機：${r.failed.message}`, true);
+}
+
+function stopDevice(r) {
+  clearInterval(r.timer);
+  r.stream.getTracks().forEach((t) => t.stop());
+  if (r.wake) r.wake.release().catch(() => {});
+}
+
+async function finishRecording(form) {
+  const r = rec;
+  if (!r) return;
+  const btn = form.querySelector(".record-stop");
+  form.querySelector(".record-cancel").disabled = true;
+  await busy(btn, "送出並轉寫中", async () => {
+    if (r.mr.state !== "inactive") { r.mr.stop(); await r.stopped; }
+    stopDevice(r);
+    // Wait until every piece is on the PC.
+    while ((r.queue.length || r.sending) && !r.failed) {
+      if (!r.sending) pump(form);
+      await new Promise((ok) => setTimeout(ok, 300));
+    }
+    if (r.failed) {
+      recordingStatus(form, `有部分錄音沒有送到主機（${r.failed.message}）。這段錄音無法完成，請改用上傳錄音檔或重新錄音。`, true);
+      try { await post(`/api/recordings/${encodeURIComponent(r.id)}/cancel`); } catch (err) { /* removed on the PC after 30 minutes anyway */ }
+      rec = null;
+      recordingUi(form, false);
+      return;
+    }
+    recordingStatus(form, "錄音已全部送到主機，正在轉寫與產生紀錄。長錄音需要幾分鐘，請不要關閉這個頁面。");
+    try {
+      const out = await post(`/api/recordings/${encodeURIComponent(r.id)}/finish`);
+      rec = null;
+      recordingUi(form, false);
+      await loadClients();
+      markActive(r.clientId);
+      ++nav;
+      renderSession(out);
+      toast(`${out.session_id} 已轉寫完成。主機上的錄音已刪除，這台設備沒有留下錄音檔。`);
+    } catch (err) {
+      rec = null;
+      recordingUi(form, false);
+      recordingStatus(form, `沒有完成：${err.message}`, true);
+    }
+  });
+  form.querySelector(".record-cancel").disabled = false;
+}
+
+async function cancelRecording(form) {
+  const r = rec;
+  if (!r || !confirm("放棄這段錄音？已送到主機的部分會刪除，不會產生紀錄。")) return;
+  rec = null;
+  r.queue = [];
+  if (r.mr.state !== "inactive") r.mr.stop();
+  stopDevice(r);
+  try { await post(`/api/recordings/${encodeURIComponent(r.id)}/cancel`); } catch (err) { /* removed on the PC after 30 minutes anyway */ }
+  recordingUi(form, false);
+  recordingStatus(form, "已放棄這段錄音，主機上的部分已刪除。");
+}
+
 // ---------- start ----------
 
+async function start() {
+  try {
+    me = await api("/api/me");
+  } catch (err) {
+    document.getElementById("status").replaceChildren(el("span", { class: "pill bad" }, err.message),
+      el("button", { type: "button", onclick: start }, "重試"));
+    return;
+  }
+  if (me.login_required && !me.user) {
+    const idle = new URLSearchParams(location.search).get("idle") === "1";
+    showLogin(idle ? `閒置超過 ${me.idle_minutes} 分鐘，已自動登出，畫面上的資料已清除。` : null);
+    return;
+  }
+  signedIn();
+}
+
+function signedIn() {
+  document.body.classList.remove("signed-out");
+  document.getElementById("login").hidden = true;
+  if (me.user) {
+    document.getElementById("account").hidden = false;
+    document.getElementById("account-name").textContent = `${me.user.display_name}（${me.user.username}）`;
+  }
+  lastActive = Date.now();
+  boot();
+}
+
+start();
+
+function boot() {
 setStep(1);
 loadStatus();
 loadClients().then((clients) => {
@@ -1258,3 +1537,4 @@ loadClients().then((clients) => {
     openClient(clients.some((c) => c.id === wanted) ? wanted : clients[0].id);
   }
 });
+}

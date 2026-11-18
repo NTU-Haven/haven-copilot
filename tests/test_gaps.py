@@ -109,8 +109,11 @@ class DocsTest(unittest.TestCase):
 
     def test_lan_warning(self):
         self.assertEqual(server.lan_warning("127.0.0.1"), "")
-        self.assertIn("no login", server.lan_warning("0.0.0.0"))
-        self.assertIn("no login", server.lan_warning("192.168.1.5"))
+        for host in ("0.0.0.0", "192.168.1.5"):  # no accounts, no certificate, no names: Haven will not start
+            warning = server.lan_warning(host)
+            self.assertIn("will not start", warning)
+            for missing in ("no accounts", "no certificate", "HAVEN_HOSTNAMES"):
+                self.assertIn(missing, warning)
 
     def test_scripts_named_in_the_readme_exist(self):
         for name in set(re.findall(r"scripts/([a-z0-9_\-]+\.(?:py|sh))", self.README)):

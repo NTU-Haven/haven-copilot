@@ -23,7 +23,7 @@ import threading
 from contextlib import contextmanager
 from datetime import datetime, timezone
 
-from . import config, crypto
+from . import accounts, config, crypto
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS results (session_id TEXT PRIMARY KEY, payload TEXT NOT NULL, created_at TEXT NOT NULL);
@@ -113,6 +113,9 @@ def _row_hash(prev: str, ts: str, action: str, detail: str) -> str:
 
 
 def _audit(c, action: str, detail: str) -> None:
+    user = accounts.CURRENT.get()
+    if user:  # who acted, once there are accounts
+        detail = f"[{user['username']}] {detail}"
     if not c.in_transaction:
         # Take the write lock before reading the last hash, so two writers
         # cannot both chain onto the same row.
