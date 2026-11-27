@@ -1377,7 +1377,7 @@ function signedBox(r) {
     el("div", { class: "signed" }, `✓ 已由 ${sig.signed_by} 於 ${fmtDateTime(sig.signed_at)} 簽核`),
     sig.note_sha256 ? el("div", { class: "hashes", title: "簽核時由伺服器計算，用來比對紀錄與逐字稿之後有沒有被改動；不是電子簽章" },
       `紀錄雜湊 ${sig.note_sha256.slice(0, 16)}…・逐字稿雜湊 ${sig.transcript_sha256.slice(0, 16)}…・查核規則版本 ${sig.verifier_version}`) : null,
-    list, form);
+    list, form, exportBox(r)); // web/export.js
 }
 
 // ----- verifying and signing -----

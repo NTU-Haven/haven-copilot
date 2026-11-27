@@ -21,7 +21,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
-from . import accounts, config, crypto, files, human_fields, jobs, llm, regenerate, signing, store, templates, transcript_edit
+from . import accounts, config, crypto, export, files, human_fields, jobs, llm, regenerate, signing, store, templates, transcript_edit
 from .agents.verifier import VERIFIER_VERSION, Verifier
 from .models import to_dict
 from .orchestrator import Orchestrator, get_client, load_clients
@@ -260,6 +260,8 @@ def _session_view(sid: str) -> dict:
     except KeyError:
         result["client_alias"], result["therapist"] = "", ""
     result["addenda"] = store.get_addenda(sid) if signature else []
+    result["exports"] = export.for_session(sid)
+    result["export_status"] = export.status_of(result["exports"])
     if signature:
         result["note"] = store.get_signed_note(sid)
     # Field labels and hints for the page; None for a template no longer registered.
@@ -568,6 +570,10 @@ class Handler(BaseHTTPRequestHandler):
             # The therapist sees every time an admin opened this client's records.
             return self._json(dict(ORCH.brief(client["id"]), record_access=record_access_log(client["id"]),
                                    jobs=jobs.for_client(client["id"])))
+        if len(parts) == 4 and parts[1] == "sessions" and parts[3] == "export":
+            sid = _session_id(parts[2])
+            _my_session(sid)
+            return self._export(sid, query)
         if len(parts) == 3 and parts[1] == "sessions":
             sid = _session_id(parts[2])
             _my_session(sid)
@@ -648,6 +654,10 @@ class Handler(BaseHTTPRequestHandler):
                 return self._sign(sid)
             if parts[3] == "addendum":
                 return self._addendum(sid)
+        if len(parts) == 6 and parts[1] == "sessions" and parts[3] == "exports" and parts[5] == "archived":
+            sid = _session_id(parts[2])
+            _my_session(sid)
+            return self._archived(sid, parts[4])
         if len(parts) == 4 and parts[1] == "clients" and parts[3] == "ask" and config.CLINICAL_AIDS:
             return self._ask(parts[2])  # Case Memory; with the clinical aids off the endpoint does not exist
         if parts == ["api", "upload"]:
@@ -841,6 +851,38 @@ class Handler(BaseHTTPRequestHandler):
             + [("uncited_sentence_kept", f"{sid} 「{s.text[:40]}」: {s.keep_reason}") for s in note.sentences() if s.keep_reason],
         )
         return self._json(signature)
+
+    def _export(self, sid, query):
+        """E1: the confirmed note as a file. Only a signed note; the draft is never exported."""
+        fmt = (query.get("format") or [""])[0]
+        if fmt not in export.FORMATS:
+            raise BadRequest("format must be md or txt")
+        _transcript(sid)  # 404 for a session that does not exist
+        user = _user()
+        try:
+            built = export.build(sid, fmt, user["display_name"] if user else "")
+        except export.NotConfirmed:
+            raise Refused("only a confirmed note can be exported", "這次會談的紀錄還沒有簽核確認，不能匯出。請先完成簽核。") from None
+        self.send_response(HTTPStatus.OK)
+        self.send_header("Content-Type", built.content_type)
+        self.send_header("Content-Length", str(len(built.body)))
+        self.send_header("Content-Disposition", f'attachment; filename="{built.filename}"')
+        self.send_header("Cache-Control", "no-store")
+        self.send_header("X-Export-Id", built.export["export_id"])
+        self.end_headers()
+        self.wfile.write(built.body)
+
+    def _archived(self, sid, export_id):
+        """E2: the therapist marks an export as filed in the practice's own system."""
+        payload = self._payload()
+        user = _user()
+        try:
+            row = export.mark_archived(sid, export_id, payload.get("archive_ref"), user["display_name"] if user else "")
+        except export.NoSuchExport:
+            raise HttpError(HTTPStatus.NOT_FOUND, "no such export", "找不到這個匯出紀錄。") from None
+        except export.BadRef:
+            return self._error(HTTPStatus.BAD_REQUEST, "archive_ref is at most 100 characters", "歸檔編號最多 100 個字。")
+        return self._json({"export": row})
 
     def _addendum(self, sid):
         payload = self._payload()

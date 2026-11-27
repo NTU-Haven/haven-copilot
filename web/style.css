@@ -341,3 +341,8 @@ body.signed-out .status { visibility: hidden; }
 .job-status.problem { color: #9b1c1c; }
 .job-actions { margin: .5rem 0; }
 .job-button.failed, .job-button.interrupted { border-color: #9b1c1c; }
+.export-box { margin-top: 12px; padding-top: 10px; border-top: 1px dashed var(--line); font-size: .9rem; }
+.export-box .meta { color: var(--muted); font-size: .8rem; }
+.export-actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-top: 6px; }
+.export-actions input { flex: 1 1 14em; }
+.export-status { margin-top: 6px; }
