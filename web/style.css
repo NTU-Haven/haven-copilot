@@ -346,3 +346,6 @@ body.signed-out .status { visibility: hidden; }
 .export-actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-top: 6px; }
 .export-actions input { flex: 1 1 14em; }
 .export-status { margin-top: 6px; }
+
+.audio-notice { margin: 8px 0; padding: 8px 12px; border: 1px solid var(--line, #ccc); border-radius: 6px; display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+.audio-notice.problem { border-color: #b45309; }

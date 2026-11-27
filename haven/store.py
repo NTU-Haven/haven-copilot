@@ -47,6 +47,16 @@ CREATE TABLE IF NOT EXISTS exports (
     exported_by TEXT NOT NULL, exported_at TEXT NOT NULL, status TEXT NOT NULL,
     archived_by TEXT, archived_at TEXT, archive_ref TEXT);
 CREATE INDEX IF NOT EXISTS exports_by_session ON exports (session_id);
+-- Original audio (haven/audio.py). storage_ref is a file name made by the server under data/audio/.
+CREATE TABLE IF NOT EXISTS audio_assets (
+    audio_id TEXT PRIMARY KEY, session_id TEXT NOT NULL, storage_ref TEXT NOT NULL, mime TEXT NOT NULL,
+    bytes INTEGER, duration_s REAL,
+    status TEXT NOT NULL,  -- processing|available|failed|cleanup_failed|deleted
+    created_at TEXT NOT NULL, expires_at TEXT NOT NULL,
+    cleanup_status TEXT NOT NULL DEFAULT 'none',  -- none|pending|done|failed
+    cleanup_attempts INTEGER NOT NULL DEFAULT 0, last_error TEXT,
+    deleted_at TEXT, delete_reason TEXT, last_attempt_at TEXT);
+CREATE INDEX IF NOT EXISTS audio_by_session ON audio_assets (session_id);
 """
 # Columns added to signed_notes after the first release; older databases get them on first use.
 _SIGNED_COLUMNS = ("transcript_sha256", "note_sha256", "verifier_version")

@@ -21,7 +21,9 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
-from . import accounts, config, crypto, export, files, human_fields, jobs, llm, regenerate, signing, store, templates, transcript_edit
+from . import accounts
+from . import audio as audio_store
+from . import config, crypto, export, files, human_fields, jobs, llm, regenerate, signing, store, templates, transcript_edit
 from .agents.verifier import VERIFIER_VERSION, Verifier
 from .models import to_dict
 from .orchestrator import Orchestrator, get_client, load_clients
@@ -262,6 +264,7 @@ def _session_view(sid: str) -> dict:
     result["addenda"] = store.get_addenda(sid) if signature else []
     result["exports"] = export.for_session(sid)
     result["export_status"] = export.status_of(result["exports"])
+    result.update(audio_store.view(sid))  # audio_status, audio_expires_at, audio_deleted_at, audio_delete_reason, audio_hours_left
     if signature:
         result["note"] = store.get_signed_note(sid)
     # Field labels and hints for the page; None for a template no longer registered.
@@ -569,7 +572,8 @@ class Handler(BaseHTTPRequestHandler):
             store.audit("read_brief", client["id"])
             # The therapist sees every time an admin opened this client's records.
             return self._json(dict(ORCH.brief(client["id"]), record_access=record_access_log(client["id"]),
-                                   jobs=jobs.for_client(client["id"])))
+                                   jobs=jobs.for_client(client["id"]),
+                                   audio=audio_store.statuses(client.get("sessions", []))))
         if len(parts) == 4 and parts[1] == "sessions" and parts[3] == "export":
             sid = _session_id(parts[2])
             _my_session(sid)
@@ -662,6 +666,10 @@ class Handler(BaseHTTPRequestHandler):
             return self._ask(parts[2])  # Case Memory; with the clinical aids off the endpoint does not exist
         if parts == ["api", "upload"]:
             return self._upload(query)
+        if len(parts) == 5 and parts[1] == "sessions" and parts[3:] == ["audio", "delete"]:
+            sid = _session_id(parts[2])
+            _my_session(sid)
+            return self._json(_delete_audio(sid))
         if len(parts) == 4 and parts[1] == "jobs" and parts[3] == "retry":
             return self._json(_retry_job(parts[2]), HTTPStatus.ACCEPTED)
         return self._error(HTTPStatus.NOT_FOUND, "unknown endpoint")
@@ -850,6 +858,11 @@ class Handler(BaseHTTPRequestHandler):
             audit_rows=[("risk_cue_left_out", f"{sid} #{d['segment_id']}: {d['reason']}") for d in dismissals]
             + [("uncited_sentence_kept", f"{sid} 「{s.text[:40]}」: {s.keep_reason}") for s in note.sentences() if s.keep_reason],
         )
+        if config.AUDIO_DELETE_ON_CONFIRM:  # the recording has done its job; a failure here is retried by the sweep
+            try:
+                audio_store.delete_for_session(sid, "confirm")
+            except Exception as e:  # noqa: BLE001 - the note is signed either way
+                print(f"Haven: could not remove the audio of {sid} ({type(e).__name__}); the sweep will retry", file=sys.stderr)
         return self._json(signature)
 
     def _export(self, sid, query):
@@ -1234,8 +1247,8 @@ def _sweep_recordings() -> None:
 
 def _start_transcription(tmp_name: str, session_id: str, client_id: str, session_no: int, simulated: bool, action: str) -> dict:
     """Queues transcription and drafting of a complete recording and answers at
-    once (202). The recording moves to where a retry can find it (jobs.keep_audio);
-    it is removed when transcription succeeds."""
+    once (202). The recording moves into data/audio (haven/audio.py), where a retry
+    can find it and where it stays until it is signed off, expires or is deleted."""
     params = {"client_id": client_id, "session_no": session_no, "simulated": simulated, "action": action,
               "date": date.today().isoformat()}
     try:
@@ -1257,12 +1270,14 @@ def _transcribe_job(job: dict, audio: Path | None) -> None:
     failure the recording is kept for a retry; once transcribed it is removed."""
     session_id, p = job["session_id"], job["params"]
     client_id = p["client_id"]
+    asr_done = False
     try:
         if not (config.SESSIONS_DIR / f"{session_id}.json").is_file():
             if audio is None:
                 raise HttpError(HTTPStatus.GONE, "the recording is no longer kept",
                                 "原始錄音已不在主機上，無法重新轉寫。請重新上傳錄音檔。", code="audio_gone")
             jobs.stage(job, "transcribe")
+            audio_store.mark_processing(session_id)  # a retry after a failure
             try:
                 t = transcribe_audio(audio, session_id, client_id, p["session_no"], p["date"], p["simulated"])
             except ImportError:
@@ -1293,10 +1308,13 @@ def _transcribe_job(job: dict, audio: Path | None) -> None:
                     if c["id"] == client_id and session_id not in c.setdefault("sessions", []):
                         c["sessions"].append(session_id)
                 files.write_private(config.CLIENTS_FILE, json.dumps(clients, ensure_ascii=False, indent=2) + "\n")
-            jobs.drop_audio(job["job_id"])  # Haven keeps no recording once it is transcribed
+            audio_store.mark_available(session_id)  # kept for listening back until signed off, expired or deleted
+            asr_done = True
             store.audit(p["action"], f"{session_id} consent={CONSENT_SCOPE} simulated={int(p['simulated'])} asr={config.ASR_BACKEND} "
-                                     f"speakers_guessed={labelled}/{len(t.segments)}; audio removed after ASR")
+                                     f"speakers_guessed={labelled}/{len(t.segments)}; audio kept until signed off or expired")
     except BaseException as e:
+        if not asr_done:
+            audio_store.mark_failed(session_id)  # the file stays for a retry, until it expires
         kind = f"HTTP {int(e.status)}" if isinstance(e, HttpError) else type(e).__name__
         store.audit("upload_failed", f"{session_id} {kind}; audio kept for a retry")
         raise
@@ -1353,6 +1371,17 @@ def _retry_job(job_id: str) -> dict:
     except jobs.Busy:
         raise Refused("this session is already being processed", "這次會談已經在處理中，請等它完成。") from None
     return jobs.public(job)
+
+
+def _delete_audio(sid: str) -> dict:
+    """The therapist deletes the original audio now (X1). The transcript and the draft stay."""
+    try:
+        row = audio_store.delete_for_session(sid, "manual")
+    except audio_store.Busy:
+        raise Refused("the recording is still being transcribed", "錄音還在轉寫中，請等處理完成後再刪除。") from None
+    if row is None:
+        raise HttpError(HTTPStatus.NOT_FOUND, "this session has no recording", "這次會談沒有保留的原始錄音。")
+    return audio_store.view(sid)
 
 
 def _remove(path: str) -> None:
@@ -1424,6 +1453,9 @@ def serve() -> None:
     if line:
         print(line)
     leftover = files.clear_temp()
+    orphans = audio_store.clean_orphans()
+    if orphans:
+        print(f"Haven: removed {orphans} file(s) in data/audio that no record names")
     stopped = jobs.startup()
     if stopped:
         print(f"Haven: {stopped} background job(s) were cut off by the last shutdown; they are marked interrupted and can be retried")
@@ -1438,6 +1470,7 @@ def serve() -> None:
         print(warning, file=sys.stderr)
         sys.exit(2)
     ORCH = Orchestrator()
+    audio_store.start_sweeper()  # removes expired audio now and every 10 minutes
     httpd = ThreadingHTTPServer((config.HOST, config.PORT), Handler)
     scheme = "http"
     if config.TLS_CERT and config.TLS_KEY:

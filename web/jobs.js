@@ -64,7 +64,7 @@ function showJob(job) {
     if (j.status === "succeeded") {
       await loadClients();
       if (my !== nav) return;
-      toast(`${j.session_id} 已轉寫並產生紀錄草稿，主機上的錄音已刪除。${KEEP_NO_AUDIO}`);
+      toast(`${j.session_id} 已轉寫並產生紀錄草稿。${KEEP_NO_AUDIO}`);
       openSession(j.session_id);
       return;
     }

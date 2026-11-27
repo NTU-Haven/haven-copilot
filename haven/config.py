@@ -57,3 +57,11 @@ ADMIN_FROM_NETWORK = os.environ.get("HAVEN_ADMIN_FROM_NETWORK") == "1"
 
 # Background processing (transcription and drafting) runs on this many worker threads.
 JOB_WORKERS = max(1, int(os.environ.get("HAVEN_JOB_WORKERS", "2")))
+
+# Original audio (haven/audio.py): kept after transcription so the therapist can listen back,
+# removed when the note is signed (HAVEN_AUDIO_DELETE_ON_CONFIRM=0 keeps it until it expires),
+# when this many hours have passed, or when the therapist deletes it. 72 hours is a TEST
+# setting: it has not been checked against any legal or professional retention rule.
+# Read at call time (config.AUDIO_TTL_HOURS), so tests can change them.
+AUDIO_TTL_HOURS = float(os.environ.get("HAVEN_AUDIO_TTL_HOURS", "72"))
+AUDIO_DELETE_ON_CONFIRM = os.environ.get("HAVEN_AUDIO_DELETE_ON_CONFIRM", "1") != "0"
