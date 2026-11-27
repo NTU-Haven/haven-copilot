@@ -1,6 +1,6 @@
 "use strict";
 // Shown after an upload: the clinic needs the note, not the recording (interviewed psychologist, 2026-11-17).
-const KEEP_NO_AUDIO = "逐字稿已產生；原始錄音若不再需要，請從錄音設備和這台電腦上刪除。";
+const KEEP_NO_AUDIO = "逐字稿已產生；原始錄音依設定保留到簽核或到期，也可以在會談頁手動刪除。錄音設備上的檔案請自行刪除。";
 
 // Haven therapist UI. Talks only to the local Haven server (same origin).
 // No inline styles or scripts and nothing from another origin: the server's
@@ -1268,6 +1268,7 @@ function renderSession(r, focusSeg) {
     ? el("div", { class: "warnings", id: "warnings", role: "alert" }, r.warnings.map((w) => el("div", { "data-quote": demoQuote(w) }, w))) : null;
   main.replaceChildren(head, warnings || "", el("div", { class: "workspace" }, transcript, notePanel));
   decorateTranscript(r); // web/transcript_edit.js: line editing, confirmed speakers, review banner
+  decorateAudio(r); // web/audio.js: original audio notice and delete button
   renderRiskGate();
   renderNote();
   if (focusSeg) highlight([focusSeg]);

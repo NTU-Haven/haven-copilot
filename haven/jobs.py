@@ -17,9 +17,9 @@ a worker left over from before a restart (or a retry) cannot overwrite the
 state of a newer attempt.
 
 Audio: a job's recording is moved out of data/tmp (which start-up clears) into
-data/audio/ so a failed or interrupted job can be retried. It is removed as
-soon as transcription succeeds. ``keep_audio``/``audio_of``/``drop_audio`` are
-the only code that knows where it is (the full audio lifecycle replaces them).
+data/audio/ (haven/audio.py), so a failed or interrupted job can be retried. What
+happens to it afterwards (kept for listening back, removed on sign-off or expiry)
+is the audio module's business.
 """
 
 from __future__ import annotations
@@ -37,6 +37,7 @@ from concurrent.futures import Future, ThreadPoolExecutor
 from pathlib import Path
 from typing import Callable
 
+from . import audio as audio_store
 from . import config, store
 
 ACTIVE = ("queued", "running")
@@ -79,36 +80,6 @@ def _pool() -> ThreadPoolExecutor:
         if _POOL is None:
             _POOL = ThreadPoolExecutor(max_workers=config.JOB_WORKERS, thread_name_prefix="haven-job")
         return _POOL
-
-
-# ---------- the job's recording (minimal; replaced by the audio lifecycle) ----------
-
-def _audio_dir() -> Path:
-    path = config.DATA_DIR / "audio"
-    path.mkdir(parents=True, exist_ok=True)
-    os.chmod(path, 0o700)
-    return path
-
-
-def keep_audio(job_id: str, src: str | Path) -> Path:
-    """Moves the recording out of data/tmp (cleared at start-up) so the job can be retried."""
-    dest = _audio_dir() / f"job-{job_id}{Path(src).suffix.lower()}"
-    os.replace(src, dest)  # same file system: a rename
-    return dest
-
-
-def audio_of(job_id: str) -> Path | None:
-    return next(iter(sorted((config.DATA_DIR / "audio").glob(f"job-{job_id}.*"))), None) \
-        if (config.DATA_DIR / "audio").is_dir() else None
-
-
-def drop_audio(job_id: str) -> None:
-    path = audio_of(job_id)
-    if path is not None:
-        try:
-            path.unlink()
-        except FileNotFoundError:
-            pass
 
 
 # ---------- table access ----------
@@ -189,7 +160,7 @@ def create(session_id: str, kind: str, params: dict, audio: str | Path | None = 
         raise Busy(session_id) from None
     if audio is not None:
         try:
-            keep_audio(job_id, audio)
+            audio_store.store_file(session_id, audio)
         except OSError:
             _set(job_id, 1, ACTIVE, "failed", error_code="internal", message_zh=INTERNAL_ZH)
             raise
@@ -204,7 +175,7 @@ def retry(job_id: str) -> dict:
     if job is None or job["status"] not in RETRYABLE:
         raise NotRetryable(job_id)
     _, needs_audio = _HANDLERS[job["kind"]]
-    if needs_audio(job) and audio_of(job_id) is None:
+    if needs_audio(job) and audio_store.asr_path(job["session_id"]) is None:
         raise AudioGone(job_id)
     attempt = job["attempt"] + 1
     try:
@@ -234,7 +205,7 @@ def _run(job_id: str, attempt: int) -> None:
     job = get(job_id)
     run, _ = _HANDLERS[job["kind"]]
     try:
-        run(job, audio_of(job_id))
+        run(job, audio_store.asr_path(job["session_id"]))
     except Exception as e:  # noqa: BLE001 - every failure becomes the job's state
         zh = getattr(e, "zh", None)
         code = getattr(e, "code", None) or ("failed" if zh else "internal")
@@ -245,7 +216,6 @@ def _run(job_id: str, attempt: int) -> None:
                 print(f"Haven: job {job['kind']} failed with {type(e).__name__}\n{frames}", file=sys.stderr, end="")
         return
     if _set(job_id, attempt, ("running",), "succeeded", stage=None):
-        drop_audio(job_id)
         store.audit("job_succeeded", f"{job_id} {job['session_id']} {job['kind']} attempt={attempt}")
 
 

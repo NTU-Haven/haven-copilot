@@ -14,7 +14,7 @@ from helpers import IsolatedData, ServerCase, free_port
 from test_asr import FakeWhisper
 from test_server_robust import UploadMixin, fake_transcribe, settle_job
 
-from haven import config, jobs, server, store  # noqa: E402
+from haven import audio, config, jobs, server, store  # noqa: E402
 from haven.orchestrator import get_client  # noqa: E402
 
 TEXT = "這週過得怎麼樣？\n不太好，睡不著，白天也提不起勁。"
@@ -79,7 +79,9 @@ class JobsTest(UploadMixin, ServerCase, unittest.TestCase):
         self.assertEqual(status, 200)
         self.assertEqual(page["transcript"][0]["text"], "這週過得怎麼樣？")
         self.assertIsNotNone(store.get_result("C001-S40"))  # drafted by the job, not by the open
-        self.assertEqual(list((config.DATA_DIR / "audio").glob(f"job-{job['job_id']}*")), [])  # recording removed
+        kept = audio.for_session("C001-S40")  # kept for listening back (ticket 08), not removed
+        self.assertEqual(kept["status"], "available")
+        self.assertTrue(kept["path"].is_file())
 
     def test_asr_server_down_fails_with_a_message_and_a_retry_succeeds_once(self):
         port = free_port()
@@ -91,7 +93,8 @@ class JobsTest(UploadMixin, ServerCase, unittest.TestCase):
         failed = jobs.wait(job["job_id"])
         self.assertEqual((failed["status"], failed["error_code"]), ("failed", "asr_unreachable"))
         self.assertIn("語音轉寫服務", failed["message_zh"])
-        self.assertIsNotNone(jobs.audio_of(job["job_id"]))  # kept for the retry
+        self.assertIsNotNone(audio.asr_path("C001-S41"))  # kept for the retry
+        self.assertEqual(audio.get("C001-S41")["status"], "failed")
         self.assertFalse((config.SESSIONS_DIR / "C001-S41.json").exists())
         _, brief = self.call("/api/clients/C001/brief")  # the client page can offer the retry
         self.assertIn(("C001-S41", "failed"), [(j["session_id"], j["status"]) for j in brief["jobs"]])
@@ -107,7 +110,7 @@ class JobsTest(UploadMixin, ServerCase, unittest.TestCase):
         status, page = self.call("/api/sessions/C001-S41/open", {})
         self.assertEqual(status, 200)
         self.assertIn("活著好累", page["transcript"][0]["text"])
-        self.assertIsNone(jobs.audio_of(job["job_id"]))
+        self.assertEqual(audio.get("C001-S41")["status"], "available")  # the retry used the kept recording
         self.assertEqual(self.retry(job["job_id"])[0], 409)  # nothing left to retry
 
     def test_a_job_cut_off_by_a_restart_is_interrupted_and_can_be_retried(self):
@@ -123,7 +126,7 @@ class JobsTest(UploadMixin, ServerCase, unittest.TestCase):
             gate.release.set()  # the old worker ends; it must not change the job any more
             jobs.wait(job["job_id"])
         self.assertEqual(self.job(job["job_id"])["status"], "interrupted")
-        self.assertIsNotNone(jobs.audio_of(job["job_id"]))  # outside data/tmp, so start-up kept it
+        self.assertIsNotNone(audio.asr_path("C001-S42"))  # outside data/tmp, so start-up kept it
         with mock.patch.object(server, "transcribe_audio", fake_transcribe()):
             self.assertEqual(self.retry(job["job_id"])[0], 202)
             status, page = settle_job(self.base, job["job_id"])
@@ -145,7 +148,7 @@ class JobsTest(UploadMixin, ServerCase, unittest.TestCase):
                 status, failed = self.upload("C001-S43", TEXT)
             self.assertEqual((status, failed["error_code"]), ("failed", "internal"))
             self.assertTrue((config.SESSIONS_DIR / "C001-S43.json").exists())
-            self.assertIsNone(jobs.audio_of(failed["job_id"]))  # transcribed: the recording is gone
+            self.assertEqual(audio.get("C001-S43")["status"], "available")  # transcribed: kept for listening back
             self.assertEqual(self.retry(failed["job_id"])[0], 202)
             status, page = settle_job(self.base, failed["job_id"])
         self.assertEqual(status, 200)
@@ -178,7 +181,7 @@ class JobsTest(UploadMixin, ServerCase, unittest.TestCase):
     def test_retry_without_the_recording_is_audio_gone(self):
         with mock.patch.object(server, "transcribe_audio", side_effect=OSError("down")):
             _, failed = self.upload("C001-S45", TEXT)
-        jobs.drop_audio(failed["job_id"])
+        audio.delete_for_session("C001-S45", "manual")
         status, body = self.retry(failed["job_id"])
         self.assertEqual((status, body["error_code"]), (409, "audio_gone"))
         self.assertIn("message_zh", body)
