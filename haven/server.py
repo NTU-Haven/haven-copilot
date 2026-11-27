@@ -21,7 +21,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
-from . import accounts, config, crypto, files, llm, signing, store
+from . import accounts, config, crypto, files, human_fields, jobs, llm, regenerate, signing, store, templates, transcript_edit
 from .agents.verifier import VERIFIER_VERSION, Verifier
 from .models import to_dict
 from .orchestrator import Orchestrator, get_client, load_clients
@@ -81,9 +81,9 @@ class BadRequest(ValueError):
 class HttpError(Exception):
     """A request answered with a given status and a message for the therapist."""
 
-    def __init__(self, status: HTTPStatus, message: str, zh: str | None = None):
+    def __init__(self, status: HTTPStatus, message: str, zh: str | None = None, code: str | None = None):
         super().__init__(message)
-        self.status, self.zh = status, zh
+        self.status, self.zh, self.code = status, zh, code  # code: a background job's error_code
 
 
 def _no_session() -> HttpError:
@@ -142,6 +142,17 @@ def _check_revision(result: dict, payload: dict | None) -> None:
         raise Refused("the draft was changed from another page after this one loaded",
                       f"這份草稿在你打開之後，已由{who}{'於 ' + when if when else ''}修改並存檔。為了不覆蓋對方的修改，這次沒有存檔。"
                       "請重新載入這次會談再修改。", conflict=True, revision=result.get("revision", 0))
+
+
+def _need_base(payload: dict) -> None:
+    """Transcript corrections and reviews must say which draft they were made on."""
+    if payload.get("base_revision") is None:
+        raise BadRequest("base_revision is required")
+
+
+def _editor() -> str:
+    user = _user()
+    return user["display_name"] if user else ""
 
 
 def _bump(result: dict) -> None:
@@ -250,14 +261,21 @@ def _session_view(sid: str) -> dict:
         result["client_alias"], result["therapist"] = "", ""
     result["addenda"] = store.get_addenda(sid) if signature else []
     if signature:
-        note = store.get_signed_note(sid)
-        result["note"] = note
+        result["note"] = store.get_signed_note(sid)
+    # Field labels and hints for the page; None for a template no longer registered.
+    tpl = templates.find(result["note"].get("template"))
+    result["template"] = tpl.public() if tpl else None
+    if signature:
+        note = result["note"]
         result["verification"] = signing.summarize(note)
         result["risk_dismissals"] = note.get("risk_dismissals", [])
         result["risk_uncovered"] = []
     else:
         result["needs_refresh"] = _stale(result)
-        result.setdefault("risk_uncovered", signing.uncovered_risk(result["risk"], result["note"]))
+        result.setdefault("risk_uncovered", signing.uncovered_risk(result.get("risk"), result["note"]))
+    if not config.CLINICAL_AIDS:  # also for a draft made while the aids were on
+        result["risk"], result["outcome"], result["risk_uncovered"] = None, None, []
+    transcript_edit.annotate(sid, result, bool(signature))  # transcript_revision, review_status, source_changed
     return result
 
 
@@ -277,6 +295,7 @@ def _status() -> dict:
         "llm": dict(llm.describe(ORCH.llm.url), model=ORCH.llm.model) if ORCH.llm else None,
         "asr_backend": config.ASR_BACKEND,
         "asr": asr,  # None: Whisper runs inside this process
+        "clinical_aids": config.CLINICAL_AIDS,
         "refused_connections": len(llm.REFUSED),
         # Said plainly so nobody reads the page as a measurement of network traffic.
         "note": "addresses are resolved now; refused_connections counts refusals by Haven's endpoint check since start; this is not a packet capture, and it cannot see what the model server itself connects to",
@@ -284,7 +303,8 @@ def _status() -> dict:
 
 
 def _client_summary(c: dict) -> dict:
-    alerts = ORCH.outcome.run(c)["alerts"]
+    outcome = ORCH.outcome_report(c)
+    alerts = outcome["alerts"] if outcome else []
     return {
         "id": c["id"],
         "alias": c["alias"],
@@ -423,7 +443,7 @@ class Handler(BaseHTTPRequestHandler):
     def _me(self):
         user = _user()
         return self._json({"login_required": accounts.required(), "user": user, "idle_minutes": accounts.IDLE_SECONDS // 60,
-                           "tls": isinstance(self.connection, ssl.SSLSocket)})
+                           "tls": isinstance(self.connection, ssl.SSLSocket), "clinical_aids": config.CLINICAL_AIDS})
 
     def _login(self):
         p = self._payload()
@@ -473,8 +493,12 @@ class Handler(BaseHTTPRequestHandler):
         an unexpected error is a 500 with no detail, never a dropped connection."""
         try:
             return route()
-        except (BadRequest, signing.BadNote) as e:
+        except templates.UnknownTemplate as e:
+            self._error(HTTPStatus.BAD_REQUEST, str(e), "沒有這個紀錄模板，請重新選擇模板。")
+        except (BadRequest, signing.BadNote, transcript_edit.BadEdit) as e:
             self._error(HTTPStatus.BAD_REQUEST, str(e), "送出的資料格式不正確。")
+        except transcript_edit.EditRefused as e:
+            self._error(HTTPStatus.CONFLICT, str(e), e.zh)
         except HttpError as e:
             self._error(e.status, str(e), e.zh)
         except Refused as e:
@@ -533,6 +557,8 @@ class Handler(BaseHTTPRequestHandler):
         # GET only reads. Drafting a note, re-checking one and asking the model are POSTs.
         if parts == ["api", "status"]:
             return self._json(_status())
+        if parts == ["api", "templates"]:
+            return self._json([t.public() for t in templates.all_templates()])
         if parts == ["api", "clients"]:
             store.audit("list_clients", "")
             return self._json([_client_summary(c) for c in load_clients() if accounts.may_open(_user(), c)])
@@ -540,11 +566,14 @@ class Handler(BaseHTTPRequestHandler):
             client = _my_client(parts[2])
             store.audit("read_brief", client["id"])
             # The therapist sees every time an admin opened this client's records.
-            return self._json(dict(ORCH.brief(client["id"]), record_access=record_access_log(client["id"])))
+            return self._json(dict(ORCH.brief(client["id"]), record_access=record_access_log(client["id"]),
+                                   jobs=jobs.for_client(client["id"])))
         if len(parts) == 3 and parts[1] == "sessions":
             sid = _session_id(parts[2])
             _my_session(sid)
             return self._json(_session_view(sid))
+        if len(parts) == 3 and parts[1] == "jobs":
+            return self._json(jobs.public(_my_job(parts[2])))
         if parts == ["api", "admin"]:
             self._admin()
             return self._json(_admin_overview())
@@ -611,14 +640,20 @@ class Handler(BaseHTTPRequestHandler):
                 return self._restore(sid)
             if parts[3] == "speakers":
                 return self._speakers(sid)
+            if parts[3] == "transcript":
+                return self._transcript_edit(sid)
+            if parts[3] == "reviewed":
+                return self._reviewed(sid)
             if parts[3] == "sign":
                 return self._sign(sid)
             if parts[3] == "addendum":
                 return self._addendum(sid)
-        if len(parts) == 4 and parts[1] == "clients" and parts[3] == "ask":
-            return self._ask(parts[2])
+        if len(parts) == 4 and parts[1] == "clients" and parts[3] == "ask" and config.CLINICAL_AIDS:
+            return self._ask(parts[2])  # Case Memory; with the clinical aids off the endpoint does not exist
         if parts == ["api", "upload"]:
             return self._upload(query)
+        if len(parts) == 4 and parts[1] == "jobs" and parts[3] == "retry":
+            return self._json(_retry_job(parts[2]), HTTPStatus.ACCEPTED)
         return self._error(HTTPStatus.NOT_FOUND, "unknown endpoint")
 
     def _payload(self) -> dict:
@@ -640,18 +675,14 @@ class Handler(BaseHTTPRequestHandler):
         return self._json(ORCH.memory.ask(client, q.strip()))
 
     def _process(self, sid, query):
-        template = query.get("template", ["SOAP"])[0]
-        if template not in ("SOAP", "DAP"):
-            return self._error(HTTPStatus.BAD_REQUEST, "template must be SOAP or DAP")
+        template = templates.get(query.get("template", [templates.DEFAULT])[0]).id  # unknown id: 400
         if not (config.SESSIONS_DIR / f"{sid}.json").is_file():
             raise _no_session()
+        payload = self._payload() if self.headers.get("Content-Length") else {}
         with _session_lock(sid):
-            old = store.get_result(sid) or {}
-            ORCH.process_session(sid, template)  # refuses a signed session
-            result = store.get_result(sid)
-            result["revision"] = old.get("revision", 0)
-            _bump(result)
-            store.save_result(sid, result)
+            # Seam for ticket 05: a background job calls regenerate_draft the same way, holding this lock.
+            regenerate.regenerate_draft(sid, template, payload, orch=ORCH, check_revision=_check_revision, need_base=_need_base,
+                                        bump=_bump, refuse=lambda m, zh, **x: Refused(m, zh, **x))
         return self._json(_session_view(sid))
 
     def _verify(self, sid):
@@ -666,52 +697,67 @@ class Handler(BaseHTTPRequestHandler):
             _check_revision(result, payload)
             note, verification, _ = signing.check(sid, transcript, payload, result["note"]["template"], result["note"].get("engine", ""), measures, ORCH.verifier)
             signing.remember(sid, note, verification.get("llm_failed", False), by_model=ORCH.verifier.llm is not None)
-            known = {f["segment_id"] for f in result["risk"].get("flags", [])}
-            uncovered = signing.uncovered_risk(result["risk"], note)
+            risk = result.get("risk") if config.CLINICAL_AIDS else None
+            known = {f["segment_id"] for f in (risk or {}).get("flags", [])}
+            uncovered = signing.uncovered_risk(risk, note)
             result.setdefault("ai_note", result["note"])
             result["note"] = to_dict(note)
+            regenerate.stamp_origins(result["note"], result["ai_note"])  # never the browser's word
             result["verification"] = verification
             result["risk_uncovered"] = uncovered
             result["draft_dismissals"] = [d for d in dismissals if d["segment_id"] in known]
             result["draft_saved_at"] = store.now()
+            transcript_edit.mark_sources(result)
             _bump(result)
             store.save_result(sid, result)
         store.audit("verify", f"{sid} {verification['supported']}/{verification['total']} supported; draft saved"
                     + ("; local model did not answer" if verification.get("llm_failed") else ""))
-        return self._json({"note": to_dict(note), "verification": verification, "risk_uncovered": uncovered,
+        return self._json({"note": result["note"], "verification": verification, "risk_uncovered": uncovered,
                            "draft_saved_at": result["draft_saved_at"], "revision": result["revision"]})
 
     def _speakers(self, sid):
         """The therapist sets who said each line of an uploaded recording, from
-        listening to it. Labels become "confirmed", and the risk scan, the
-        checklist and every sentence of the draft are checked again under them."""
+        listening to it, also for lines already confirmed (AC-06). Labels become
+        "confirmed", and the risk scan, the checklist and every sentence of the
+        draft are checked again under them. Logic: haven/transcript_edit.py."""
         payload = self._payload()
-        changes = payload.get("speakers")
-        if not isinstance(changes, dict) or not changes:
-            raise BadRequest("speakers must map segment numbers to therapist or client")
+        _need_base(payload)
         with _session_lock(sid):
-            result, transcript, _ = _draft(sid)
+            result, _, _ = _draft(sid)
             _check_revision(result, payload)
-            segs = transcript.by_id()
-            wanted = {}
-            for key, who in changes.items():
-                try:
-                    seg_id = int(key)
-                except (TypeError, ValueError):
-                    raise BadRequest("segment numbers must be integers") from None
-                if seg_id not in segs or who not in ("therapist", "client"):
-                    raise BadRequest(f"segment {key}: unknown segment or speaker")
-                if segs[seg_id].speaker_source == "script":
-                    raise Refused("prepared transcripts already carry their speakers", "這份逐字稿的說話者已由原稿標好，不需要更正。")
-                wanted[seg_id] = who
-            changed = sum(1 for i, who in wanted.items() if segs[i].speaker != who)
-            for i, who in wanted.items():
-                segs[i].speaker, segs[i].speaker_source = who, "confirmed"
-            save_transcript(transcript)
-            result["transcript"] = [to_dict(s) for s in transcript.segments]
+            count, changed = transcript_edit.edit_speakers(sid, payload.get("speakers"), _editor())
             _bump(result)
-            ORCH.refresh(result)  # risk, checklist and sentences under the confirmed labels
-            store.audit("speakers_confirmed", f"{sid}: {len(wanted)} line(s) confirmed, {changed} changed")
+            transcript_edit.commit(sid, result, changed, ORCH.refresh)
+            store.audit("speakers_confirmed", f"{sid}: {count} line(s) confirmed, {len(changed)} changed, "
+                        f"transcript_revision={transcript_edit.revision(sid)}")
+        return self._json(_session_view(sid))
+
+    def _transcript_edit(self, sid):
+        """Corrects the words of transcript lines; ids and times stay (AC-05)."""
+        payload = self._payload()
+        _need_base(payload)
+        with _session_lock(sid):
+            result, _, _ = _draft(sid)
+            _check_revision(result, payload)
+            changed = transcript_edit.edit_text(sid, payload.get("segments"), _editor())
+            if changed:
+                _bump(result)
+                transcript_edit.commit(sid, result, changed, ORCH.refresh)
+            store.audit("transcript_edited", f"{sid}: {len(changed)} line(s) corrected, "
+                        f"transcript_revision={transcript_edit.revision(sid)}")
+        return self._json(_session_view(sid))
+
+    def _reviewed(self, sid):
+        """The therapist has read the draft against the transcript as it is now."""
+        payload = self._payload()
+        _need_base(payload)
+        with _session_lock(sid):
+            result, _, _ = _draft(sid)
+            _check_revision(result, payload)
+            transcript_edit.mark_reviewed(sid, result)
+            _bump(result)
+            store.save_result(sid, result)
+            store.audit("transcript_reviewed", f"{sid}: transcript_revision={transcript_edit.revision(sid)}")
         return self._json(_session_view(sid))
 
     def _restore(self, sid):
@@ -737,9 +783,21 @@ class Handler(BaseHTTPRequestHandler):
             signed_by = user["display_name"]
         if not isinstance(signed_by, str) or not signed_by.strip() or len(signed_by) > 80 or "note" not in payload:
             return self._error(HTTPStatus.BAD_REQUEST, "signed_by and note are required", "請填寫簽核心理師姓名。")
+        # One at a time with transcript corrections, so the hash recorded below is the
+        # hash of the transcript the draft was reviewed against (spec §9.3 rule 6).
+        with _session_lock(sid):
+            return self._sign_locked(sid, payload, signed_by)
+
+    def _sign_locked(self, sid, payload, signed_by):
         dismissals = signing.parse_dismissals(payload.get("risk_dismissals"))
         result, transcript, measures = _draft(sid)
+        _need_base(payload)
         _check_revision(result, payload)
+        t_rev = transcript_edit.revision(sid)
+        if transcript_edit.review_status(result, t_rev, False) == "needs_review":
+            raise Refused("the transcript was corrected after the draft was last reviewed; mark it reviewed first",
+                          "逐字稿在您上次審閱之後有修改。請先對照逐字稿檢查紀錄，按「已審閱」後再簽核。",
+                          needs_review=True, transcript_revision=t_rev, reviewed_against=transcript_edit.reviewed_against(result))
         # The rule lives here, not in the UI. Sentences the server has not judged
         # before are checked by the rule layers only: fast, and never more lenient
         # than the full check the therapist saw.
@@ -749,14 +807,19 @@ class Handler(BaseHTTPRequestHandler):
                           f"有 {len(forged)} 句量表句和量表資料不一致。量表句由系統依量表資料產生，不能修改；請還原後再簽核。", blocking=forged)
         if verification["total"] == 0:
             raise Refused("the note has no sentences", "紀錄是空的，不能簽核。請至少寫下一句引用逐字稿的紀錄。")
+        left = human_fields.placeholders(note)
+        if left:  # decided from the text, so a flag from the browser cannot clear it
+            raise Refused(f"{len(left)} placeholder sentence(s) are still in the note",
+                          f"還有 {len(left)} 個欄位保留著「{human_fields.PLACEHOLDER}」。請改寫成您的內容，或刪除這一句，再簽核。",
+                          blocking=[s.text for s in left])
         blocking = signing.blocking_sentences(note)
         if blocking:
             raise Refused(f"{len(blocking)} sentence(s) unverified, unsupported, or held for confirmation; re-verify, edit or confirm them first",
                           f"還有 {len(blocking)} 句沒有通過驗證（無支持證據、與風險有關而支持不足，或被本機模型否決）。請先修改、刪除，或逐句按「保留此句」"
                           "（沒有引用逐字稿的句子要寫下依據），再重新驗證。",
                           blocking=[s.text for s in blocking])
-        risk = to_dict(ORCH.risk.run(transcript))
-        known = {f["segment_id"] for f in risk["flags"]}
+        risk = ORCH.scan_risk(transcript)  # None with the clinical aids off: no risk gate
+        known = {f["segment_id"] for f in (risk or {}).get("flags", [])}
         dismissals = [d for d in dismissals if d["segment_id"] in known]
         uncovered = signing.uncovered_risk(risk, note, dismissals)
         if uncovered:
@@ -766,6 +829,8 @@ class Handler(BaseHTTPRequestHandler):
                           risk_uncovered=uncovered)
         kept = sum(1 for s in note.sentences() if s.status != "supported" and s.confirmed_by_therapist)
         signed = signing.signed_form(note, dismissals)
+        regenerate.stamp_origins(signed, result.get("ai_note") or result["note"])
+        signed["transcript_revision"] = t_rev
         signature = store.sign_note(
             sid, signed, signed_by.strip(), kept,
             transcript_sha256=signing.transcript_sha256(sid), note_sha256=signing.note_sha256(signed), verifier_version=VERIFIER_VERSION,
@@ -829,7 +894,8 @@ class Handler(BaseHTTPRequestHandler):
         except BaseException as e:
             _abandon_audio(tmp_name, session_id, e)
             raise
-        return self._json(_transcribe_and_store(tmp_name, session_id, client_id, session_no, simulated, "transcribe_upload"))
+        return self._json(_start_transcription(tmp_name, session_id, client_id, session_no, simulated, "transcribe_upload"),
+                          HTTPStatus.ACCEPTED)
 
     # ---------- accounts and client assignments (admin, on the main PC) ----------
 
@@ -951,8 +1017,8 @@ class Handler(BaseHTTPRequestHandler):
         if rec["bytes"] == 0:
             _abandon_audio(rec["path"], rec["session_id"], HttpError(HTTPStatus.BAD_REQUEST, "empty"))
             raise HttpError(HTTPStatus.BAD_REQUEST, "nothing was recorded", "沒有收到任何錄音，沒有建立會談。")
-        return self._json(_transcribe_and_store(rec["path"], rec["session_id"], rec["client_id"], rec["session_no"],
-                                                rec["simulated"], "transcribe_recording"))
+        return self._json(_start_transcription(rec["path"], rec["session_id"], rec["client_id"], rec["session_no"],
+                                               rec["simulated"], "transcribe_recording"), HTTPStatus.ACCEPTED)
 
     def _recording_cancel(self, rid: str):
         rec = self._recording(rid)
@@ -1121,48 +1187,114 @@ def _sweep_recordings() -> None:
         store.audit("recording_abandoned", f"{r['session_id']}: nothing arrived for {RECORDING_IDLE // 60} minutes; audio removed")
 
 
-def _transcribe_and_store(tmp_name: str, session_id: str, client_id: str, session_no: int, simulated: bool, action: str) -> dict:
-    """Transcribes a complete recording, removes it (on success and on every
-    failure), labels speakers, files the transcript and drafts the note."""
+def _start_transcription(tmp_name: str, session_id: str, client_id: str, session_no: int, simulated: bool, action: str) -> dict:
+    """Queues transcription and drafting of a complete recording and answers at
+    once (202). The recording moves to where a retry can find it (jobs.keep_audio);
+    it is removed when transcription succeeds."""
+    params = {"client_id": client_id, "session_no": session_no, "simulated": simulated, "action": action,
+              "date": date.today().isoformat()}
     try:
-        try:
-            t = transcribe_audio(Path(tmp_name), session_id, client_id, session_no, date.today().isoformat(), simulated)
-        except ImportError:
-            raise HttpError(HTTPStatus.NOT_IMPLEMENTED, "faster-whisper is not installed",
-                            "這台電腦還沒有安裝語音轉寫模組（faster-whisper）。") from None
-        except ASRError as e:
-            too_long = "maximum allowed duration" in str(e)
-            raise HttpError(HTTPStatus.BAD_GATEWAY, f"speech-to-text server at {config.ASR_URL}: {e}",
-                            "錄音超過本機語音轉寫服務允許的長度。請調高伺服器的 VLLM_MAX_AUDIO_DECODE_DURATION_S，或把錄音分段上傳。"
-                            if too_long else "本機語音轉寫服務沒有回傳可用的逐字稿，請確認錄音檔格式後再試。") from None
-        except llm.NonLocalEndpointError:
-            raise HttpError(HTTPStatus.BAD_GATEWAY, "the speech-to-text endpoint is not local; nothing was sent",
-                            "語音轉寫服務的位址不是本機或診所區域網路，錄音沒有送出。請檢查設定。") from None
-        except OSError:
-            raise HttpError(HTTPStatus.SERVICE_UNAVAILABLE, f"speech-to-text server not reachable at {config.ASR_URL}",
-                            "連不上本機語音轉寫服務，請確認它已經啟動。") from None
-        finally:
-            _remove(tmp_name)  # Haven keeps no recording, on success or on failure
-        if not t.segments:
-            raise HttpError(HTTPStatus.UNPROCESSABLE_ENTITY, "no speech was recognised in the recording",
-                            "錄音裡沒有辨識到任何語音，沒有建立會談。請確認錄音檔是否正確、有沒有聲音。")
-        labelled = ORCH.speakers.run(t)
-        with CLIENTS_LOCK:  # two uploads at once must not drop each other's session
-            save_transcript(t)
-            clients = load_clients()
-            for c in clients:
-                if c["id"] == client_id and session_id not in c.setdefault("sessions", []):
-                    c["sessions"].append(session_id)
-            files.write_private(config.CLIENTS_FILE, json.dumps(clients, ensure_ascii=False, indent=2) + "\n")
+        job = jobs.create(session_id, "transcribe", params, audio=tmp_name)
+    except jobs.Busy:
+        e = Refused("this session is already being processed", "這次會談已經在處理中，請等它完成。")
+        _abandon_audio(tmp_name, session_id, e)
+        raise e from None
     except BaseException as e:
         _abandon_audio(tmp_name, session_id, e)
         raise
+    return jobs.public(job)
+
+
+def _transcribe_job(job: dict, audio: Path | None) -> None:
+    """The "transcribe" job: speech to text, speaker labels, the transcript filed
+    and the client's session list updated, then the note drafted. A retry after the
+    transcript was stored skips the speech-to-text step and only drafts. On a
+    failure the recording is kept for a retry; once transcribed it is removed."""
+    session_id, p = job["session_id"], job["params"]
+    client_id = p["client_id"]
+    try:
+        if not (config.SESSIONS_DIR / f"{session_id}.json").is_file():
+            if audio is None:
+                raise HttpError(HTTPStatus.GONE, "the recording is no longer kept",
+                                "原始錄音已不在主機上，無法重新轉寫。請重新上傳錄音檔。", code="audio_gone")
+            jobs.stage(job, "transcribe")
+            try:
+                t = transcribe_audio(audio, session_id, client_id, p["session_no"], p["date"], p["simulated"])
+            except ImportError:
+                raise HttpError(HTTPStatus.NOT_IMPLEMENTED, "faster-whisper is not installed",
+                                "這台電腦還沒有安裝語音轉寫模組（faster-whisper）。", code="asr_not_installed") from None
+            except ASRError as e:
+                too_long = "maximum allowed duration" in str(e)
+                raise HttpError(HTTPStatus.BAD_GATEWAY, f"speech-to-text server at {config.ASR_URL}: {e}",
+                                "錄音超過本機語音轉寫服務允許的長度。請調高伺服器的 VLLM_MAX_AUDIO_DECODE_DURATION_S，或把錄音分段上傳。"
+                                if too_long else "本機語音轉寫服務沒有回傳可用的逐字稿，請確認錄音檔格式後再試。",
+                                code="asr_too_long" if too_long else "asr_failed") from None
+            except llm.NonLocalEndpointError:
+                raise HttpError(HTTPStatus.BAD_GATEWAY, "the speech-to-text endpoint is not local; nothing was sent",
+                                "語音轉寫服務的位址不是本機或診所區域網路，錄音沒有送出。請檢查設定。", code="asr_not_local") from None
+            except OSError:
+                raise HttpError(HTTPStatus.SERVICE_UNAVAILABLE, f"speech-to-text server not reachable at {config.ASR_URL}",
+                                "連不上本機語音轉寫服務，請確認它已經啟動，再按「重試」。", code="asr_unreachable") from None
+            if not t.segments:
+                raise HttpError(HTTPStatus.UNPROCESSABLE_ENTITY, "no speech was recognised in the recording",
+                                "錄音裡沒有辨識到任何語音，沒有建立會談。請確認錄音檔是否正確、有沒有聲音。", code="no_speech")
+            jobs.stage(job, "speakers")
+            labelled = ORCH.speakers.run(t)
+            with CLIENTS_LOCK:  # two uploads at once must not drop each other's session
+                if not (config.SESSIONS_DIR / f"{session_id}.json").exists():
+                    save_transcript(t)
+                clients = load_clients()
+                for c in clients:
+                    if c["id"] == client_id and session_id not in c.setdefault("sessions", []):
+                        c["sessions"].append(session_id)
+                files.write_private(config.CLIENTS_FILE, json.dumps(clients, ensure_ascii=False, indent=2) + "\n")
+            jobs.drop_audio(job["job_id"])  # Haven keeps no recording once it is transcribed
+            store.audit(p["action"], f"{session_id} consent={CONSENT_SCOPE} simulated={int(p['simulated'])} asr={config.ASR_BACKEND} "
+                                     f"speakers_guessed={labelled}/{len(t.segments)}; audio removed after ASR")
+    except BaseException as e:
+        kind = f"HTTP {int(e.status)}" if isinstance(e, HttpError) else type(e).__name__
+        store.audit("upload_failed", f"{session_id} {kind}; audio kept for a retry")
+        raise
     finally:
-        _remove(tmp_name)
         with CLIENTS_LOCK:
             UPLOADING.pop(session_id, None)
-    store.audit(action, f"{session_id} consent={CONSENT_SCOPE} simulated={int(simulated)} asr={config.ASR_BACKEND} speakers_guessed={labelled}/{len(t.segments)}; temp audio removed after ASR")
-    return _open_session(session_id)
+    jobs.stage(job, "draft")
+    _open_session(session_id)
+
+
+jobs.register("transcribe", _transcribe_job,
+              needs_audio=lambda job: not (config.SESSIONS_DIR / f"{job['session_id']}.json").is_file())
+
+
+def _my_job(job_id: str) -> dict:
+    """The job, if the signed-in therapist may open its session's client; 404 otherwise."""
+    job = jobs.get(job_id)
+    missing = HttpError(HTTPStatus.NOT_FOUND, "no such job", "找不到這項處理工作。")
+    if job is None:
+        raise missing
+    if accounts.required():
+        try:
+            client = get_client(job["params"].get("client_id") or load_transcript(job["session_id"]).client_id)
+        except (KeyError, FileNotFoundError):
+            raise missing from None
+        if not accounts.may_open(_user(), client):
+            raise missing
+    return job
+
+
+def _retry_job(job_id: str) -> dict:
+    job = _my_job(job_id)
+    try:
+        job = jobs.retry(job["job_id"])
+    except jobs.NotRetryable:
+        raise Refused("only a failed or interrupted job can be retried", "這項處理正在進行或已經完成，不需要重試。",
+                      job_status=(jobs.get(job_id) or {}).get("status")) from None
+    except jobs.AudioGone:
+        raise Refused("the recording of this job is no longer kept", "原始錄音已不在主機上，無法重新轉寫。請重新上傳錄音檔。",
+                      error_code="audio_gone") from None
+    except jobs.Busy:
+        raise Refused("this session is already being processed", "這次會談已經在處理中，請等它完成。") from None
+    return jobs.public(job)
 
 
 def _remove(path: str) -> None:
@@ -1179,7 +1311,7 @@ def _reserve_upload(session_id: str, client_id: str) -> int:
     with CLIENTS_LOCK:
         client = _client(client_id)
         taken = (config.SESSIONS_DIR / f"{session_id}.json").exists() or session_id in UPLOADING \
-            or any(session_id in c.get("sessions", []) for c in load_clients())
+            or any(session_id in c.get("sessions", []) for c in load_clients()) or jobs.active(session_id, "transcribe")
         if taken:
             raise Refused("a session with this id already exists or is being uploaded",
                           "這個會談編號已經存在，或正在上傳中。請換一個編號。")
@@ -1234,6 +1366,9 @@ def serve() -> None:
     if line:
         print(line)
     leftover = files.clear_temp()
+    stopped = jobs.startup()
+    if stopped:
+        print(f"Haven: {stopped} background job(s) were cut off by the last shutdown; they are marked interrupted and can be retried")
     if leftover:
         print(f"Haven: removed {leftover} recording(s) left in {files.temp_dir()} by an earlier run that did not finish")
     chain = store.verify_audit()

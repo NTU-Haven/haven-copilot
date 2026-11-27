@@ -138,9 +138,14 @@ class DemoWalkthroughTest(ServerCase, unittest.TestCase):
             self.assertIsNone(store.get_signature(sid))
         self.assertTrue(store.verify_audit()["ok"])
 
-    def test_2_brief_shows_five_alerts(self):
+    def test_2_brief_has_no_alerts_by_default_and_five_with_the_clinical_aids(self):
         _, brief = self.call("/api/clients/C001/brief")
-        self.assertEqual(len(brief["outcome"]["alerts"]), 5)
+        self.assertIsNone(brief["outcome"])  # HAVEN_CLINICAL_AIDS is off by default
+        saved, config.CLINICAL_AIDS = config.CLINICAL_AIDS, True
+        try:
+            self.assertEqual(len(self.call("/api/clients/C001/brief")[1]["outcome"]["alerts"]), 5)
+        finally:
+            config.CLINICAL_AIDS = saved
         self.assertEqual([m["signed"] for m in brief["sessions_meta"]], [False, False])
         self.assertTrue(all(m["simulated"] and m["processed"] for m in brief["sessions_meta"]))
 
@@ -174,6 +179,7 @@ class DemoWalkthroughTest(ServerCase, unittest.TestCase):
     def test_5_reset_again_unsigns_and_no_example_flag_works(self):
         out = self.run_reset("--no-example")
         self.assertEqual(out.returncode, 0, out.stderr)
+        self.assertEqual(len(list(config.DATA_DIR.glob("haven.db-backup-*[0-9]"))), 2)  # both backups kept, even within one second
         self.assertIsNone(store.get_signature("C001-S04"))
         self.assertEqual(store.get_result("C001-S04")["verification"]["unsupported"], 0)
 
@@ -187,6 +193,31 @@ class DemoWalkthroughTest(ServerCase, unittest.TestCase):
             out = subprocess.run([sys.executable, str(REPO / "scripts" / "reset_demo.py")], env=env, capture_output=True, text=True)
             self.assertEqual(out.returncode, 1)
             self.assertIn("C001-S09.json", out.stderr)
+
+
+class ResetBackupNameTest(unittest.TestCase):
+    """Ticket 16: two resets in the same second (even the same microsecond) keep both backups."""
+
+    def test_backup_names_never_collide(self):
+        import importlib.util
+        from datetime import datetime
+        from unittest import mock
+        spec = importlib.util.spec_from_file_location("reset_demo", REPO / "scripts" / "reset_demo.py")
+        reset_demo = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(reset_demo)
+        frozen = mock.Mock(wraps=datetime)
+        frozen.now.return_value = datetime(2026, 11, 27, 9, 0, 0, 123456)
+        with IsolatedData(), mock.patch.object(reset_demo, "datetime", frozen):
+            db = config.DATA_DIR / "haven.db"
+            names = []
+            for _ in range(3):
+                db.write_text("x", encoding="utf-8")
+                backup = reset_demo.backup_name(db)
+                self.assertFalse(backup.exists())
+                db.rename(backup)
+                names.append(backup.name)
+            self.assertEqual(len(set(names)), 3)
+            self.assertEqual(len(list(config.DATA_DIR.glob("haven.db-backup-*"))), 3)
 
 
 if __name__ == "__main__":

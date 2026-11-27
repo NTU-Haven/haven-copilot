@@ -120,16 +120,17 @@ class ServerTest(unittest.TestCase):
     def test_sign_rules(self):
         h = {"X-Haven": "1", "Content-Type": "application/json"}
         self.assertEqual(self.call("/api/sessions/C002-S05/open", {}, h)[0], 200)  # the server drafts the note first
+        base = store.get_result("C002-S05").get("revision", 0)  # signing names the draft it was made on
         # The status sent by the browser is ignored: this sentence is not in the transcript.
         bad = {"S": [{"text": "個案表示與母親關係良好。", "status": "supported", "confirmed_by_therapist": False}]}
-        self.assertEqual(self.call("/api/sessions/C002-S05/sign", {"signed_by": "王", "note": {"sections": bad}}, h)[0], 409)
+        self.assertEqual(self.call("/api/sessions/C002-S05/sign", {"signed_by": "王", "base_revision": base, "note": {"sections": bad}}, h)[0], 409)
         clicked = {"S": [dict(bad["S"][0], confirmed_by_therapist=True)]}
         # It cites nothing, so one click is not enough: the therapist writes what it is based on.
-        self.assertEqual(self.call("/api/sessions/C002-S05/sign", {"signed_by": "王", "note": {"sections": clicked}}, h)[0], 409)
+        self.assertEqual(self.call("/api/sessions/C002-S05/sign", {"signed_by": "王", "base_revision": base, "note": {"sections": clicked}}, h)[0], 409)
         kept = {"S": [dict(clicked["S"][0], keep_reason="會談後個案來訊補充")]}
-        self.assertEqual(self.call("/api/sessions/C002-S05/sign", {"signed_by": "王", "note": {"sections": kept}}, h)[0], 200)
+        self.assertEqual(self.call("/api/sessions/C002-S05/sign", {"signed_by": "王", "base_revision": base, "note": {"sections": kept}}, h)[0], 200)
         # A signed note is never overwritten.
-        self.assertEqual(self.call("/api/sessions/C002-S05/sign", {"signed_by": "李", "note": {"sections": kept}}, h)[0], 409)
+        self.assertEqual(self.call("/api/sessions/C002-S05/sign", {"signed_by": "李", "base_revision": base, "note": {"sections": kept}}, h)[0], 409)
         self.assertEqual(store.get_signature("C002-S05")["signed_by"], "王")
         audit = store.recent_audit()
         self.assertIn("1 flagged", next(a for a in audit if a["action"] == "sign_note")["detail"])
@@ -164,6 +165,10 @@ class OpenAICompatTest(unittest.TestCase):
     def test_skips_think_block(self):
         from haven import llm
         self.assertEqual(llm._parse_json('<think>\n先想一下\n</think>\n{"a": 1}'), {"a": 1})
+
+# These tests cover the clinical aids (risk, R quotes, score lines, outcome, Case Memory),
+# which are off by default; they run with HAVEN_CLINICAL_AIDS on, as before the flag existed.
+from helpers import clinical_aids_on as setUpModule, clinical_aids_restore as tearDownModule  # noqa: E402,F401
 
 
 if __name__ == "__main__":

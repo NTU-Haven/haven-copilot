@@ -20,6 +20,21 @@ REPO_DATA = Path(__file__).resolve().parent.parent / "data"
 H = {"X-Haven": "1", "Content-Type": "application/json"}
 
 
+_saved_aids: list[bool] = []
+
+
+def clinical_aids_on():
+    """Turns on HAVEN_CLINICAL_AIDS (risk scan and gate, R quotes, score lines, outcome,
+    Case Memory; off by default). Modules that test those features use
+    ``setUpModule = clinical_aids_on`` and ``tearDownModule = clinical_aids_restore``."""
+    _saved_aids.append(config.CLINICAL_AIDS)
+    config.CLINICAL_AIDS = True
+
+
+def clinical_aids_restore():
+    config.CLINICAL_AIDS = _saved_aids.pop()
+
+
 class IsolatedData:
     """Points config at a temp copy of data/sessions and clients.json, with an empty
     database, so a test can sign, upload or add sessions without touching the repo."""
@@ -76,6 +91,7 @@ class ServerCase:
 
     @classmethod
     def call(self, path, body=None, headers=None, method=None):
+        body = self._with_base(path, body)
         data = json.dumps(body).encode() if body is not None else None
         req = urllib.request.Request(self.base + path, data=data, headers=H if headers is None else headers,
                                      method=method or ("POST" if data is not None else "GET"))
@@ -85,6 +101,19 @@ class ServerCase:
         except urllib.error.HTTPError as e:
             with e:
                 return e.code, json.load(e)
+
+    @classmethod
+    def _with_base(cls, path, body):
+        """/sign and /process of an existing draft need base_revision (ticket 07). Most tests are
+        not about that, so the current revision is filled in unless the test sets the key itself
+        (``"base_revision": None`` sends none)."""
+        import re
+        from haven import store
+        m = re.fullmatch(r"/api/sessions/([^/?]+)/(sign|process)(\?.*)?", path)
+        if not m or not isinstance(body, dict) or "base_revision" in body:
+            return body
+        result = store.get_result(m.group(1).upper())
+        return dict(body, base_revision=result.get("revision", 0)) if result else body
 
     @classmethod
     def draft(self, sid):

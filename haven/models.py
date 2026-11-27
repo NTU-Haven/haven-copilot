@@ -20,7 +20,21 @@ class Segment:
     #                usable answer); ``speaker`` is then "unknown".
     # Agents treat only CONFIRMED sources as known.
     speaker_source: str = "script"
+    # Set by the first correction of the words (haven/transcript_edit.py): what the
+    # ASR heard, never changed afterwards. None for a line never corrected.
+    asr_text: str | None = None
+    # Who last corrected this line's words or speaker, and when.
+    edited_by: str = ""
+    edited_at: str = ""
+    # Only with HAVEN_ASR_REFINE (haven/asr_refine.py): which engine's words the text is
+    # ("whisper", or the Qwen3-ASR model name), and Whisper's own words when they were
+    # replaced. None otherwise, and then left out of the saved and served transcript.
+    asr_engine: str | None = None
+    whisper_text: str | None = None
 
+
+# Segment fields that exist only for some transcripts; to_dict leaves them out when unset.
+_OPTIONAL_SEGMENT_FIELDS = ("asr_engine", "whisper_text")
 
 CONFIRMED = ("script", "confirmed")
 
@@ -51,6 +65,8 @@ class NoteSentence:
     reason: str = ""
     # "transcript": evidence is segment ids. "measure": the sentence is filled
     # in from questionnaire scores, so there is no transcript line to cite.
+    # "therapist": written by the therapist in a human_only field with no citation
+    # (the server sets it from the template; the browser cannot claim it).
     source: str = "transcript"
     # A weak sentence that is about risk, or that the local model rejected:
     # signing waits until the therapist confirms it.
@@ -61,6 +77,10 @@ class NoteSentence:
     confirmed_by_therapist: bool = False
     # A kept sentence that cites no transcript line: what the therapist based it on.
     keep_reason: str = ""
+    # Who wrote the sentence: "ai" (as the AI wrote it), "ai_edited" (the therapist
+    # changed an AI sentence) or "human". The server sets it on save by comparing
+    # with the AI's own draft (haven/regenerate.py); a value sent by a browser is ignored.
+    origin: str = "ai"
 
 
 @dataclass
@@ -109,4 +129,9 @@ class RiskReport:
 
 
 def to_dict(obj) -> dict:
-    return asdict(obj)
+    out = asdict(obj)
+    if isinstance(obj, Segment):
+        for k in _OPTIONAL_SEGMENT_FIELDS:
+            if out[k] is None:
+                del out[k]
+    return out

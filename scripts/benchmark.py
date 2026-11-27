@@ -75,7 +75,7 @@ def run_one(session_id: str) -> dict:
         "sentences_total": v["total"],
         "sentences_weak": v["weak"],
         "sentences_unsupported": v["unsupported"],
-        "risk_level": r["risk"]["level"],
+        "risk_level": (r["risk"] or {}).get("level"),
         "flagged": flagged_sentences(r),
     }
 

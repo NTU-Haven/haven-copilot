@@ -23,4 +23,4 @@ for client in load_clients():
             print(f"{session_id}: already signed, left as it is")
             continue
         v = r["verification"]
-        print(f"{session_id}: {time.perf_counter() - t0:.1f}s, {v['supported']}/{v['total']} supported, risk={r['risk']['level']}")
+        print(f"{session_id}: {time.perf_counter() - t0:.1f}s, {v['supported']}/{v['total']} supported, risk={(r['risk'] or {}).get('level', 'off')}")
