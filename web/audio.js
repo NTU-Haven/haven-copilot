@@ -43,6 +43,7 @@ async function deleteAudio(btn) {
       if (my !== nav) return;
       Object.assign(session, a);
       decorateAudio(session);
+      decoratePlayback(session);
       toast("原始錄音已刪除；逐字稿與草稿仍保留。");
     } catch (err) {
       toast(`無法刪除原始錄音：${err.message}`);

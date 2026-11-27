@@ -1273,6 +1273,7 @@ function renderSession(r, focusSeg) {
   main.replaceChildren(head, warnings || "", el("div", { class: "workspace" }, transcript, notePanel));
   decorateTranscript(r); // web/transcript_edit.js: line editing, confirmed speakers, review banner
   decorateAudio(r); // web/audio.js: original audio notice and delete button
+  decoratePlayback(r); // web/playback.js: mini player and a play button per line
   renderRiskGate();
   renderNote();
   if (focusSeg) highlight([focusSeg]);
