@@ -240,7 +240,8 @@ class HybridTest(unittest.TestCase):
             saved = path.read_text(encoding="utf-8")
         expected = {"session_id": "T-S01", "client_id": "C001", "session_no": 1, "date": "2026-11-08", "simulated": True,
                     "segments": [{"id": i, "start": s["start"], "end": s["end"], "speaker": "unknown", "text": s["text"],
-                                  "speaker_source": "none"} for i, s in enumerate(WHISPER["segments"], start=1)]}
+                                  "speaker_source": "none", "asr_text": None, "edited_by": "", "edited_at": ""}  # ticket 06's edit fields
+                                 for i, s in enumerate(WHISPER["segments"], start=1)]}
         self.assertEqual(saved, json.dumps(expected, ensure_ascii=False, indent=2))
 
     def test_flag_is_off_by_default(self):
