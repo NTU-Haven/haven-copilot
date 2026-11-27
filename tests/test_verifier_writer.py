@@ -11,7 +11,8 @@ from helpers import IsolatedData, ServerCase
 from haven import signing, store
 from haven.agents.risk import RiskAgent
 from haven.agents.verifier import MODEL_SILENT, Verifier, rule_violation, unbacked_clause
-from haven.agents.writer import CHUNK, FALLBACK_ENGINE, TEMPLATES, NoteWriter, _evidence, _parse
+from haven import templates
+from haven.agents.writer import CHUNK, FALLBACK_ENGINE, NoteWriter, _evidence, _parse
 from haven.models import Note, NoteSentence, Segment, Transcript
 from haven.orchestrator import Orchestrator
 from haven.transcript import load_transcript
@@ -345,8 +346,8 @@ class RuleEngineRiskTest(unittest.TestCase):
         self.assertTrue(Verifier().run(note, t)["ready_to_sign"])
 
     def test_dap_has_the_risk_section_too(self):
-        self.assertIn("R", TEMPLATES["SOAP"])
-        self.assertIn("R", TEMPLATES["DAP"])
+        self.assertIn("R", templates.get("SOAP").keys)
+        self.assertIn("R", templates.get("DAP").keys)
         note = NoteWriter().run(load_transcript("C001-S04"), "DAP")
         self.assertEqual(list(note.sections), ["D", "A", "P", "R"])
         self.assertTrue(note.sections["R"])
@@ -381,17 +382,21 @@ class RuleEngineRiskTest(unittest.TestCase):
         self.assertTrue(line.text.startswith("個案表示"))
 
 
+def _instructions(template_id, key):
+    return next(f.instructions for f in templates.get(template_id).fields if f.key == key)
+
+
 class PromptTest(unittest.TestCase):
     """2.9: CLN-I15. O is observed behaviour, still cited. Batch 9: only what the
     transcript text shows; tone, pace, expression and inferred affect are the therapist's to add."""
 
     def test_objective_section_definition(self):
-        o = TEMPLATES["SOAP"]["O"]
+        o = _instructions("SOAP", "O")
         self.assertIn("行為", o)
         self.assertIn("引用", o)
         for word in ("語氣", "語速", "神情", "語氣中透露出"):
             self.assertIn(word, o.split("一律不要寫")[0])  # listed among what not to write
-        self.assertIn("語速", TEMPLATES["DAP"]["D"].split("不要寫")[0])
+        self.assertIn("語速", _instructions("DAP", "D").split("不要寫")[0])
 
     def test_prompt_tells_the_model_about_proposals_and_risk_section(self):
         from haven.agents.writer import SYSTEM_PROMPT, _prompt
