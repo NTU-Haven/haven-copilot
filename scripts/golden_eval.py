@@ -150,7 +150,9 @@ def run_all(items: list[dict], template: str | None, llm_factory) -> list[dict]:
             row = {"session_id": it["session_id"], "input_mode": it["labels"]["input_mode"], "traps": it["labels"]["traps"]}
             t0 = time.perf_counter()
             try:
-                r = orch.process_session(it["session_id"], template)
+                # QUAL unless --template says otherwise: passing None would fall back to
+                # templates.DEFAULT (SOAP) for in-room sessions, while the report says QUAL.
+                r = orch.process_session(it["session_id"], template or "QUAL")
             except Exception as e:  # keep going; the sheet shows the failure
                 row["error"] = f"{type(e).__name__}: {e}"
                 out.append(row)

@@ -114,6 +114,7 @@ class GoldenEvalTest(unittest.TestCase):
         for r in report["sessions"]:
             self.assertNotIn("error", r, r)
             self.assertTrue(r["checks"]["sentences"])
+            self.assertEqual(r["template_id"], "QUAL", r["session_id"])  # the report's default, for every session
         recap = [r for r in report["sessions"] if r["input_mode"] == "recap"]
         self.assertGreaterEqual(len(recap), 2)
         self.assertTrue(all(r["checks"]["recap_voice"] is not None for r in recap))

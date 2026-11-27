@@ -27,7 +27,7 @@ What this run is and is not: one 23-second clip of three utterances shows that t
 
 ## Alignment hybrid on the 46-minute L50 recording (to run on the B70)
 
-Ticket 12 adds `HAVEN_ASR_REFINE=1` (Whisper's segments and times, Qwen3-ASR's text; see `haven/asr_refine.py`). It was tested only against fake servers; **it has not been run on the B70 or on `~/L50-tts.ogg`**. To compare with the evaluation (`docs/specs/asr-qwen3-evaluation.md` §3.1), run on the B70 with Whisper on :8001 and Qwen3-ASR on :8002 (`scripts/b70-vllm.sh`). `scripts/asr_eval.py` goes through `transcript.transcribe_audio` and computes the character error rate against the script. The reference is all 339 segments of `C002-L50`:
+Ticket 12 adds `HAVEN_ASR_REFINE=1` (Whisper's segments and times, Qwen3-ASR's text; see `haven/asr_refine.py`). Run on the B70 on 2026-11-27 (results below). To compare with the evaluation (`docs/specs/asr-qwen3-evaluation.md` §3.1), run on the B70 with Whisper on :8001 and Qwen3-ASR on :8002 (`scripts/b70-vllm.sh`). `scripts/asr_eval.py` goes through `transcript.transcribe_audio` and computes the character error rate against the script. The reference is all 339 segments of `C002-L50`:
 
 ```bash
 # Whisper only (baseline)
@@ -41,3 +41,16 @@ HAVEN_ASR_REFINE=1 HAVEN_ASR_REFINE_URL=http://127.0.0.1:8002 HAVEN_ASR_REFINE_M
 ```
 
 Compare `cer` in the two `.md`/`.json` files with the evaluation's figures (Whisper 7.4%, Qwen3-ASR alone 1.1% on L50). The run prints, on stderr, how many segments took Qwen3-ASR's words and how many seam full stops were dropped. Check by eye that no segment is empty or starts with punctuation and that segment times equal the Whisper-only run. `HAVEN_LLM=demo` makes the speaker step rule-based; its speaker count in the report is not meaningful here.
+
+### Result on the B70 (2026-11-27, commit f32b9f6, dual-card deployment)
+
+| Run | CER | Transcription time | Report |
+|---|---|---|---|
+| Whisper only | 7.5% | 9.0 s | `b70-L50-whisper-only.md` |
+| Alignment hybrid | **4.8%** | 17.1 s | `b70-L50-hybrid.md` |
+| (evaluation) Qwen3-ASR alone, no timestamps | 1.1% | 7.5 s | `b70-asr-bench-l50-snap.md` |
+
+- Segment ids and start/end times are identical in both runs (553 segments); no segment is empty or starts with punctuation. 371 of 553 segment texts changed.
+- The hybrid does not reach Qwen3-ASR's own 1.1%. About 2 of the 2.7 remaining points (216 of ~530 character errors) come from **one Whisper hallucination at the end of the recording** (「請不吝點贊 訂閱 轉發 打賞支援明鏡與點點欄目」), a segment Qwen3-ASR has no words for, so the hybrid keeps Whisper's text by design. Most of the rest is in a few places where Whisper dropped whole sentences (its segments cannot hold text it did not hear).
+- Seen once: a full stop inside a word (「跟他對。抗」), and Qwen3-ASR's own semantic error from the evaluation (「覺察到這一點」→「覺得查到九一點」).
+- Conclusion: consistent with the evaluation (hybrid between Whisper and Qwen3-ASR alone, times unchanged), with the hallucinated segment as the main known gap.
