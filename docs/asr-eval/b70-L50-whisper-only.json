@@ -1,0 +1,4443 @@
+{
+  "label": "b70-L50-whisper-only",
+  "date": "2026-11-27T17:42:36+00:00",
+  "asr": "openai:whisper",
+  "asr_prompt": "",
+  "to_traditional": true,
+  "speaker_model": null,
+  "reference": "C002-L50 segments 1-339",
+  "audio_seconds": 2755.7,
+  "asr_seconds": 9.0,
+  "speaker_seconds": 0.0,
+  "reference_characters": 10519,
+  "cer": 0.0755,
+  "segments": 553,
+  "speakers_labelled": 0,
+  "speakers_right": 0,
+  "rows": [
+    {
+      "start": 0.0,
+      "end": 1.5,
+      "text": "嗨，最近過得怎麼樣？",
+      "speaker_guess": "unknown",
+      "script_segment": 1,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 2.1,
+      "end": 6.1,
+      "text": "聽說你們這兩週剛好是期中考，應該很辛苦吧？",
+      "speaker_guess": "unknown",
+      "script_segment": 1,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 7.2,
+      "end": 11.4,
+      "text": "對啊，真的超累的，我幾乎每天都在熬夜準備，",
+      "speaker_guess": "unknown",
+      "script_segment": 2,
+      "script_speaker": "client"
+    },
+    {
+      "start": 11.8,
+      "end": 15.3,
+      "text": "結果還是一提提看不下去，壓力很大。",
+      "speaker_guess": "unknown",
+      "script_segment": 2,
+      "script_speaker": "client"
+    },
+    {
+      "start": 16.0,
+      "end": 17.5,
+      "text": "聽起來真的很辛苦。",
+      "speaker_guess": "unknown",
+      "script_segment": 3,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 18.2,
+      "end": 21.1,
+      "text": "那考試結束後，心情有什麼變化嗎？",
+      "speaker_guess": "unknown",
+      "script_segment": 3,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 22.2,
+      "end": 26.9,
+      "text": "考試結束後反而更空虛了，好像一下子沒事做了，",
+      "speaker_guess": "unknown",
+      "script_segment": 4,
+      "script_speaker": "client"
+    },
+    {
+      "start": 26.9,
+      "end": 29.8,
+      "text": "又開始覺得自己什麼都沒做好。",
+      "speaker_guess": "unknown",
+      "script_segment": 4,
+      "script_speaker": "client"
+    },
+    {
+      "start": 30.0,
+      "end": 32.2,
+      "text": "那種感覺很熟悉啊？",
+      "speaker_guess": "unknown",
+      "script_segment": 5,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 33.3,
+      "end": 42.0,
+      "text": "嗯，每次考試完都這樣，我總覺得自己應該做得更好，但實際上又做不到，就開始自我懷疑",
+      "speaker_guess": "unknown",
+      "script_segment": 6,
+      "script_speaker": "client"
+    },
+    {
+      "start": 42.0,
+      "end": 46.0,
+      "text": "你提到應該做得更好，這是不是一種壓力來源？",
+      "speaker_guess": "unknown",
+      "script_segment": 7,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 47.1,
+      "end": 56.1,
+      "text": "對，我總是覺得自己不夠努力，明明可以做得更好，卻總是拖延，等到最後一刻才開始動手",
+      "speaker_guess": "unknown",
+      "script_segment": 8,
+      "script_speaker": "client"
+    },
+    {
+      "start": 56.1,
+      "end": 59.2,
+      "text": "拖延對你來說，是不是一種逃避？",
+      "speaker_guess": "unknown",
+      "script_segment": 9,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 60.0,
+      "end": 68.4,
+      "text": "我想是吧，我常常覺得壓力太大，就寧願什麼都不做，反正最後一刻再來處理。",
+      "speaker_guess": "unknown",
+      "script_segment": 10,
+      "script_speaker": "client"
+    },
+    {
+      "start": 69.1,
+      "end": 70.3,
+      "text": "那種感覺像什麼？",
+      "speaker_guess": "unknown",
+      "script_segment": 11,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 71.4,
+      "end": 79.0,
+      "text": "像是被困住了一樣，明明知道該做，但就是動不了，有時候連開啟筆電都覺得好難。",
+      "speaker_guess": "unknown",
+      "script_segment": 12,
+      "script_speaker": "client"
+    },
+    {
+      "start": 79.7,
+      "end": 82.4,
+      "text": "那種動不了的感覺，會持續多久？",
+      "speaker_guess": "unknown",
+      "script_segment": 13,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 83.2,
+      "end": 88.9,
+      "text": "有時候是一天，有時候是一週，尤其當我覺得事情太多。",
+      "speaker_guess": "unknown",
+      "script_segment": 14,
+      "script_speaker": "client"
+    },
+    {
+      "start": 90.0,
+      "end": 93.2,
+      "text": "壓力太大的時候，就特別容易這樣。",
+      "speaker_guess": "unknown",
+      "script_segment": 14,
+      "script_speaker": "client"
+    },
+    {
+      "start": 93.9,
+      "end": 97.4,
+      "text": "那考試期間，你有事處調整這種情況嗎？",
+      "speaker_guess": "unknown",
+      "script_segment": 15,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 98.5,
+      "end": 108.0,
+      "text": "有事過，但總是失敗，我會設定計劃，但常常做不到，然後就開始責怪自己，覺得自己不夠自律。",
+      "speaker_guess": "unknown",
+      "script_segment": 16,
+      "script_speaker": "client"
+    },
+    {
+      "start": 108.7,
+      "end": 110.8,
+      "text": "責怪自己會讓情況更糟嗎？",
+      "speaker_guess": "unknown",
+      "script_segment": 17,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 111.8,
+      "end": 117.9,
+      "text": "我想是的，我越責怪自己，就越不想動，好像在跟自己對抗一樣。",
+      "speaker_guess": "unknown",
+      "script_segment": 18,
+      "script_speaker": "client"
+    },
+    {
+      "start": 118.2,
+      "end": 119.1,
+      "text": "那你先？",
+      "speaker_guess": "unknown",
+      "script_segment": 19,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 120.0,
+      "end": 121.5,
+      "text": "現在對自己有什麼期待？",
+      "speaker_guess": "unknown",
+      "script_segment": 19,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 122.6,
+      "end": 126.3,
+      "text": "我希望自己能更自律，能更早開始準備，",
+      "speaker_guess": "unknown",
+      "script_segment": 20,
+      "script_speaker": "client"
+    },
+    {
+      "start": 126.7,
+      "end": 131.5,
+      "text": "而不是等到最後一課，我也希望考試後不會那麼空虛。",
+      "speaker_guess": "unknown",
+      "script_segment": 20,
+      "script_speaker": "client"
+    },
+    {
+      "start": 132.2,
+      "end": 134.3,
+      "text": "聽起來你很清楚自己的問題。",
+      "speaker_guess": "unknown",
+      "script_segment": 21,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 135.6,
+      "end": 138.6,
+      "text": "是啊，但我就是不知道該怎麼改變，",
+      "speaker_guess": "unknown",
+      "script_segment": 22,
+      "script_speaker": "client"
+    },
+    {
+      "start": 138.9,
+      "end": 143.1,
+      "text": "每次想改變，都好像被什麼東西拉回去一樣。",
+      "speaker_guess": "unknown",
+      "script_segment": 22,
+      "script_speaker": "client"
+    },
+    {
+      "start": 143.7,
+      "end": 146.2,
+      "text": "那種被拉回去的感覺，像什麼？",
+      "speaker_guess": "unknown",
+      "script_segment": 23,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 147.0,
+      "end": 149.4,
+      "text": "像是有一種聲音在說，",
+      "speaker_guess": "unknown",
+      "script_segment": 24,
+      "script_speaker": "client"
+    },
+    {
+      "start": 150.0,
+      "end": 169.4,
+      "text": "反正你也不會做得好，不如就別做了，那種聲音很熟悉，每次壓力大的時候就會出現。我覺得那聲音好像一直以來都跟著我，從高中開始就這樣，每次想努力的時候，它就會出現，讓我覺得自己做不到。",
+      "speaker_guess": "unknown",
+      "script_segment": 25,
+      "script_speaker": "client"
+    },
+    {
+      "start": 170.1,
+      "end": 172.7,
+      "text": "那聲音出現時，你會怎麼反應？",
+      "speaker_guess": "unknown",
+      "script_segment": 26,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 180.0,
+      "end": 185.0,
+      "text": "但最後還是會覺得對他說的對，反正我就是不行。",
+      "speaker_guess": "unknown",
+      "script_segment": 27,
+      "script_speaker": "client"
+    },
+    {
+      "start": 185.0,
+      "end": 188.0,
+      "text": "你說對他說的對，那是什麼感覺？",
+      "speaker_guess": "unknown",
+      "script_segment": 28,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 188.0,
+      "end": 200.0,
+      "text": "那種感覺很奇怪，像是有一種無力感，好像我真的被他說服了，即使我知道他不對，但就是控制不了自己不去相信他。",
+      "speaker_guess": "unknown",
+      "script_segment": 29,
+      "script_speaker": "client"
+    },
+    {
+      "start": 200.0,
+      "end": 204.0,
+      "text": "那種聲音出現時，你會有什麼身體反應？",
+      "speaker_guess": "unknown",
+      "script_segment": 30,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 204.0,
+      "end": 209.4,
+      "text": "我會覺得胸口很壓，呼吸變淺，有時候會覺得很難，",
+      "speaker_guess": "unknown",
+      "script_segment": 31,
+      "script_speaker": "client"
+    },
+    {
+      "start": 210.0,
+      "end": 215.0,
+      "text": "然後還會胃痛，那種感覺很不舒服，但又好像躲不開。",
+      "speaker_guess": "unknown",
+      "script_segment": 31,
+      "script_speaker": "client"
+    },
+    {
+      "start": 215.7,
+      "end": 219.8,
+      "text": "聽起來這聲音不準是心理上的，也會影響你的身體。",
+      "speaker_guess": "unknown",
+      "script_segment": 32,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 220.9,
+      "end": 227.1,
+      "text": "對，我常常覺得自己不是不想改變，而是身體好像被他控制住了。",
+      "speaker_guess": "unknown",
+      "script_segment": 33,
+      "script_speaker": "client"
+    },
+    {
+      "start": 227.7,
+      "end": 231.3,
+      "text": "你說身體好像被他控制住了，可以舉個例子嗎？",
+      "speaker_guess": "unknown",
+      "script_segment": 34,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 232.4,
+      "end": 239.7,
+      "text": "比如說我決定早點睡覺，結果躺在床上就是睡不著，腦子裡一直在想明天的",
+      "speaker_guess": "unknown",
+      "script_segment": 35,
+      "script_speaker": "client"
+    },
+    {
+      "start": 240.0,
+      "end": 243.1,
+      "text": "事情，然後不知不覺就又熬夜了。",
+      "speaker_guess": "unknown",
+      "script_segment": 35,
+      "script_speaker": "client"
+    },
+    {
+      "start": 243.7,
+      "end": 246.0,
+      "text": "那種情況下，你會怎麼想？",
+      "speaker_guess": "unknown",
+      "script_segment": 36,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 247.1,
+      "end": 254.7,
+      "text": "我會想說，反正我已經睡不好了，不如就繼續熬夜吧，反正明天也一定會起步來。",
+      "speaker_guess": "unknown",
+      "script_segment": 37,
+      "script_speaker": "client"
+    },
+    {
+      "start": 255.4,
+      "end": 259.7,
+      "text": "你說反正明天也一定會起步來，那是怎麼形成的想法？",
+      "speaker_guess": "unknown",
+      "script_segment": 38,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 260.6,
+      "end": 269.5,
+      "text": "因為我過去真的常常起步來，每次設定鬧鐘都沒用，我覺得自己就是個起步來的人，不管怎麼努力，",
+      "speaker_guess": "unknown",
+      "script_segment": 39,
+      "script_speaker": "client"
+    },
+    {
+      "start": 270.0,
+      "end": 274.9,
+      "text": "那種想法出現時，你會有什麼證據支援他？",
+      "speaker_guess": "unknown",
+      "script_segment": 40,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 276.0,
+      "end": 285.8,
+      "text": "我有證據啊，比如說我這學期已經遲到三次了，而且每次都是因為起不來，我試過很多方法，但都沒用。",
+      "speaker_guess": "unknown",
+      "script_segment": 41,
+      "script_speaker": "client"
+    },
+    {
+      "start": 286.5,
+      "end": 288.2,
+      "text": "那你有沒有證據反駁他？",
+      "speaker_guess": "unknown",
+      "script_segment": 42,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 289.3,
+      "end": 299.2,
+      "text": "嗯，其實有一次我提前睡覺，第二天居然準時起床了，那一次我覺得很驚訝，因為我真的以為自己做不到。",
+      "speaker_guess": "unknown",
+      "script_segment": 43,
+      "script_speaker": "client"
+    },
+    {
+      "start": 300.0,
+      "end": 303.0,
+      "text": "那次的經驗對你來說有什麼意義？",
+      "speaker_guess": "unknown",
+      "script_segment": 44,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 304.1,
+      "end": 310.7,
+      "text": "那次經驗讓我覺得，也許我真的不是做不到，而是我一直在告訴自己做不到。",
+      "speaker_guess": "unknown",
+      "script_segment": 45,
+      "script_speaker": "client"
+    },
+    {
+      "start": 311.4,
+      "end": 313.9,
+      "text": "聽起來你開始看到一些可能性了。",
+      "speaker_guess": "unknown",
+      "script_segment": 46,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 315.0,
+      "end": 321.7,
+      "text": "對，我開始覺得，也許我可以試著改變那個聲音，而不是一直聽他的話。",
+      "speaker_guess": "unknown",
+      "script_segment": 47,
+      "script_speaker": "client"
+    },
+    {
+      "start": 322.4,
+      "end": 326.1,
+      "text": "你說試著改變那個聲音，可以說說看怎麼做嗎？",
+      "speaker_guess": "unknown",
+      "script_segment": 48,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 330.0,
+      "end": 332.1,
+      "text": "每次那個聲音出現時",
+      "speaker_guess": "unknown",
+      "script_segment": 49,
+      "script_speaker": "client"
+    },
+    {
+      "start": 332.1,
+      "end": 333.6,
+      "text": "我都寫下來",
+      "speaker_guess": "unknown",
+      "script_segment": 49,
+      "script_speaker": "client"
+    },
+    {
+      "start": 333.6,
+      "end": 334.9,
+      "text": "然後問自己",
+      "speaker_guess": "unknown",
+      "script_segment": 49,
+      "script_speaker": "client"
+    },
+    {
+      "start": 334.9,
+      "end": 336.1,
+      "text": "這是真的嗎",
+      "speaker_guess": "unknown",
+      "script_segment": 49,
+      "script_speaker": "client"
+    },
+    {
+      "start": 336.1,
+      "end": 337.2,
+      "text": "有證據嗎",
+      "speaker_guess": "unknown",
+      "script_segment": 49,
+      "script_speaker": "client"
+    },
+    {
+      "start": 337.2,
+      "end": 339.8,
+      "text": "這樣也許可以慢慢改變它",
+      "speaker_guess": "unknown",
+      "script_segment": 49,
+      "script_speaker": "client"
+    },
+    {
+      "start": 339.8,
+      "end": 343.8,
+      "text": "其實我這幾天都有試著去做這個練習",
+      "speaker_guess": "unknown",
+      "script_segment": 50,
+      "script_speaker": "client"
+    },
+    {
+      "start": 343.8,
+      "end": 347.2,
+      "text": "雖然有時候還是會覺得壓力很大",
+      "speaker_guess": "unknown",
+      "script_segment": 50,
+      "script_speaker": "client"
+    },
+    {
+      "start": 347.2,
+      "end": 350.6,
+      "text": "但至少我開始學會覺察那個聲音",
+      "speaker_guess": "unknown",
+      "script_segment": 50,
+      "script_speaker": "client"
+    },
+    {
+      "start": 350.6,
+      "end": 352.9,
+      "text": "而不是直接被它牽著走",
+      "speaker_guess": "unknown",
+      "script_segment": 50,
+      "script_speaker": "client"
+    },
+    {
+      "start": 352.9,
+      "end": 353.9,
+      "text": "很好",
+      "speaker_guess": "unknown",
+      "script_segment": 51,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 353.9,
+      "end": 355.8,
+      "text": "覺察是改變的第一步",
+      "speaker_guess": "unknown",
+      "script_segment": 51,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 355.8,
+      "end": 358.0,
+      "text": "不過我發現",
+      "speaker_guess": "unknown",
+      "script_segment": 52,
+      "script_speaker": "client"
+    },
+    {
+      "start": 358.0,
+      "end": 359.4,
+      "text": "當我在課堂",
+      "speaker_guess": "unknown",
+      "script_segment": 52,
+      "script_speaker": "client"
+    },
+    {
+      "start": 360.0,
+      "end": 361.5,
+      "text": "上準備發問時",
+      "speaker_guess": "unknown",
+      "script_segment": 52,
+      "script_speaker": "client"
+    },
+    {
+      "start": 361.5,
+      "end": 363.9,
+      "text": "那個聲音會特別強烈",
+      "speaker_guess": "unknown",
+      "script_segment": 52,
+      "script_speaker": "client"
+    },
+    {
+      "start": 363.9,
+      "end": 366.5,
+      "text": "像是你說了會不會很尷尬",
+      "speaker_guess": "unknown",
+      "script_segment": 52,
+      "script_speaker": "client"
+    },
+    {
+      "start": 366.5,
+      "end": 368.4,
+      "text": "別人會不會笑你",
+      "speaker_guess": "unknown",
+      "script_segment": 52,
+      "script_speaker": "client"
+    },
+    {
+      "start": 368.4,
+      "end": 371.0,
+      "text": "這些想法會讓我停下來",
+      "speaker_guess": "unknown",
+      "script_segment": 52,
+      "script_speaker": "client"
+    },
+    {
+      "start": 371.0,
+      "end": 372.2,
+      "text": "不敢舉手",
+      "speaker_guess": "unknown",
+      "script_segment": 52,
+      "script_speaker": "client"
+    },
+    {
+      "start": 372.2,
+      "end": 374.2,
+      "text": "這些想法很常見",
+      "speaker_guess": "unknown",
+      "script_segment": 53,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 374.2,
+      "end": 377.0,
+      "text": "你有沒有事注用證據來挑戰他們",
+      "speaker_guess": "unknown",
+      "script_segment": 53,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 377.0,
+      "end": 378.3,
+      "text": "有",
+      "speaker_guess": "unknown",
+      "script_segment": 1,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 378.3,
+      "end": 379.6,
+      "text": "我寫下來了",
+      "speaker_guess": "unknown",
+      "script_segment": 54,
+      "script_speaker": "client"
+    },
+    {
+      "start": 379.6,
+      "end": 381.0,
+      "text": "比如我問自己",
+      "speaker_guess": "unknown",
+      "script_segment": 54,
+      "script_speaker": "client"
+    },
+    {
+      "start": 381.0,
+      "end": 384.3,
+      "text": "我真的有證據證明別人會笑我嗎",
+      "speaker_guess": "unknown",
+      "script_segment": 54,
+      "script_speaker": "client"
+    },
+    {
+      "start": 384.3,
+      "end": 385.4,
+      "text": "結果發現",
+      "speaker_guess": "unknown",
+      "script_segment": 54,
+      "script_speaker": "client"
+    },
+    {
+      "start": 385.4,
+      "end": 387.9,
+      "text": "我從來沒有實際被笑過",
+      "speaker_guess": "unknown",
+      "script_segment": 54,
+      "script_speaker": "client"
+    },
+    {
+      "start": 387.9,
+      "end": 389.0,
+      "text": "只是自己",
+      "speaker_guess": "unknown",
+      "script_segment": 54,
+      "script_speaker": "client"
+    },
+    {
+      "start": 390.0,
+      "end": 391.1,
+      "text": "假設會這樣",
+      "speaker_guess": "unknown",
+      "script_segment": 54,
+      "script_speaker": "client"
+    },
+    {
+      "start": 391.1,
+      "end": 393.3,
+      "text": "這是一個很好的練習",
+      "speaker_guess": "unknown",
+      "script_segment": 55,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 393.3,
+      "end": 395.5,
+      "text": "而且我發現",
+      "speaker_guess": "unknown",
+      "script_segment": 56,
+      "script_speaker": "client"
+    },
+    {
+      "start": 395.5,
+      "end": 399.1,
+      "text": "當我問自己最壞的情況會是什麼時",
+      "speaker_guess": "unknown",
+      "script_segment": 56,
+      "script_speaker": "client"
+    },
+    {
+      "start": 399.1,
+      "end": 401.4,
+      "text": "答案通常是我會尷尬",
+      "speaker_guess": "unknown",
+      "script_segment": 56,
+      "script_speaker": "client"
+    },
+    {
+      "start": 401.4,
+      "end": 404.4,
+      "text": "但其實那也不是什麼大不了的事",
+      "speaker_guess": "unknown",
+      "script_segment": 56,
+      "script_speaker": "client"
+    },
+    {
+      "start": 404.4,
+      "end": 405.6,
+      "text": "我還活著",
+      "speaker_guess": "unknown",
+      "script_segment": 56,
+      "script_speaker": "client"
+    },
+    {
+      "start": 405.6,
+      "end": 407.8,
+      "text": "而且課還是繼續上了",
+      "speaker_guess": "unknown",
+      "script_segment": 56,
+      "script_speaker": "client"
+    },
+    {
+      "start": 407.8,
+      "end": 410.7,
+      "text": "你開始看到事情的真實性了",
+      "speaker_guess": "unknown",
+      "script_segment": 57,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 410.7,
+      "end": 412.0,
+      "text": "對",
+      "speaker_guess": "unknown",
+      "script_segment": 1,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 412.0,
+      "end": 413.3,
+      "text": "我開始覺得",
+      "speaker_guess": "unknown",
+      "script_segment": 47,
+      "script_speaker": "client"
+    },
+    {
+      "start": 413.3,
+      "end": 416.1,
+      "text": "那個聲音其實是在保護我",
+      "speaker_guess": "unknown",
+      "script_segment": 58,
+      "script_speaker": "client"
+    },
+    {
+      "start": 416.1,
+      "end": 418.1,
+      "text": "但它的方式太過頭了",
+      "speaker_guess": "unknown",
+      "script_segment": 58,
+      "script_speaker": "client"
+    },
+    {
+      "start": 418.1,
+      "end": 419.4,
+      "text": "我需要學會",
+      "speaker_guess": "unknown",
+      "script_segment": 58,
+      "script_speaker": "client"
+    },
+    {
+      "start": 420.0,
+      "end": 422.6,
+      "text": "跟他溝通，而不是被他嚇跑。",
+      "speaker_guess": "unknown",
+      "script_segment": 58,
+      "script_speaker": "client"
+    },
+    {
+      "start": 423.3,
+      "end": 427.2,
+      "text": "你說的對，那個聲音是想保護你，這樣發誓不對。",
+      "speaker_guess": "unknown",
+      "script_segment": 59,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 428.4,
+      "end": 433.8,
+      "text": "所以這幾天我有試著在心裡跟他說，我知道你是在保護我，",
+      "speaker_guess": "unknown",
+      "script_segment": 60,
+      "script_speaker": "client"
+    },
+    {
+      "start": 434.1,
+      "end": 437.7,
+      "text": "但我不想一直躲著，我想學會表達自己。",
+      "speaker_guess": "unknown",
+      "script_segment": 60,
+      "script_speaker": "client"
+    },
+    {
+      "start": 438.4,
+      "end": 439.8,
+      "text": "這是一個很棒的對話。",
+      "speaker_guess": "unknown",
+      "script_segment": 61,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 440.7,
+      "end": 446.8,
+      "text": "而且我發現，當我這樣做的時候，那個聲音反而會慢慢變小，",
+      "speaker_guess": "unknown",
+      "script_segment": 62,
+      "script_speaker": "client"
+    },
+    {
+      "start": 447.2,
+      "end": 448.8,
+      "text": "不像以前那樣強烈。",
+      "speaker_guess": "unknown",
+      "script_segment": 62,
+      "script_speaker": "client"
+    },
+    {
+      "start": 450.0,
+      "end": 452.7,
+      "text": "這代表你在建立新的對話方式。",
+      "speaker_guess": "unknown",
+      "script_segment": 63,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 453.8,
+      "end": 460.4,
+      "text": "對，我開始覺得，我其實可以選擇要不要聽那個聲音，而不是被他控制。",
+      "speaker_guess": "unknown",
+      "script_segment": 64,
+      "script_speaker": "client"
+    },
+    {
+      "start": 461.0,
+      "end": 462.5,
+      "text": "你正在建立自主權。",
+      "speaker_guess": "unknown",
+      "script_segment": 65,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 463.7,
+      "end": 475.8,
+      "text": "而且我發現，當我真的舉手發問時，雖然還是會緊張，但至少我完成了，而且老師還回應了我，這讓我覺得自己其實可以做到。",
+      "speaker_guess": "unknown",
+      "script_segment": 66,
+      "script_speaker": "client"
+    },
+    {
+      "start": 476.4,
+      "end": 477.9,
+      "text": "這是一個重要的經驗。",
+      "speaker_guess": "unknown",
+      "script_segment": 67,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 478.7,
+      "end": 479.2,
+      "text": "我和老師的經驗。",
+      "speaker_guess": "unknown",
+      "script_segment": 44,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 480.0,
+      "end": 491.0,
+      "text": "我還記錄了發問前後的焦慮分數，發問前是7分，發問後反而降到4分，這讓我覺得，其實行動真的能減輕焦慮。",
+      "speaker_guess": "unknown",
+      "script_segment": 68,
+      "script_speaker": "client"
+    },
+    {
+      "start": 491.7,
+      "end": 494.0,
+      "text": "行動確實能擾破焦慮的迴圈。",
+      "speaker_guess": "unknown",
+      "script_segment": 69,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 495.2,
+      "end": 506.7,
+      "text": "所以我想，接下來我可以繼續練習，不只是在課堂上發問，也可以在小組討論時多說幾句話，慢慢擴充套件我的舒適圈。",
+      "speaker_guess": "unknown",
+      "script_segment": 70,
+      "script_speaker": "client"
+    },
+    {
+      "start": 507.1,
+      "end": 508.8,
+      "text": "這是一個很好的目標。",
+      "speaker_guess": "unknown",
+      "script_segment": 71,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 510.0,
+      "end": 522.2,
+      "text": "而且我覺得，如果我能改變那個聲音，也許我也能改變拖延的習慣，因為拖延好像也是因為害怕失敗，所以一直逃避。",
+      "speaker_guess": "unknown",
+      "script_segment": 72,
+      "script_speaker": "client"
+    },
+    {
+      "start": 522.8,
+      "end": 525.3,
+      "text": "你開始看到拖延和焦慮的連結了。",
+      "speaker_guess": "unknown",
+      "script_segment": 73,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 540.0,
+      "end": 542.6,
+      "text": "當時你有沒有察覺到這個想法？",
+      "speaker_guess": "unknown",
+      "script_segment": 75,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 543.7,
+      "end": 559.3,
+      "text": "有啊，而且那個聲音特別清楚，好像有一個人一直在我腦子裡說，你這樣問，別人會笑你，我甚至還想，萬一老師也覺得我問得太簡單，會不會影響他對我的印象？",
+      "speaker_guess": "unknown",
+      "script_segment": 76,
+      "script_speaker": "client"
+    },
+    {
+      "start": 560.0,
+      "end": 562.0,
+      "text": "那種聲音聽起來很熟悉",
+      "speaker_guess": "unknown",
+      "script_segment": 77,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 562.7,
+      "end": 569.8,
+      "text": "對啊，就是那種老聲音，我試著告訴自己，這只是我的想法，不是事實",
+      "speaker_guess": "unknown",
+      "script_segment": 78,
+      "script_speaker": "client"
+    },
+    {
+      "start": 570.0,
+      "end": 572.5,
+      "text": "可是當下還是很難克服",
+      "speaker_guess": "unknown",
+      "script_segment": 78,
+      "script_speaker": "client"
+    },
+    {
+      "start": 572.5,
+      "end": 574.6,
+      "text": "你有沒有事注問自己",
+      "speaker_guess": "unknown",
+      "script_segment": 79,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 574.6,
+      "end": 576.6,
+      "text": "這個想法有證據啊",
+      "speaker_guess": "unknown",
+      "script_segment": 79,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 576.6,
+      "end": 578.5,
+      "text": "我有想過",
+      "speaker_guess": "unknown",
+      "script_segment": 80,
+      "script_speaker": "client"
+    },
+    {
+      "start": 578.5,
+      "end": 580.3,
+      "text": "但當時太緊張了",
+      "speaker_guess": "unknown",
+      "script_segment": 80,
+      "script_speaker": "client"
+    },
+    {
+      "start": 580.3,
+      "end": 581.9,
+      "text": "腦子一片空白",
+      "speaker_guess": "unknown",
+      "script_segment": 80,
+      "script_speaker": "client"
+    },
+    {
+      "start": 581.9,
+      "end": 583.5,
+      "text": "我記得我當時想",
+      "speaker_guess": "unknown",
+      "script_segment": 80,
+      "script_speaker": "client"
+    },
+    {
+      "start": 583.5,
+      "end": 584.8,
+      "text": "如果我問了",
+      "speaker_guess": "unknown",
+      "script_segment": 74,
+      "script_speaker": "client"
+    },
+    {
+      "start": 584.8,
+      "end": 587.6,
+      "text": "別人會不會覺得我很不成熟",
+      "speaker_guess": "unknown",
+      "script_segment": 80,
+      "script_speaker": "client"
+    },
+    {
+      "start": 587.6,
+      "end": 589.2,
+      "text": "可是我真的不知道",
+      "speaker_guess": "unknown",
+      "script_segment": 80,
+      "script_speaker": "client"
+    },
+    {
+      "start": 589.2,
+      "end": 591.6,
+      "text": "因為我從來沒有問過",
+      "speaker_guess": "unknown",
+      "script_segment": 80,
+      "script_speaker": "client"
+    },
+    {
+      "start": 591.6,
+      "end": 593.7,
+      "text": "這正是我們練習的部分",
+      "speaker_guess": "unknown",
+      "script_segment": 81,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 593.7,
+      "end": 595.1,
+      "text": "對",
+      "speaker_guess": "unknown",
+      "script_segment": 1,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 595.1,
+      "end": 596.9,
+      "text": "我覺得如果我問了",
+      "speaker_guess": "unknown",
+      "script_segment": 82,
+      "script_speaker": "client"
+    },
+    {
+      "start": 596.9,
+      "end": 599.8,
+      "text": "也許會發現其實沒什麼大不了",
+      "speaker_guess": "unknown",
+      "script_segment": 82,
+      "script_speaker": "client"
+    },
+    {
+      "start": 600.0,
+      "end": 601.5,
+      "text": "可是我就是怕",
+      "speaker_guess": "unknown",
+      "script_segment": 82,
+      "script_speaker": "client"
+    },
+    {
+      "start": 601.5,
+      "end": 603.2,
+      "text": "他自己表現不好",
+      "speaker_guess": "unknown",
+      "script_segment": 82,
+      "script_speaker": "client"
+    },
+    {
+      "start": 603.2,
+      "end": 605.7,
+      "text": "怕別人對我的看法改變",
+      "speaker_guess": "unknown",
+      "script_segment": 82,
+      "script_speaker": "client"
+    },
+    {
+      "start": 605.7,
+      "end": 607.5,
+      "text": "你說得很清楚",
+      "speaker_guess": "unknown",
+      "script_segment": 83,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 607.5,
+      "end": 609.8,
+      "text": "而且我發現",
+      "speaker_guess": "unknown",
+      "script_segment": 56,
+      "script_speaker": "client"
+    },
+    {
+      "start": 609.8,
+      "end": 612.0,
+      "text": "這種害怕失敗的感覺",
+      "speaker_guess": "unknown",
+      "script_segment": 84,
+      "script_speaker": "client"
+    },
+    {
+      "start": 612.0,
+      "end": 613.8,
+      "text": "不只是在課堂上",
+      "speaker_guess": "unknown",
+      "script_segment": 70,
+      "script_speaker": "client"
+    },
+    {
+      "start": 613.8,
+      "end": 616.4,
+      "text": "還會影響我做很多事情",
+      "speaker_guess": "unknown",
+      "script_segment": 84,
+      "script_speaker": "client"
+    },
+    {
+      "start": 616.4,
+      "end": 617.4,
+      "text": "比如說",
+      "speaker_guess": "unknown",
+      "script_segment": 35,
+      "script_speaker": "client"
+    },
+    {
+      "start": 617.4,
+      "end": 619.7,
+      "text": "我常常拖到最後一刻",
+      "speaker_guess": "unknown",
+      "script_segment": 84,
+      "script_speaker": "client"
+    },
+    {
+      "start": 619.7,
+      "end": 621.2,
+      "text": "才開始寫報告",
+      "speaker_guess": "unknown",
+      "script_segment": 84,
+      "script_speaker": "client"
+    },
+    {
+      "start": 621.2,
+      "end": 623.0,
+      "text": "因為我怕寫不好",
+      "speaker_guess": "unknown",
+      "script_segment": 84,
+      "script_speaker": "client"
+    },
+    {
+      "start": 623.0,
+      "end": 626.0,
+      "text": "這是不是和你剛才說的聲音有關",
+      "speaker_guess": "unknown",
+      "script_segment": 85,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 626.0,
+      "end": 627.3,
+      "text": "對",
+      "speaker_guess": "unknown",
+      "script_segment": 1,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 627.3,
+      "end": 629.8,
+      "text": "我覺得那種聲音一直在告",
+      "speaker_guess": "unknown",
+      "script_segment": 86,
+      "script_speaker": "client"
+    },
+    {
+      "start": 630.0,
+      "end": 635.0,
+      "text": "告訴我，你會搞砸的，所以我寧願不做，也不要做不好。",
+      "speaker_guess": "unknown",
+      "script_segment": 86,
+      "script_speaker": "client"
+    },
+    {
+      "start": 635.7,
+      "end": 638.4,
+      "text": "你有沒有想過，不做其實也是重失敗？",
+      "speaker_guess": "unknown",
+      "script_segment": 87,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 639.5,
+      "end": 648.4,
+      "text": "嗯，我從來沒有這樣想過，我總是覺得拖延是為了保護自己，但其實可能只是讓事情變得更糟。",
+      "speaker_guess": "unknown",
+      "script_segment": 88,
+      "script_speaker": "client"
+    },
+    {
+      "start": 649.1,
+      "end": 651.4,
+      "text": "你開始看到拖延背後的重心了？",
+      "speaker_guess": "unknown",
+      "script_segment": 89,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 652.2,
+      "end": 659.4,
+      "text": "對，我覺得如果我能改變那個聲音，也許我就不用再拖延了，可是問題是，",
+      "speaker_guess": "unknown",
+      "script_segment": 90,
+      "script_speaker": "client"
+    },
+    {
+      "start": 660.0,
+      "end": 664.2,
+      "text": "那個聲音太強了，我常常聽不到自己的聲音。",
+      "speaker_guess": "unknown",
+      "script_segment": 90,
+      "script_speaker": "client"
+    },
+    {
+      "start": 664.8,
+      "end": 667.4,
+      "text": "你有沒有試過用另一個聲音來對話？",
+      "speaker_guess": "unknown",
+      "script_segment": 91,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 668.5,
+      "end": 674.4,
+      "text": "我試過，但有時候會覺得那種聲音很假，好像不是真的屬於我，",
+      "speaker_guess": "unknown",
+      "script_segment": 92,
+      "script_speaker": "client"
+    },
+    {
+      "start": 674.4,
+      "end": 680.7,
+      "text": "我想要找到一個屬於自己的聲音，而不是一直被那個害怕的聲音控制。",
+      "speaker_guess": "unknown",
+      "script_segment": 92,
+      "script_speaker": "client"
+    },
+    {
+      "start": 681.4,
+      "end": 682.6,
+      "text": "你可以慢慢練習。",
+      "speaker_guess": "unknown",
+      "script_segment": 93,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 683.7,
+      "end": 689.1,
+      "text": "我知道這需要時間，但我願意是，我覺得每一次這樣的練習，",
+      "speaker_guess": "unknown",
+      "script_segment": 94,
+      "script_speaker": "client"
+    },
+    {
+      "start": 690.0,
+      "end": 692.2,
+      "text": "都讓我離那個聲音遠一點。",
+      "speaker_guess": "unknown",
+      "script_segment": 94,
+      "script_speaker": "client"
+    },
+    {
+      "start": 692.9,
+      "end": 694.2,
+      "text": "你已經在前進了。",
+      "speaker_guess": "unknown",
+      "script_segment": 95,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 695.3,
+      "end": 699.0,
+      "text": "對，我覺得我現在至少知道問題在哪裡了，",
+      "speaker_guess": "unknown",
+      "script_segment": 96,
+      "script_speaker": "client"
+    },
+    {
+      "start": 699.2,
+      "end": 702.1,
+      "text": "以前我總是覺得自己就是不夠好，",
+      "speaker_guess": "unknown",
+      "script_segment": 96,
+      "script_speaker": "client"
+    },
+    {
+      "start": 702.5,
+      "end": 705.5,
+      "text": "現在我知道，那是那個聲音在說。",
+      "speaker_guess": "unknown",
+      "script_segment": 96,
+      "script_speaker": "client"
+    },
+    {
+      "start": 706.2,
+      "end": 708.5,
+      "text": "你越來越清楚自己的內在對話了。",
+      "speaker_guess": "unknown",
+      "script_segment": 97,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 709.5,
+      "end": 711.4,
+      "text": "不過，我還是會想，",
+      "speaker_guess": "unknown",
+      "script_segment": 98,
+      "script_speaker": "client"
+    },
+    {
+      "start": 711.8,
+      "end": 715.2,
+      "text": "如果我在課堂上問了一個很基本的問題，",
+      "speaker_guess": "unknown",
+      "script_segment": 98,
+      "script_speaker": "client"
+    },
+    {
+      "start": 715.7,
+      "end": 717.7,
+      "text": "大家會不會覺得我很笨，",
+      "speaker_guess": "unknown",
+      "script_segment": 98,
+      "script_speaker": "client"
+    },
+    {
+      "start": 717.7,
+      "end": 719.2,
+      "text": "我常常在想。",
+      "speaker_guess": "unknown",
+      "script_segment": 98,
+      "script_speaker": "client"
+    },
+    {
+      "start": 720.0,
+      "end": 725.8,
+      "text": "這樣問出來是不是會讓老師失望，或者讓同學看不起我？",
+      "speaker_guess": "unknown",
+      "script_segment": 98,
+      "script_speaker": "client"
+    },
+    {
+      "start": 725.8,
+      "end": 728.7,
+      "text": "這是一個很常見的想法。",
+      "speaker_guess": "unknown",
+      "script_segment": 99,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 728.7,
+      "end": 732.8,
+      "text": "對，而且這個想法常常在課堂上出現，",
+      "speaker_guess": "unknown",
+      "script_segment": 100,
+      "script_speaker": "client"
+    },
+    {
+      "start": 732.8,
+      "end": 736.4,
+      "text": "尤其是在老師講到比較複雜的內容時，",
+      "speaker_guess": "unknown",
+      "script_segment": 100,
+      "script_speaker": "client"
+    },
+    {
+      "start": 736.4,
+      "end": 742.2,
+      "text": "我會想，如果我不懂，是不是代表我根本跟不上課程？",
+      "speaker_guess": "unknown",
+      "script_segment": 100,
+      "script_speaker": "client"
+    },
+    {
+      "start": 742.2,
+      "end": 747.5,
+      "text": "你有沒有注意到這個想法出現時，是基於什麼樣的情境？",
+      "speaker_guess": "unknown",
+      "script_segment": 101,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 747.5,
+      "end": 749.4,
+      "text": "通常是當我聽不懂老師的課程，",
+      "speaker_guess": "unknown",
+      "script_segment": 102,
+      "script_speaker": "client"
+    },
+    {
+      "start": 750.0,
+      "end": 760.1,
+      "text": "或者看到其他同學好像都懂了，那時候我會覺得自己落後了，而且怕問問題會暴露自己的無知。",
+      "speaker_guess": "unknown",
+      "script_segment": 102,
+      "script_speaker": "client"
+    },
+    {
+      "start": 760.8,
+      "end": 765.6,
+      "text": "那我們可以來看看這個想法。問問問題大家會看不起我。",
+      "speaker_guess": "unknown",
+      "script_segment": 103,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 766.6,
+      "end": 777.3,
+      "text": "嗯，我覺得這個想法很真實，因為我常常會看到有人笑別人問問題，或者有人會說這不是應該知道的嗎？這種話。",
+      "speaker_guess": "unknown",
+      "script_segment": 104,
+      "script_speaker": "client"
+    },
+    {
+      "start": 777.6,
+      "end": 779.6,
+      "text": "那我們可以一起找找看。",
+      "speaker_guess": "unknown",
+      "script_segment": 105,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 780.0,
+      "end": 782.0,
+      "text": "有那些證據支援這個想法？",
+      "speaker_guess": "unknown",
+      "script_segment": 105,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 783.1,
+      "end": 787.8,
+      "text": "比如說，有一次我在課堂上問了一個很基本的問題，",
+      "speaker_guess": "unknown",
+      "script_segment": 106,
+      "script_speaker": "client"
+    },
+    {
+      "start": 788.3,
+      "end": 792.8,
+      "text": "結果有幾個同學笑了，雖然他們可能不是針對我，",
+      "speaker_guess": "unknown",
+      "script_segment": 106,
+      "script_speaker": "client"
+    },
+    {
+      "start": 793.1,
+      "end": 798.5,
+      "text": "但我當時真的覺得自己很尷尬，而且之後就不太敢問問題了。",
+      "speaker_guess": "unknown",
+      "script_segment": 106,
+      "script_speaker": "client"
+    },
+    {
+      "start": 799.2,
+      "end": 801.2,
+      "text": "那有沒有證據反對這個想法？",
+      "speaker_guess": "unknown",
+      "script_segment": 107,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 802.3,
+      "end": 805.6,
+      "text": "嗯，有一次我鼓起勇氣問了一個問題，",
+      "speaker_guess": "unknown",
+      "script_segment": 108,
+      "script_speaker": "client"
+    },
+    {
+      "start": 805.6,
+      "end": 809.5,
+      "text": "結果老師說這個問題很好，而且還不知，",
+      "speaker_guess": "unknown",
+      "script_segment": 108,
+      "script_speaker": "client"
+    },
+    {
+      "start": 810.0,
+      "end": 817.3,
+      "text": "我衷了一些內容，那時候我覺得問問題其實是有幫助的，而且老師也沒有看不起我。",
+      "speaker_guess": "unknown",
+      "script_segment": 108,
+      "script_speaker": "client"
+    },
+    {
+      "start": 817.9,
+      "end": 818.4,
+      "text": "還有嗎？",
+      "speaker_guess": "unknown",
+      "script_segment": 109,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 819.5,
+      "end": 834.6,
+      "text": "還有，有一次我沒有問問題，結果課後自己花了很多時間查資料，才發現其實那個問題很常見，很多人都會搞錯，如果當時問了，可能可以省很多時間。",
+      "speaker_guess": "unknown",
+      "script_segment": 110,
+      "script_speaker": "client"
+    },
+    {
+      "start": 835.3,
+      "end": 838.8,
+      "text": "所以，這個想法問問問題大家會看不起我。",
+      "speaker_guess": "unknown",
+      "script_segment": 111,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 840.0,
+      "end": 841.5,
+      "text": "並不是總是正確的。",
+      "speaker_guess": "unknown",
+      "script_segment": 111,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 842.6,
+      "end": 849.6,
+      "text": "對，我開始覺得這個想法可能只是我腦中那個聲音在嚇唬我，而不是現實。",
+      "speaker_guess": "unknown",
+      "script_segment": 112,
+      "script_speaker": "client"
+    },
+    {
+      "start": 850.3,
+      "end": 851.7,
+      "text": "你怎麼看待這個聲音？",
+      "speaker_guess": "unknown",
+      "script_segment": 113,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 852.8,
+      "end": 859.7,
+      "text": "我覺得它是在保護我，不想讓我受傷，但它也讓我錯過了很多學習的機會。",
+      "speaker_guess": "unknown",
+      "script_segment": 114,
+      "script_speaker": "client"
+    },
+    {
+      "start": 860.4,
+      "end": 863.0,
+      "text": "你願意試著對這個聲音說些什麼嗎？",
+      "speaker_guess": "unknown",
+      "script_segment": 115,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 863.9,
+      "end": 869.3,
+      "text": "我想對它說，我知道問問題是學習的一部分，而且問問題是學習的一部分，",
+      "speaker_guess": "unknown",
+      "script_segment": 116,
+      "script_speaker": "client"
+    },
+    {
+      "start": 870.0,
+      "end": 877.0,
+      "text": "問問題不代表我不夠聰明，如果我真的不知道，那問問題就是最好的方式。",
+      "speaker_guess": "unknown",
+      "script_segment": 116,
+      "script_speaker": "client"
+    },
+    {
+      "start": 877.0,
+      "end": 879.0,
+      "text": "這是一個很有意思的回應。",
+      "speaker_guess": "unknown",
+      "script_segment": 117,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 879.0,
+      "end": 891.0,
+      "text": "對，而且我發現，當我問問題時，其實大家並沒有特別看不起我，他們可能只是專注在自己的事情上，而不是在評價我。",
+      "speaker_guess": "unknown",
+      "script_segment": 118,
+      "script_speaker": "client"
+    },
+    {
+      "start": 891.0,
+      "end": 897.0,
+      "text": "你越來越能辨識自己的自動化想法，並開始挑戰他們了。",
+      "speaker_guess": "unknown",
+      "script_segment": 119,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 897.0,
+      "end": 899.2,
+      "text": "對，我覺得這是一個。",
+      "speaker_guess": "unknown",
+      "script_segment": 120,
+      "script_speaker": "client"
+    },
+    {
+      "start": 900.0,
+      "end": 908.1,
+      "text": "很重要的進步，雖然我還是會有那個聲音，但我現在知道，我可以選擇要不要聽他的話。",
+      "speaker_guess": "unknown",
+      "script_segment": 120,
+      "script_speaker": "client"
+    },
+    {
+      "start": 908.8,
+      "end": 910.0,
+      "text": "你已經在改變了。",
+      "speaker_guess": "unknown",
+      "script_segment": 121,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 911.0,
+      "end": 920.9,
+      "text": "不過，我還是有點擔心，如果我真的在課堂上提問，會不會還是會覺得尷尬，或者別人會覺得我很蠢。",
+      "speaker_guess": "unknown",
+      "script_segment": 122,
+      "script_speaker": "client"
+    },
+    {
+      "start": 920.9,
+      "end": 926.6,
+      "text": "我之前不是說過，我總是預設別人會對我有負面評價嗎？",
+      "speaker_guess": "unknown",
+      "script_segment": 122,
+      "script_speaker": "client"
+    },
+    {
+      "start": 927.2,
+      "end": 928.8,
+      "text": "是的，你說得很不準。",
+      "speaker_guess": "unknown",
+      "script_segment": 123,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 930.0,
+      "end": 945.0,
+      "text": "所以我想，我們是不是可以設計一個行為實驗，比如說，下週課堂上我真的提問一次，然後觀察大家的反應，再來比較我原本的預測和實際發生的事。",
+      "speaker_guess": "unknown",
+      "script_segment": 124,
+      "script_speaker": "client"
+    },
+    {
+      "start": 945.7,
+      "end": 947.0,
+      "text": "這是個很好的想法。",
+      "speaker_guess": "unknown",
+      "script_segment": 125,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 948.0,
+      "end": 959.3,
+      "text": "我覺得這樣做會很有幫助，因為我總是靠想象來決定要不要行動，而不是靠實際經驗，如果我真的去做了，就能知道世界上的事情。",
+      "speaker_guess": "unknown",
+      "script_segment": 126,
+      "script_speaker": "client"
+    },
+    {
+      "start": 960.0,
+      "end": 962.8,
+      "text": "這件事情是不是真的像我想的那樣糟糕？",
+      "speaker_guess": "unknown",
+      "script_segment": 126,
+      "script_speaker": "client"
+    },
+    {
+      "start": 963.5,
+      "end": 964.5,
+      "text": "你說得很對。",
+      "speaker_guess": "unknown",
+      "script_segment": 127,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 965.6,
+      "end": 968.9,
+      "text": "那我可以先寫下我對這次提問的預測，",
+      "speaker_guess": "unknown",
+      "script_segment": 128,
+      "script_speaker": "client"
+    },
+    {
+      "start": 969.3,
+      "end": 971.4,
+      "text": "比如說，我會覺得尷尬，",
+      "speaker_guess": "unknown",
+      "script_segment": 128,
+      "script_speaker": "client"
+    },
+    {
+      "start": 971.7,
+      "end": 974.5,
+      "text": "別人會笑我，老師會不耐煩，",
+      "speaker_guess": "unknown",
+      "script_segment": 128,
+      "script_speaker": "client"
+    },
+    {
+      "start": 975.0,
+      "end": 977.6,
+      "text": "或者我說錯話會讓大家尷尬。",
+      "speaker_guess": "unknown",
+      "script_segment": 128,
+      "script_speaker": "client"
+    },
+    {
+      "start": 978.3,
+      "end": 981.7,
+      "text": "很好，寫下來會讓你更清楚自己的想法。",
+      "speaker_guess": "unknown",
+      "script_segment": 129,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 982.8,
+      "end": 985.0,
+      "text": "然後，我真的去提問後，",
+      "speaker_guess": "unknown",
+      "script_segment": 130,
+      "script_speaker": "client"
+    },
+    {
+      "start": 985.4,
+      "end": 987.3,
+      "text": "再寫下實際發生的事，",
+      "speaker_guess": "unknown",
+      "script_segment": 130,
+      "script_speaker": "client"
+    },
+    {
+      "start": 987.4,
+      "end": 989.6,
+      "text": "比如說，老師有沒有好事？",
+      "speaker_guess": "unknown",
+      "script_segment": 130,
+      "script_speaker": "client"
+    },
+    {
+      "start": 990.0,
+      "end": 998.8,
+      "text": "反應，同學有沒有笑，我自己有沒有覺得尷尬，這樣我就能看到，我的預測和現實之間的差距。",
+      "speaker_guess": "unknown",
+      "script_segment": 130,
+      "script_speaker": "client"
+    },
+    {
+      "start": 999.4,
+      "end": 1001.1,
+      "text": "這就是行為實驗的核心。",
+      "speaker_guess": "unknown",
+      "script_segment": 131,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1002.3,
+      "end": 1017.0,
+      "text": "我覺得這方法很實用，因為我常常因為害怕尷尬而什麼都不做，結果反而讓自己更焦慮，如果我真的去做了，不管結果如何，至少我證明了自己可以面對恐懼。",
+      "speaker_guess": "unknown",
+      "script_segment": 132,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1017.7,
+      "end": 1018.7,
+      "text": "你說得很對。",
+      "speaker_guess": "unknown",
+      "script_segment": 127,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1020.0,
+      "end": 1032.4,
+      "text": "而且，如果我真的提問了，不管別人怎麼想，我都會知道，我並沒有被否定，也沒有被嘲笑，這對我來說是一個很重要的經驗。",
+      "speaker_guess": "unknown",
+      "script_segment": 134,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1032.7,
+      "end": 1035.5,
+      "text": "你正在學習用行動來改變信念？",
+      "speaker_guess": "unknown",
+      "script_segment": 135,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1036.3,
+      "end": 1049.4,
+      "text": "對，我覺得這比一直告訴自己不要害怕有用多了，因為光靠想，我還是會覺得害怕，但實際去做，反而讓我發現事情沒有我想得那麼糟。",
+      "speaker_guess": "unknown",
+      "script_segment": 136,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1050.0,
+      "end": 1052.0,
+      "text": "行動確實能再來改變。",
+      "speaker_guess": "unknown",
+      "script_segment": 137,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1053.2,
+      "end": 1058.0,
+      "text": "所以我想，這個行為實驗可以幫助我慢慢減少拖延，",
+      "speaker_guess": "unknown",
+      "script_segment": 138,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1058.4,
+      "end": 1062.0,
+      "text": "因為我總是因為害怕尷尬而什麼都不做，",
+      "speaker_guess": "unknown",
+      "script_segment": 138,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1062.4,
+      "end": 1065.9,
+      "text": "結果事情就一直拖著，如果我真的去做了，",
+      "speaker_guess": "unknown",
+      "script_segment": 138,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1066.3,
+      "end": 1070.6,
+      "text": "不管結果如何，我都會覺得自己完成了該做的事。",
+      "speaker_guess": "unknown",
+      "script_segment": 138,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1071.2,
+      "end": 1074.7,
+      "text": "你已經開始看到行為和情緒之間的關係了。",
+      "speaker_guess": "unknown",
+      "script_segment": 139,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1075.4,
+      "end": 1079.3,
+      "text": "對，我覺得這是一個很好的練習，而且，",
+      "speaker_guess": "unknown",
+      "script_segment": 140,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1080.0,
+      "end": 1089.2,
+      "text": "如果我真的去做，我也可以把這個經驗分享給你，讓我們一起看看，我的預測和實際結果之間的差異。",
+      "speaker_guess": "unknown",
+      "script_segment": 140,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1089.9,
+      "end": 1092.2,
+      "text": "很好，我們下週再談談結果。",
+      "speaker_guess": "unknown",
+      "script_segment": 141,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1093.3,
+      "end": 1102.4,
+      "text": "我會盡力去做，而且我會記得寫下我的預測，我相信這會是一個很重要的經驗，幫助我繼續往前走。",
+      "speaker_guess": "unknown",
+      "script_segment": 142,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1103.0,
+      "end": 1104.3,
+      "text": "你已經在前進了。",
+      "speaker_guess": "unknown",
+      "script_segment": 95,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1105.1,
+      "end": 1109.3,
+      "text": "對，我覺得我越來越能掌控自己的想法了。",
+      "speaker_guess": "unknown",
+      "script_segment": 144,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1110.0,
+      "end": 1117.0,
+      "text": "雖然還是會有那個聲音，但我現在知道，我可以選擇要不要聽它的話。",
+      "speaker_guess": "unknown",
+      "script_segment": 144,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1117.0,
+      "end": 1119.0,
+      "text": "你已經在改變了。",
+      "speaker_guess": "unknown",
+      "script_segment": 121,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1119.0,
+      "end": 1136.0,
+      "text": "不過，我還是想談談番茄中的事情，我這幾天真的試著用它來安排讀書時間，但手機還是會一直幹擾我，我總覺得要看一下訊息或社群，結果就完全沒辦法專注。",
+      "speaker_guess": "unknown",
+      "script_segment": 146,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1136.0,
+      "end": 1139.0,
+      "text": "嗯？這是很常見的經驗。",
+      "speaker_guess": "unknown",
+      "script_segment": 147,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1140.0,
+      "end": 1154.5,
+      "text": "對，我試著把手機放在另一個房間，但有時候還是會忍不住去拿，我發現自己好像對手機有一種強烈的依賴感，好像不看一下就會錯過什麼重要的事情。",
+      "speaker_guess": "unknown",
+      "script_segment": 148,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1155.3,
+      "end": 1158.2,
+      "text": "你覺察到這一點，已經是很大在進步了。",
+      "speaker_guess": "unknown",
+      "script_segment": 149,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1170.0,
+      "end": 1173.5,
+      "text": "這樣至少不會在專注的時候被打斷。",
+      "speaker_guess": "unknown",
+      "script_segment": 150,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1173.5,
+      "end": 1175.5,
+      "text": "這個想法很實際。",
+      "speaker_guess": "unknown",
+      "script_segment": 151,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1175.5,
+      "end": 1189.4,
+      "text": "我也在想，是不是可以把手機設成灰階模式，這樣看起來就沒有那麼吸引人。我之前聽說過有人這樣做，說是會減少使用手機的衝動。",
+      "speaker_guess": "unknown",
+      "script_segment": 152,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1189.4,
+      "end": 1191.2,
+      "text": "你可以試試看。",
+      "speaker_guess": "unknown",
+      "script_segment": 153,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1191.2,
+      "end": 1199.4,
+      "text": "另外，我發現自己在番茄中的最後幾分鐘特別容易分心，好像腦子裡會想。",
+      "speaker_guess": "unknown",
+      "script_segment": 154,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1200.0,
+      "end": 1201.6,
+      "text": "反正時間快到了",
+      "speaker_guess": "unknown",
+      "script_segment": 154,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1201.6,
+      "end": 1204.0,
+      "text": "不如就看一下手機好了",
+      "speaker_guess": "unknown",
+      "script_segment": 154,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1204.0,
+      "end": 1205.7,
+      "text": "這其實是個陷阱",
+      "speaker_guess": "unknown",
+      "script_segment": 154,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1205.7,
+      "end": 1206.5,
+      "text": "我知道",
+      "speaker_guess": "unknown",
+      "script_segment": 29,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1206.5,
+      "end": 1208.7,
+      "text": "但還是會掉進去",
+      "speaker_guess": "unknown",
+      "script_segment": 154,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1208.7,
+      "end": 1210.5,
+      "text": "你說的很不準確",
+      "speaker_guess": "unknown",
+      "script_segment": 155,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1210.5,
+      "end": 1212.5,
+      "text": "所以我想",
+      "speaker_guess": "unknown",
+      "script_segment": 70,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1212.5,
+      "end": 1216.2,
+      "text": "是不是可以在番茄中結束前五分鐘",
+      "speaker_guess": "unknown",
+      "script_segment": 156,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1216.2,
+      "end": 1219.1,
+      "text": "提醒自己不要提前放棄專注",
+      "speaker_guess": "unknown",
+      "script_segment": 156,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1219.1,
+      "end": 1219.7,
+      "text": "或者",
+      "speaker_guess": "unknown",
+      "script_segment": 98,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1219.7,
+      "end": 1223.8,
+      "text": "我可以把番茄中的時間拆成更小的單位",
+      "speaker_guess": "unknown",
+      "script_segment": 156,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1223.8,
+      "end": 1226.6,
+      "text": "比如說先試著做15分鐘",
+      "speaker_guess": "unknown",
+      "script_segment": 156,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1226.6,
+      "end": 1228.4,
+      "text": "成功後再延長",
+      "speaker_guess": "unknown",
+      "script_segment": 156,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1228.4,
+      "end": 1229.5,
+      "text": "就個方",
+      "speaker_guess": "unknown",
+      "script_segment": 157,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1230.0,
+      "end": 1231.7,
+      "text": "這種方法很適合你目前的階段。",
+      "speaker_guess": "unknown",
+      "script_segment": 157,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1232.9,
+      "end": 1247.8,
+      "text": "我也在想，是不是可以把番茄中的完成次數當作一種成就感的累積，比如說完成五次就可以給自己一個小獎勵，像是看一集喜歡的影集或吃點喜歡的零食。",
+      "speaker_guess": "unknown",
+      "script_segment": 158,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1248.5,
+      "end": 1249.9,
+      "text": "這聽起來很可行。",
+      "speaker_guess": "unknown",
+      "script_segment": 159,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1250.6,
+      "end": 1259.1,
+      "text": "不過，我還是會擔心，如果我失敗了，是不是就代表我沒有進步，有時候我會覺得自己是不錯的。",
+      "speaker_guess": "unknown",
+      "script_segment": 160,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1260.0,
+      "end": 1263.5,
+      "text": "做得不夠好，然後就完全不想繼續了。",
+      "speaker_guess": "unknown",
+      "script_segment": 160,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1264.1,
+      "end": 1266.2,
+      "text": "你有這樣的擔心，很正常。",
+      "speaker_guess": "unknown",
+      "script_segment": 161,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1267.4,
+      "end": 1272.0,
+      "text": "對，我開始學著告訴自己，失敗只是學習的一部分，",
+      "speaker_guess": "unknown",
+      "script_segment": 162,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1272.5,
+      "end": 1276.0,
+      "text": "不代表我沒有進步，而且，每一次嘗試，",
+      "speaker_guess": "unknown",
+      "script_segment": 162,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1276.4,
+      "end": 1278.8,
+      "text": "其實都在幫助我更瞭解自己。",
+      "speaker_guess": "unknown",
+      "script_segment": 162,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1279.5,
+      "end": 1281.6,
+      "text": "你已經學會了很重要的東西。",
+      "speaker_guess": "unknown",
+      "script_segment": 163,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1282.5,
+      "end": 1286.3,
+      "text": "我覺得我現在對拖延的態度也比較不同了，",
+      "speaker_guess": "unknown",
+      "script_segment": 164,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1286.6,
+      "end": 1289.1,
+      "text": "以前我總是覺得拖延是壞事，",
+      "speaker_guess": "unknown",
+      "script_segment": 164,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1290.0,
+      "end": 1295.1,
+      "text": "現在則是把它當作一個訊號，告訴我哪裡需要調整。",
+      "speaker_guess": "unknown",
+      "script_segment": 164,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1295.7,
+      "end": 1296.9,
+      "text": "這是很大的轉變。",
+      "speaker_guess": "unknown",
+      "script_segment": 165,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1298.0,
+      "end": 1304.7,
+      "text": "對，我開始相信，只要我願意去面對，就一定能找到適合自己的方法，",
+      "speaker_guess": "unknown",
+      "script_segment": 166,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1305.0,
+      "end": 1311.0,
+      "text": "而且，我也越來越相信，改變不是一粗可擊的，而是慢慢累積的。",
+      "speaker_guess": "unknown",
+      "script_segment": 166,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1311.6,
+      "end": 1313.6,
+      "text": "你已經走在正確的路上了。",
+      "speaker_guess": "unknown",
+      "script_segment": 167,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1314.6,
+      "end": 1319.2,
+      "text": "謝謝你一直以來的陪伴，我知道這段旅程還很長。",
+      "speaker_guess": "unknown",
+      "script_segment": 168,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1320.0,
+      "end": 1322.4,
+      "text": "但我已經開始看到希望了。",
+      "speaker_guess": "unknown",
+      "script_segment": 168,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1323.0,
+      "end": 1324.3,
+      "text": "你值得這樣的希望？",
+      "speaker_guess": "unknown",
+      "script_segment": 169,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1325.4,
+      "end": 1328.0,
+      "text": "說到這裡，我想起一件事，",
+      "speaker_guess": "unknown",
+      "script_segment": 170,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1328.4,
+      "end": 1332.9,
+      "text": "最近我晚上睡覺的時候常常被室友的聲音吵醒，",
+      "speaker_guess": "unknown",
+      "script_segment": 170,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1333.2,
+      "end": 1339.1,
+      "text": "他晚上常常開著電視看劇，或者跟朋友講電話，聲音很大，",
+      "speaker_guess": "unknown",
+      "script_segment": 170,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1339.1,
+      "end": 1346.1,
+      "text": "我是過跟他說，但總是覺得不好意思，怕他會生氣或者覺得我太挑剔。",
+      "speaker_guess": "unknown",
+      "script_segment": 170,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1346.7,
+      "end": 1348.6,
+      "text": "嗯？這聽起來很真實？",
+      "speaker_guess": "unknown",
+      "script_segment": 171,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1350.0,
+      "end": 1366.7,
+      "text": "對，我總是想，他可能只是習慣這樣，或者他也有他的理由，但每次我被吵醒，我就會很煩躁，甚至開始討厭自己，覺得我是不是太敏感了，是不是應該忍一忍就好？",
+      "speaker_guess": "unknown",
+      "script_segment": 172,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1367.4,
+      "end": 1369.5,
+      "text": "你有覺察到自己的情緒反應？",
+      "speaker_guess": "unknown",
+      "script_segment": 173,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1370.3,
+      "end": 1379.8,
+      "text": "對，我常常會想，如果我跟他說了，他會不會覺得我太小氣，或者他會不會覺得我是在針對他？",
+      "speaker_guess": "unknown",
+      "script_segment": 174,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1380.0,
+      "end": 1381.8,
+      "text": "我總是擔心衝突",
+      "speaker_guess": "unknown",
+      "script_segment": 174,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1381.8,
+      "end": 1383.7,
+      "text": "所以就選擇沉默",
+      "speaker_guess": "unknown",
+      "script_segment": 174,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1383.7,
+      "end": 1386.5,
+      "text": "但這樣其實對我來說很辛苦",
+      "speaker_guess": "unknown",
+      "script_segment": 174,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1386.5,
+      "end": 1389.3,
+      "text": "你又覺察到自己的逃避行為",
+      "speaker_guess": "unknown",
+      "script_segment": 175,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1389.3,
+      "end": 1390.7,
+      "text": "是的",
+      "speaker_guess": "unknown",
+      "script_segment": 18,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1390.7,
+      "end": 1391.8,
+      "text": "我發現",
+      "speaker_guess": "unknown",
+      "script_segment": 52,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1391.8,
+      "end": 1395.6,
+      "text": "我總是把不好意思當成不去行動的理由",
+      "speaker_guess": "unknown",
+      "script_segment": 176,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1395.6,
+      "end": 1396.5,
+      "text": "但其實",
+      "speaker_guess": "unknown",
+      "script_segment": 56,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1396.5,
+      "end": 1399.6,
+      "text": "我真正想要的是能安靜地睡覺",
+      "speaker_guess": "unknown",
+      "script_segment": 176,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1399.6,
+      "end": 1403.4,
+      "text": "而不是讓自己一直處在焦慮和不滿中",
+      "speaker_guess": "unknown",
+      "script_segment": 176,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1403.4,
+      "end": 1405.8,
+      "text": "你又覺察到自己的需求",
+      "speaker_guess": "unknown",
+      "script_segment": 177,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1405.8,
+      "end": 1407.1,
+      "text": "對",
+      "speaker_guess": "unknown",
+      "script_segment": 1,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1407.1,
+      "end": 1408.4,
+      "text": "我開始想",
+      "speaker_guess": "unknown",
+      "script_segment": 150,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1408.4,
+      "end": 1409.6,
+      "text": "如果我真的是",
+      "speaker_guess": "unknown",
+      "script_segment": 80,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1410.0,
+      "end": 1422.7,
+      "text": "說了，是不是會有什麼不好的結果，或者，是不是其實他會理解，我開始想練習怎麼用比較溫和的方式去表達我的需求，而不是一直壓抑。",
+      "speaker_guess": "unknown",
+      "script_segment": 178,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1423.4,
+      "end": 1425.1,
+      "text": "你有覺察到自己的選擇？",
+      "speaker_guess": "unknown",
+      "script_segment": 179,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1425.9,
+      "end": 1439.7,
+      "text": "對，我想到可以用我的語句，比如說我晚上睡覺的時候比較需要安靜的環境，而不是直接說你聲音太大了，這樣可能比較不會讓他覺得被攻擊。",
+      "speaker_guess": "unknown",
+      "script_segment": 180,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1440.0,
+      "end": 1442.6,
+      "text": "你有覺察到自己的表達方式？",
+      "speaker_guess": "unknown",
+      "script_segment": 181,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1443.7,
+      "end": 1447.0,
+      "text": "對，我覺得這是一個可以練習的機會，",
+      "speaker_guess": "unknown",
+      "script_segment": 182,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1447.3,
+      "end": 1449.3,
+      "text": "雖然還是會有點緊張，",
+      "speaker_guess": "unknown",
+      "script_segment": 182,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1449.7,
+      "end": 1451.4,
+      "text": "但我已經開始相信，",
+      "speaker_guess": "unknown",
+      "script_segment": 182,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1451.8,
+      "end": 1454.2,
+      "text": "我有權利去表達自己的需求，",
+      "speaker_guess": "unknown",
+      "script_segment": 182,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1454.6,
+      "end": 1458.0,
+      "text": "而不是一直讓自己處在不舒服的狀態裡。",
+      "speaker_guess": "unknown",
+      "script_segment": 182,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1458.6,
+      "end": 1460.3,
+      "text": "你有覺察到自己的信念？",
+      "speaker_guess": "unknown",
+      "script_segment": 183,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1461.1,
+      "end": 1463.1,
+      "text": "對，我開始相信，",
+      "speaker_guess": "unknown",
+      "script_segment": 166,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1463.5,
+      "end": 1465.7,
+      "text": "表達自己的需求不是自私，",
+      "speaker_guess": "unknown",
+      "script_segment": 184,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1466.1,
+      "end": 1467.4,
+      "text": "而是對自己負責，",
+      "speaker_guess": "unknown",
+      "script_segment": 184,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1467.8,
+      "end": 1469.8,
+      "text": "而且，如果我真的說了，",
+      "speaker_guess": "unknown",
+      "script_segment": 184,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1470.0,
+      "end": 1472.8,
+      "text": "最壞的情況也不過是被拒絕",
+      "speaker_guess": "unknown",
+      "script_segment": 184,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1472.8,
+      "end": 1474.4,
+      "text": "或者他不理解",
+      "speaker_guess": "unknown",
+      "script_segment": 184,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1474.4,
+      "end": 1476.0,
+      "text": "但至少我是過了",
+      "speaker_guess": "unknown",
+      "script_segment": 184,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1476.0,
+      "end": 1479.2,
+      "text": "而不是一直讓自己處在不滿中",
+      "speaker_guess": "unknown",
+      "script_segment": 184,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1479.2,
+      "end": 1481.5,
+      "text": "你有覺察到自己的勇氣？",
+      "speaker_guess": "unknown",
+      "script_segment": 185,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1482.6,
+      "end": 1482.7,
+      "text": "對",
+      "speaker_guess": "unknown",
+      "script_segment": 1,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1482.7,
+      "end": 1485.7,
+      "text": "我覺得這是我可以慢慢練習的",
+      "speaker_guess": "unknown",
+      "script_segment": 186,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1485.7,
+      "end": 1487.3,
+      "text": "也許第一次說了",
+      "speaker_guess": "unknown",
+      "script_segment": 186,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1487.3,
+      "end": 1489.1,
+      "text": "他不會馬上改變",
+      "speaker_guess": "unknown",
+      "script_segment": 186,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1489.1,
+      "end": 1491.5,
+      "text": "但我已經邁出了第一步",
+      "speaker_guess": "unknown",
+      "script_segment": 186,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1491.5,
+      "end": 1492.0,
+      "text": "而且",
+      "speaker_guess": "unknown",
+      "script_segment": 41,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1492.0,
+      "end": 1493.2,
+      "text": "我發現",
+      "speaker_guess": "unknown",
+      "script_segment": 52,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1493.2,
+      "end": 1495.9,
+      "text": "當我開始表達自己的需求時",
+      "speaker_guess": "unknown",
+      "script_segment": 186,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1495.9,
+      "end": 1498.4,
+      "text": "我反而會覺得比較輕鬆",
+      "speaker_guess": "unknown",
+      "script_segment": 186,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1500.0,
+      "end": 1501.7,
+      "text": "你又覺察到自己的改變？",
+      "speaker_guess": "unknown",
+      "script_segment": 187,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1502.8,
+      "end": 1515.8,
+      "text": "對，我開始相信，改變不是一蹴可擊的，而是慢慢累積的，而且，我也越來越相信，只要我願意去面對，就一定能找到適合自己的方法。",
+      "speaker_guess": "unknown",
+      "script_segment": 166,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1516.1,
+      "end": 1518.4,
+      "text": "你已經走在正確的路上了。",
+      "speaker_guess": "unknown",
+      "script_segment": 167,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1519.3,
+      "end": 1526.6,
+      "text": "謝謝你一直以來的陪伴，我知道這段旅程還很長，但我已經開始看到希望了。",
+      "speaker_guess": "unknown",
+      "script_segment": 168,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1527.3,
+      "end": 1528.4,
+      "text": "你值得這樣的希望？",
+      "speaker_guess": "unknown",
+      "script_segment": 169,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1530.0,
+      "end": 1543.6,
+      "text": "對，我開始相信，只要我願意去面對，就一定能找到適合自己的方法，而且，我也越來越相信，改變不是一蹴可擊的，而是慢慢累積的。",
+      "speaker_guess": "unknown",
+      "script_segment": 166,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1544.2,
+      "end": 1546.2,
+      "text": "你已經走在正確的路上了。",
+      "speaker_guess": "unknown",
+      "script_segment": 167,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1560.0,
+      "end": 1561.7,
+      "text": "去表達我的請求",
+      "speaker_guess": "unknown",
+      "script_segment": 194,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1561.7,
+      "end": 1563.0,
+      "text": "而不是逃避",
+      "speaker_guess": "unknown",
+      "script_segment": 194,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1563.0,
+      "end": 1564.0,
+      "text": "很好",
+      "speaker_guess": "unknown",
+      "script_segment": 51,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1564.0,
+      "end": 1565.9,
+      "text": "這是一個很棒的練習",
+      "speaker_guess": "unknown",
+      "script_segment": 195,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1565.9,
+      "end": 1568.3,
+      "text": "我會先想一下",
+      "speaker_guess": "unknown",
+      "script_segment": 196,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1568.3,
+      "end": 1569.5,
+      "text": "如果我說",
+      "speaker_guess": "unknown",
+      "script_segment": 196,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1569.5,
+      "end": 1572.3,
+      "text": "你可以幫我整理一下房間嗎",
+      "speaker_guess": "unknown",
+      "script_segment": 196,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1572.3,
+      "end": 1573.8,
+      "text": "我最近有點忙",
+      "speaker_guess": "unknown",
+      "script_segment": 196,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1573.8,
+      "end": 1575.8,
+      "text": "真的需要一點空間",
+      "speaker_guess": "unknown",
+      "script_segment": 196,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1575.8,
+      "end": 1577.7,
+      "text": "這樣會不會太直接",
+      "speaker_guess": "unknown",
+      "script_segment": 196,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1577.7,
+      "end": 1580.5,
+      "text": "還是我該用比較委婉的方式",
+      "speaker_guess": "unknown",
+      "script_segment": 196,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1580.5,
+      "end": 1583.4,
+      "text": "你已經很清楚自己的需求了",
+      "speaker_guess": "unknown",
+      "script_segment": 197,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1583.4,
+      "end": 1585.8,
+      "text": "但我還是會想",
+      "speaker_guess": "unknown",
+      "script_segment": 198,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1585.8,
+      "end": 1588.2,
+      "text": "萬一他覺得我在指責他",
+      "speaker_guess": "unknown",
+      "script_segment": 198,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1588.2,
+      "end": 1589.4,
+      "text": "或者覺得我",
+      "speaker_guess": "unknown",
+      "script_segment": 170,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1590.0,
+      "end": 1595.0,
+      "text": "那會不會讓我們的關係變差？我總是擔心別人對我的看法。",
+      "speaker_guess": "unknown",
+      "script_segment": 198,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1595.0,
+      "end": 1597.0,
+      "text": "這是你慣性的佳妞。",
+      "speaker_guess": "unknown",
+      "script_segment": 199,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1597.0,
+      "end": 1611.0,
+      "text": "我知道，但這感覺很真實，我會想，如果我說了，他可能會覺得我是在抱怨他不幫忙，其實我只是希望房間乾淨一點，並不是針對他。",
+      "speaker_guess": "unknown",
+      "script_segment": 200,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1611.0,
+      "end": 1616.0,
+      "text": "你已經能分辨自己的需求和他人可能的反應了。",
+      "speaker_guess": "unknown",
+      "script_segment": 201,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1616.0,
+      "end": 1619.4,
+      "text": "對，我覺得我可以用比較的。",
+      "speaker_guess": "unknown",
+      "script_segment": 202,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1620.0,
+      "end": 1622.0,
+      "text": "這樣的表達方式很嚇到。",
+      "speaker_guess": "unknown",
+      "script_segment": 203,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1622.0,
+      "end": 1632.0,
+      "text": "我也可以準備好應對他可能的反應，比如他說：我最近也很忙，那我就可以說：沒關係，我們可以一起找時間，這樣我就不會覺得被拒絕了。",
+      "speaker_guess": "unknown",
+      "script_segment": 204,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1632.0,
+      "end": 1640.0,
+      "text": "我可以說：我最近也很忙，那我就可以說：沒關係，我們可以一起找時間，這樣我就不會覺得被拒絕了。",
+      "speaker_guess": "unknown",
+      "script_segment": 204,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1640.0,
+      "end": 1649.0,
+      "text": "我可以說：我最近也很忙，那我就可以說：沒關係，我們可以一起找時間，這樣我就不會覺得被拒絕了。",
+      "speaker_guess": "unknown",
+      "script_segment": 204,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1650.0,
+      "end": 1652.4,
+      "text": "你已經在練習彈性命對了。",
+      "speaker_guess": "unknown",
+      "script_segment": 205,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1653.5,
+      "end": 1665.6,
+      "text": "而且，如果他真的拒絕了，我也會告訴自己，這不代表我有什麼問題，只是他現在不方便，我已經學會用不同的方式看待拒絕了。",
+      "speaker_guess": "unknown",
+      "script_segment": 206,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1666.2,
+      "end": 1667.8,
+      "text": "你正在建立新的信念。",
+      "speaker_guess": "unknown",
+      "script_segment": 207,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1680.0,
+      "end": 1709.2,
+      "text": "也不會有什麼大不了的後果。你正在改變最尷尬的體驗。而且，如果我真的說了，不管結果如何，我都會告訴自己，我已經完成了這一步，這對我來說就是一種勝利。你已經在前進了。我覺得這樣的練習讓我更有信心去面對其他類似的情境，比如說，我也可以試著請室友幫我買東西，或者一起去做。",
+      "speaker_guess": "unknown",
+      "script_segment": 212,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1710.0,
+      "end": 1712.2,
+      "text": "討論房間的使用規則",
+      "speaker_guess": "unknown",
+      "script_segment": 212,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1712.2,
+      "end": 1715.0,
+      "text": "你正在擴張你的行動範圍",
+      "speaker_guess": "unknown",
+      "script_segment": 213,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1715.0,
+      "end": 1720.2,
+      "text": "對，我覺得這對我來說是一個很重要的轉變",
+      "speaker_guess": "unknown",
+      "script_segment": 214,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1720.2,
+      "end": 1722.7,
+      "text": "我不再覺得自己一定要完美",
+      "speaker_guess": "unknown",
+      "script_segment": 214,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1722.7,
+      "end": 1725.1,
+      "text": "才能去請求別人的幫助",
+      "speaker_guess": "unknown",
+      "script_segment": 214,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1725.1,
+      "end": 1726.6,
+      "text": "我已經學會了",
+      "speaker_guess": "unknown",
+      "script_segment": 214,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1726.6,
+      "end": 1729.4,
+      "text": "請求幫助是一種正常的互動",
+      "speaker_guess": "unknown",
+      "script_segment": 214,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1729.4,
+      "end": 1732.2,
+      "text": "你正在建立健康的互動模式",
+      "speaker_guess": "unknown",
+      "script_segment": 215,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1732.2,
+      "end": 1736.8,
+      "text": "我真的很感謝你一直以來的陪伴和引導",
+      "speaker_guess": "unknown",
+      "script_segment": 216,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1736.8,
+      "end": 1739.3,
+      "text": "我覺得自己越來越能掌握",
+      "speaker_guess": "unknown",
+      "script_segment": 216,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1740.0,
+      "end": 1743.8,
+      "text": "自己的生活，而不是被焦慮和拖延控制。",
+      "speaker_guess": "unknown",
+      "script_segment": 216,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1744.5,
+      "end": 1745.8,
+      "text": "你真的這樣的窮爪？",
+      "speaker_guess": "unknown",
+      "script_segment": 240,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1746.9,
+      "end": 1752.1,
+      "text": "其實我最近有在考慮加入一個社團，是關於公益服務的，",
+      "speaker_guess": "unknown",
+      "script_segment": 218,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1752.4,
+      "end": 1757.1,
+      "text": "我一直很喜歡幫助別人，但每次想到要自我介紹，",
+      "speaker_guess": "unknown",
+      "script_segment": 218,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1757.5,
+      "end": 1761.1,
+      "text": "我就會開始緊張，甚至連想都不敢想。",
+      "speaker_guess": "unknown",
+      "script_segment": 218,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1761.8,
+      "end": 1763.0,
+      "text": "這是很自然的反應。",
+      "speaker_guess": "unknown",
+      "script_segment": 219,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1764.0,
+      "end": 1769.4,
+      "text": "我知道這對我來說是一個很好的機會，可以練習與人互動，",
+      "speaker_guess": "unknown",
+      "script_segment": 220,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1770.0,
+      "end": 1783.1,
+      "text": "也能把注意力從自己身上轉移出去，但每次想到要站在一群人面前說出自己的名字，興趣，我就覺得自己會說錯話，表現得很尷尬。",
+      "speaker_guess": "unknown",
+      "script_segment": 220,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1783.8,
+      "end": 1787.1,
+      "text": "你又覺察到自己的焦慮，這已經是很大在進步。",
+      "speaker_guess": "unknown",
+      "script_segment": 221,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1788.0,
+      "end": 1799.1,
+      "text": "我試著用我們之前練習的挑戰自動想法方法，告訴自己自我介紹只是簡單的介紹，不是考試，但有時候還是會背。",
+      "speaker_guess": "unknown",
+      "script_segment": 222,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1800.0,
+      "end": 1806.6,
+      "text": "負面想法打斷，比如他們會不會覺得我很無聊，我是不是說的太少了。",
+      "speaker_guess": "unknown",
+      "script_segment": 222,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1807.2,
+      "end": 1811.3,
+      "text": "這些想法很常見，但你可以選擇不讓他們控制你。",
+      "speaker_guess": "unknown",
+      "script_segment": 223,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1812.4,
+      "end": 1823.0,
+      "text": "我也在想，能不能先在家裡練習自我介紹，把內容寫下來，甚至錄音聽聽看，這樣至少能減少當下的慌亂感。",
+      "speaker_guess": "unknown",
+      "script_segment": 224,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1823.7,
+      "end": 1825.2,
+      "text": "這是很好的具體行動。",
+      "speaker_guess": "unknown",
+      "script_segment": 225,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1826.3,
+      "end": 1829.7,
+      "text": "另外，我還想問問你，如果我在社會上，",
+      "speaker_guess": "unknown",
+      "script_segment": 226,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1830.0,
+      "end": 1837.6,
+      "text": "在團裡真的表現得很緊張，是不是代表我做錯了什麼，還是隻是我還在學習的過程中？",
+      "speaker_guess": "unknown",
+      "script_segment": 226,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1838.3,
+      "end": 1841.1,
+      "text": "學習的過程中，緊張是很正常的。",
+      "speaker_guess": "unknown",
+      "script_segment": 227,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1842.2,
+      "end": 1853.9,
+      "text": "我覺得自己已經比以前勇敢多了，以前連上課發言都不敢，現在至少願意考慮加入社團，這是不是代表我在慢慢走出舒適圈？",
+      "speaker_guess": "unknown",
+      "script_segment": 228,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1854.6,
+      "end": 1858.1,
+      "text": "你正在走出舒適圈，而且走得很比我覺察。",
+      "speaker_guess": "unknown",
+      "script_segment": 229,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1860.0,
+      "end": 1871.3,
+      "text": "我想我可以先去參加社團的說明會，不需要馬上自我介紹，這樣我可以先觀察環境，認識一些人，再慢慢準備。",
+      "speaker_guess": "unknown",
+      "script_segment": 230,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1872.0,
+      "end": 1873.4,
+      "text": "這是一個很好的策略。",
+      "speaker_guess": "unknown",
+      "script_segment": 231,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1874.6,
+      "end": 1886.9,
+      "text": "我也在想，如果我真的在自我介紹時表現得很不自在，是不是可以請社團的幹部先幫我介紹，或者用簡短的方式說，不用太詳細。",
+      "speaker_guess": "unknown",
+      "script_segment": 232,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1887.3,
+      "end": 1889.4,
+      "text": "你正在規劃被選方案。",
+      "speaker_guess": "unknown",
+      "script_segment": 233,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1890.0,
+      "end": 1891.2,
+      "text": "這很有幫助。",
+      "speaker_guess": "unknown",
+      "script_segment": 233,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1892.3,
+      "end": 1901.6,
+      "text": "我覺得自己越來越能接受不完美的自己了，即使表現得不完美，我也知道這不代表我不好，而是我在學習。",
+      "speaker_guess": "unknown",
+      "script_segment": 234,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1902.2,
+      "end": 1904.3,
+      "text": "你正在建立對我建議的基礎。",
+      "speaker_guess": "unknown",
+      "script_segment": 235,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1905.4,
+      "end": 1918.9,
+      "text": "我想我可以先設定一個小目標，比如至少去一次說明會，而不是一定要加入社團，這樣壓力會比較小，也能讓我更專注在過程而不是結果上。",
+      "speaker_guess": "unknown",
+      "script_segment": 236,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1920.0,
+      "end": 1921.8,
+      "text": "這個目標設定很實際。",
+      "speaker_guess": "unknown",
+      "script_segment": 237,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1923.0,
+      "end": 1932.3,
+      "text": "我也想請你幫我看看，我寫的自我介紹稿，看看是不是太長，太複雜，或者有什麼地方可以簡化。",
+      "speaker_guess": "unknown",
+      "script_segment": 238,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1933.0,
+      "end": 1935.3,
+      "text": "當然可以，我們可以一起練習。",
+      "speaker_guess": "unknown",
+      "script_segment": 239,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1936.4,
+      "end": 1946.9,
+      "text": "我真的很期待能有這樣的機會，不只是為了社交，也是為了證明給自己看，我可以在害怕的情況下，還是選擇行動。",
+      "speaker_guess": "unknown",
+      "script_segment": 240,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1947.3,
+      "end": 1949.4,
+      "text": "你正在證明給自己看。",
+      "speaker_guess": "unknown",
+      "script_segment": 241,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1950.0,
+      "end": 1951.2,
+      "text": "不過",
+      "speaker_guess": "unknown",
+      "script_segment": 52,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1951.2,
+      "end": 1953.7,
+      "text": "每次想到要面對人群",
+      "speaker_guess": "unknown",
+      "script_segment": 242,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1953.7,
+      "end": 1956.1,
+      "text": "我還是會覺得胸口很壓",
+      "speaker_guess": "unknown",
+      "script_segment": 242,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1956.1,
+      "end": 1958.9,
+      "text": "好像有一種聲音一直在說",
+      "speaker_guess": "unknown",
+      "script_segment": 242,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1958.9,
+      "end": 1960.4,
+      "text": "你會搞砸的",
+      "speaker_guess": "unknown",
+      "script_segment": 86,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1960.4,
+      "end": 1961.6,
+      "text": "不如別試了",
+      "speaker_guess": "unknown",
+      "script_segment": 242,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1961.6,
+      "end": 1963.1,
+      "text": "那是什麼聲音",
+      "speaker_guess": "unknown",
+      "script_segment": 243,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1963.1,
+      "end": 1966.6,
+      "text": "我不知道是不是我自己的聲音",
+      "speaker_guess": "unknown",
+      "script_segment": 244,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1966.6,
+      "end": 1968.3,
+      "text": "但感覺很熟悉",
+      "speaker_guess": "unknown",
+      "script_segment": 244,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1968.3,
+      "end": 1970.0,
+      "text": "可能是我小時候",
+      "speaker_guess": "unknown",
+      "script_segment": 244,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1970.0,
+      "end": 1971.9,
+      "text": "每次考試考不好",
+      "speaker_guess": "unknown",
+      "script_segment": 244,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1971.9,
+      "end": 1973.6,
+      "text": "我爸媽就會說",
+      "speaker_guess": "unknown",
+      "script_segment": 244,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1973.6,
+      "end": 1975.6,
+      "text": "你這樣下去會怎麼樣",
+      "speaker_guess": "unknown",
+      "script_segment": 244,
+      "script_speaker": "client"
+    },
+    {
+      "start": 1975.6,
+      "end": 1977.2,
+      "text": "那是什麼感覺",
+      "speaker_guess": "unknown",
+      "script_segment": 28,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1977.2,
+      "end": 1979.1,
+      "text": "那種感覺",
+      "speaker_guess": "unknown",
+      "script_segment": 5,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 1980.0,
+      "end": 2009.3,
+      "text": "我感到很難受，像是被否定，然後自己也開始懷疑自己，我開始覺得，我永遠都不夠好，永遠都達不到他們的期望。你現在還會這樣想嗎？有時候會，特別是在我覺得自己做得不夠好的時候，我會想，如果我考不好，他們會失望，會覺得我讓他們失望了。你覺得他們會失望嗎？我不知道，我從來不夠。",
+      "speaker_guess": "unknown",
+      "script_segment": 248,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2010.0,
+      "end": 2018.2,
+      "text": "我都不敢問他們，也不敢說出自己的感受，我怕他們會說我太軟弱，或者說我太不負責任。",
+      "speaker_guess": "unknown",
+      "script_segment": 250,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2018.9,
+      "end": 2022.4,
+      "text": "你有沒有想過，他們其實也希望你能過得開心？",
+      "speaker_guess": "unknown",
+      "script_segment": 251,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 2023.5,
+      "end": 2033.8,
+      "text": "我有試過這樣想，但每次一想到他們對我的期待，我就覺得壓力很大，我好像永遠都做不到他們想要的那種成功。",
+      "speaker_guess": "unknown",
+      "script_segment": 252,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2034.4,
+      "end": 2035.7,
+      "text": "你覺得成功是什麼？",
+      "speaker_guess": "unknown",
+      "script_segment": 253,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 2036.5,
+      "end": 2039.7,
+      "text": "對我來說，成功就是能讓他們成功。",
+      "speaker_guess": "unknown",
+      "script_segment": 254,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2040.0,
+      "end": 2045.5,
+      "text": "我覺得我值得驕傲，但我也知道，這可能不是他們真正想要的。",
+      "speaker_guess": "unknown",
+      "script_segment": 254,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2046.1,
+      "end": 2046.8,
+      "text": "你怎麼知道？",
+      "speaker_guess": "unknown",
+      "script_segment": 255,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 2048.0,
+      "end": 2062.6,
+      "text": "因為我從來沒有真正和他們談過，我總是假設他們想要的是我考第一名，找到好工作，過得很穩定，但我從來沒有問過他們，他們希望我過什麼樣的生活。",
+      "speaker_guess": "unknown",
+      "script_segment": 256,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2063.3,
+      "end": 2064.6,
+      "text": "你有想過要問嗎？",
+      "speaker_guess": "unknown",
+      "script_segment": 257,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 2065.3,
+      "end": 2069.2,
+      "text": "有，但我怕他們會失望，我怕他們會對我。",
+      "speaker_guess": "unknown",
+      "script_segment": 258,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2070.0,
+      "end": 2073.7,
+      "text": "我覺得我太自私，或者說我太不負責任。",
+      "speaker_guess": "unknown",
+      "script_segment": 258,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2074.3,
+      "end": 2076.4,
+      "text": "你覺得那是他們的真實想法嗎？",
+      "speaker_guess": "unknown",
+      "script_segment": 259,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 2077.5,
+      "end": 2084.0,
+      "text": "我不知道，我只是覺得，如果我說出自己的想法，他們會覺得我不夠努力。",
+      "speaker_guess": "unknown",
+      "script_segment": 260,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2084.7,
+      "end": 2087.5,
+      "text": "你有沒有想過，他們也可能會有壓力？",
+      "speaker_guess": "unknown",
+      "script_segment": 261,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 2088.6,
+      "end": 2097.5,
+      "text": "我從來沒有這樣想過，我一直覺得壓力都是我自己的，但我現在開始覺得，他們可能也有他們的壓力。",
+      "speaker_guess": "unknown",
+      "script_segment": 262,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2100.0,
+      "end": 2112.0,
+      "text": "我開始覺得，他們可能也希望我過得開心，而不是隻是成功，只是我從來沒有這樣想過，因為我總是太在意他們的期待。",
+      "speaker_guess": "unknown",
+      "script_segment": 264,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2112.6,
+      "end": 2114.1,
+      "text": "你現在有什麼感覺？",
+      "speaker_guess": "unknown",
+      "script_segment": 265,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 2115.0,
+      "end": 2128.6,
+      "text": "我覺得有點釋懷，好像開始看到一些新的可能性，我開始覺得，也許我也可以試著和他們談談，不只是關於成績，而是關於我真正想要的生活。",
+      "speaker_guess": "unknown",
+      "script_segment": 266,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2130.0,
+      "end": 2152.2,
+      "text": "其實我還記得小學的時候，有一次考試我只考了第三名，回家後我媽就問我，為什麼不是第一名，那時我還小，我說我已經很努力了，但她說，努力沒有用，結果才重要，從那時起，我就開始覺得，如果做不到最好，就是失敗。",
+      "speaker_guess": "unknown",
+      "script_segment": 267,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2152.9,
+      "end": 2155.3,
+      "text": "那種感覺，是不是一直跟著你？",
+      "speaker_guess": "unknown",
+      "script_segment": 268,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 2160.0,
+      "end": 2172.7,
+      "text": "我報名了跳遠，結果只拿到第三名，我媽就說，你連這個都拿不到第一，還能做什麼？那時我真的覺得很難過，甚至不想再參加比賽了。",
+      "speaker_guess": "unknown",
+      "script_segment": 269,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2173.3,
+      "end": 2176.5,
+      "text": "那種話，對你來說，像是一種否定嗎？",
+      "speaker_guess": "unknown",
+      "script_segment": 270,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 2177.6,
+      "end": 2187.2,
+      "text": "對，我覺得他不是在否定我跳得不好，而是在否定我本身，好像只要我做不到最好，我就不是一個好孩子。",
+      "speaker_guess": "unknown",
+      "script_segment": 271,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2187.9,
+      "end": 2188.7,
+      "text": "那種感覺。",
+      "speaker_guess": "unknown",
+      "script_segment": 5,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 2190.0,
+      "end": 2191.9,
+      "text": "是不是讓你對失敗特別應該？",
+      "speaker_guess": "unknown",
+      "script_segment": 272,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 2193.1,
+      "end": 2195.9,
+      "text": "對，我覺得我現在對失敗的恐懼，",
+      "speaker_guess": "unknown",
+      "script_segment": 273,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2196.3,
+      "end": 2198.6,
+      "text": "其實就是從那種否定來的，",
+      "speaker_guess": "unknown",
+      "script_segment": 273,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2198.8,
+      "end": 2201.7,
+      "text": "我總是覺得，如果我做不到最好，",
+      "speaker_guess": "unknown",
+      "script_segment": 273,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2201.7,
+      "end": 2203.8,
+      "text": "別人就會看不起我，",
+      "speaker_guess": "unknown",
+      "script_segment": 273,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2204.1,
+      "end": 2206.4,
+      "text": "連我自己也會看不起自己。",
+      "speaker_guess": "unknown",
+      "script_segment": 273,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2207.0,
+      "end": 2209.6,
+      "text": "那種想法，現在還影響你呢？",
+      "speaker_guess": "unknown",
+      "script_segment": 274,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 2210.7,
+      "end": 2213.7,
+      "text": "當然會，比如說我現在寫報告，",
+      "speaker_guess": "unknown",
+      "script_segment": 275,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2214.1,
+      "end": 2216.3,
+      "text": "如果我覺得自己寫得不夠好，",
+      "speaker_guess": "unknown",
+      "script_segment": 275,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2216.7,
+      "end": 2219.7,
+      "text": "我就會拖延，因為我不想讓別人看，",
+      "speaker_guess": "unknown",
+      "script_segment": 275,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2220.0,
+      "end": 2221.9,
+      "text": "看到我不夠好的一面。",
+      "speaker_guess": "unknown",
+      "script_segment": 275,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2222.6,
+      "end": 2225.1,
+      "text": "那種拖延，是不是一種自我保護？",
+      "speaker_guess": "unknown",
+      "script_segment": 276,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 2226.2,
+      "end": 2230.3,
+      "text": "對，我覺得如果我不交報告，至少我還能說，",
+      "speaker_guess": "unknown",
+      "script_segment": 277,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2230.7,
+      "end": 2235.9,
+      "text": "我只是還沒寫完，而不是我寫得不好，這樣我就不會被否定。",
+      "speaker_guess": "unknown",
+      "script_segment": 277,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2236.5,
+      "end": 2238.6,
+      "text": "你覺得很熟悉這種感覺嗎？",
+      "speaker_guess": "unknown",
+      "script_segment": 278,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 2239.4,
+      "end": 2245.1,
+      "text": "真的太熟悉了，我從小學開始就這樣，我總是想做到完美，",
+      "speaker_guess": "unknown",
+      "script_segment": 279,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2245.4,
+      "end": 2249.3,
+      "text": "因為我知道，只要我不完美，就會被否定。",
+      "speaker_guess": "unknown",
+      "script_segment": 279,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2250.0,
+      "end": 2253.5,
+      "text": "那種否定，是不是來自於你內心的聲音？",
+      "speaker_guess": "unknown",
+      "script_segment": 280,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 2254.6,
+      "end": 2268.3,
+      "text": "對，我覺得我內心有一個聲音，一直在說，如果你做不到最好，你就什麼都不是，那聲音很像我媽的語氣，但我現在才發現，那是我內心學來的。",
+      "speaker_guess": "unknown",
+      "script_segment": 281,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2268.9,
+      "end": 2271.5,
+      "text": "你現在對那個聲音有什麼心的理解？",
+      "speaker_guess": "unknown",
+      "script_segment": 282,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 2272.3,
+      "end": 2279.7,
+      "text": "我開始覺得，那個聲音不是真的愛我，而是想控制我，它讓我覺得只有做到最好。",
+      "speaker_guess": "unknown",
+      "script_segment": 283,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2280.0,
+      "end": 2287.1,
+      "text": "才值得被愛，但其實，我早就知道，我媽愛我，不只是因為我成功。",
+      "speaker_guess": "unknown",
+      "script_segment": 283,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2287.8,
+      "end": 2288.7,
+      "text": "你怎麼知道的？",
+      "speaker_guess": "unknown",
+      "script_segment": 284,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 2289.8,
+      "end": 2296.8,
+      "text": "因為有一次我生病了，她沒有問我成績，而是問我有沒有吃藥，有沒有休息，",
+      "speaker_guess": "unknown",
+      "script_segment": 285,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2297.2,
+      "end": 2302.0,
+      "text": "那時我才發現，她其實在乎的是我，而不是我的表現。",
+      "speaker_guess": "unknown",
+      "script_segment": 285,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2302.7,
+      "end": 2305.2,
+      "text": "那種發現，對你來說有什麼意義？",
+      "speaker_guess": "unknown",
+      "script_segment": 286,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 2310.0,
+      "end": 2320.6,
+      "text": "不只是因為我成功，而是因為我是我，這對我來說很重要，因為我以前總是覺得，只有做到最好，才值得存在。",
+      "speaker_guess": "unknown",
+      "script_segment": 287,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2321.2,
+      "end": 2323.6,
+      "text": "你現在對最好有什麼新的想法？",
+      "speaker_guess": "unknown",
+      "script_segment": 288,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 2324.4,
+      "end": 2334.3,
+      "text": "我開始覺得，最好不是一個固定的標準，而是我自己的選擇，我可以選擇努力，但不需要逼自己做到完美。",
+      "speaker_guess": "unknown",
+      "script_segment": 289,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2335.0,
+      "end": 2338.2,
+      "text": "你覺得這樣的改變，會影響你未來的決定嗎？",
+      "speaker_guess": "unknown",
+      "script_segment": 290,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 2340.0,
+      "end": 2349.5,
+      "text": "會的，我覺得我可以開始接受自己不是第一名，也可以過得很好，這對我來說，是一個很大的轉變。",
+      "speaker_guess": "unknown",
+      "script_segment": 291,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2350.3,
+      "end": 2364.4,
+      "text": "今天我學到很多，尤其是關於最好這件事，以前我總是覺得，如果不做到最好，就沒有價值，但現在我知道，這只是我腦中的一個想法，而不是事實。",
+      "speaker_guess": "unknown",
+      "script_segment": 292,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2365.1,
+      "end": 2367.3,
+      "text": "嗯，這是一個很重要的覺察。",
+      "speaker_guess": "unknown",
+      "script_segment": 293,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 2370.0,
+      "end": 2381.0,
+      "text": "拖延並不是懶惰，而是我對失敗的恐懼，當我覺得事情做不到最好時，我就會逃避，這樣反而讓事情變得更糟。\"",
+      "speaker_guess": "unknown",
+      "script_segment": 294,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2381.0,
+      "end": 2386.1,
+      "text": "你能這樣說，代表你對自己的行為有了更深的認識？",
+      "speaker_guess": "unknown",
+      "script_segment": 295,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 2386.1,
+      "end": 2399.1,
+      "text": "我還學到了挑戰自動想法的方法，比如，當我覺得我一定會搞砸時，我可以問自己，有證據支援這個想法嗎？有沒有其他可能性？這讓我",
+      "speaker_guess": "unknown",
+      "script_segment": 296,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2400.0,
+      "end": 2402.6,
+      "text": "我不再那麼容易陷入負面情緒",
+      "speaker_guess": "unknown",
+      "script_segment": 296,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2402.6,
+      "end": 2403.6,
+      "text": "很好",
+      "speaker_guess": "unknown",
+      "script_segment": 51,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 2403.6,
+      "end": 2406.5,
+      "text": "這正是認知行為治療的核心技巧",
+      "speaker_guess": "unknown",
+      "script_segment": 297,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 2406.5,
+      "end": 2410.1,
+      "text": "我也開始練習設定小目標",
+      "speaker_guess": "unknown",
+      "script_segment": 298,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2410.1,
+      "end": 2412.8,
+      "text": "而不是一下子就想做到完美",
+      "speaker_guess": "unknown",
+      "script_segment": 298,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2412.8,
+      "end": 2415.9,
+      "text": "比如今天我完成了報告的一部分",
+      "speaker_guess": "unknown",
+      "script_segment": 298,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2415.9,
+      "end": 2418.1,
+      "text": "雖然不是最好的版本",
+      "speaker_guess": "unknown",
+      "script_segment": 298,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2418.1,
+      "end": 2419.9,
+      "text": "但我已經完成了",
+      "speaker_guess": "unknown",
+      "script_segment": 298,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2419.9,
+      "end": 2422.5,
+      "text": "這讓我更有信心繼續下去",
+      "speaker_guess": "unknown",
+      "script_segment": 298,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2422.5,
+      "end": 2424.0,
+      "text": "你做得很好",
+      "speaker_guess": "unknown",
+      "script_segment": 299,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 2424.0,
+      "end": 2426.5,
+      "text": "這樣子改變需要時間和練習",
+      "speaker_guess": "unknown",
+      "script_segment": 299,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 2426.5,
+      "end": 2429.2,
+      "text": "我還學會了用更有",
+      "speaker_guess": "unknown",
+      "script_segment": 300,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2430.0,
+      "end": 2439.7,
+      "text": "不善的語言對待自己，以前我總是用我真爛，我永遠做不到這種話，現在我知道，這樣只會讓自己更沮喪。",
+      "speaker_guess": "unknown",
+      "script_segment": 300,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2440.4,
+      "end": 2443.4,
+      "text": "你願意改變對自己的態度，這很不容易。",
+      "speaker_guess": "unknown",
+      "script_segment": 301,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 2444.6,
+      "end": 2454.9,
+      "text": "我也開始練習自我接納，我不再逼自己一定要做到完美，而是接受自己有時候會犯錯，這讓我感覺輕鬆了很多。",
+      "speaker_guess": "unknown",
+      "script_segment": 302,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2455.6,
+      "end": 2457.0,
+      "text": "這是一個很大最進步。",
+      "speaker_guess": "unknown",
+      "script_segment": 303,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 2460.0,
+      "end": 2473.5,
+      "text": "拖延並不是壞事，它其實是在告訴我，我對某件事有壓力或焦慮，所以，我現在會先問自己，我為什麼不想做這件事，而不是一昧地責怪自己。",
+      "speaker_guess": "unknown",
+      "script_segment": 304,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2474.2,
+      "end": 2476.4,
+      "text": "你越來越能覺察自己的情緒了。",
+      "speaker_guess": "unknown",
+      "script_segment": 305,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 2477.4,
+      "end": 2487.7,
+      "text": "我也開始相信，失敗並不代表我就是失敗的人，每一次的失敗，其實都是學習的機會，這讓我對未來更有希望。",
+      "speaker_guess": "unknown",
+      "script_segment": 306,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2488.1,
+      "end": 2489.2,
+      "text": "你對失敗的事情？",
+      "speaker_guess": "unknown",
+      "script_segment": 294,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2490.0,
+      "end": 2492.3,
+      "text": "看法中在轉變，這很關鍵。",
+      "speaker_guess": "unknown",
+      "script_segment": 307,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 2493.5,
+      "end": 2505.8,
+      "text": "我覺得自己現在更有能力去面對困難，而不是逃避，雖然還是會有時候想拖延，但我已經知道那是我的舊習慣，而不是我真正的選擇。",
+      "speaker_guess": "unknown",
+      "script_segment": 308,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2506.4,
+      "end": 2508.9,
+      "text": "你已經學會分辨習慣和選擇了。",
+      "speaker_guess": "unknown",
+      "script_segment": 309,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 2509.7,
+      "end": 2519.3,
+      "text": "我也開始相信，我可以慢慢來，不需要一下子改變所有事情，只要每天進步一點點，我就離我想著。",
+      "speaker_guess": "unknown",
+      "script_segment": 310,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2520.0,
+      "end": 2521.4,
+      "text": "成為的人更近了",
+      "speaker_guess": "unknown",
+      "script_segment": 310,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2521.4,
+      "end": 2523.9,
+      "text": "你已經走在改變的路上了",
+      "speaker_guess": "unknown",
+      "script_segment": 311,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 2523.9,
+      "end": 2526.9,
+      "text": "今天我最大的收穫是",
+      "speaker_guess": "unknown",
+      "script_segment": 312,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2526.9,
+      "end": 2529.1,
+      "text": "我發現我不需要完美",
+      "speaker_guess": "unknown",
+      "script_segment": 312,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2529.1,
+      "end": 2530.8,
+      "text": "也可以過得很好",
+      "speaker_guess": "unknown",
+      "script_segment": 291,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2530.8,
+      "end": 2533.2,
+      "text": "這讓我對未來更有信心",
+      "speaker_guess": "unknown",
+      "script_segment": 312,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2533.2,
+      "end": 2536.5,
+      "text": "也更有動力去面對生活中的挑戰",
+      "speaker_guess": "unknown",
+      "script_segment": 312,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2536.5,
+      "end": 2538.3,
+      "text": "你已經在改變了",
+      "speaker_guess": "unknown",
+      "script_segment": 121,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 2538.3,
+      "end": 2539.2,
+      "text": "這很棒",
+      "speaker_guess": "unknown",
+      "script_segment": 313,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 2539.2,
+      "end": 2544.3,
+      "text": "我覺得自己越來越能掌控自己的想法和行為了",
+      "speaker_guess": "unknown",
+      "script_segment": 314,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2544.3,
+      "end": 2547.1,
+      "text": "雖然還有很多要練習的地方",
+      "speaker_guess": "unknown",
+      "script_segment": 314,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2547.1,
+      "end": 2549.4,
+      "text": "但我已經看到了改變的",
+      "speaker_guess": "unknown",
+      "script_segment": 314,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2550.0,
+      "end": 2550.4,
+      "text": "可能。",
+      "speaker_guess": "unknown",
+      "script_segment": 46,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 2551.2,
+      "end": 2555.2,
+      "text": "你已經走得很遠了，繼續這樣下去，會越來越好的。",
+      "speaker_guess": "unknown",
+      "script_segment": 315,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 2556.4,
+      "end": 2561.0,
+      "text": "其實我今天也想了一下，關於我之前說的那個作業，",
+      "speaker_guess": "unknown",
+      "script_segment": 316,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2561.4,
+      "end": 2566.1,
+      "text": "我決定先跟室友說一下，請他幫我檢查一下格式，",
+      "speaker_guess": "unknown",
+      "script_segment": 316,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2566.5,
+      "end": 2569.4,
+      "text": "這樣我就可以比較安心地交作業了。",
+      "speaker_guess": "unknown",
+      "script_segment": 316,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2570.0,
+      "end": 2574.6,
+      "text": "這個想法很好，你願意主動請求幫助，是很早在進步。",
+      "speaker_guess": "unknown",
+      "script_segment": 317,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 2575.4,
+      "end": 2578.8,
+      "text": "我有點緊張，怕他會覺得我很煩。",
+      "speaker_guess": "unknown",
+      "script_segment": 318,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2580.0,
+      "end": 2590.0,
+      "text": "但我想我可以用比較輕鬆的方式跟他說，比如說開個玩笑，說我快被作業逼瘋了，需要他幫忙看一下。",
+      "speaker_guess": "unknown",
+      "script_segment": 318,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2590.7,
+      "end": 2594.9,
+      "text": "用幽默的方式表達請求，會讓對方比較容易接受。",
+      "speaker_guess": "unknown",
+      "script_segment": 319,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 2595.7,
+      "end": 2608.9,
+      "text": "我也想試著每天用番茄鍾來安排時間，雖然我以前總是拖到最後一刻才開始，但這次我想試著每天至少完成兩個番茄鐘的作業。",
+      "speaker_guess": "unknown",
+      "script_segment": 320,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2610.0,
+      "end": 2612.7,
+      "text": "兩個番茄鍾是個很好的提點。",
+      "speaker_guess": "unknown",
+      "script_segment": 321,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 2613.9,
+      "end": 2626.7,
+      "text": "我已經下載了番茄鐘的App，而且設定了一個提醒，每完成一個番茄鍾就給自己一點小獎勵，像是吃點喜歡的零食或者看一集喜歡的影集。",
+      "speaker_guess": "unknown",
+      "script_segment": 322,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2627.5,
+      "end": 2629.5,
+      "text": "這樣的對我獎勵方式很有效。",
+      "speaker_guess": "unknown",
+      "script_segment": 323,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 2630.4,
+      "end": 2639.5,
+      "text": "我也想安排一下我們下次見面的時間，因為我覺得這段時間的練習對我幫助很大，我希望可以持續。",
+      "speaker_guess": "unknown",
+      "script_segment": 324,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2640.0,
+      "end": 2669.3,
+      "text": "請不吝點贊 訂閱 轉發 打賞支援明鏡與點點欄目",
+      "speaker_guess": "unknown",
+      "script_segment": 310,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2670.0,
+      "end": 2699.1,
+      "text": "你已經學會了很多重要的技巧。",
+      "speaker_guess": "unknown",
+      "script_segment": 331,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 2700.0,
+      "end": 2711.3,
+      "text": "我想請你幫我看看我這段時間的練習筆記，看看我是不是有什麼地方可以再加強的，或者是不是有什麼習慣還沒有養成。",
+      "speaker_guess": "unknown",
+      "script_segment": 332,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2712.0,
+      "end": 2714.9,
+      "text": "當然可以，我們下次見面時一起討論。",
+      "speaker_guess": "unknown",
+      "script_segment": 333,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 2716.1,
+      "end": 2726.1,
+      "text": "我覺得這段時間的治療對我幫助很大，我學會了怎麼面對自己的焦慮，也學會了怎麼安排時間，讓自己不再拖延。",
+      "speaker_guess": "unknown",
+      "script_segment": 334,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2726.8,
+      "end": 2728.1,
+      "text": "你已經改變了很多。",
+      "speaker_guess": "unknown",
+      "script_segment": 335,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 2730.0,
+      "end": 2739.9,
+      "text": "我也希望未來能繼續這樣練習下去，讓自己變得更自信，更有條理，也能更享受學習和生活的過程。",
+      "speaker_guess": "unknown",
+      "script_segment": 336,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2740.6,
+      "end": 2742.5,
+      "text": "你已經走在正確的路上了。",
+      "speaker_guess": "unknown",
+      "script_segment": 167,
+      "script_speaker": "therapist"
+    },
+    {
+      "start": 2743.6,
+      "end": 2752.4,
+      "text": "謝謝你這段時間的陪伴和指導，我覺得自己變得更清楚自己的想法，也更有動力去面對未來的挑戰。",
+      "speaker_guess": "unknown",
+      "script_segment": 338,
+      "script_speaker": "client"
+    },
+    {
+      "start": 2753.1,
+      "end": 2755.7,
+      "text": "很高興能陪你一起走過這段旅程。",
+      "speaker_guess": "unknown",
+      "script_segment": 339,
+      "script_speaker": "therapist"
+    }
+  ]
+}

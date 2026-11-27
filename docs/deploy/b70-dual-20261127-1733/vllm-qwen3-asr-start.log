@@ -1,0 +1,2 @@
+53f15034f288342db19df661a1c5000ae3fbc2e8e298a2b0a2dbafd0ab7cbed3
+started; follow with: docker logs -f vllm-qwen3-asr

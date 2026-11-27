@@ -1,0 +1,1 @@
+vllm/vllm-openai-xpu@sha256:e2ab50957fc309d3fb110e6331ab8bfb7dd4f0074df41cbbf0bc3c64c8bc0e52

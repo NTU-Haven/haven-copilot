@@ -1,0 +1,2 @@
+79fb036f7fd82780d59c087c95be8dcba9f8c76bfaeb8780efc6539df7da75f4
+started; follow with: docker logs -f vllm-asr

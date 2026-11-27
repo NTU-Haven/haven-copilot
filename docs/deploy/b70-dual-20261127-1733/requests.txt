@@ -1,0 +1,9 @@
+--- qwen3-32b-awq chat completion
+:"qwen3-32b-awq","choices":[{"index":0,"message":{"role":"assistant","content":"{\"ok\": true}","refusal":null,"annotations":null,"audio":null,"function_call":null,"reasoning":null},"logprobs":null,"finish_reason":"stop","stop_reason":null,"token_ids":null,"routed_experts":null}],"service_tier":null,"system_fingerprint":"vllm-0.26.0-95c17a94","usage":{"prompt_tokens":21,"total_tokens":27,"completion_tokens":6,"prompt_tokens_details":null},"prompt_logprobs":null,"prompt_token_ids":null,"prompt_text":null,"kv_transfer_params":null,"ec_transfer_params":null,"metrics":null}
+HTTP 200 in 0.693195 s
+--- whisper verbose_json on L50-tts.ogg
+HTTP 200 in 8.921161 s
+segments: 553
+--- qwen3-asr json on L50-tts.ogg
+HTTP 200 in 11.029028 s
+characters: 11742

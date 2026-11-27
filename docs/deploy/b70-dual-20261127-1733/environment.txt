@@ -1,0 +1,34 @@
+date: 2026-11-27T17:33:17+00:00
+kernel: 7.0.0-34-generic
+os: Ubuntu 26.04.1 LTS
+docker: Docker version 29.8.1, build 4a63305
+--- GPU driver packages
+intel-opencl-icd 26.22.38646.7-1~26.04~ppa1
+libxpum2 2.0.0-1~26.04~ppa1
+libze-dev:amd64 1.28.6-1~26.04~ppa1
+libze-intel-gpu-raytracing 1.2.4-1~26.04~ppa3
+libze-intel-gpu1 26.22.38646.7-1~26.04~ppa1
+libze1:amd64 1.28.6-1~26.04~ppa1
+xpu-smi 2.0.0-1~26.04~ppa1
+--- kernel module
+filename:       /lib/modules/7.0.0-34-generic/kernel/drivers/gpu/drm/xe/xe.ko.zst
+vermagic:       7.0.0-34-generic SMP preempt mod_unload modversions 
+--- xpu-smi discovery
+                                                                  
+  Device ID     Device Information                                
+  0             Device Name: Intel(R) Arc(TM) Pro B70 Graphics    
+                Device State: normal                              
+                Vendor Name: Intel(R) Corporation                 
+                SOC UUID: 00000000-0000-0017-0000-0000e2238086    
+                PCI BDF Address: 0000:17:00.0                     
+                DRM Device: /dev/dri/card1                        
+                Function Type: physical                           
+                                                                  
+  1             Device Name: Intel(R) Arc(TM) Pro B70 Graphics    
+                Device State: normal                              
+                Vendor Name: Intel(R) Corporation                 
+                SOC UUID: 00000000-0000-00ba-0000-0000e2238086    
+                PCI BDF Address: 0000:ba:00.0                     
+                DRM Device: /dev/dri/card2                        
+                Function Type: physical                           
+                                                                  
