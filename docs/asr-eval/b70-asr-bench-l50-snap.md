@@ -1,6 +1,6 @@
 # ASR benchmark: b70-asr-bench-l50-snap
 
-- Date: 2026-11-27T08:23:44+00:00
+- Date: 2026-11-27T08:25:35+00:00
 - Candidate: `qwen3-asr` at http://127.0.0.1:8002 (response_format json; no timestamps)
 - Baseline: `whisper` at http://127.0.0.1:8001 (response_format verbose_json, as Haven sends it)
 - Simplified → Traditional before scoring: on (opencc s2twp)
@@ -9,8 +9,8 @@
 
 | Category | Utterances | MER Qwen3-ASR | MER Whisper | CER Qwen3-ASR | CER Whisper | WER Qwen3-ASR | WER Whisper | Failed (Q / W) | Seconds (Q / W) |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| long-zh | 1 | 1.1% | 7.4% | 1.1% | 7.4% | 66.7% | 33.3% | 0 / 0 | 7.8 / 8.4 |
-| all | 1 | 1.1% | 7.4% | 1.1% | 7.4% | 66.7% | 33.3% | 0 / 0 | 7.8 / 8.4 |
+| long-zh | 1 | 1.1% | 7.4% | 1.1% | 7.4% | 66.7% | 33.3% | 0 / 0 | 7.5 / 8.4 |
+| all | 1 | 1.1% | 7.4% | 1.1% | 7.4% | 66.7% | 33.3% | 0 / 0 | 7.5 / 8.4 |
 
 ## Alignment hybrid on C002-L50:1-339
 
