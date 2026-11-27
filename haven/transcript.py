@@ -26,6 +26,7 @@ def load_transcript(session_id: str) -> Transcript:
         date=raw["date"],
         simulated=raw.get("simulated", True),
         input_mode=raw.get("input_mode", "session"),
+        timestamps_estimated=bool(raw.get("timestamps_estimated", False)),
         segments=[Segment(**s) for s in raw["segments"]],
     )
 
@@ -83,6 +84,12 @@ def converts_to_traditional() -> bool:
 # Characters per second of conversational Mandarin, used only to estimate
 # timestamps when the transcription server returns text without a duration.
 SPEECH_RATE = 4.0
+
+
+class _Timed(list):
+    """The (start, end, text) list from the ASR server; ``estimated`` is True when the
+    server gave no timestamps and ``_sentences`` made them up."""
+    estimated = False
 
 
 class ASRError(Exception):
@@ -168,7 +175,9 @@ def _openai_server(audio_path: Path) -> list[tuple[float, float, str]]:
             duration = float(out.get("duration") or 0.0)
         except (TypeError, ValueError):
             duration = 0.0
-        return _sentences(out["text"], duration)
+        timed = _Timed(_sentences(out["text"], duration))
+        timed.estimated = True
+        return timed
     raise ASRError("no transcript in the reply")
 
 
@@ -184,7 +193,8 @@ def transcribe_audio(audio_path: Path, session_id: str, client_id: str, session_
     if config.ASR_REFINE:  # Qwen3-ASR's words in Whisper's segments (haven/asr_refine.py)
         from .asr_refine import refine
         refine(audio_path, segments)
-    return Transcript(session_id, client_id, session_no, date, segments, simulated=simulated)
+    return Transcript(session_id, client_id, session_no, date, segments, simulated=simulated,
+                      timestamps_estimated=bool(getattr(raw, "estimated", False)))
 
 
 def save_transcript(t: Transcript) -> Path:
@@ -199,6 +209,8 @@ def save_transcript(t: Transcript) -> Path:
     }
     if t.input_mode != "session":  # a file without the key is a session
         payload["input_mode"] = t.input_mode
+    if t.timestamps_estimated:  # a file without the key has real timestamps
+        payload["timestamps_estimated"] = True
     from .files import write_private
 
     write_private(path, json.dumps(payload, ensure_ascii=False, indent=2))

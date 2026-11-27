@@ -23,6 +23,7 @@ from urllib.parse import parse_qs, urlparse
 
 from . import accounts
 from . import audio as audio_store
+from . import playback
 from . import config, crypto, export, files, human_fields, jobs, llm, recap, regenerate, signing, store, templates, transcript_edit
 from .agents.verifier import VERIFIER_VERSION, Verifier
 from .models import to_dict
@@ -62,7 +63,7 @@ CSRF_HEADER = "X-Haven"
 # On every response. The UI has no inline script or style and loads nothing
 # from another origin, so the policy can be strict; the page cannot be framed.
 SECURITY_HEADERS = {
-    "Content-Security-Policy": "default-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'",
+    "Content-Security-Policy": "default-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'; media-src 'self'",
     "X-Frame-Options": "DENY",
     "X-Content-Type-Options": "nosniff",
     "Referrer-Policy": "no-referrer",
@@ -264,6 +265,7 @@ def _session_view(sid: str) -> dict:
     result["addenda"] = store.get_addenda(sid) if signature else []
     result["exports"] = export.for_session(sid)
     result["export_status"] = export.status_of(result["exports"])
+    result.update(playback.view(sid))  # playback_supported (ticket 09)
     result.update(audio_store.view(sid))  # audio_status, audio_expires_at, audio_deleted_at, audio_delete_reason, audio_hours_left
     result["input_mode"] = recap.mode_of(sid)
     if signature:
@@ -549,6 +551,8 @@ class Handler(BaseHTTPRequestHandler):
         url = urlparse(self.path)
         parts = [p for p in url.path.split("/") if p]
         query = parse_qs(url.query)
+        if parts[:2] == ["media", "audio"] and len(parts) == 3:
+            return self._media(parts[2])  # no X-Haven: an <audio> element cannot send it; the ticket is the credential
         if parts[:1] != ["api"]:
             return self._static(url.path)
         # Every API request carries the header, reads included: a read of a clinical
@@ -671,9 +675,17 @@ class Handler(BaseHTTPRequestHandler):
             sid = _session_id(parts[2])
             _my_session(sid)
             return self._json(_delete_audio(sid))
+        if len(parts) == 5 and parts[1] == "sessions" and parts[3:] == ["audio", "ticket"]:
+            sid = _session_id(parts[2])
+            _my_session(sid)
+            _transcript(sid)  # 404 for an unknown session even without accounts
+            return self._json(playback.issue(sid, _user()))
         if len(parts) == 4 and parts[1] == "jobs" and parts[3] == "retry":
             return self._json(_retry_job(parts[2]), HTTPStatus.ACCEPTED)
         return self._error(HTTPStatus.NOT_FOUND, "unknown endpoint")
+
+    def _media(self, ticket: str):
+        playback.serve(self, ticket, _user(), self.headers.get("Range"), _my_session)
 
     def _payload(self) -> dict:
         try:

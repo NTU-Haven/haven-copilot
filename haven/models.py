@@ -56,6 +56,9 @@ class Transcript:
     # "session" (a recording of the whole session) or "recap" (the therapist dictating
     # after the session). A transcript file without the key is a session.
     input_mode: str = "session"
+    # True when the ASR server gave no timestamps and Haven spread the time by text length
+    # (transcript._sentences). Playback shows "time positions are estimates" (ticket 09).
+    timestamps_estimated: bool = False
 
     def by_id(self) -> dict[int, Segment]:
         return {s.id: s for s in self.segments}
