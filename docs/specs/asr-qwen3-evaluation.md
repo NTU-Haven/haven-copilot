@@ -1,13 +1,34 @@
 ---
 title: Qwen3-ASR 評估與 ASR 決策（Haven Copilot MVP）
 date: 2026-11-27
-status: desk evaluation done; B70 measurement pending (Validation Gate)
+status: Step 0 passed on the B70 (2026-11-27); Step 1 (public sets) pending
 supersedes: haven-copilot-mvp.md §8.1–8.3 and ADR-005 default "No-Go"
 ---
 
 # Qwen3-ASR 評估與 ASR 決策
 
-> 這份是**文件評估**，資料來自官方模型卡、vLLM 原始碼與第三方論文和模型卡，**還沒有在 B70 上跑過任何一筆音檔**。以下所有效能數字都是原作者自己公布的，不是本專案量測的結果。
+> §1–§4 是**文件評估**，資料來自官方模型卡、vLLM 原始碼與第三方論文和模型卡，裡面的效能數字都是原作者自己公布的。§0 是本專案在 B70 上的實測。
+
+## 0. Step 0 實測結果（B70，2026-11-27，`scripts/qwen3-asr-smoke.sh`）
+
+**結果：通過。** 條件：card 1 同時跑 Whisper（`UTIL=0.12`，:8001）與 Qwen3-ASR-1.7B（`UTIL=0.3`，`--max-model-len 8192`，:8002），映像為 `vllm/vllm-openai-xpu:v0.26.0`，未升級 vLLM。錄音是 `~/L50-tts.ogg`：C002-L50 劇本 1–339 段，由 macOS `say` 的兩個合成聲音朗讀，約 46 分鐘，以劇本為參考。報告：`docs/asr-eval/b70-qwen3asr-smoke-20261127-0629.md`。
+
+| 項目 | Qwen3-ASR | Whisper（Haven 的呼叫方式：verbose_json） |
+|---|---|---|
+| XPU 啟動 | ✅ `device_config=xpu`，約 2 分 15 秒可回應 | 既有 |
+| `verbose_json` | ❌ 400「Currently do not support verbose_json for qwen3-asr」 | ✅ 553 個帶時間戳的 segments |
+| `json`／`text` | ✅ 200 | 200，但**掉字**（見下） |
+| CER（轉繁後） | **1.2%**（json 與 text 相同） | **7.5%**（和 11/17 batch 10 的數字相同，基準可重現） |
+| Coverage／最後 5 句 | 1.001／5 of 5，**沒有截斷** | 0.965／5 of 5 |
+| 46 分鐘的轉寫時間 | 7.8–11.1 s | 9.0 s |
+| card 1 記憶體 | 16.0 GiB（49%），兩個模型合計，為 vLLM 預先保留的量 | – |
+
+發現：
+1. **只有文字，沒有時間戳**，和 §2.2 的預測一致，必須採 Hybrid。
+2. **Whisper 用 `json`／`text` 會掉字**：CER 20.5%、Coverage 0.81。Haven 用的是 `verbose_json`，不受影響；以後修改 ASR 呼叫時不能改用 `json`。
+3. 準確度差距只能說明「在乾淨的合成華語上明顯比較好」：單一錄音、合成語音、純華語。**不能直接當作產品效能引用**。
+
+**Step 1 的改變（11/27 決定）**：不另外錄製素材。改用兩個公開資料集（不需要 token），再加上 L50。**不評估台語**，簡報不宣稱台語能力。另外改用「對齊式 Hybrid」（§3.1），不需要 ffmpeg。
 
 ## 1. 結論
 
@@ -75,6 +96,18 @@ supersedes: haven-copilot-mvp.md §8.1–8.3 and ADR-005 default "No-Go"
 
 **Hybrid 的技術前提：要能切音訊。** Python 標準函式庫只能切 WAV。瀏覽器錄音是 webm/opus，上傳檔可能是 m4a 或 mp3，所以需要 **ffmpeg**（主機上的系統工具，不是 pip 依賴）先統一轉成 16 kHz mono WAV。這一步同時解決 MVP 規格 §11.3 的 webm 無法拖動播放的問題（回放改用 WAV，或用轉出的 opus）。所以 ffmpeg 是兩個需求共用的 Validation Gate。
 
+### 3.1 對齊式 Hybrid（Step 0 之後的建議做法）
+Step 0 顯示 Qwen3-ASR 能一次完整轉寫 46 分鐘，不會截斷，所以不必切音訊：
+1. Whisper（`verbose_json`）照常產生帶時間戳的段落，段落 id、`start`、`end` 都以它為準。
+2. Qwen3-ASR（`json`）對整段音檔轉寫一次，取得全文。
+3. 用字元層級的序列對齊（標準函式庫 `difflib.SequenceMatcher`，比對前先統一轉繁、去標點）把 Qwen 全文切回 Whisper 的段落。對齊相同的地方照字數對應；兩邊替換的地方依比例切開。
+
+好處：不需要 ffmpeg，只多一個請求，Qwen 看得到整段上下文，某一段對不上時可以保留 Whisper 原文。
+風險：Whisper 在某個地方錯很多時，切點可能偏一兩個字，下一段的開頭因此跑到上一段。
+本地測試：在 L50 的 339 段上，先讓「Whisper」那一方每 15 個字錯 1 個字，再對齊回正確文字，339 段全部切對，耗時 0.4 秒。真實音檔的驗證要看 `scripts/asr_benchmark.py` 輸出的抽樣表。
+
+切段式 Hybrid 與 ffmpeg 改為**備案**：只有在對齊式 Hybrid 的抽樣檢查不合格時才考慮。
+
 **ForcedAligner 路線（不建議用在 MVP）：** 要在 XPU 上跑 transformers、把音訊切成 5 分鐘以內的窗口、把字級時間戳合回段落，還要另外處理說話者切段。改動最大、XPU 未知，也不支援閩南語。
 
 ## 4. 主要風險
@@ -97,52 +130,46 @@ supersedes: haven-copilot-mvp.md §8.1–8.3 and ADR-005 default "No-Go"
 3. 送一段約 10 分鐘和一段 46 分鐘的合成錄音，確認沒有被截斷。
 4. 用 `xpu-smi` 記錄記憶體用量，確認 Whisper、Qwen3-ASR 和 Qwen3-32B 擺得下（雙卡時 Qwen3-32B 獨佔 card 0）。
 
-### Step 1：對照評測（1 天）
-- **素材**（自製或合成、有授權、不用真實個案）：
-  - 6 段台灣華語
-  - 6 段中英混用
-  - 6 段台語或華台混用
-  - 6 段關鍵語意：否定、時間、主詞
-  - 1 段 ≥ 30 分鐘的模擬晤談
-  - 時間允許的話，加三語切換
-- **對照組**：
-  - (a) Whisper（現況）
-  - (b) Qwen3-ASR 直接轉寫整段
-  - (c) Hybrid：Whisper 切段，Qwen3-ASR 重新轉寫每段
-  - 選做 (d) TEA-ASR-1.1：架構相同，如果 vLLM 能載入，就只加一列
+### Step 1：對照評測（半天，`scripts/asr_benchmark.py`）
+- **素材**（11/27 改為公開資料集，不需要 token，也不另外錄製）：
+
+  | 資料集 | 內容 | 抽樣 | 授權 | 限制 |
+  |---|---|---|---|---|
+  | `CAiRE/ASCEND` test（1,315 句） | 自然對話，23 位香港雙語者，每句標註 zh／en／mixed | 平均間隔抽 60 句 | CC BY-SA 4.0 | 不是台灣口音；參考稿是簡體 |
+  | `ky552/cszs_zh_en` test（3,176 句）的 `correct_*` | 中英混用句子（ICASSP 2024 benchmark） | 平均間隔抽 40 句 | CC BY 4.0 | 講者與錄製方式未說明；參考稿是簡體 |
+  | `~/L50-tts.ogg`（C002-L50 1–339） | 46 分鐘合成語音的模擬晤談 | 1 段 | 本專案 | 合成語音；用來檢查對齊式 Hybrid |
+
+  兩個公開資料集都是 TEA-ASR 和 Breeze-ASR 報告中用過的，結果方向可以對照（但評分方式不同，不能直接比數字）。**不評估台語**。
+- **對照組**：Qwen3-ASR（`json`）vs Whisper（`verbose_json`，Haven 的呼叫方式）；L50 另外做對齊式 Hybrid。TEA-ASR 與切段式 Hybrid 不做。
 - **指標**：
-  - 中文 CER、英文 WER、混用 MER，正規化規則統一（轉繁、去標點、英文小寫）
-  - 關鍵語意錯誤數，人工判定
-  - 漏句和重複
-  - 長音訊完整性
-  - 時間戳：(a) 和 (c) 段落起點誤差，抽 20 段
-  - 延遲與 GPU 記憶體
-- **台語**：分三種輸出目標分開評，不跨目標比較 CER：
-  - 忠實台語漢字或台羅
-  - 台語正字
-  - 華語語意
+  - MER（中文字＋英文詞）、CER（只算中文字）、WER（只算英文詞），依類別分開做 micro-average。
+  - 評分前兩邊都用 opencc s2twp 轉繁、轉小寫、去標點，簡繁不同不算錯。
+  - 失敗數、總轉寫時間。
+  - 列出 Qwen 相對 Whisper 表現最差的 5 句。
+  - L50：Hybrid 的空段數、段落與 Whisper 的差異中位數、抽 20 段對照表，**人工看過**才算數。
+- **關鍵語意錯誤**（否定、時間、主詞）：不另做資料集。從結果的 json 檔裡，人工檢查含否定詞或時間詞的句子各 10 句。
 
 ### Step 2：Go / No-Go（11/29 中午前決定）
-**Hybrid 只有在以下條件全部成立時才採用：**
-1. Step 0 全部通過：在 XPU 上穩定、長音訊沒有截斷、記憶體擺得下。
-2. 中英混用 MER 相對 Whisper 改善 ≥ 20%，而且台灣華語 CER 不比 Whisper 差。
-3. 關鍵語意錯誤 ≤ Whisper。
-4. 漏句加重複 ≤ Whisper。
-5. 主機上有 ffmpeg，或可以用既有容器裡的 ffmpeg。
+**對齊式 Hybrid 只有在以下條件全部成立時才採用：**
+1. ✅ Step 0 全部通過：在 XPU 上穩定、長音訊沒有截斷、記憶體擺得下（11/27 已確認）。
+2. `ascend-mixed` 與 `cszs-mixed` 的 MER 相對 Whisper 改善 ≥ 20%，而且 `ascend-zh` 的 CER 不比 Whisper 差。
+3. 人工抽查的否定與時間句，Qwen 的錯誤數 ≤ Whisper。
+4. 失敗數為 0，L50 沒有截斷。
+5. L50 的 Hybrid 抽樣 20 段中，至少 18 段切點正確，而且空段數 ≤ 1%。
 6. 整合估計可以在 12/01 前完成，不擋 MVP 的 critical path。
 
 **其他結果：**
 - **No-Go**：維持 Whisper。評測結果照樣寫進簡報，作為「做過比較」的證據與 Roadmap。
-- **只過條件 1–4、沒有 ffmpeg**：MVP 維持 Whisper。Qwen3-ASR 只當成選用的「重新轉寫此段」功能（P1），或列入 Roadmap。
+- **條件 2–4 通過、條件 5 不通過**：先檢查是不是對齊參數的問題（時間盒半天）。修不好就考慮切段式 Hybrid（需要 ffmpeg），否則 MVP 維持 Whisper，Qwen3-ASR 列入 Roadmap。
 
 ## 6. 對 MVP Spec 的影響
 
 - ADR-005 改為「Whisper 為主（時間戳），Qwen3-ASR 以 Hybrid 方式有條件採用」。
 - T16 拆成三張：
-  - **T16a**：Step 0 煙霧測試
-  - **T16b**：對照評測，含 `scripts/asr_eval.py` 的多語分組
-  - **T16c**：Hybrid 整合，只有 Go 才做，約 1–1.5d
-- T08 回放和 T16c 共用新的 **T07a「音訊正規化」**：用 ffmpeg 統一轉成 16 kHz WAV 或 opus，產生的檔案依 §11.2 的規則管理。
+  - **T16a**：Step 0 煙霧測試。✅ 11/27 完成。
+  - **T16b**：對照評測，用 `scripts/asr_benchmark.py`（公開資料集＋L50）。
+  - **T16c**：對齊式 Hybrid 整合，只有 Go 才做，約 1 天。不需要 ffmpeg；對齊函式從 `scripts/asr_benchmark.py` 的 `align()` 移進 Haven。
+- **T07a「音訊正規化」**不再是 ASR 的前提，只和 T08 回放（webm 無法拖動播放）有關。
 - 會後口述大多是單人短音檔，可以考慮直接用 Qwen3-ASR，時間戳用估計值就夠（P1 選項，不必等 Hybrid）。
 
 ## 7. 還不知道、需要 B70 回答的事

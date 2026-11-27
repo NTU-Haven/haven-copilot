@@ -645,7 +645,7 @@ T04 Schema & WAL ──┬──→ T05 Jobs ──→ T06 input_mode in upload/
                    └──→ T12 Export (exports table)
 T13 Security acceptance tests  ← T05, T08, T09, T12
 T15 B70 deploy & two-card gate  (parallel from day 1)
-T16a Qwen3-ASR smoke → T16b benchmark & Go/No-Go (11/29 noon) ──Go──→ T16c Hybrid ← T07a audio normalisation ← T07
+T16a Qwen3-ASR smoke (done) → T16b benchmark & Go/No-Go (11/29 noon) ──Go──→ T16c alignment hybrid
 T17 Real E2E Release Gate       ← T03, T06, T08, T10, T11, T12, T15
 T18 Docs: README, consent, demo script ← T07, T01, T17
 T19 Small fixes (reset_demo, sign lock)  (parallel, any time)
@@ -679,9 +679,9 @@ T19 Small fixes (reset_demo, sign lock)  (parallel, any time)
 | T14 | 模型品質 golden set | ≥ 10 段腳本＋人工標註；擴充 verifier_eval 案例；在 B70 跑並人工審閱 | 統計顯著評估 | T03, T15 | data/（新案例檔）、scripts/ | AC-01 Model Quality | P0 | 1d | 中 |
 | T15 | B70 部署與雙卡 Gate | 記錄 driver、image digest、啟動指令；嘗試 Qwen card0／Whisper card1；SSH tunnel 說明 | NGINX、LAN 模式 | – | scripts/（新啟動說明或參數）、docs | 兩個 vLLM 服務可用、配置記錄完整 | P0 | 0.5d | 中 |
 | T16a | Qwen3-ASR 可行性煙霧測試 | 確認映像檔有這個模型、XPU 能啟動、`verbose_json` 和 `json` 的行為、10 與 46 分鐘音檔不截斷、記憶體擺得下 | 準確度評測 | T15 | scripts/（啟動參數）、docs/asr-eval | asr-qwen3-evaluation.md §5 Step 0 | P0 | 0.5d | 中 |
-| T16b | ASR 對照評測＋Go/No-Go | 準備 24 段加 1 段長音檔；比較 Whisper、Qwen3 直接轉寫、Hybrid（選做 TEA-ASR）；台語分三種目標；決策紀錄 | 整合 | T16a | scripts/asr_eval.py（多語分組、MER）、docs/asr-eval | §5 Step 1–2，11/29 中午前決策 | P0 | 1d | 中 |
-| T07a | 音訊正規化 | 用 ffmpeg 轉成 16 kHz mono WAV（給 ASR 與切段用）和可拖動播放的格式（給回放用）；衍生檔依 §11.2 管理 | 新 pip 依賴 | T07 | audio 模組 | 轉檔成功與失敗都會清理；webm 能拖動播放 | P0（若 T08 或 T16c 需要） | 0.5d | 中（ffmpeg 不一定有） |
-| T16c | Hybrid ASR 整合（只在 Go 時做） | 依 Whisper 段落切音訊，批次送 Qwen3-ASR，逐段失敗就退回 Whisper 文字；段落保留 `asr_engine` 與 Whisper 原文；`HAVEN_ASR_REFINE` flag | ForcedAligner | T16b（Go）、T07a | transcript、新 asr_refine 模組 | 段落 id 和時間不變；fake 伺服器測試加 B70 實測 | P0（條件式） | 1–1.5d | 中 |
+| T16b | ASR 對照評測＋Go/No-Go | 用 `scripts/asr_benchmark.py` 評 ASCEND 60 句、CSZS 40 句加 L50；Qwen3（json）vs Whisper（verbose_json）；L50 加做對齊式 Hybrid 抽樣；人工抽查否定與時間句；決策紀錄。**不評台語** | 整合；自製素材 | T16a（✅ 11/27 通過） | docs/asr-eval | asr-qwen3-evaluation.md §5 Step 2，11/29 中午前決策 | P0 | 0.5d | 低 |
+| T07a | 音訊正規化（只給回放用） | 用 ffmpeg 把瀏覽器錄的 webm 轉成可拖動播放的格式；衍生檔依 §11.2 管理 | 新 pip 依賴；ASR 前處理 | T07 | audio 模組 | 轉檔成功與失敗都會清理；webm 能拖動播放 | P0（只在 T08 的 seek Gate 失敗時做） | 0.5d | 中（ffmpeg 不一定有） |
+| T16c | 對齊式 Hybrid ASR 整合（只在 Go 時做） | Whisper `verbose_json` 段落＋Qwen3-ASR `json` 全文，用 `align()`（從 scripts/asr_benchmark.py 移入）切回段落；某段對不上或 Qwen 失敗時保留 Whisper 文字；段落記錄 `asr_engine` 與 Whisper 原文；`HAVEN_ASR_REFINE` flag；`_openai_server` 依模型選擇 response_format | ForcedAligner；切音訊 | T16b（Go） | transcript、新 asr_refine 模組、config | 段落 id 和時間不變；fake 伺服器測試＋B70 實測 | P0（條件式） | 1d | 中 |
 | T17 | 真實 E2E Release Gate | AC-12、AC-13；performance 紀錄；錄製備援影片並標示 | – | T03, T06, T08, T10, T11, T12, T15 | docs（結果） | AC-12 通過或記錄失敗與限制 | P0 | 1d | 高 |
 | T18 | 文件同步 | README（音檔政策、Safety Boundary、Limitations）、同意書、demo 腳本、架構圖、法規引用待核對標記 | 簡報製作 | T01, T07, T17 | README、docs/consent-form.md、docs/video-script.md | 文件與行為一致 | P0 | 0.5d | 中 |
 | T19 | 小修 | reset_demo 備份檔名；（若 T10 未先做）sign 加鎖 | – | – | scripts/reset_demo.py | test_ui 連跑 10 次不失敗 | P0 | 0.1d | 低 |

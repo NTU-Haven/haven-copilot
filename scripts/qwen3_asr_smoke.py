@@ -52,8 +52,9 @@ def models(url: str) -> list[str]:
         raise SystemExit(f"no model server at {url}: {type(e).__name__}: {e}") from None
 
 
-def transcribe(url: str, model: str, audio: Path, fmt: str, timeout: float) -> dict:
-    """One transcription request, built like haven.transcript._openai_server."""
+def transcribe(url: str, model: str, audio: Path, fmt: str, timeout: float, keep_segments: bool = False) -> dict:
+    """One transcription request, built like haven.transcript._openai_server. With
+    ``keep_segments`` the answer's full segment list is kept as ``all_segments``."""
     assert_local(url)
     boundary = uuid.uuid4().hex
     fields = {"model": model, "language": "zh", "response_format": fmt}
@@ -90,6 +91,9 @@ def transcribe(url: str, model: str, audio: Path, fmt: str, timeout: float) -> d
         out["first_segments"] = [{"start": s.get("start"), "end": s.get("end"), "text": str(s.get("text", ""))[:40]}
                                  for s in segs[:3] if isinstance(s, dict)]
         out["duration"] = data.get("duration")
+        if keep_segments:
+            out["all_segments"] = [{"start": s.get("start"), "end": s.get("end"), "text": str(s.get("text", ""))}
+                                   for s in segs if isinstance(s, dict)]
         out["text"] = str(data.get("text") or "".join(str(s.get("text", "")) for s in segs if isinstance(s, dict)))
     else:
         out["text"] = text  # response_format=text
