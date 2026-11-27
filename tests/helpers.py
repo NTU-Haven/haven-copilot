@@ -91,6 +91,7 @@ class ServerCase:
 
     @classmethod
     def call(self, path, body=None, headers=None, method=None):
+        body = self._with_base(path, body)
         data = json.dumps(body).encode() if body is not None else None
         req = urllib.request.Request(self.base + path, data=data, headers=H if headers is None else headers,
                                      method=method or ("POST" if data is not None else "GET"))
@@ -100,6 +101,19 @@ class ServerCase:
         except urllib.error.HTTPError as e:
             with e:
                 return e.code, json.load(e)
+
+    @classmethod
+    def _with_base(cls, path, body):
+        """/sign and /process of an existing draft need base_revision (ticket 07). Most tests are
+        not about that, so the current revision is filled in unless the test sets the key itself
+        (``"base_revision": None`` sends none)."""
+        import re
+        from haven import store
+        m = re.fullmatch(r"/api/sessions/([^/?]+)/(sign|process)(\?.*)?", path)
+        if not m or not isinstance(body, dict) or "base_revision" in body:
+            return body
+        result = store.get_result(m.group(1).upper())
+        return dict(body, base_revision=result.get("revision", 0)) if result else body
 
     @classmethod
     def draft(self, sid):

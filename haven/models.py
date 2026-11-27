@@ -67,6 +67,10 @@ class NoteSentence:
     confirmed_by_therapist: bool = False
     # A kept sentence that cites no transcript line: what the therapist based it on.
     keep_reason: str = ""
+    # Who wrote the sentence: "ai" (as the AI wrote it), "ai_edited" (the therapist
+    # changed an AI sentence) or "human". The server sets it on save by comparing
+    # with the AI's own draft (haven/regenerate.py); a value sent by a browser is ignored.
+    origin: str = "ai"
 
 
 @dataclass

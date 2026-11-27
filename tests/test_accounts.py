@@ -167,8 +167,8 @@ class WhoMayOpenWhatTest(AccountCase, unittest.TestCase):
             k: [{"text": s["text"], "evidence": s["evidence"], "source": s["source"],
                  "confirmed_by_therapist": True, "keep_reason": "測試"} for s in v] for k, v in r["note"]["sections"].items()}}
         dismissals = [{"segment_id": u["segment_id"], "reason": "測試"} for u in r.get("risk_uncovered", [])]
-        status, sig, _ = self.req("/api/sessions/C001-S03/sign", {"signed_by": "隨便打的名字", "note": note, "risk_dismissals": dismissals},
-                                  cookie=wang)
+        status, sig, _ = self.req("/api/sessions/C001-S03/sign", {"signed_by": "隨便打的名字", "note": note, "risk_dismissals": dismissals,
+                                   "base_revision": r.get("revision", 0)}, cookie=wang)
         self.assertEqual(status, 200, sig)
         self.assertEqual(sig["signed_by"], "王心理師")
         sign_rows = [a for a in store.recent_audit(50) if a["action"] == "sign_note"]

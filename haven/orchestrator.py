@@ -134,7 +134,8 @@ class Orchestrator:
             k: [NoteSentence(s["text"], list(s.get("evidence", [])), source="measure" if s["text"] in measures and not s.get("evidence") else "transcript",
                              # The therapist's own confirmations in a saved working draft survive a re-check.
                              confirmed_by_therapist=s.get("confirmed_by_therapist") is True,
-                             keep_reason=s.get("keep_reason", "") if isinstance(s.get("keep_reason"), str) else "")
+                             keep_reason=s.get("keep_reason", "") if isinstance(s.get("keep_reason"), str) else "",
+                             origin=s.get("origin") if s.get("origin") in ("ai", "ai_edited", "human") else "ai")
                 for s in items]
             for k, items in stored["sections"].items()
         }, stored.get("engine", ""), stored.get("warnings", []))

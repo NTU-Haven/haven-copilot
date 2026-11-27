@@ -1274,15 +1274,17 @@ function renderSession(r, focusSeg) {
 }
 
 async function regenerate(btn) {
-  if (!confirm("重新產生會丟掉這份草稿和您在這一頁做的修改。確定要重新產生？")) return;
+  if (!(await confirmRegenerate())) return; // web/regenerate.js: the old draft is kept under "先前版本"
   const my = nav, sid = session.session_id, template = session.note.template;
   await busy(btn, "重新產生中", async () => {
     try {
-      const r = await post(`/api/sessions/${encodeURIComponent(sid)}/process?template=${encodeURIComponent(template)}`);
+      const r = await post(`/api/sessions/${encodeURIComponent(sid)}/process?template=${encodeURIComponent(template)}`,
+        { base_revision: session.revision || 0, discard_edits: true });
       if (my !== nav) return;
       renderSession(r);
     } catch (err) {
-      if (my === nav) showMessage(`沒有重新產生：${err.message}`, true);
+      if (my === nav && err.data && err.data.conflict) showConflict(err.message);
+      else if (my === nav) showMessage(`沒有重新產生：${err.message}`, true);
     }
   });
 }
