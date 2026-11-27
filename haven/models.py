@@ -18,6 +18,9 @@ class Segment:
     #   "model":     guessed by the local LLM from the words, for uploaded audio.
     #   "none":      uploaded audio the speaker agent did not label (no model, or no
     #                usable answer); ``speaker`` is then "unknown".
+    #   "recap":     a post-session recap (haven/recap.py): the therapist alone speaks,
+    #                so every line is "therapist" without any guess. Not in CONFIRMED:
+    #                the risk scan still reads these lines as what was said about the client.
     # Agents treat only CONFIRMED sources as known.
     speaker_source: str = "script"
     # Set by the first correction of the words (haven/transcript_edit.py): what the
@@ -50,6 +53,9 @@ class Transcript:
     # From the client file, when known. The risk agent uses it for cues that
     # matter differently for a minor (substance use, abuse).
     client_age: int | None = None
+    # "session" (a recording of the whole session) or "recap" (the therapist dictating
+    # after the session). A transcript file without the key is a session.
+    input_mode: str = "session"
 
     def by_id(self) -> dict[int, Segment]:
         return {s.id: s for s in self.segments}

@@ -23,7 +23,7 @@ from urllib.parse import parse_qs, urlparse
 
 from . import accounts
 from . import audio as audio_store
-from . import config, crypto, export, files, human_fields, jobs, llm, regenerate, signing, store, templates, transcript_edit
+from . import config, crypto, export, files, human_fields, jobs, llm, recap, regenerate, signing, store, templates, transcript_edit
 from .agents.verifier import VERIFIER_VERSION, Verifier
 from .models import to_dict
 from .orchestrator import Orchestrator, get_client, load_clients
@@ -265,6 +265,7 @@ def _session_view(sid: str) -> dict:
     result["exports"] = export.for_session(sid)
     result["export_status"] = export.status_of(result["exports"])
     result.update(audio_store.view(sid))  # audio_status, audio_expires_at, audio_deleted_at, audio_delete_reason, audio_hours_left
+    result["input_mode"] = recap.mode_of(sid)
     if signature:
         result["note"] = store.get_signed_note(sid)
     # Field labels and hints for the page; None for a template no longer registered.
@@ -693,7 +694,8 @@ class Handler(BaseHTTPRequestHandler):
         return self._json(ORCH.memory.ask(client, q.strip()))
 
     def _process(self, sid, query):
-        template = templates.get(query.get("template", [templates.DEFAULT])[0]).id  # unknown id: 400
+        default = recap.DEFAULT_TEMPLATE if recap.mode_of(sid) == recap.RECAP else templates.DEFAULT  # QUAL for a recap
+        template = templates.get(query.get("template", [default])[0]).id  # unknown id: 400
         if not (config.SESSIONS_DIR / f"{sid}.json").is_file():
             raise _no_session()
         payload = self._payload() if self.headers.get("Content-Length") else {}
@@ -744,7 +746,9 @@ class Handler(BaseHTTPRequestHandler):
         payload = self._payload()
         _need_base(payload)
         with _session_lock(sid):
-            result, _, _ = _draft(sid)
+            result, transcript, _ = _draft(sid)
+            if recap.is_recap(transcript):  # a dictation has one voice and nothing to confirm
+                raise Refused(recap.SPEAKERS_REFUSED, recap.SPEAKERS_REFUSED_ZH)
             _check_revision(result, payload)
             count, changed = transcript_edit.edit_speakers(sid, payload.get("speakers"), _editor())
             _bump(result)
@@ -919,6 +923,7 @@ class Handler(BaseHTTPRequestHandler):
         # Absent means a real client: the safer reading. A recording wrongly marked
         # as simulated would lose the care real data gets (and pass the pre-commit check).
         simulated = query.get("simulated", ["0"])[0] == "1"
+        input_mode = _input_mode(query.get("input_mode", [None])[0])
         _my_client(client_id)
         if not session_id.startswith(f"{client_id.upper()}-"):
             raise HttpError(HTTPStatus.BAD_REQUEST, "the session id must start with the client id",
@@ -952,7 +957,7 @@ class Handler(BaseHTTPRequestHandler):
         except BaseException as e:
             _abandon_audio(tmp_name, session_id, e)
             raise
-        return self._json(_start_transcription(tmp_name, session_id, client_id, session_no, simulated, "transcribe_upload"),
+        return self._json(_start_transcription(tmp_name, session_id, client_id, session_no, simulated, "transcribe_upload", input_mode),
                           HTTPStatus.ACCEPTED)
 
     # ---------- accounts and client assignments (admin, on the main PC) ----------
@@ -1021,6 +1026,7 @@ class Handler(BaseHTTPRequestHandler):
         if p.get("consent") is not True:
             return self._error(HTTPStatus.BAD_REQUEST, "the client's written consent to recording is required",
                                "需要先取得個案對錄音的書面同意。")
+        input_mode = _input_mode(p.get("input_mode"))
         _my_client(client_id)
         if not session_id.startswith(f"{client_id.upper()}-"):
             raise HttpError(HTTPStatus.BAD_REQUEST, "the session id must start with the client id",
@@ -1034,7 +1040,7 @@ class Handler(BaseHTTPRequestHandler):
         user = _user()
         with CLIENTS_LOCK:
             RECORDINGS[rid] = {"path": tmp_name, "session_id": session_id, "client_id": client_id, "session_no": session_no,
-                               "simulated": p.get("simulated") is True, "next": 0, "bytes": 0, "seen": time.time(),
+                               "simulated": p.get("simulated") is True, "input_mode": input_mode, "next": 0, "bytes": 0, "seen": time.time(),
                                "user": user["username"] if user else None, "lock": threading.Lock()}
         store.audit("recording_started", f"{session_id} consent={CONSENT_SCOPE}")
         return self._json({"recording_id": rid, "session_id": session_id})
@@ -1076,7 +1082,7 @@ class Handler(BaseHTTPRequestHandler):
             _abandon_audio(rec["path"], rec["session_id"], HttpError(HTTPStatus.BAD_REQUEST, "empty"))
             raise HttpError(HTTPStatus.BAD_REQUEST, "nothing was recorded", "沒有收到任何錄音，沒有建立會談。")
         return self._json(_start_transcription(rec["path"], rec["session_id"], rec["client_id"], rec["session_no"],
-                                               rec["simulated"], "transcribe_recording"), HTTPStatus.ACCEPTED)
+                                               rec["simulated"], "transcribe_recording", rec["input_mode"]), HTTPStatus.ACCEPTED)
 
     def _recording_cancel(self, rid: str):
         rec = self._recording(rid)
@@ -1245,12 +1251,21 @@ def _sweep_recordings() -> None:
         store.audit("recording_abandoned", f"{r['session_id']}: nothing arrived for {RECORDING_IDLE // 60} minutes; audio removed")
 
 
-def _start_transcription(tmp_name: str, session_id: str, client_id: str, session_no: int, simulated: bool, action: str) -> dict:
+def _input_mode(value) -> str:
+    """``input_mode`` of an upload or recording (haven/recap.py); anything but session or recap is a 400."""
+    try:
+        return recap.parse(value)
+    except ValueError as e:
+        raise BadRequest(str(e)) from None
+
+
+def _start_transcription(tmp_name: str, session_id: str, client_id: str, session_no: int, simulated: bool, action: str,
+                         input_mode: str = recap.SESSION) -> dict:
     """Queues transcription and drafting of a complete recording and answers at
     once (202). The recording moves into data/audio (haven/audio.py), where a retry
     can find it and where it stays until it is signed off, expires or is deleted."""
     params = {"client_id": client_id, "session_no": session_no, "simulated": simulated, "action": action,
-              "date": date.today().isoformat()}
+              "date": date.today().isoformat(), "input_mode": input_mode}
     try:
         job = jobs.create(session_id, "transcribe", params, audio=tmp_name)
     except jobs.Busy:
@@ -1299,7 +1314,8 @@ def _transcribe_job(job: dict, audio: Path | None) -> None:
                 raise HttpError(HTTPStatus.UNPROCESSABLE_ENTITY, "no speech was recognised in the recording",
                                 "錄音裡沒有辨識到任何語音，沒有建立會談。請確認錄音檔是否正確、有沒有聲音。", code="no_speech")
             jobs.stage(job, "speakers")
-            labelled = ORCH.speakers.run(t)
+            t.input_mode = recap.parse(p.get("input_mode"))
+            labelled = recap.label(t) if recap.is_recap(t) else ORCH.speakers.run(t)  # a recap has one voice: no guessing
             with CLIENTS_LOCK:  # two uploads at once must not drop each other's session
                 if not (config.SESSIONS_DIR / f"{session_id}.json").exists():
                     save_transcript(t)

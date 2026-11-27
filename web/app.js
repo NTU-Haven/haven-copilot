@@ -183,6 +183,7 @@ function engineName(engine) {
 
 function speakerName(s) {
   const name = s.speaker === "client" ? "個案" : s.speaker === "therapist" ? "心理師" : "說話者未標示";
+  if (s.speaker_source === "recap") return `${name}（口述）`;
   return name + (s.speaker_source === "model" ? "（推測）" : s.speaker_source === "confirmed" ? " ✓" : "");
 }
 
@@ -602,6 +603,8 @@ async function openClient(id) {
   const numbers = meta.map((m) => m.session_no || 0);
   upForm.session_id.value = `${id}-S${String(Math.max(0, ...numbers) + 1).padStart(2, "0")}`;
   setUpRecording(frag.querySelector(".record-form"), id, upForm.session_id.value);
+  bindInputMode(upForm);
+  bindInputMode(frag.querySelector(".record-form"));
   upForm.addEventListener("submit", async (e) => {
     e.preventDefault();
     const file = upForm.audio.files[0];
@@ -610,7 +613,7 @@ async function openClient(id) {
     upMsg.textContent = "正在送出錄音…";
     await busy(btn, "送出中", async () => {
       try {
-        const q = new URLSearchParams({ client: id, session_id: upForm.session_id.value, consent: upForm.consent.checked ? "1" : "0", simulated: upForm.simulated.checked ? "1" : "0" });
+        const q = new URLSearchParams({ client: id, session_id: upForm.session_id.value, consent: upForm.consent.checked ? "1" : "0", simulated: upForm.simulated.checked ? "1" : "0", input_mode: inputMode(upForm) });
         const r = await api(`/api/upload?${q}`, { method: "POST", headers: { "X-Filename": encodeURIComponent(file.name) }, body: file });
         markActive(id);
         if (my !== nav) { // the therapist went elsewhere: the job runs on; it is listed on the client page
@@ -1126,7 +1129,7 @@ function flagLine(f) {
     f.negated ? el("span", { class: "flag-tag" }, "含否定語，請確認") : null,
     // Only a question with 你 from an unconfirmed speaker is likely the therapist asking.
     f.maybe_therapist ? el("span", { class: "flag-tag" }, "說話者未確認，可能是心理師的提問")
-      : f.speaker_unconfirmed ? el("span", { class: "flag-tag" }, "說話者由模型推測，請對照錄音") : null,
+      : f.speaker_unconfirmed ? el("span", { class: "flag-tag" }, session && session.input_mode === "recap" ? "會後口述內容，請對照個案實際情況" : "說話者由模型推測，請對照錄音") : null,
     f.note ? el("div", { class: "flag-note" }, f.note) : null);
 }
 
@@ -1205,7 +1208,8 @@ function renderSession(r, focusSeg) {
 
   const unconfirmed = locked ? [] : r.transcript.filter((s) => s.speaker_source === "model" || s.speaker_source === "none");
   const transcript = el("section", { class: "card transcript", "aria-label": "逐字稿" },
-    el("h3", {}, "逐字稿 ", el("small", { lang: "en" }, "Transcript")),
+    el("h3", {}, "逐字稿 ", el("small", { lang: "en" }, "Transcript"), r.input_mode === "recap" ? el("span", { class: "recap-tag" }, " 口述") : null),
+    r.input_mode === "recap" ? el("p", { class: "muted" }, "會後口述：只有心理師一人的聲音，不需要確認說話者。") : null,
     unconfirmed.length ? el("div", { class: "speaker-bar" },
       el("span", {}, `${unconfirmed.length} 段的說話者是推測的。請對照錄音更正，再按確認；確認後${r.risk ? "風險判讀和" : ""}查核會重算。`),
       el("button", { type: "button", class: "confirm", id: "speakers-btn", onclick: (e) => confirmSpeakers(e.currentTarget) }, "確認說話者")) : null,
@@ -1544,6 +1548,7 @@ function recordingUi(form, on) {
   form.querySelector(".record-stop").hidden = !on;
   form.querySelector(".record-cancel").hidden = !on;
   for (const name of ["session_id", "consent", "simulated"]) form[name].disabled = on;
+  lockInputMode(form, on);
   const t = form.querySelector(".record-time");
   t.classList.toggle("live", on);
   if (!on) t.textContent = "";
@@ -1568,7 +1573,7 @@ async function startRecording(form, clientId) {
   let started;
   try {
     started = await post("/api/recordings", { client: clientId, session_id: form.session_id.value, consent: form.consent.checked,
-      simulated: form.simulated.checked, mime });
+      simulated: form.simulated.checked, mime, input_mode: inputMode(form) });
   } catch (err) {
     stream.getTracks().forEach((t) => t.stop());
     recordingStatus(form, `沒有開始錄音：${err.message}`, true);

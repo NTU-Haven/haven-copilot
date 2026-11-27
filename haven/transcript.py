@@ -25,6 +25,7 @@ def load_transcript(session_id: str) -> Transcript:
         session_no=raw["session_no"],
         date=raw["date"],
         simulated=raw.get("simulated", True),
+        input_mode=raw.get("input_mode", "session"),
         segments=[Segment(**s) for s in raw["segments"]],
     )
 
@@ -196,6 +197,8 @@ def save_transcript(t: Transcript) -> Path:
         "simulated": t.simulated,
         "segments": [to_dict(s) for s in t.segments],
     }
+    if t.input_mode != "session":  # a file without the key is a session
+        payload["input_mode"] = t.input_mode
     from .files import write_private
 
     write_private(path, json.dumps(payload, ensure_ascii=False, indent=2))
