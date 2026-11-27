@@ -27,6 +27,7 @@ from __future__ import annotations
 import json
 import re
 
+from .. import human_fields
 from ..llm import DATA_ONLY
 from ..models import CONFIRMED, Note, Transcript
 from ..textutil import bigrams, clauses, denied, has_negation, overlap
@@ -36,7 +37,7 @@ SUPPORTED = 0.5
 WEAK = 0.25
 # Stored with every signed note and with the cached verdicts. Change it whenever
 # a rule changes, so a verdict from older rules is never reused.
-VERIFIER_VERSION = "2026.11-5"
+VERIFIER_VERSION = "2026.11-6"
 MEASURE_MISMATCH = "量表句與系統依量表資料產生的內容不符。量表句不可修改：請還原，或改寫成引用逐字稿的句子"
 
 _TIME = re.compile(r"這週|下週|上週|本週|今天|明天|昨天|下次|上次|每天|每週|週[一二三四五六日]")
@@ -197,6 +198,12 @@ class Verifier:
         for i, s in enumerate(sentences):
             if s.status != "unchecked":  # already checked and not edited since
                 continue
+            if human_fields.is_placeholder(s.text):  # never content, whatever else is set on it
+                s.source, s.status, s.support, s.reason = "transcript", "unsupported", 0.0, human_fields.PLACEHOLDER_REASON
+                continue
+            if s.source == human_fields.THERAPIST:  # the therapist's own words in a human_only field
+                s.status, s.support, s.reason = "supported", 1.0, ""
+                continue
             if s.source == "measure" and s.text in measures:  # filled in from scores, not from the transcript
                 s.status, s.support, s.reason = "supported", 1.0, ""
                 continue
@@ -256,7 +263,7 @@ class Verifier:
                 else:
                     s.reason = MODEL_SILENT  # no answer is not a "no"
         for s in sentences:
-            if s.source == "measure":
+            if s.source in ("measure", human_fields.THERAPIST):
                 continue
             # Uploaded audio: who said a line is the model's guess, so a sentence
             # about what the client said, or about risk, waits for the therapist.
@@ -268,7 +275,7 @@ class Verifier:
                 s.status, s.reason = "weak", INSTRUCTION_REASON
             s.must_confirm = s.status == "weak" and (about_risk(s) or s.model_rejected or instructed)
         # Score lines are not claims about the session; leave them out of the ratio.
-        claims = [s for s in sentences if s.source != "measure"]
+        claims = [s for s in sentences if s.source not in ("measure", human_fields.THERAPIST)]
         n = len(claims)
         counts = {k: sum(1 for s in claims if s.status == k) for k in ("supported", "weak", "unsupported")}
         return {

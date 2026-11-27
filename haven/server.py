@@ -21,7 +21,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
-from . import accounts, config, crypto, files, llm, signing, store, templates
+from . import accounts, config, crypto, files, human_fields, llm, signing, store, templates
 from .agents.verifier import VERIFIER_VERSION, Verifier
 from .models import to_dict
 from .orchestrator import Orchestrator, get_client, load_clients
@@ -755,6 +755,11 @@ class Handler(BaseHTTPRequestHandler):
                           f"有 {len(forged)} 句量表句和量表資料不一致。量表句由系統依量表資料產生，不能修改；請還原後再簽核。", blocking=forged)
         if verification["total"] == 0:
             raise Refused("the note has no sentences", "紀錄是空的，不能簽核。請至少寫下一句引用逐字稿的紀錄。")
+        left = human_fields.placeholders(note)
+        if left:  # decided from the text, so a flag from the browser cannot clear it
+            raise Refused(f"{len(left)} placeholder sentence(s) are still in the note",
+                          f"還有 {len(left)} 個欄位保留著「{human_fields.PLACEHOLDER}」。請改寫成您的內容，或刪除這一句，再簽核。",
+                          blocking=[s.text for s in left])
         blocking = signing.blocking_sentences(note)
         if blocking:
             raise Refused(f"{len(blocking)} sentence(s) unverified, unsupported, or held for confirmation; re-verify, edit or confirm them first",

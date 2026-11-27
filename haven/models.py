@@ -51,6 +51,8 @@ class NoteSentence:
     reason: str = ""
     # "transcript": evidence is segment ids. "measure": the sentence is filled
     # in from questionnaire scores, so there is no transcript line to cite.
+    # "therapist": written by the therapist in a human_only field with no citation
+    # (the server sets it from the template; the browser cannot claim it).
     source: str = "transcript"
     # A weak sentence that is about risk, or that the local model rejected:
     # signing waits until the therapist confirms it.

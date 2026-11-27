@@ -236,6 +236,9 @@ button.add, .sentence .confirm, .sentence .del, button.ev, .gate-item button { f
 .sentence.confirmed { border-left: 4px double var(--accent); }
 .sentence.confirmed .st { color: var(--accent); }
 .sentence.measure .st { color: var(--muted); }
+.sentence.therapist { border-left: 4px solid var(--accent); }
+.sentence.therapist .st { color: var(--accent); }
+.template-picker { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; font-size: .85rem; margin: 4px 0 8px; }
 .sentence.empty-section { color: var(--muted); }
 .sentence.blank { background: transparent; border-left: 4px dotted var(--line); }
 .sentence.blank .st { visibility: hidden; }

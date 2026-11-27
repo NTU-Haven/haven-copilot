@@ -12,7 +12,7 @@ from __future__ import annotations
 import hashlib
 import json
 
-from . import config, store, templates
+from . import config, human_fields, store, templates
 from .agents.verifier import VERIFIER_VERSION, Verifier
 from .models import Note, NoteSentence, Transcript, to_dict
 
@@ -49,7 +49,7 @@ def remember(session_id: str, note: Note, llm_failed: bool = False, by_model: bo
     has a model, so turning the model on later does change the result."""
     verdicts = {}
     for s in note.sentences():
-        if s.source == "measure" or s.status == "unchecked":
+        if s.source in ("measure", human_fields.THERAPIST) or s.status == "unchecked":
             continue
         if llm_failed and s.status != "supported":
             continue  # the model did not answer: ask again next time
@@ -108,7 +108,9 @@ def note_from_payload(session_id: str, payload, template: str, engine: str, meas
             elif seen:
                 s.status, s.support, s.reason, s.model_rejected = seen["status"], seen["support"], seen["reason"], bool(seen.get("model_rejected"))
             sections[key].append(s)
-    return Note(template, sections, engine), forged
+    note = Note(template, sections, engine)
+    human_fields.mark_therapist_authored(note)
+    return note, forged
 
 
 def uncovered_risk(risk: dict, note: Note | dict, dismissals: list[dict] = ()) -> list[dict]:
@@ -164,7 +166,7 @@ def blocking_sentences(note: Note) -> list[NoteSentence]:
 
 def summarize(note: dict) -> dict:
     """Verification summary of a stored (signed) note."""
-    claims = [s for items in note["sections"].values() for s in items if s.get("source") != "measure"]
+    claims = [s for items in note["sections"].values() for s in items if s.get("source") not in ("measure", human_fields.THERAPIST)]
     counts = {k: sum(1 for s in claims if s.get("status") == k) for k in ("supported", "weak", "unsupported")}
     n = len(claims)
     return {"total": n, **counts, "supported_ratio": round(counts["supported"] / n, 3) if n else 0.0,

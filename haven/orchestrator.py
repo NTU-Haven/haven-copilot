@@ -5,7 +5,7 @@ from __future__ import annotations
 import json
 import time
 
-from . import config, files, signing, store, templates
+from . import config, files, human_fields, signing, store, templates
 from .agents.memory import CaseMemory
 from .agents.outcome import OutcomeAgent
 from .agents.risk import RiskAgent
@@ -126,6 +126,7 @@ class Orchestrator:
                 for s in items]
             for k, items in stored["sections"].items()
         }, stored.get("engine", ""), stored.get("warnings", []))
+        human_fields.mark_therapist_authored(note)
         result["verification"] = self.verifier.run(note, transcript, measures)
         result["note"] = to_dict(note)
         result["risk"] = to_dict(self.risk.run(transcript))
