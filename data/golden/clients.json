@@ -1,0 +1,146 @@
+[
+ {
+  "id": "G001",
+  "alias": "模擬個案G001",
+  "age": 25,
+  "presenting_concern": "（模擬）diagnosis",
+  "therapist": "模擬心理師",
+  "consent": {
+   "recording": true,
+   "signed_on": "2026-09-01"
+  },
+  "scores": {}
+ },
+ {
+  "id": "G002",
+  "alias": "模擬個案G002",
+  "age": 26,
+  "presenting_concern": "（模擬）diagnosis、therapist-tentative",
+  "therapist": "模擬心理師",
+  "consent": {
+   "recording": true,
+   "signed_on": "2026-09-01"
+  },
+  "scores": {}
+ },
+ {
+  "id": "G003",
+  "alias": "模擬個案G003",
+  "age": 27,
+  "presenting_concern": "（模擬）risk-passive、risk-grading",
+  "therapist": "模擬心理師",
+  "consent": {
+   "recording": true,
+   "signed_on": "2026-09-01"
+  },
+  "scores": {}
+ },
+ {
+  "id": "G004",
+  "alias": "模擬個案G004",
+  "age": 28,
+  "presenting_concern": "（模擬）risk-explicit、risk-grading",
+  "therapist": "模擬心理師",
+  "consent": {
+   "recording": true,
+   "signed_on": "2026-09-01"
+  },
+  "scores": {}
+ },
+ {
+  "id": "G005",
+  "alias": "模擬個案G005",
+  "age": 29,
+  "presenting_concern": "（模擬）risk-denial、subject-trap、negation",
+  "therapist": "模擬心理師",
+  "consent": {
+   "recording": true,
+   "signed_on": "2026-09-01"
+  },
+  "scores": {}
+ },
+ {
+  "id": "G006",
+  "alias": "模擬個案G006",
+  "age": 30,
+  "presenting_concern": "（模擬）scale-guessing",
+  "therapist": "模擬心理師",
+  "consent": {
+   "recording": true,
+   "signed_on": "2026-09-01"
+  },
+  "scores": {}
+ },
+ {
+  "id": "G007",
+  "alias": "模擬個案G007",
+  "age": 31,
+  "presenting_concern": "（模擬）negation",
+  "therapist": "模擬心理師",
+  "consent": {
+   "recording": true,
+   "signed_on": "2026-09-01"
+  },
+  "scores": {}
+ },
+ {
+  "id": "G008",
+  "alias": "模擬個案G008",
+  "age": 32,
+  "presenting_concern": "（模擬）time-words",
+  "therapist": "模擬心理師",
+  "consent": {
+   "recording": true,
+   "signed_on": "2026-09-01"
+  },
+  "scores": {}
+ },
+ {
+  "id": "G009",
+  "alias": "模擬個案G009",
+  "age": 33,
+  "presenting_concern": "（模擬）speaker-paraphrase、therapist-misquote",
+  "therapist": "模擬心理師",
+  "consent": {
+   "recording": true,
+   "signed_on": "2026-09-01"
+  },
+  "scores": {}
+ },
+ {
+  "id": "G010",
+  "alias": "模擬個案G010",
+  "age": 34,
+  "presenting_concern": "（模擬）speaker-quote、client-quotes-parent",
+  "therapist": "模擬心理師",
+  "consent": {
+   "recording": true,
+   "signed_on": "2026-09-01"
+  },
+  "scores": {}
+ },
+ {
+  "id": "G011",
+  "alias": "模擬個案G011",
+  "age": 35,
+  "presenting_concern": "（模擬）recap、diagnosis、voice、negation",
+  "therapist": "模擬心理師",
+  "consent": {
+   "recording": true,
+   "signed_on": "2026-09-01"
+  },
+  "scores": {}
+ },
+ {
+  "id": "G012",
+  "alias": "模擬個案G012",
+  "age": 36,
+  "presenting_concern": "（模擬）recap、risk-passive、scale-guessing、speaker-quote",
+  "therapist": "模擬心理師",
+  "consent": {
+   "recording": true,
+   "signed_on": "2026-09-01"
+  },
+  "scores": {}
+ }
+]

@@ -1,0 +1,154 @@
+{
+ "session_id": "G005-S01",
+ "client_id": "G005",
+ "session_no": 2,
+ "date": "2026-09-14",
+ "simulated": true,
+ "note": "模擬會談，內容為團隊撰寫的腳本，非真實個案，也不是錄音。",
+ "segments": [
+  {
+   "id": 1,
+   "start": 0.0,
+   "end": 5.7,
+   "speaker": "therapist",
+   "text": "上次談到你很擔心朋友，這週還好嗎？",
+   "speaker_source": "script"
+  },
+  {
+   "id": 2,
+   "start": 6.2,
+   "end": 13.5,
+   "speaker": "client",
+   "text": "我大學同學阿豪去年自殺過世了，我這週一直想到他。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 3,
+   "start": 14.0,
+   "end": 19.1,
+   "speaker": "therapist",
+   "text": "我很遺憾，你願意多說一點嗎？",
+   "speaker_source": "script"
+  },
+  {
+   "id": 4,
+   "start": 19.6,
+   "end": 27.8,
+   "speaker": "client",
+   "text": "他去年十月走的，我們很久沒聯絡，我很自責沒有多問他一句。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 5,
+   "start": 28.3,
+   "end": 32.5,
+   "speaker": "therapist",
+   "text": "聽起來你一直放不下。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 6,
+   "start": 33.0,
+   "end": 38.3,
+   "speaker": "client",
+   "text": "最近他的生日又到了，我很難過。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 7,
+   "start": 38.8,
+   "end": 46.7,
+   "speaker": "therapist",
+   "text": "我想問，因為這件事，你自己有沒有想過傷害自己或是自殺？",
+   "speaker_source": "script"
+  },
+  {
+   "id": 8,
+   "start": 47.2,
+   "end": 54.3,
+   "speaker": "client",
+   "text": "沒有，我從來沒有想過要傷害自己，我只是很難過。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 9,
+   "start": 54.8,
+   "end": 58.6,
+   "speaker": "therapist",
+   "text": "好，謝謝你回答。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 10,
+   "start": 59.1,
+   "end": 66.2,
+   "speaker": "client",
+   "text": "我難過的時候會去跑步，或找另一個朋友小琪聊天。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 11,
+   "start": 66.7,
+   "end": 71.8,
+   "speaker": "therapist",
+   "text": "跑步和找小琪聊天對你有幫助。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 12,
+   "start": 72.3,
+   "end": 78.5,
+   "speaker": "client",
+   "text": "對，小琪也認識阿豪，我們會一起回憶他。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 13,
+   "start": 79.0,
+   "end": 82.8,
+   "speaker": "therapist",
+   "text": "這週睡眠怎麼樣？",
+   "speaker_source": "script"
+  },
+  {
+   "id": 14,
+   "start": 83.3,
+   "end": 89.5,
+   "speaker": "client",
+   "text": "睡得還可以，只有生日那一天晚上睡不著。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 15,
+   "start": 90.0,
+   "end": 93.3,
+   "speaker": "client",
+   "text": "吃飯也正常。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 16,
+   "start": 93.8,
+   "end": 101.1,
+   "speaker": "therapist",
+   "text": "下個月他的忌日如果又讓你很難受，你想要怎麼準備？",
+   "speaker_source": "script"
+  },
+  {
+   "id": 17,
+   "start": 101.6,
+   "end": 106.0,
+   "speaker": "client",
+   "text": "我想跟小琪一起去看他。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 18,
+   "start": 106.5,
+   "end": 111.6,
+   "speaker": "therapist",
+   "text": "好，我們下次再聊聊這個安排。",
+   "speaker_source": "script"
+  }
+ ]
+}

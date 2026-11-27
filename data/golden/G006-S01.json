@@ -1,0 +1,154 @@
+{
+ "session_id": "G006-S01",
+ "client_id": "G006",
+ "session_no": 3,
+ "date": "2026-10-21",
+ "simulated": true,
+ "note": "模擬會談，內容為團隊撰寫的腳本，非真實個案，也不是錄音。",
+ "segments": [
+  {
+   "id": 1,
+   "start": 0.0,
+   "end": 4.2,
+   "speaker": "therapist",
+   "text": "今天心情大概怎麼樣？",
+   "speaker_source": "script"
+  },
+  {
+   "id": 2,
+   "start": 4.7,
+   "end": 11.3,
+   "speaker": "client",
+   "text": "如果要打分數的話，大概六分吧，十分是最好。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 3,
+   "start": 11.8,
+   "end": 15.6,
+   "speaker": "therapist",
+   "text": "六分，比上週呢？",
+   "speaker_source": "script"
+  },
+  {
+   "id": 4,
+   "start": 16.1,
+   "end": 21.6,
+   "speaker": "client",
+   "text": "上週大概四分左右，所以有好一點。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 5,
+   "start": 22.1,
+   "end": 28.3,
+   "speaker": "therapist",
+   "text": "這是你自己的感覺評分，不是正式的量表。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 6,
+   "start": 28.8,
+   "end": 33.7,
+   "speaker": "client",
+   "text": "嗯，我只是隨便抓一個數字。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 7,
+   "start": 34.2,
+   "end": 38.8,
+   "speaker": "therapist",
+   "text": "讓你降到四分的是什麼事？",
+   "speaker_source": "script"
+  },
+  {
+   "id": 8,
+   "start": 39.3,
+   "end": 45.0,
+   "speaker": "client",
+   "text": "上週我跟室友吵架，整個禮拜都很煩。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 9,
+   "start": 45.5,
+   "end": 50.1,
+   "speaker": "therapist",
+   "text": "那這週為什麼上升到六分？",
+   "speaker_source": "script"
+  },
+  {
+   "id": 10,
+   "start": 50.6,
+   "end": 56.6,
+   "speaker": "client",
+   "text": "我們後來講開了，她說她會把東西收好。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 11,
+   "start": 57.1,
+   "end": 62.2,
+   "speaker": "therapist",
+   "text": "你有主動去談，這件事不容易。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 12,
+   "start": 62.7,
+   "end": 69.8,
+   "speaker": "client",
+   "text": "焦慮的話，大概七成吧，主要是還在煩要不要搬家。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 13,
+   "start": 70.3,
+   "end": 74.9,
+   "speaker": "therapist",
+   "text": "搬家的決定什麼時候要做？",
+   "speaker_source": "script"
+  },
+  {
+   "id": 14,
+   "start": 75.4,
+   "end": 80.0,
+   "speaker": "client",
+   "text": "房東說這個月底前要答覆。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 15,
+   "start": 80.5,
+   "end": 86.9,
+   "speaker": "therapist",
+   "text": "那我們這週來列一下留下和搬走各自的好處。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 16,
+   "start": 87.4,
+   "end": 91.4,
+   "speaker": "client",
+   "text": "好，我回去寫寫看。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 17,
+   "start": 91.9,
+   "end": 97.0,
+   "speaker": "therapist",
+   "text": "下次你可以帶來，我們一起看。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 18,
+   "start": 97.5,
+   "end": 99.9,
+   "speaker": "client",
+   "text": "好。",
+   "speaker_source": "script"
+  }
+ ]
+}

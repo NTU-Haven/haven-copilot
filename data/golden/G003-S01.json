@@ -1,0 +1,170 @@
+{
+ "session_id": "G003-S01",
+ "client_id": "G003",
+ "session_no": 2,
+ "date": "2026-10-19",
+ "simulated": true,
+ "note": "模擬會談，內容為團隊撰寫的腳本，非真實個案，也不是錄音。",
+ "segments": [
+  {
+   "id": 1,
+   "start": 0.0,
+   "end": 6.0,
+   "speaker": "therapist",
+   "text": "上次你說這陣子很累，今天感覺怎麼樣？",
+   "speaker_source": "script"
+  },
+  {
+   "id": 2,
+   "start": 6.5,
+   "end": 11.8,
+   "speaker": "client",
+   "text": "比較沒力氣，很多事情都不想做。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 3,
+   "start": 12.3,
+   "end": 19.1,
+   "speaker": "client",
+   "text": "有時候晚上躺著會想，如果就這樣消失不見也好。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 4,
+   "start": 19.6,
+   "end": 26.0,
+   "speaker": "therapist",
+   "text": "你說有時候會想消失不見，可以多說一點嗎？",
+   "speaker_source": "script"
+  },
+  {
+   "id": 5,
+   "start": 26.5,
+   "end": 33.3,
+   "speaker": "client",
+   "text": "就是覺得很累，不是真的想死，只是不想再面對。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 6,
+   "start": 33.8,
+   "end": 40.4,
+   "speaker": "therapist",
+   "text": "我想確認一下，你有沒有想過要怎麼傷害自己？",
+   "speaker_source": "script"
+  },
+  {
+   "id": 7,
+   "start": 40.9,
+   "end": 46.6,
+   "speaker": "client",
+   "text": "沒有，我沒有想過方法，也沒有計畫。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 8,
+   "start": 47.1,
+   "end": 52.4,
+   "speaker": "therapist",
+   "text": "這個想法一個星期大概出現幾次？",
+   "speaker_source": "script"
+  },
+  {
+   "id": 9,
+   "start": 52.9,
+   "end": 58.6,
+   "speaker": "client",
+   "text": "大概兩三次，都是在晚上很累的時候。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 10,
+   "start": 59.1,
+   "end": 63.7,
+   "speaker": "therapist",
+   "text": "出現的時候，你會做什麼？",
+   "speaker_source": "script"
+  },
+  {
+   "id": 11,
+   "start": 64.2,
+   "end": 71.7,
+   "speaker": "client",
+   "text": "我會打電話給我姐姐，她住在台中，講一講就會好一點。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 12,
+   "start": 72.2,
+   "end": 77.3,
+   "speaker": "therapist",
+   "text": "聽起來姐姐是一個支持你的人。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 13,
+   "start": 77.8,
+   "end": 81.8,
+   "speaker": "client",
+   "text": "對，我們感情很好。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 14,
+   "start": 82.3,
+   "end": 88.0,
+   "speaker": "therapist",
+   "text": "如果這個想法變強，你願意跟我說嗎？",
+   "speaker_source": "script"
+  },
+  {
+   "id": 15,
+   "start": 88.5,
+   "end": 94.0,
+   "speaker": "client",
+   "text": "願意，我會跟你說，也會跟姐姐說。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 16,
+   "start": 94.5,
+   "end": 102.2,
+   "speaker": "therapist",
+   "text": "我們一起寫一張卡片，放上姐姐的電話和這裡的聯絡方式。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 17,
+   "start": 102.7,
+   "end": 105.1,
+   "speaker": "client",
+   "text": "好。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 18,
+   "start": 105.6,
+   "end": 110.9,
+   "speaker": "client",
+   "text": "我其實還是會上班，也會去爬山。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 19,
+   "start": 111.4,
+   "end": 116.7,
+   "speaker": "therapist",
+   "text": "爬山是你覺得還有一點樂趣的事。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 20,
+   "start": 117.2,
+   "end": 126.7,
+   "speaker": "therapist",
+   "text": "下週同一天我們再看看，這段時間如果很不舒服，卡片上的電話隨時可以打。",
+   "speaker_source": "script"
+  }
+ ]
+}

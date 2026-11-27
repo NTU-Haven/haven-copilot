@@ -18,9 +18,26 @@ class Segment:
     #   "model":     guessed by the local LLM from the words, for uploaded audio.
     #   "none":      uploaded audio the speaker agent did not label (no model, or no
     #                usable answer); ``speaker`` is then "unknown".
+    #   "recap":     a post-session recap (haven/recap.py): the therapist alone speaks,
+    #                so every line is "therapist" without any guess. Not in CONFIRMED:
+    #                the risk scan still reads these lines as what was said about the client.
     # Agents treat only CONFIRMED sources as known.
     speaker_source: str = "script"
+    # Set by the first correction of the words (haven/transcript_edit.py): what the
+    # ASR heard, never changed afterwards. None for a line never corrected.
+    asr_text: str | None = None
+    # Who last corrected this line's words or speaker, and when.
+    edited_by: str = ""
+    edited_at: str = ""
+    # Only with HAVEN_ASR_REFINE (haven/asr_refine.py): which engine's words the text is
+    # ("whisper", or the Qwen3-ASR model name), and Whisper's own words when they were
+    # replaced. None otherwise, and then left out of the saved and served transcript.
+    asr_engine: str | None = None
+    whisper_text: str | None = None
 
+
+# Segment fields that exist only for some transcripts; to_dict leaves them out when unset.
+_OPTIONAL_SEGMENT_FIELDS = ("asr_engine", "whisper_text")
 
 CONFIRMED = ("script", "confirmed")
 
@@ -36,6 +53,12 @@ class Transcript:
     # From the client file, when known. The risk agent uses it for cues that
     # matter differently for a minor (substance use, abuse).
     client_age: int | None = None
+    # "session" (a recording of the whole session) or "recap" (the therapist dictating
+    # after the session). A transcript file without the key is a session.
+    input_mode: str = "session"
+    # True when the ASR server gave no timestamps and Haven spread the time by text length
+    # (transcript._sentences). Playback shows "time positions are estimates" (ticket 09).
+    timestamps_estimated: bool = False
 
     def by_id(self) -> dict[int, Segment]:
         return {s.id: s for s in self.segments}
@@ -51,6 +74,8 @@ class NoteSentence:
     reason: str = ""
     # "transcript": evidence is segment ids. "measure": the sentence is filled
     # in from questionnaire scores, so there is no transcript line to cite.
+    # "therapist": written by the therapist in a human_only field with no citation
+    # (the server sets it from the template; the browser cannot claim it).
     source: str = "transcript"
     # A weak sentence that is about risk, or that the local model rejected:
     # signing waits until the therapist confirms it.
@@ -61,6 +86,10 @@ class NoteSentence:
     confirmed_by_therapist: bool = False
     # A kept sentence that cites no transcript line: what the therapist based it on.
     keep_reason: str = ""
+    # Who wrote the sentence: "ai" (as the AI wrote it), "ai_edited" (the therapist
+    # changed an AI sentence) or "human". The server sets it on save by comparing
+    # with the AI's own draft (haven/regenerate.py); a value sent by a browser is ignored.
+    origin: str = "ai"
 
 
 @dataclass
@@ -109,4 +138,9 @@ class RiskReport:
 
 
 def to_dict(obj) -> dict:
-    return asdict(obj)
+    out = asdict(obj)
+    if isinstance(obj, Segment):
+        for k in _OPTIONAL_SEGMENT_FIELDS:
+            if out[k] is None:
+                del out[k]
+    return out

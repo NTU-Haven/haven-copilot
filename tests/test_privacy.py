@@ -20,7 +20,7 @@ from unittest import mock
 from helpers import IsolatedData, ServerCase
 from test_server_robust import UploadMixin, fake_transcribe
 
-from haven import config, files, llm, server, store, transcript  # noqa: E402
+from haven import audio, config, files, jobs, llm, server, store, transcript  # noqa: E402
 from haven.agents import memory, speakers, verifier, writer  # noqa: E402
 from haven.agents.verifier import Verifier  # noqa: E402
 from haven.models import Note, NoteSentence, Segment, Transcript  # noqa: E402
@@ -397,18 +397,25 @@ class TempAudioTest(UploadMixin, ServerCase, unittest.TestCase):
 
         with mock.patch.object(server, "transcribe_audio", spy):
             self.assertEqual(self.upload("C001-S60", "這週過得怎麼樣？\n不太好。")[0], 200)
-        self.assertEqual(seen["path"].parent, config.DATA_DIR / "tmp")
+        # Since ticket 08 Haven keeps the audio in data/audio (0700, files 0600) after
+        # transcription, until sign-off, expiry or a manual delete (tests/test_audio.py).
+        self.assertEqual(seen["path"].parent, config.DATA_DIR / "audio")
         self.assertEqual(seen["mode"], 0o600)
-        self.assertFalse(seen["path"].exists())
+        self.assertTrue(seen["path"].exists())
+        self.assertEqual(audio.get("C001-S60")["storage_ref"], seen["path"].name)
         self.assertEqual(self.leftovers(), [])
 
     def test_temp_file_is_removed_on_every_failure_path(self):
+        # Since uploads became background jobs (ticket 05), a failed job keeps its
+        # recording in data/audio so it can be retried; nothing stays in data/tmp.
         for n, fault in enumerate((transcript.ASRError("HTTP 500"), OSError("down"), ImportError("faster_whisper"),
                                    llm.NonLocalEndpointError("moved"), RuntimeError("anything else"))):
-            with mock.patch.object(server, "transcribe_audio", side_effect=fault), mock.patch.object(server, "_log_fault"):
-                status, _ = self.upload(f"C001-S6{n + 1}", "x")
-            self.assertGreaterEqual(status, 400, fault)
+            with mock.patch.object(server, "transcribe_audio", side_effect=fault), mock.patch("sys.stderr"):
+                status, job = self.upload(f"C001-S6{n + 1}", "x")
+            self.assertEqual(status, "failed", fault)
+            self.assertTrue(job["message_zh"], fault)
             self.assertEqual(self.leftovers(), [], fault)
+            self.assertIsNotNone(audio.asr_path(f"C001-S6{n + 1}"), fault)
         self.assertEqual(sum(1 for a in store.recent_audit(50) if a["action"] == "upload_failed"), 5)
 
     def test_start_up_removes_recordings_left_by_a_crash(self):
@@ -536,6 +543,10 @@ class PromptInjectionTest(unittest.TestCase):
             note = Note("SOAP", {"S": [NoteSentence(text, evidence)]}, "test")
             Verifier().run(note, t)
             self.assertNotEqual(note.sections["S"][0].reason, verifier.INSTRUCTION_REASON, text)
+
+# These tests cover the clinical aids (risk, R quotes, score lines, outcome, Case Memory),
+# which are off by default; they run with HAVEN_CLINICAL_AIDS on, as before the flag existed.
+from helpers import clinical_aids_on as setUpModule, clinical_aids_restore as tearDownModule  # noqa: E402,F401
 
 
 if __name__ == "__main__":

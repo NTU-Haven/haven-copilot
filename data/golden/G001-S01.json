@@ -1,0 +1,162 @@
+{
+ "session_id": "G001-S01",
+ "client_id": "G001",
+ "session_no": 1,
+ "date": "2026-10-12",
+ "simulated": true,
+ "note": "模擬會談，內容為團隊撰寫的腳本，非真實個案，也不是錄音。",
+ "segments": [
+  {
+   "id": 1,
+   "start": 0.0,
+   "end": 4.2,
+   "speaker": "therapist",
+   "text": "今天想從哪裡開始談？",
+   "speaker_source": "script"
+  },
+  {
+   "id": 2,
+   "start": 4.7,
+   "end": 11.3,
+   "speaker": "client",
+   "text": "這兩個禮拜我一直在想，我是不是得了憂鬱症。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 3,
+   "start": 11.8,
+   "end": 15.8,
+   "speaker": "therapist",
+   "text": "你怎麼會這樣想呢？",
+   "speaker_source": "script"
+  },
+  {
+   "id": 4,
+   "start": 16.3,
+   "end": 24.9,
+   "speaker": "client",
+   "text": "我在網路上做了一個測驗，結果說我可能有憂鬱症，我看了很害怕。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 5,
+   "start": 25.4,
+   "end": 30.3,
+   "speaker": "therapist",
+   "text": "那個測驗的結果讓你很擔心。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 6,
+   "start": 30.8,
+   "end": 36.5,
+   "speaker": "client",
+   "text": "對，我晚上都睡不著，一直想這件事。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 7,
+   "start": 37.0,
+   "end": 48.2,
+   "speaker": "therapist",
+   "text": "我先說明，我沒有辦法只用一個網路測驗就判斷你有沒有憂鬱症，今天我們先聽你實際的狀況。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 8,
+   "start": 48.7,
+   "end": 54.4,
+   "speaker": "client",
+   "text": "我這個月食慾比較差，早餐常常沒吃。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 9,
+   "start": 54.9,
+   "end": 62.6,
+   "speaker": "client",
+   "text": "上班的時候也比較提不起勁，但是我還是每天都有去上班。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 10,
+   "start": 63.1,
+   "end": 68.6,
+   "speaker": "therapist",
+   "text": "你還是每天去上班，這點我有聽到。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 11,
+   "start": 69.1,
+   "end": 75.1,
+   "speaker": "client",
+   "text": "我沒有請過假，同事也沒有說我怪怪的。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 12,
+   "start": 75.6,
+   "end": 82.4,
+   "speaker": "therapist",
+   "text": "除了食慾和提不起勁，還有其他你在意的地方嗎？",
+   "speaker_source": "script"
+  },
+  {
+   "id": 13,
+   "start": 82.9,
+   "end": 88.9,
+   "speaker": "client",
+   "text": "就是怕，怕我真的有病，怕被家人知道。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 14,
+   "start": 89.4,
+   "end": 95.1,
+   "speaker": "therapist",
+   "text": "怕被家人知道，是怕他們什麼反應呢？",
+   "speaker_source": "script"
+  },
+  {
+   "id": 15,
+   "start": 95.6,
+   "end": 104.2,
+   "speaker": "client",
+   "text": "我爸會覺得我是想太多，他以前就說過心理的問題都是意志力不夠。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 16,
+   "start": 104.7,
+   "end": 109.3,
+   "speaker": "therapist",
+   "text": "你會擔心被爸爸這樣看待。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 17,
+   "start": 109.8,
+   "end": 115.8,
+   "speaker": "client",
+   "text": "嗯。其實我只是想知道，我到底是不是。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 18,
+   "start": 116.3,
+   "end": 127.8,
+   "speaker": "therapist",
+   "text": "這個問題我們不急著今天回答，下次我會用比較完整的方式了解，這週你可以先記錄睡眠和食慾。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 19,
+   "start": 128.3,
+   "end": 131.6,
+   "speaker": "client",
+   "text": "好，我會記。",
+   "speaker_source": "script"
+  }
+ ]
+}

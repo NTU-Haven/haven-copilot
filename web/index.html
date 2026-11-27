@@ -84,6 +84,19 @@
     </form>
   </dialog>
 
+  <dialog id="regenerate-dialog" aria-labelledby="regenerate-title">
+    <form method="dialog" id="regenerate-form">
+      <h3 id="regenerate-title">重新產生紀錄草稿</h3>
+      <p>重新產生會用目前的引擎寫一份新草稿。目前草稿會保留在「先前版本」，不會刪除（最多保留最近 3 份）。</p>
+      <label class="field"><input type="checkbox" name="understood" required>
+        <span>我了解新草稿不會帶入我在這份草稿上的修改、確認和理由。</span></label>
+      <div class="dialog-actions">
+        <button type="button" id="regenerate-cancel">取消</button>
+        <button type="submit" class="primary">重新產生</button>
+      </div>
+    </form>
+  </dialog>
+
   <template id="tpl-client">
     <section class="card brief">
       <div class="card-head">
@@ -99,13 +112,18 @@
       <h3>會談 <small lang="en">Sessions</small></h3>
       <div class="session-buttons"></div>
       <details class="upload">
-        <summary>錄音或上傳錄音（在主機轉寫；Haven 不保存錄音，轉寫後刪除）</summary>
+        <summary>錄音或上傳錄音（在主機轉寫；原始錄音暫存供回聽核對，紀錄確認後或到期時清除）</summary>
         <form class="record-form">
           <h4>在這裡錄音</h4>
           <p class="record-note">用這台設備的麥克風錄音，每幾秒就把錄到的聲音送到主機，這台設備不存任何錄音檔。錄音期間請保持這個頁面開著、連著診所網路。</p>
           <label class="field"><span>會談編號</span>
             <input type="text" name="session_id" placeholder="例如 C001-S05" required pattern="[A-Za-z0-9\-]{1,40}"></label>
-          <label class="check"><input type="checkbox" name="consent" required> 已取得個案書面同意：錄音、本機 AI 轉寫與說話者推測、逐字稿保存</label>
+          <fieldset class="input-mode">
+            <legend>錄音內容</legend>
+            <label class="check"><input type="radio" name="input_mode" value="session" checked> 完整晤談錄音：心理師與個案的對話，轉寫後由本機 AI 推測說話者，請心理師確認。</label>
+            <label class="check"><input type="radio" name="input_mode" value="recap"> 會後口述：只有心理師一人在說話，所有段落視為心理師，不推測說話者；草稿以「心理師口述…」寫成，不會寫成個案說的話。</label>
+          </fieldset>
+          <label class="check"><input type="checkbox" name="consent" required> <span class="consent-text">已取得個案書面同意：錄音、本機 AI 轉寫與說話者推測、逐字稿保存</span></label>
           <label class="check"><input type="checkbox" name="simulated"> 這是模擬會談（非真實個案）。不勾選就當作真實個案資料。</label>
           <div class="record-controls">
             <button type="submit" class="primary record-start">開始錄音</button>
@@ -121,7 +139,12 @@
             <input type="text" name="session_id" placeholder="例如 C001-S05" required pattern="[A-Za-z0-9\-]{1,40}"></label>
           <label class="field"><span>錄音檔</span>
             <input type="file" name="audio" accept="audio/*" required></label>
-          <label class="check"><input type="checkbox" name="consent" required> 已取得個案書面同意：錄音、本機 AI 轉寫與說話者推測、逐字稿保存</label>
+          <fieldset class="input-mode">
+            <legend>錄音內容</legend>
+            <label class="check"><input type="radio" name="input_mode" value="session" checked> 完整晤談錄音：心理師與個案的對話，轉寫後由本機 AI 推測說話者，請心理師確認。</label>
+            <label class="check"><input type="radio" name="input_mode" value="recap"> 會後口述：只有心理師一人在說話，所有段落視為心理師，不推測說話者；草稿以「心理師口述…」寫成，不會寫成個案說的話。</label>
+          </fieldset>
+          <label class="check"><input type="checkbox" name="consent" required> <span class="consent-text">已取得個案書面同意：錄音、本機 AI 轉寫與說話者推測、逐字稿保存</span></label>
           <label class="check"><input type="checkbox" name="simulated"> 這是模擬會談（非真實個案）。不勾選就當作真實個案資料。</label>
           <button type="submit">轉寫並產生紀錄</button>
         </form>
@@ -138,6 +161,14 @@
       <div class="ask-result" role="status" aria-live="polite"></div>
     </section>
   </template>
+  <script src="templates.js"></script>
   <script src="app.js"></script>
+  <script src="recap.js"></script>
+  <script src="transcript_edit.js"></script>
+  <script src="audio.js"></script>
+  <script src="playback.js"></script>
+  <script src="jobs.js"></script>
+  <script src="regenerate.js"></script>
+  <script src="export.js"></script>
 </body>
 </html>
