@@ -582,7 +582,7 @@ async function openClient(id) {
     );
   }
 
-  frag.querySelector(".session-buttons").append(...meta.map((m) =>
+  frag.querySelector(".session-buttons").append(...jobButtons(brief.jobs), ...meta.map((m) =>
     el("button", { type: "button", title: m.session_id, disabled: !!m.missing,
       onclick: (e) => openSession(m.session_id, null, e.currentTarget) }, sessionLabel(m))));
 
@@ -596,20 +596,18 @@ async function openClient(id) {
     const file = upForm.audio.files[0];
     const btn = upForm.querySelector("button[type=submit]");
     upMsg.className = "upload-msg";
-    upMsg.textContent = "本機轉寫與產生紀錄中，請不要關閉這個頁面。長錄音需要幾分鐘。";
-    await busy(btn, "轉寫中", async () => {
+    upMsg.textContent = "正在送出錄音…";
+    await busy(btn, "送出中", async () => {
       try {
         const q = new URLSearchParams({ client: id, session_id: upForm.session_id.value, consent: upForm.consent.checked ? "1" : "0", simulated: upForm.simulated.checked ? "1" : "0" });
         const r = await api(`/api/upload?${q}`, { method: "POST", headers: { "X-Filename": encodeURIComponent(file.name) }, body: file });
-        await loadClients();
         markActive(id);
-        if (my !== nav) { // the therapist went elsewhere while it ran: say so, do not take the screen
-          toast(`${r.session_id} 已轉寫完成，可以從個案頁開啟。${KEEP_NO_AUDIO}`);
+        if (my !== nav) { // the therapist went elsewhere: the job runs on; it is listed on the client page
+          toast(`${r.session_id} 已開始在主機上處理，完成後可從個案頁開啟。`);
           return;
         }
-        upMsg.textContent = `完成。Haven 不保存錄音，暫存檔已刪除。${KEEP_NO_AUDIO}`;
-        ++nav;
-        renderSession(r);
+        upMsg.textContent = "錄音已送到主機，開始處理。";
+        showJob(r); // background job: the processing screen polls and opens the draft
       } catch (err) {
         upMsg.className = "upload-msg problem";
         upMsg.textContent = `沒有完成：${err.message}`;
@@ -1628,16 +1626,13 @@ async function finishRecording(form) {
       recordingUi(form, false);
       return;
     }
-    recordingStatus(form, "錄音已全部送到主機，正在轉寫與產生紀錄。長錄音需要幾分鐘，請不要關閉這個頁面。");
+    recordingStatus(form, "錄音已全部送到主機，開始處理。");
     try {
       const out = await post(`/api/recordings/${encodeURIComponent(r.id)}/finish`);
       rec = null;
       recordingUi(form, false);
-      await loadClients();
       markActive(r.clientId);
-      ++nav;
-      renderSession(out);
-      toast(`${out.session_id} 已轉寫完成。主機上的錄音已刪除，這台設備沒有留下錄音檔。`);
+      showJob(out);
     } catch (err) {
       rec = null;
       recordingUi(form, false);

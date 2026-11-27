@@ -21,7 +21,7 @@ from helpers import H, IsolatedData, ServerCase, free_port
 
 from haven import accounts, config, server, store  # noqa: E402
 from haven.orchestrator import Orchestrator  # noqa: E402
-from test_server_robust import fake_transcribe  # noqa: E402
+from test_server_robust import fake_transcribe, settle_job  # noqa: E402
 
 REPO = Path(__file__).resolve().parent.parent
 PASSWORD = "correct horse battery"
@@ -220,8 +220,15 @@ class RecordingTest(AccountCase, unittest.TestCase):
         self.assertEqual((status, body["expected"]), (409, 1))
         self.assertEqual(self.chunk(wang, rid, 1, "好多了，比較睡得著。\n")[0], 200)
         with mock.patch.object(server, "transcribe_audio", fake_transcribe()):
-            status, r, _ = self.req(f"/api/recordings/{rid}/finish", {}, cookie=wang)
+            status, job, _ = self.req(f"/api/recordings/{rid}/finish", {}, cookie=wang)
+            self.assertEqual(status, 202, job)
+            self.assertEqual(job["session_id"], "C001-S60")
+            status, r = settle_job(self.base, job["job_id"], cookie=f"{accounts.COOKIE}={wang}")
         self.assertEqual(status, 200, r)
+        self.assertEqual(self.req(f"/api/jobs/{job['job_id']}", cookie=wang)[1]["status"], "succeeded")
+        lin = self.login("lin")  # another therapist's job is "no such job", read or retried
+        self.assertEqual(self.req(f"/api/jobs/{job['job_id']}", cookie=lin)[0], 404)
+        self.assertEqual(self.req(f"/api/jobs/{job['job_id']}/retry", {}, cookie=lin)[0], 404)
         self.assertEqual([s["text"] for s in r["transcript"]], ["這週過得怎麼樣？", "好多了，比較睡得著。"])
         self.assertEqual(list((config.DATA_DIR / "tmp").iterdir()), [])
         actions = [a["action"] for a in store.recent_audit(30)]
