@@ -330,3 +330,11 @@ body.signed-out .status { visibility: hidden; }
 .seg .seg-hint { font-size: .75rem; color: var(--muted); }
 .review-banner { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: space-between; margin: 0 0 8px; padding: 8px 10px; border-radius: 6px; background: var(--warn-soft); color: var(--ink); font-size: .9rem; }
 .sentence .reason.source-changed { background: var(--warn-soft); color: var(--ink); border-radius: 4px; padding: 2px 6px; }
+/* background job processing view (web/jobs.js) */
+.job-steps { display: flex; gap: .75rem; list-style: none; padding: 0; margin: .5rem 0; }
+.job-steps li { padding: .2rem .6rem; border-radius: 1rem; background: #eee; color: #666; }
+.job-steps li.done { background: #dff0e0; color: #1d5a24; }
+.job-steps li.current { background: #fff3cd; color: #6b4e00; font-weight: 600; }
+.job-status.problem { color: #9b1c1c; }
+.job-actions { margin: .5rem 0; }
+.job-button.failed, .job-button.interrupted { border-color: #9b1c1c; }

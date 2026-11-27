@@ -21,7 +21,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
-from . import accounts, config, crypto, files, llm, signing, store, templates, transcript_edit
+from . import accounts, config, crypto, files, jobs, llm, signing, store, templates, transcript_edit
 from .agents.verifier import VERIFIER_VERSION, Verifier
 from .models import to_dict
 from .orchestrator import Orchestrator, get_client, load_clients
@@ -81,9 +81,9 @@ class BadRequest(ValueError):
 class HttpError(Exception):
     """A request answered with a given status and a message for the therapist."""
 
-    def __init__(self, status: HTTPStatus, message: str, zh: str | None = None):
+    def __init__(self, status: HTTPStatus, message: str, zh: str | None = None, code: str | None = None):
         super().__init__(message)
-        self.status, self.zh = status, zh
+        self.status, self.zh, self.code = status, zh, code  # code: a background job's error_code
 
 
 def _no_session() -> HttpError:
@@ -566,11 +566,14 @@ class Handler(BaseHTTPRequestHandler):
             client = _my_client(parts[2])
             store.audit("read_brief", client["id"])
             # The therapist sees every time an admin opened this client's records.
-            return self._json(dict(ORCH.brief(client["id"]), record_access=record_access_log(client["id"])))
+            return self._json(dict(ORCH.brief(client["id"]), record_access=record_access_log(client["id"]),
+                                   jobs=jobs.for_client(client["id"])))
         if len(parts) == 3 and parts[1] == "sessions":
             sid = _session_id(parts[2])
             _my_session(sid)
             return self._json(_session_view(sid))
+        if len(parts) == 3 and parts[1] == "jobs":
+            return self._json(jobs.public(_my_job(parts[2])))
         if parts == ["api", "admin"]:
             self._admin()
             return self._json(_admin_overview())
@@ -649,6 +652,8 @@ class Handler(BaseHTTPRequestHandler):
             return self._ask(parts[2])  # Case Memory; with the clinical aids off the endpoint does not exist
         if parts == ["api", "upload"]:
             return self._upload(query)
+        if len(parts) == 4 and parts[1] == "jobs" and parts[3] == "retry":
+            return self._json(_retry_job(parts[2]), HTTPStatus.ACCEPTED)
         return self._error(HTTPStatus.NOT_FOUND, "unknown endpoint")
 
     def _payload(self) -> dict:
@@ -871,7 +876,8 @@ class Handler(BaseHTTPRequestHandler):
         except BaseException as e:
             _abandon_audio(tmp_name, session_id, e)
             raise
-        return self._json(_transcribe_and_store(tmp_name, session_id, client_id, session_no, simulated, "transcribe_upload"))
+        return self._json(_start_transcription(tmp_name, session_id, client_id, session_no, simulated, "transcribe_upload"),
+                          HTTPStatus.ACCEPTED)
 
     # ---------- accounts and client assignments (admin, on the main PC) ----------
 
@@ -993,8 +999,8 @@ class Handler(BaseHTTPRequestHandler):
         if rec["bytes"] == 0:
             _abandon_audio(rec["path"], rec["session_id"], HttpError(HTTPStatus.BAD_REQUEST, "empty"))
             raise HttpError(HTTPStatus.BAD_REQUEST, "nothing was recorded", "沒有收到任何錄音，沒有建立會談。")
-        return self._json(_transcribe_and_store(rec["path"], rec["session_id"], rec["client_id"], rec["session_no"],
-                                                rec["simulated"], "transcribe_recording"))
+        return self._json(_start_transcription(rec["path"], rec["session_id"], rec["client_id"], rec["session_no"],
+                                               rec["simulated"], "transcribe_recording"), HTTPStatus.ACCEPTED)
 
     def _recording_cancel(self, rid: str):
         rec = self._recording(rid)
@@ -1163,48 +1169,114 @@ def _sweep_recordings() -> None:
         store.audit("recording_abandoned", f"{r['session_id']}: nothing arrived for {RECORDING_IDLE // 60} minutes; audio removed")
 
 
-def _transcribe_and_store(tmp_name: str, session_id: str, client_id: str, session_no: int, simulated: bool, action: str) -> dict:
-    """Transcribes a complete recording, removes it (on success and on every
-    failure), labels speakers, files the transcript and drafts the note."""
+def _start_transcription(tmp_name: str, session_id: str, client_id: str, session_no: int, simulated: bool, action: str) -> dict:
+    """Queues transcription and drafting of a complete recording and answers at
+    once (202). The recording moves to where a retry can find it (jobs.keep_audio);
+    it is removed when transcription succeeds."""
+    params = {"client_id": client_id, "session_no": session_no, "simulated": simulated, "action": action,
+              "date": date.today().isoformat()}
     try:
-        try:
-            t = transcribe_audio(Path(tmp_name), session_id, client_id, session_no, date.today().isoformat(), simulated)
-        except ImportError:
-            raise HttpError(HTTPStatus.NOT_IMPLEMENTED, "faster-whisper is not installed",
-                            "這台電腦還沒有安裝語音轉寫模組（faster-whisper）。") from None
-        except ASRError as e:
-            too_long = "maximum allowed duration" in str(e)
-            raise HttpError(HTTPStatus.BAD_GATEWAY, f"speech-to-text server at {config.ASR_URL}: {e}",
-                            "錄音超過本機語音轉寫服務允許的長度。請調高伺服器的 VLLM_MAX_AUDIO_DECODE_DURATION_S，或把錄音分段上傳。"
-                            if too_long else "本機語音轉寫服務沒有回傳可用的逐字稿，請確認錄音檔格式後再試。") from None
-        except llm.NonLocalEndpointError:
-            raise HttpError(HTTPStatus.BAD_GATEWAY, "the speech-to-text endpoint is not local; nothing was sent",
-                            "語音轉寫服務的位址不是本機或診所區域網路，錄音沒有送出。請檢查設定。") from None
-        except OSError:
-            raise HttpError(HTTPStatus.SERVICE_UNAVAILABLE, f"speech-to-text server not reachable at {config.ASR_URL}",
-                            "連不上本機語音轉寫服務，請確認它已經啟動。") from None
-        finally:
-            _remove(tmp_name)  # Haven keeps no recording, on success or on failure
-        if not t.segments:
-            raise HttpError(HTTPStatus.UNPROCESSABLE_ENTITY, "no speech was recognised in the recording",
-                            "錄音裡沒有辨識到任何語音，沒有建立會談。請確認錄音檔是否正確、有沒有聲音。")
-        labelled = ORCH.speakers.run(t)
-        with CLIENTS_LOCK:  # two uploads at once must not drop each other's session
-            save_transcript(t)
-            clients = load_clients()
-            for c in clients:
-                if c["id"] == client_id and session_id not in c.setdefault("sessions", []):
-                    c["sessions"].append(session_id)
-            files.write_private(config.CLIENTS_FILE, json.dumps(clients, ensure_ascii=False, indent=2) + "\n")
+        job = jobs.create(session_id, "transcribe", params, audio=tmp_name)
+    except jobs.Busy:
+        e = Refused("this session is already being processed", "這次會談已經在處理中，請等它完成。")
+        _abandon_audio(tmp_name, session_id, e)
+        raise e from None
     except BaseException as e:
         _abandon_audio(tmp_name, session_id, e)
         raise
+    return jobs.public(job)
+
+
+def _transcribe_job(job: dict, audio: Path | None) -> None:
+    """The "transcribe" job: speech to text, speaker labels, the transcript filed
+    and the client's session list updated, then the note drafted. A retry after the
+    transcript was stored skips the speech-to-text step and only drafts. On a
+    failure the recording is kept for a retry; once transcribed it is removed."""
+    session_id, p = job["session_id"], job["params"]
+    client_id = p["client_id"]
+    try:
+        if not (config.SESSIONS_DIR / f"{session_id}.json").is_file():
+            if audio is None:
+                raise HttpError(HTTPStatus.GONE, "the recording is no longer kept",
+                                "原始錄音已不在主機上，無法重新轉寫。請重新上傳錄音檔。", code="audio_gone")
+            jobs.stage(job, "transcribe")
+            try:
+                t = transcribe_audio(audio, session_id, client_id, p["session_no"], p["date"], p["simulated"])
+            except ImportError:
+                raise HttpError(HTTPStatus.NOT_IMPLEMENTED, "faster-whisper is not installed",
+                                "這台電腦還沒有安裝語音轉寫模組（faster-whisper）。", code="asr_not_installed") from None
+            except ASRError as e:
+                too_long = "maximum allowed duration" in str(e)
+                raise HttpError(HTTPStatus.BAD_GATEWAY, f"speech-to-text server at {config.ASR_URL}: {e}",
+                                "錄音超過本機語音轉寫服務允許的長度。請調高伺服器的 VLLM_MAX_AUDIO_DECODE_DURATION_S，或把錄音分段上傳。"
+                                if too_long else "本機語音轉寫服務沒有回傳可用的逐字稿，請確認錄音檔格式後再試。",
+                                code="asr_too_long" if too_long else "asr_failed") from None
+            except llm.NonLocalEndpointError:
+                raise HttpError(HTTPStatus.BAD_GATEWAY, "the speech-to-text endpoint is not local; nothing was sent",
+                                "語音轉寫服務的位址不是本機或診所區域網路，錄音沒有送出。請檢查設定。", code="asr_not_local") from None
+            except OSError:
+                raise HttpError(HTTPStatus.SERVICE_UNAVAILABLE, f"speech-to-text server not reachable at {config.ASR_URL}",
+                                "連不上本機語音轉寫服務，請確認它已經啟動，再按「重試」。", code="asr_unreachable") from None
+            if not t.segments:
+                raise HttpError(HTTPStatus.UNPROCESSABLE_ENTITY, "no speech was recognised in the recording",
+                                "錄音裡沒有辨識到任何語音，沒有建立會談。請確認錄音檔是否正確、有沒有聲音。", code="no_speech")
+            jobs.stage(job, "speakers")
+            labelled = ORCH.speakers.run(t)
+            with CLIENTS_LOCK:  # two uploads at once must not drop each other's session
+                if not (config.SESSIONS_DIR / f"{session_id}.json").exists():
+                    save_transcript(t)
+                clients = load_clients()
+                for c in clients:
+                    if c["id"] == client_id and session_id not in c.setdefault("sessions", []):
+                        c["sessions"].append(session_id)
+                files.write_private(config.CLIENTS_FILE, json.dumps(clients, ensure_ascii=False, indent=2) + "\n")
+            jobs.drop_audio(job["job_id"])  # Haven keeps no recording once it is transcribed
+            store.audit(p["action"], f"{session_id} consent={CONSENT_SCOPE} simulated={int(p['simulated'])} asr={config.ASR_BACKEND} "
+                                     f"speakers_guessed={labelled}/{len(t.segments)}; audio removed after ASR")
+    except BaseException as e:
+        kind = f"HTTP {int(e.status)}" if isinstance(e, HttpError) else type(e).__name__
+        store.audit("upload_failed", f"{session_id} {kind}; audio kept for a retry")
+        raise
     finally:
-        _remove(tmp_name)
         with CLIENTS_LOCK:
             UPLOADING.pop(session_id, None)
-    store.audit(action, f"{session_id} consent={CONSENT_SCOPE} simulated={int(simulated)} asr={config.ASR_BACKEND} speakers_guessed={labelled}/{len(t.segments)}; temp audio removed after ASR")
-    return _open_session(session_id)
+    jobs.stage(job, "draft")
+    _open_session(session_id)
+
+
+jobs.register("transcribe", _transcribe_job,
+              needs_audio=lambda job: not (config.SESSIONS_DIR / f"{job['session_id']}.json").is_file())
+
+
+def _my_job(job_id: str) -> dict:
+    """The job, if the signed-in therapist may open its session's client; 404 otherwise."""
+    job = jobs.get(job_id)
+    missing = HttpError(HTTPStatus.NOT_FOUND, "no such job", "找不到這項處理工作。")
+    if job is None:
+        raise missing
+    if accounts.required():
+        try:
+            client = get_client(job["params"].get("client_id") or load_transcript(job["session_id"]).client_id)
+        except (KeyError, FileNotFoundError):
+            raise missing from None
+        if not accounts.may_open(_user(), client):
+            raise missing
+    return job
+
+
+def _retry_job(job_id: str) -> dict:
+    job = _my_job(job_id)
+    try:
+        job = jobs.retry(job["job_id"])
+    except jobs.NotRetryable:
+        raise Refused("only a failed or interrupted job can be retried", "這項處理正在進行或已經完成，不需要重試。",
+                      job_status=(jobs.get(job_id) or {}).get("status")) from None
+    except jobs.AudioGone:
+        raise Refused("the recording of this job is no longer kept", "原始錄音已不在主機上，無法重新轉寫。請重新上傳錄音檔。",
+                      error_code="audio_gone") from None
+    except jobs.Busy:
+        raise Refused("this session is already being processed", "這次會談已經在處理中，請等它完成。") from None
+    return jobs.public(job)
 
 
 def _remove(path: str) -> None:
@@ -1221,7 +1293,7 @@ def _reserve_upload(session_id: str, client_id: str) -> int:
     with CLIENTS_LOCK:
         client = _client(client_id)
         taken = (config.SESSIONS_DIR / f"{session_id}.json").exists() or session_id in UPLOADING \
-            or any(session_id in c.get("sessions", []) for c in load_clients())
+            or any(session_id in c.get("sessions", []) for c in load_clients()) or jobs.active(session_id, "transcribe")
         if taken:
             raise Refused("a session with this id already exists or is being uploaded",
                           "這個會談編號已經存在，或正在上傳中。請換一個編號。")
@@ -1276,6 +1348,9 @@ def serve() -> None:
     if line:
         print(line)
     leftover = files.clear_temp()
+    stopped = jobs.startup()
+    if stopped:
+        print(f"Haven: {stopped} background job(s) were cut off by the last shutdown; they are marked interrupted and can be retried")
     if leftover:
         print(f"Haven: removed {leftover} recording(s) left in {files.temp_dir()} by an earlier run that did not finish")
     chain = store.verify_audit()

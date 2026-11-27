@@ -34,6 +34,13 @@ CREATE TABLE IF NOT EXISTS verdicts (
     session_id TEXT NOT NULL, transcript_sha256 TEXT NOT NULL, verifier_version TEXT NOT NULL,
     text TEXT NOT NULL, evidence TEXT NOT NULL, verdict TEXT NOT NULL,
     PRIMARY KEY (session_id, transcript_sha256, verifier_version, text, evidence));
+CREATE TABLE IF NOT EXISTS jobs (
+    job_id TEXT PRIMARY KEY, session_id TEXT NOT NULL, kind TEXT NOT NULL,
+    status TEXT NOT NULL, attempt INTEGER NOT NULL DEFAULT 1, error_code TEXT, message_zh TEXT,
+    stage TEXT, params TEXT NOT NULL DEFAULT '{}', created_at TEXT NOT NULL, updated_at TEXT NOT NULL);
+-- One active job per session and kind (haven/jobs.py relies on this to refuse a second one).
+CREATE UNIQUE INDEX IF NOT EXISTS jobs_one_active ON jobs (session_id, kind) WHERE status IN ('queued', 'running');
+CREATE INDEX IF NOT EXISTS jobs_by_session ON jobs (session_id);
 """
 # Columns added to signed_notes after the first release; older databases get them on first use.
 _SIGNED_COLUMNS = ("transcript_sha256", "note_sha256", "verifier_version")
@@ -85,6 +92,9 @@ def _prepare() -> None:
         config.DATA_DIR.mkdir(parents=True, exist_ok=True)
         conn = sqlite3.connect(config.DB_FILE, timeout=30)
         try:
+            # Readers do not wait for a writer (a job saving a transcript while a page loads).
+            # Persistent: the database file stays in WAL mode.
+            conn.execute("PRAGMA journal_mode=WAL")
             conn.executescript(SCHEMA)
             have = {row[1] for row in conn.execute("PRAGMA table_info(signed_notes)")}
             for column in _SIGNED_COLUMNS:

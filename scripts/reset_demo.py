@@ -72,8 +72,9 @@ def main() -> int:
             if side.exists():
                 side.rename(backup.with_name(backup.name + suffix))
         print(f"moved the old database to {backup}")
-    for leftover in config.DATA_DIR.glob(f"{config.DB_FILE.name}-journal"):
-        leftover.unlink()
+    for suffix in ("-journal", "-wal", "-shm"):  # sidecars of the old database must not attach to the new one
+        for leftover in config.DATA_DIR.glob(f"{config.DB_FILE.name}{suffix}"):
+            leftover.unlink()
     if args.source:
         shutil.copy(args.source, config.DB_FILE)
         conn = sqlite3.connect(config.DB_FILE)

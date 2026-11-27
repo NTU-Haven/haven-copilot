@@ -54,3 +54,6 @@ HOSTNAMES = [h.strip() for h in os.environ.get("HAVEN_HOSTNAMES", "").split(",")
 # Accounts and client assignments are managed on the main PC itself (https://localhost:<port>).
 # Set to 1 to allow an admin account to manage them from another device on the clinic network.
 ADMIN_FROM_NETWORK = os.environ.get("HAVEN_ADMIN_FROM_NETWORK") == "1"
+
+# Background processing (transcription and drafting) runs on this many worker threads.
+JOB_WORKERS = max(1, int(os.environ.get("HAVEN_JOB_WORKERS", "2")))
