@@ -152,11 +152,18 @@ def add(manifest: Path, audio: Path, script: str, category: str) -> None:
 _PLAIN = re.compile(r"[㐀-鿿豈-﫿A-Za-z0-9]")
 
 
-def align(segments: list[dict], text: str) -> list[str]:
+SNAP = 6  # how far (in characters) an unsure cut may move to reach the candidate's punctuation
+
+
+def align(segments: list[dict], text: str, stats: dict | None = None) -> list[str]:
     """Cuts ``text`` (the candidate's full transcript) into pieces matching ``segments``
     (the baseline's timed segments), so each piece keeps that segment's id and times.
     Character-level alignment of the two transcripts with difflib; inside a replaced
-    stretch the cut falls proportionally. Standard library only."""
+    stretch the cut falls proportionally. A cut is sure when the characters on both
+    sides of it are the same in both transcripts; any other cut moves to the nearest
+    punctuation of the candidate within SNAP characters (Whisper's segments end at
+    clause ends, and the candidate punctuates them), or stays put if there is none.
+    ``stats`` gets the number of cuts that moved. Standard library only."""
     w_plain, bounds = "", []
     for s in segments:  # character by character, so conversion never changes a length
         w_plain += "".join(to_traditional(c).lower() for c in _PLAIN.findall(str(s.get("text", ""))))
@@ -164,11 +171,22 @@ def align(segments: list[dict], text: str) -> list[str]:
     q_chars = [(i, c) for i, c in enumerate(text) if _PLAIN.fullmatch(c)]
     q_plain = "".join(to_traditional(c).lower() for _, c in q_chars)
     ops = difflib.SequenceMatcher(None, w_plain, q_plain, autojunk=False).get_opcodes()
+    # j is a punctuation gap when something other than spaces stands between plain characters j-1 and j
+    gaps = [j for j in range(1, len(q_chars)) if text[q_chars[j - 1][0] + 1:q_chars[j][0]].strip()]
 
     def to_q(b: int) -> int:
-        for _tag, i1, i2, j1, j2 in ops:
+        for tag, i1, i2, j1, j2 in ops:
+            if i1 < b < i2 and tag == "equal":
+                return j1 + b - i1  # sure
+        for tag, i1, i2, j1, j2 in ops:
             if i1 <= b <= i2:
-                return j1 + (b - i1 if _tag == "equal" else round((b - i1) * (j2 - j1) / max(1, i2 - i1)))
+                j = j1 + (b - i1 if tag == "equal" else round((b - i1) * (j2 - j1) / max(1, i2 - i1)))
+                near = min(gaps, key=lambda g: (abs(g - j), g), default=None)
+                if near is not None and near != j and abs(near - j) <= SNAP:
+                    if stats is not None:
+                        stats["snapped"] = stats.get("snapped", 0) + 1
+                    return near
+                return j
         return len(q_plain)
 
     cuts = [0] + [q_chars[j][0] if j < len(q_chars) else len(text) for j in (to_q(b) for b in bounds[:-1])] + [len(text)]
@@ -197,10 +215,11 @@ def run(args) -> None:
             row["baseline"].update(rates(item["reference"], base["text"]))
         segs = base.get("all_segments", []) if item["category"].startswith("long") else []
         if segs and cand["status"] == 200:
-            pieces = align(segs, cand["text"])
+            moved: dict = {}
+            pieces = align(segs, cand["text"], moved)
             empty = sum(1 for p in pieces if not tokens(p))
             disagree = [edit_distance(tokens(p), tokens(s["text"])) / max(1, len(tokens(s["text"]))) for p, s in zip(pieces, segs)]
-            row["hybrid"] = {"segments": len(segs), "empty_pieces": empty, "median_piece_vs_whisper": round(statistics.median(disagree), 3),
+            row["hybrid"] = {"segments": len(segs), "snapped_cuts": moved.get("snapped", 0), "empty_pieces": empty, "median_piece_vs_whisper": round(statistics.median(disagree), 3),
                              "sample": [{"start": s["start"], "end": s["end"], "whisper": s["text"], "hybrid": p}
                                         for s, p in list(zip(segs, pieces))[::max(1, len(segs) // 20)][:20]]}
         results.append(row)
@@ -250,7 +269,7 @@ def write_report(args, results: list[dict]) -> None:
         h = r.get("hybrid")
         if h:
             lines += ["", f"## Alignment hybrid on {r['id']}", "",
-                      f"{h['segments']} Whisper segments; {h['empty_pieces']} got no Qwen3-ASR text; median difference between a "
+                      f"{h['segments']} Whisper segments; {h.get('snapped_cuts', 0)} unsure cuts moved to Qwen3-ASR punctuation; {h['empty_pieces']} got no Qwen3-ASR text; median difference between a "
                       f"segment's Qwen3-ASR piece and Whisper's own text {h['median_piece_vs_whisper']:.1%} (this includes Whisper's own errors). "
                       "Read the sample: a boundary is right when both columns say the same thing.", "",
                       "| Time | Whisper | Hybrid (Qwen3-ASR text) |", "| --- | --- | --- |"]
