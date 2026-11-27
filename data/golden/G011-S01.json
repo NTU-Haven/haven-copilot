@@ -1,0 +1,131 @@
+{
+ "session_id": "G011-S01",
+ "client_id": "G011",
+ "session_no": 4,
+ "date": "2026-11-09",
+ "simulated": true,
+ "note": "模擬會談，內容為團隊撰寫的腳本，非真實個案，也不是錄音。",
+ "segments": [
+  {
+   "id": 1,
+   "start": 0.0,
+   "end": 7.9,
+   "speaker": "therapist",
+   "text": "這是十一月九日的會後口述，個案是G011，第四次晤談。",
+   "speaker_source": "recap"
+  },
+  {
+   "id": 2,
+   "start": 8.4,
+   "end": 15.9,
+   "speaker": "therapist",
+   "text": "個案這週睡眠比上週差，說是因為搬家前一晚都在打包。",
+   "speaker_source": "recap"
+  },
+  {
+   "id": 3,
+   "start": 16.4,
+   "end": 23.0,
+   "speaker": "therapist",
+   "text": "個案提到新家離公司比較遠，通勤要一個小時。",
+   "speaker_source": "recap"
+  },
+  {
+   "id": 4,
+   "start": 23.5,
+   "end": 31.0,
+   "speaker": "therapist",
+   "text": "個案沒有提到想傷害自己，我這次有問，個案回答沒有。",
+   "speaker_source": "recap"
+  },
+  {
+   "id": 5,
+   "start": 31.5,
+   "end": 42.1,
+   "speaker": "therapist",
+   "text": "我個人感覺個案的狀況有點像適應障礙，但我還沒有做正式評估，這只是我的初步感覺。",
+   "speaker_source": "recap"
+  },
+  {
+   "id": 6,
+   "start": 42.6,
+   "end": 49.4,
+   "speaker": "therapist",
+   "text": "個案提到母親上週打電話來，問個案有沒有吃飯。",
+   "speaker_source": "recap"
+  },
+  {
+   "id": 7,
+   "start": 49.9,
+   "end": 55.4,
+   "speaker": "therapist",
+   "text": "個案說下週五要跟房東辦退租手續。",
+   "speaker_source": "recap"
+  },
+  {
+   "id": 8,
+   "start": 55.9,
+   "end": 61.9,
+   "speaker": "therapist",
+   "text": "個案不是不想搬，是對新環境還不熟悉。",
+   "speaker_source": "recap"
+  },
+  {
+   "id": 9,
+   "start": 62.4,
+   "end": 69.7,
+   "speaker": "therapist",
+   "text": "這次晤談我做了正念呼吸的練習，帶個案做了三分鐘。",
+   "speaker_source": "recap"
+  },
+  {
+   "id": 10,
+   "start": 70.2,
+   "end": 75.5,
+   "speaker": "therapist",
+   "text": "個案練習之後說肩膀有放鬆一點。",
+   "speaker_source": "recap"
+  },
+  {
+   "id": 11,
+   "start": 76.0,
+   "end": 81.3,
+   "speaker": "therapist",
+   "text": "我請個案這週每天記錄入睡時間。",
+   "speaker_source": "recap"
+  },
+  {
+   "id": 12,
+   "start": 81.8,
+   "end": 89.7,
+   "speaker": "therapist",
+   "text": "個案提到三年前換過一次城市生活，當時也花了半年才適應。",
+   "speaker_source": "recap"
+  },
+  {
+   "id": 13,
+   "start": 90.2,
+   "end": 95.5,
+   "speaker": "therapist",
+   "text": "個案這週沒有喝酒，也沒有請假。",
+   "speaker_source": "recap"
+  },
+  {
+   "id": 14,
+   "start": 96.0,
+   "end": 100.2,
+   "speaker": "therapist",
+   "text": "下週二同一時間再約。",
+   "speaker_source": "recap"
+  },
+  {
+   "id": 15,
+   "start": 100.7,
+   "end": 106.4,
+   "speaker": "therapist",
+   "text": "以上是我的口述，沒有加上其他評估。",
+   "speaker_source": "recap"
+  }
+ ],
+ "input_mode": "recap"
+}

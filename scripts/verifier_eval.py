@@ -22,19 +22,32 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
+from haven import config  # noqa: E402
 from haven.agents.verifier import Verifier  # noqa: E402
 from haven.llm import get_llm  # noqa: E402
 from haven.models import Note, NoteSentence  # noqa: E402
 from haven.transcript import load_transcript  # noqa: E402
 
 
+def load_golden_or_demo(case_set, sid):
+    """A case with "set": "golden" cites data/golden (ticket 15); any other case, data/sessions."""
+    if case_set != "golden":
+        return load_transcript(sid)
+    saved = config.SESSIONS_DIR
+    config.SESSIONS_DIR = ROOT / "data" / "golden"
+    try:
+        return load_transcript(sid)
+    finally:
+        config.SESSIONS_DIR = saved
+
+
 def evaluate(cases: list[dict], llm=None) -> list[dict]:
     by_session = defaultdict(list)
     for c in cases:
-        by_session[c["session_id"]].append(c)
+        by_session[(c.get("set"), c["session_id"])].append(c)
     results = []
-    for sid, group in by_session.items():
-        t = load_transcript(sid)
+    for (case_set, sid), group in by_session.items():
+        t = load_golden_or_demo(case_set, sid)
         # One note per session, so the LLM layer sees one batch as it would in use.
         note = Note("SOAP", {"S": [NoteSentence(c["text"], c["evidence"]) for c in group]}, "eval")
         Verifier(llm).run(note, t)

@@ -1,0 +1,170 @@
+{
+ "session_id": "G007-S01",
+ "client_id": "G007",
+ "session_no": 2,
+ "date": "2026-10-28",
+ "simulated": true,
+ "note": "模擬會談，內容為團隊撰寫的腳本，非真實個案，也不是錄音。",
+ "segments": [
+  {
+   "id": 1,
+   "start": 0.0,
+   "end": 3.8,
+   "speaker": "therapist",
+   "text": "這週睡眠怎麼樣？",
+   "speaker_source": "script"
+  },
+  {
+   "id": 2,
+   "start": 4.3,
+   "end": 11.4,
+   "speaker": "client",
+   "text": "我沒有失眠，只是比較晚睡，大概都十二點多才睡。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 3,
+   "start": 11.9,
+   "end": 15.2,
+   "speaker": "therapist",
+   "text": "睡著之後呢？",
+   "speaker_source": "script"
+  },
+  {
+   "id": 4,
+   "start": 15.7,
+   "end": 20.8,
+   "speaker": "client",
+   "text": "睡著就一覺到天亮，不會醒來。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 5,
+   "start": 21.3,
+   "end": 24.8,
+   "speaker": "therapist",
+   "text": "白天會很累嗎？",
+   "speaker_source": "script"
+  },
+  {
+   "id": 6,
+   "start": 25.3,
+   "end": 31.5,
+   "speaker": "client",
+   "text": "不是每天都累，主要是開會很多的那兩天。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 7,
+   "start": 32.0,
+   "end": 35.5,
+   "speaker": "therapist",
+   "text": "飲食和喝酒呢？",
+   "speaker_source": "script"
+  },
+  {
+   "id": 8,
+   "start": 36.0,
+   "end": 41.5,
+   "speaker": "client",
+   "text": "我從來不喝酒，咖啡一天一杯而已。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 9,
+   "start": 42.0,
+   "end": 48.4,
+   "speaker": "therapist",
+   "text": "有沒有出現過恐慌的感覺，像突然喘不過氣？",
+   "speaker_source": "script"
+  },
+  {
+   "id": 10,
+   "start": 48.9,
+   "end": 55.7,
+   "speaker": "client",
+   "text": "沒有，我沒有過那種情況，只是有時候會有點悶。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 11,
+   "start": 56.2,
+   "end": 60.4,
+   "speaker": "therapist",
+   "text": "悶的時候會持續多久？",
+   "speaker_source": "script"
+  },
+  {
+   "id": 12,
+   "start": 60.9,
+   "end": 64.4,
+   "speaker": "client",
+   "text": "幾分鐘就過了。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 13,
+   "start": 64.9,
+   "end": 68.7,
+   "speaker": "therapist",
+   "text": "跟人相處方面呢？",
+   "speaker_source": "script"
+  },
+  {
+   "id": 14,
+   "start": 69.2,
+   "end": 76.3,
+   "speaker": "client",
+   "text": "我不是不想跟同事吃飯，是中午想一個人休息一下。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 15,
+   "start": 76.8,
+   "end": 80.8,
+   "speaker": "therapist",
+   "text": "所以不是在躲同事。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 16,
+   "start": 81.3,
+   "end": 86.2,
+   "speaker": "client",
+   "text": "對，晚上跟朋友還是會出去。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 17,
+   "start": 86.7,
+   "end": 93.8,
+   "speaker": "client",
+   "text": "我也不是對工作沒有興趣，只是最近的專案太雜了。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 18,
+   "start": 94.3,
+   "end": 99.2,
+   "speaker": "therapist",
+   "text": "專案太雜，你希望怎麼調整？",
+   "speaker_source": "script"
+  },
+  {
+   "id": 19,
+   "start": 99.7,
+   "end": 104.3,
+   "speaker": "client",
+   "text": "想請主管幫我排優先順序。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 20,
+   "start": 104.8,
+   "end": 110.3,
+   "speaker": "therapist",
+   "text": "好，我們下次練習怎麼跟主管開口。",
+   "speaker_source": "script"
+  }
+ ]
+}

@@ -1,0 +1,194 @@
+{
+ "session_id": "G004-S01",
+ "client_id": "G004",
+ "session_no": 3,
+ "date": "2026-10-26",
+ "simulated": true,
+ "note": "模擬會談，內容為團隊撰寫的腳本，非真實個案，也不是錄音。",
+ "segments": [
+  {
+   "id": 1,
+   "start": 0.0,
+   "end": 5.5,
+   "speaker": "therapist",
+   "text": "今天你看起來很疲倦，最近怎麼樣？",
+   "speaker_source": "script"
+  },
+  {
+   "id": 2,
+   "start": 6.0,
+   "end": 11.5,
+   "speaker": "client",
+   "text": "這週很糟，我跟前女友徹底分手了。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 3,
+   "start": 12.0,
+   "end": 16.4,
+   "speaker": "therapist",
+   "text": "聽到你這週經歷了分手。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 4,
+   "start": 16.9,
+   "end": 21.8,
+   "speaker": "client",
+   "text": "我覺得生活沒有什麼意義了。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 5,
+   "start": 22.3,
+   "end": 28.7,
+   "speaker": "therapist",
+   "text": "我想直接問你，你有想過結束自己的生命嗎？",
+   "speaker_source": "script"
+  },
+  {
+   "id": 6,
+   "start": 29.2,
+   "end": 33.4,
+   "speaker": "client",
+   "text": "有，我這幾天都在想。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 7,
+   "start": 33.9,
+   "end": 37.7,
+   "speaker": "therapist",
+   "text": "有想過怎麼做嗎？",
+   "speaker_source": "script"
+  },
+  {
+   "id": 8,
+   "start": 38.2,
+   "end": 44.8,
+   "speaker": "client",
+   "text": "我想過在這個週末，把家裡的安眠藥一次吃完。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 9,
+   "start": 45.3,
+   "end": 49.3,
+   "speaker": "therapist",
+   "text": "那些藥現在在哪裡？",
+   "speaker_source": "script"
+  },
+  {
+   "id": 10,
+   "start": 49.8,
+   "end": 55.3,
+   "speaker": "client",
+   "text": "在我床頭的抽屜裡，大概有一整瓶。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 11,
+   "start": 55.8,
+   "end": 64.2,
+   "speaker": "therapist",
+   "text": "謝謝你願意告訴我，這件事很重要。你現在有想要馬上這麼做嗎？",
+   "speaker_source": "script"
+  },
+  {
+   "id": 12,
+   "start": 64.7,
+   "end": 70.2,
+   "speaker": "client",
+   "text": "現在不會，因為我還想把貓安頓好。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 13,
+   "start": 70.7,
+   "end": 74.0,
+   "speaker": "therapist",
+   "text": "你有一隻貓？",
+   "speaker_source": "script"
+  },
+  {
+   "id": 14,
+   "start": 74.5,
+   "end": 78.9,
+   "speaker": "client",
+   "text": "對，叫麻糬，養了四年。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 15,
+   "start": 79.4,
+   "end": 84.9,
+   "speaker": "therapist",
+   "text": "你有沒有可以暫時幫忙保管藥的人？",
+   "speaker_source": "script"
+  },
+  {
+   "id": 16,
+   "start": 85.4,
+   "end": 90.5,
+   "speaker": "client",
+   "text": "我哥哥可能可以，他住在附近。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 17,
+   "start": 91.0,
+   "end": 98.9,
+   "speaker": "therapist",
+   "text": "那我們現在一起打電話給哥哥，請他今天把藥拿走，可以嗎？",
+   "speaker_source": "script"
+  },
+  {
+   "id": 18,
+   "start": 99.4,
+   "end": 102.7,
+   "speaker": "client",
+   "text": "好……我打。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 19,
+   "start": 103.2,
+   "end": 108.7,
+   "speaker": "therapist",
+   "text": "哥哥說他今晚七點會到你家，對嗎？",
+   "speaker_source": "script"
+  },
+  {
+   "id": 20,
+   "start": 109.2,
+   "end": 113.0,
+   "speaker": "client",
+   "text": "對，他說七點到。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 21,
+   "start": 113.5,
+   "end": 123.6,
+   "speaker": "therapist",
+   "text": "我們也一起寫安全計畫，包含你今晚七點前可以聯絡的人，和這裡的緊急聯絡電話。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 22,
+   "start": 124.1,
+   "end": 126.5,
+   "speaker": "client",
+   "text": "好。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 23,
+   "start": 127.0,
+   "end": 133.4,
+   "speaker": "therapist",
+   "text": "明天我會打電話關心你，下週一我們再見面。",
+   "speaker_source": "script"
+  }
+ ]
+}

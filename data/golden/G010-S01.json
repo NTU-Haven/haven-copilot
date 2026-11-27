@@ -1,0 +1,170 @@
+{
+ "session_id": "G010-S01",
+ "client_id": "G010",
+ "session_no": 4,
+ "date": "2026-11-02",
+ "simulated": true,
+ "note": "模擬會談，內容為團隊撰寫的腳本，非真實個案，也不是錄音。",
+ "segments": [
+  {
+   "id": 1,
+   "start": 0.0,
+   "end": 4.4,
+   "speaker": "therapist",
+   "text": "這週你有回家看爸媽嗎？",
+   "speaker_source": "script"
+  },
+  {
+   "id": 2,
+   "start": 4.9,
+   "end": 8.9,
+   "speaker": "client",
+   "text": "有，週日回去吃飯。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 3,
+   "start": 9.4,
+   "end": 17.3,
+   "speaker": "client",
+   "text": "我媽一看到我就說，「你就是太懶，才會一直找不到工作」。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 4,
+   "start": 17.8,
+   "end": 23.1,
+   "speaker": "therapist",
+   "text": "聽到這句話，你當下有什麼反應？",
+   "speaker_source": "script"
+  },
+  {
+   "id": 5,
+   "start": 23.6,
+   "end": 28.7,
+   "speaker": "client",
+   "text": "我什麼都沒說，但心裡很難受。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 6,
+   "start": 29.2,
+   "end": 33.2,
+   "speaker": "therapist",
+   "text": "你同意媽媽說的嗎？",
+   "speaker_source": "script"
+  },
+  {
+   "id": 7,
+   "start": 33.7,
+   "end": 41.0,
+   "speaker": "client",
+   "text": "我不同意，我這半年投了四十幾份履歷，怎麼會是懶。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 8,
+   "start": 41.5,
+   "end": 46.1,
+   "speaker": "therapist",
+   "text": "所以你很清楚自己有努力。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 9,
+   "start": 46.6,
+   "end": 51.7,
+   "speaker": "client",
+   "text": "對，只是一直沒有面試的機會。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 10,
+   "start": 52.2,
+   "end": 58.2,
+   "speaker": "client",
+   "text": "我爸比較少說話，他只說，「隨便你」。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 11,
+   "start": 58.7,
+   "end": 63.6,
+   "speaker": "therapist",
+   "text": "爸爸說隨便你，你怎麼理解？",
+   "speaker_source": "script"
+  },
+  {
+   "id": 12,
+   "start": 64.1,
+   "end": 69.8,
+   "speaker": "client",
+   "text": "我不知道他是放棄我，還是不想吵架。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 13,
+   "start": 70.3,
+   "end": 74.5,
+   "speaker": "therapist",
+   "text": "你不確定爸爸的意思。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 14,
+   "start": 75.0,
+   "end": 77.4,
+   "speaker": "client",
+   "text": "嗯。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 15,
+   "start": 77.9,
+   "end": 85.8,
+   "speaker": "client",
+   "text": "我哥哥在旁邊說，「你可以來我公司幫忙」，但我不想靠他。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 16,
+   "start": 86.3,
+   "end": 91.2,
+   "speaker": "therapist",
+   "text": "你不想靠哥哥，是為什麼呢？",
+   "speaker_source": "script"
+  },
+  {
+   "id": 17,
+   "start": 91.7,
+   "end": 96.3,
+   "speaker": "client",
+   "text": "因為我想靠自己找到工作。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 18,
+   "start": 96.8,
+   "end": 104.1,
+   "speaker": "therapist",
+   "text": "這週你可以試試看，把今天的感受用一兩句話寫下來。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 19,
+   "start": 104.6,
+   "end": 107.9,
+   "speaker": "client",
+   "text": "好，我可以。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 20,
+   "start": 108.4,
+   "end": 113.3,
+   "speaker": "therapist",
+   "text": "下週我們再看看你寫了什麼。",
+   "speaker_source": "script"
+  }
+ ]
+}
