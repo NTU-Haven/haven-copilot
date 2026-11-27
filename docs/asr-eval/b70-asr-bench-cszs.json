@@ -1,0 +1,1136 @@
+{
+  "label": "b70-asr-bench-cszs",
+  "results": [
+    {
+      "id": "cszs-0",
+      "category": "cszs-mixed",
+      "reference": "我觉得渐渐 getting inconvenient 了。",
+      "candidate": {
+        "status": 200,
+        "seconds": 0.24,
+        "text": "我觉得渐渐 getting inconvenient 了。",
+        "error": "",
+        "ref_tokens": 8,
+        "mer_err": 0,
+        "ref_zh": 6,
+        "cer_err": 0,
+        "ref_en": 2,
+        "wer_err": 0
+      },
+      "baseline": {
+        "status": 200,
+        "seconds": 0.13,
+        "text": "我觉得渐渐该挺inconvenient了",
+        "error": "",
+        "ref_tokens": 8,
+        "mer_err": 2,
+        "ref_zh": 6,
+        "cer_err": 2,
+        "ref_en": 2,
+        "wer_err": 1
+      }
+    },
+    {
+      "id": "cszs-79",
+      "category": "cszs-mixed",
+      "reference": "大龙 is one of the chess pieces in the game of 将棋 in Japan.",
+      "candidate": {
+        "status": 200,
+        "seconds": 0.44,
+        "text": "大龙 is one of the chess pieces, the game of 棋 in Japan.",
+        "error": "",
+        "ref_tokens": 16,
+        "mer_err": 2,
+        "ref_zh": 4,
+        "cer_err": 1,
+        "ref_en": 12,
+        "wer_err": 1
+      },
+      "baseline": {
+        "status": 200,
+        "seconds": 0.24,
+        "text": "大龙是一种的《财务》的一种《香气》的一种《香气》的一种《香气》。",
+        "error": "",
+        "ref_tokens": 16,
+        "mer_err": 21,
+        "ref_zh": 4,
+        "cer_err": 21,
+        "ref_en": 12,
+        "wer_err": 12
+      }
+    },
+    {
+      "id": "cszs-158",
+      "category": "cszs-mixed",
+      "reference": "网友 can online 阅读 and download these documents.",
+      "candidate": {
+        "status": 200,
+        "seconds": 0.26,
+        "text": "网友 can online read and download these documents.",
+        "error": "",
+        "ref_tokens": 10,
+        "mer_err": 2,
+        "ref_zh": 4,
+        "cer_err": 2,
+        "ref_en": 6,
+        "wer_err": 1
+      },
+      "baseline": {
+        "status": 200,
+        "seconds": 0.14,
+        "text": "网友看 online,阅读 and download these documents.",
+        "error": "",
+        "ref_tokens": 10,
+        "mer_err": 1,
+        "ref_zh": 4,
+        "cer_err": 1,
+        "ref_en": 6,
+        "wer_err": 1
+      }
+    },
+    {
+      "id": "cszs-237",
+      "category": "cszs-mixed",
+      "reference": "大叶马兜铃 is a plant belonging to the family Aristolochiaceae.",
+      "candidate": {
+        "status": 200,
+        "seconds": 0.46,
+        "text": "大叶马兜铃 is a plant belonging to the family Aristolochiaceae.",
+        "error": "",
+        "ref_tokens": 13,
+        "mer_err": 0,
+        "ref_zh": 5,
+        "cer_err": 0,
+        "ref_en": 8,
+        "wer_err": 0
+      },
+      "baseline": {
+        "status": 200,
+        "seconds": 0.15,
+        "text": "大叶马豆林 is a plant belonging to the family Aristola Chiachi.",
+        "error": "",
+        "ref_tokens": 13,
+        "mer_err": 4,
+        "ref_zh": 5,
+        "cer_err": 2,
+        "ref_en": 8,
+        "wer_err": 2
+      }
+    },
+    {
+      "id": "cszs-316",
+      "category": "cszs-mixed",
+      "reference": "该校's original name是Shandong Blue Eagle Vocational School。",
+      "candidate": {
+        "status": 200,
+        "seconds": 0.32,
+        "text": "该校的original name是山东布利欧 vocational school。",
+        "error": "",
+        "ref_tokens": 11,
+        "mer_err": 6,
+        "ref_zh": 3,
+        "cer_err": 6,
+        "ref_en": 8,
+        "wer_err": 4
+      },
+      "baseline": {
+        "status": 200,
+        "seconds": 0.15,
+        "text": "该校's original name 是山东布里尔 Vocational School",
+        "error": "",
+        "ref_tokens": 11,
+        "mer_err": 5,
+        "ref_zh": 3,
+        "cer_err": 5,
+        "ref_en": 8,
+        "wer_err": 3
+      }
+    },
+    {
+      "id": "cszs-395",
+      "category": "cszs-mixed",
+      "reference": "Blue represents rivers and 湖泊.",
+      "candidate": {
+        "status": 200,
+        "seconds": 0.2,
+        "text": "Blue represents rivers and湖泊.",
+        "error": "",
+        "ref_tokens": 6,
+        "mer_err": 0,
+        "ref_zh": 2,
+        "cer_err": 0,
+        "ref_en": 4,
+        "wer_err": 0
+      },
+      "baseline": {
+        "status": 200,
+        "seconds": 0.13,
+        "text": "鲁 represents rivers and the湖泊.",
+        "error": "",
+        "ref_tokens": 6,
+        "mer_err": 2,
+        "ref_zh": 2,
+        "cer_err": 1,
+        "ref_en": 4,
+        "wer_err": 2
+      }
+    },
+    {
+      "id": "cszs-474",
+      "category": "cszs-mixed",
+      "reference": "武威郡有了儒雅之士, but they are truly exceptional.",
+      "candidate": {
+        "status": 200,
+        "seconds": 0.37,
+        "text": "武威俊有了儒雅之势，but they are truly exceptional.",
+        "error": "",
+        "ref_tokens": 14,
+        "mer_err": 2,
+        "ref_zh": 9,
+        "cer_err": 2,
+        "ref_en": 5,
+        "wer_err": 0
+      },
+      "baseline": {
+        "status": 200,
+        "seconds": 0.16,
+        "text": "五位俊有了儒雅之士,but they are truly exceptional.",
+        "error": "",
+        "ref_tokens": 14,
+        "mer_err": 3,
+        "ref_zh": 9,
+        "cer_err": 3,
+        "ref_en": 5,
+        "wer_err": 0
+      }
+    },
+    {
+      "id": "cszs-553",
+      "category": "cszs-mixed",
+      "reference": "亚美尼亚因而成为世界上第一个将基督教定为国教的国家, making it the first country in the world to establish Christianity as its national religion.",
+      "candidate": {
+        "status": 200,
+        "seconds": 1.0,
+        "text": "亚美尼亚因而成为世界上第一个将基督教定为国教的国家，making it the first country in the world to establish Christianity as its national religion.",
+        "error": "",
+        "ref_tokens": 40,
+        "mer_err": 0,
+        "ref_zh": 25,
+        "cer_err": 0,
+        "ref_en": 15,
+        "wer_err": 0
+      },
+      "baseline": {
+        "status": 200,
+        "seconds": 0.3,
+        "text": "亚美尼亚因而成为世界上第一个将基督教定为国教的国家,making it the first country in the world to establish Christianity as its national religion.",
+        "error": "",
+        "ref_tokens": 40,
+        "mer_err": 0,
+        "ref_zh": 25,
+        "cer_err": 0,
+        "ref_en": 15,
+        "wer_err": 0
+      }
+    },
+    {
+      "id": "cszs-632",
+      "category": "cszs-mixed",
+      "reference": "本文 is about the period of TaiChung city during the provincial administration.",
+      "candidate": {
+        "status": 200,
+        "seconds": 0.38,
+        "text": "本文 is about a period of Taichang City during the provincial administration.",
+        "error": "",
+        "ref_tokens": 13,
+        "mer_err": 2,
+        "ref_zh": 2,
+        "cer_err": 0,
+        "ref_en": 11,
+        "wer_err": 2
+      },
+      "baseline": {
+        "status": 200,
+        "seconds": 0.21,
+        "text": "本文是在台中的渠道时期时 当时的几乎是在台中的国家。",
+        "error": "",
+        "ref_tokens": 13,
+        "mer_err": 22,
+        "ref_zh": 2,
+        "cer_err": 22,
+        "ref_en": 11,
+        "wer_err": 11
+      }
+    },
+    {
+      "id": "cszs-711",
+      "category": "cszs-mixed",
+      "reference": "Turpolo is a municipality located in Jackson County, Arkansas, 美国.",
+      "candidate": {
+        "status": 200,
+        "seconds": 0.43,
+        "text": "Turpo is a municipality located in Jackson County, Arkansas, 美国.",
+        "error": "",
+        "ref_tokens": 11,
+        "mer_err": 1,
+        "ref_zh": 2,
+        "cer_err": 0,
+        "ref_en": 9,
+        "wer_err": 1
+      },
+      "baseline": {
+        "status": 200,
+        "seconds": 0.14,
+        "text": "Turpo is a municipality located in Jackson County, Arkansas,美國.",
+        "error": "",
+        "ref_tokens": 11,
+        "mer_err": 1,
+        "ref_zh": 2,
+        "cer_err": 0,
+        "ref_en": 9,
+        "wer_err": 1
+      }
+    },
+    {
+      "id": "cszs-790",
+      "category": "cszs-mixed",
+      "reference": "王菲的音乐production team到此也已经固定了。",
+      "candidate": {
+        "status": 200,
+        "seconds": 0.36,
+        "text": "王菲的音乐 production team 到此也已经固定了。",
+        "error": "",
+        "ref_tokens": 15,
+        "mer_err": 0,
+        "ref_zh": 13,
+        "cer_err": 0,
+        "ref_en": 2,
+        "wer_err": 0
+      },
+      "baseline": {
+        "status": 200,
+        "seconds": 0.15,
+        "text": "王菲的音乐production team到此也已经固定了",
+        "error": "",
+        "ref_tokens": 15,
+        "mer_err": 0,
+        "ref_zh": 13,
+        "cer_err": 0,
+        "ref_en": 2,
+        "wer_err": 0
+      }
+    },
+    {
+      "id": "cszs-869",
+      "category": "cszs-mixed",
+      "reference": "现在 it is generally recognized that 是 a compilation of 吴起's military thoughts 经 subsequent generations 的 record.",
+      "candidate": {
+        "status": 200,
+        "seconds": 0.73,
+        "text": "Now it is generally recognized that a compilation of Wu Qi's military thoughts in subsequent generations' record.",
+        "error": "",
+        "ref_tokens": 21,
+        "mer_err": 9,
+        "ref_zh": 7,
+        "cer_err": 7,
+        "ref_en": 14,
+        "wer_err": 5
+      },
+      "baseline": {
+        "status": 200,
+        "seconds": 2.17,
+        "text": "",
+        "error": "",
+        "ref_tokens": 21,
+        "mer_err": 21,
+        "ref_zh": 7,
+        "cer_err": 7,
+        "ref_en": 14,
+        "wer_err": 14
+      }
+    },
+    {
+      "id": "cszs-948",
+      "category": "cszs-mixed",
+      "reference": "其他已发现的 structures are bigger than the aforementioned 尺寸。",
+      "candidate": {
+        "status": 200,
+        "seconds": 0.32,
+        "text": "其他已发现的 structures are bigger than the aforementioned尺寸。",
+        "error": "",
+        "ref_tokens": 14,
+        "mer_err": 0,
+        "ref_zh": 8,
+        "cer_err": 0,
+        "ref_en": 6,
+        "wer_err": 0
+      },
+      "baseline": {
+        "status": 200,
+        "seconds": 0.17,
+        "text": "其他已发现的,structures are bigger than the aforementioned尺寸。",
+        "error": "",
+        "ref_tokens": 14,
+        "mer_err": 0,
+        "ref_zh": 8,
+        "cer_err": 0,
+        "ref_en": 6,
+        "wer_err": 0
+      }
+    },
+    {
+      "id": "cszs-1027",
+      "category": "cszs-mixed",
+      "reference": "曾跟随刘家良的刘家班 and worked with the martial arts coaching team of 梁小熊.",
+      "candidate": {
+        "status": 200,
+        "seconds": 0.53,
+        "text": "曾跟随刘家良的刘家班，and worked with Marshall as coaching team of梁小雄。",
+        "error": "",
+        "ref_tokens": 22,
+        "mer_err": 4,
+        "ref_zh": 13,
+        "cer_err": 1,
+        "ref_en": 9,
+        "wer_err": 3
+      },
+      "baseline": {
+        "status": 200,
+        "seconds": 0.2,
+        "text": "曾跟随刘嘉良的刘嘉班 and worked with Marshall Earth's coaching team of梁小熊",
+        "error": "",
+        "ref_tokens": 22,
+        "mer_err": 5,
+        "ref_zh": 13,
+        "cer_err": 2,
+        "ref_en": 9,
+        "wer_err": 3
+      }
+    },
+    {
+      "id": "cszs-1106",
+      "category": "cszs-mixed",
+      "reference": "世界杯棒球赛 is an international baseball tournament.",
+      "candidate": {
+        "status": 200,
+        "seconds": 0.29,
+        "text": "世界杯棒球赛 is an international baseball tournament.",
+        "error": "",
+        "ref_tokens": 11,
+        "mer_err": 0,
+        "ref_zh": 6,
+        "cer_err": 0,
+        "ref_en": 5,
+        "wer_err": 0
+      },
+      "baseline": {
+        "status": 200,
+        "seconds": 0.12,
+        "text": "世界杯棒球赛 is an international baseball tournament.",
+        "error": "",
+        "ref_tokens": 11,
+        "mer_err": 0,
+        "ref_zh": 6,
+        "cer_err": 0,
+        "ref_en": 5,
+        "wer_err": 0
+      }
+    },
+    {
+      "id": "cszs-1185",
+      "category": "cszs-mixed",
+      "reference": "神户北野美术馆是一座located in the central district of Kobe City, Hyogo Prefecture的art gallery。",
+      "candidate": {
+        "status": 200,
+        "seconds": 0.55,
+        "text": "神户北野美术馆是一座 located in the central district of Kobe City, Hyogo Prefecture 的 art gallery.",
+        "error": "",
+        "ref_tokens": 23,
+        "mer_err": 0,
+        "ref_zh": 11,
+        "cer_err": 0,
+        "ref_en": 12,
+        "wer_err": 0
+      },
+      "baseline": {
+        "status": 200,
+        "seconds": 0.22,
+        "text": "神户北野美术馆是一座 located in the central district of Kobe City, Haugou Prefecture at Art Gallery.",
+        "error": "",
+        "ref_tokens": 23,
+        "mer_err": 2,
+        "ref_zh": 11,
+        "cer_err": 1,
+        "ref_en": 12,
+        "wer_err": 2
+      }
+    },
+    {
+      "id": "cszs-1264",
+      "category": "cszs-mixed",
+      "reference": "Latin letters的传播和Christianity的传播密不可分.",
+      "candidate": {
+        "status": 200,
+        "seconds": 0.33,
+        "text": "拉丁字母的传播和基督教的传播密不可分。",
+        "error": "",
+        "ref_tokens": 14,
+        "mer_err": 7,
+        "ref_zh": 11,
+        "cer_err": 7,
+        "ref_en": 3,
+        "wer_err": 3
+      },
+      "baseline": {
+        "status": 200,
+        "seconds": 0.16,
+        "text": "Latin Letters的传播和Christianity的传播密不可分",
+        "error": "",
+        "ref_tokens": 14,
+        "mer_err": 0,
+        "ref_zh": 11,
+        "cer_err": 0,
+        "ref_en": 3,
+        "wer_err": 0
+      }
+    },
+    {
+      "id": "cszs-1343",
+      "category": "cszs-mixed",
+      "reference": "又作谛受，let us meditate on the profound meaning.",
+      "candidate": {
+        "status": 200,
+        "seconds": 0.37,
+        "text": "又坐地瘦。Let us meditate on the profound meaning.",
+        "error": "",
+        "ref_tokens": 11,
+        "mer_err": 3,
+        "ref_zh": 4,
+        "cer_err": 3,
+        "ref_en": 7,
+        "wer_err": 0
+      },
+      "baseline": {
+        "status": 200,
+        "seconds": 0.14,
+        "text": "右座地秀, let us meditate on the profound meaning.",
+        "error": "",
+        "ref_tokens": 11,
+        "mer_err": 4,
+        "ref_zh": 4,
+        "cer_err": 4,
+        "ref_en": 7,
+        "wer_err": 0
+      }
+    },
+    {
+      "id": "cszs-1422",
+      "category": "cszs-mixed",
+      "reference": "此站可直接前往 the opposite direction platform.",
+      "candidate": {
+        "status": 200,
+        "seconds": 0.28,
+        "text": "此站可直接前往的 opposite direction platform。",
+        "error": "",
+        "ref_tokens": 11,
+        "mer_err": 1,
+        "ref_zh": 7,
+        "cer_err": 1,
+        "ref_en": 4,
+        "wer_err": 1
+      },
+      "baseline": {
+        "status": 200,
+        "seconds": 0.13,
+        "text": "此站可直接前往The Opposite Direction Platform。",
+        "error": "",
+        "ref_tokens": 11,
+        "mer_err": 0,
+        "ref_zh": 7,
+        "cer_err": 0,
+        "ref_en": 4,
+        "wer_err": 0
+      }
+    },
+    {
+      "id": "cszs-1501",
+      "category": "cszs-mixed",
+      "reference": "韦斯珀镇区 is a town in Lincoln County, Kansas, under the jurisdiction of the United States.",
+      "candidate": {
+        "status": 200,
+        "seconds": 0.43,
+        "text": "韦斯珀镇区是美国堪萨斯州林肯县的一个镇。",
+        "error": "",
+        "ref_tokens": 19,
+        "mer_err": 14,
+        "ref_zh": 5,
+        "cer_err": 14,
+        "ref_en": 14,
+        "wer_err": 14
+      },
+      "baseline": {
+        "status": 200,
+        "seconds": 0.17,
+        "text": "維斯波政區 is a town in Lincoln County, Kansas, under the jurisdiction of United States.",
+        "error": "",
+        "ref_tokens": 19,
+        "mer_err": 4,
+        "ref_zh": 5,
+        "cer_err": 3,
+        "ref_en": 14,
+        "wer_err": 1
+      }
+    },
+    {
+      "id": "cszs-1580",
+      "category": "cszs-mixed",
+      "reference": "药用狗牙花 is a species under the genus Tabernaemontana in the family Apocynaceae.",
+      "candidate": {
+        "status": 200,
+        "seconds": 0.54,
+        "text": "要用狗牙花，A species under the genus Tabernanthe in the family Apocynaceae。",
+        "error": "",
+        "ref_tokens": 16,
+        "mer_err": 3,
+        "ref_zh": 5,
+        "cer_err": 1,
+        "ref_en": 11,
+        "wer_err": 2
+      },
+      "baseline": {
+        "status": 200,
+        "seconds": 0.2,
+        "text": "要用狗牙花 as a species under the genus Tabernumontana and the family Epcynaceae.",
+        "error": "",
+        "ref_tokens": 16,
+        "mer_err": 5,
+        "ref_zh": 5,
+        "cer_err": 1,
+        "ref_en": 11,
+        "wer_err": 4
+      }
+    },
+    {
+      "id": "cszs-1659",
+      "category": "cszs-mixed",
+      "reference": "该物种的模式产地在Malacca.",
+      "candidate": {
+        "status": 200,
+        "seconds": 0.24,
+        "text": "该物种的模式产地在马来西亚。",
+        "error": "",
+        "ref_tokens": 10,
+        "mer_err": 4,
+        "ref_zh": 9,
+        "cer_err": 4,
+        "ref_en": 1,
+        "wer_err": 1
+      },
+      "baseline": {
+        "status": 200,
+        "seconds": 0.14,
+        "text": "该物种的模式产地在Malaka",
+        "error": "",
+        "ref_tokens": 10,
+        "mer_err": 1,
+        "ref_zh": 9,
+        "cer_err": 0,
+        "ref_en": 1,
+        "wer_err": 1
+      }
+    },
+    {
+      "id": "cszs-1738",
+      "category": "cszs-mixed",
+      "reference": "科利纳斯 is a municipality in the state of Maranhão, Brazil.",
+      "candidate": {
+        "status": 200,
+        "seconds": 0.37,
+        "text": "Colinas is a municipality in the state of Maranhão, Brazil.",
+        "error": "",
+        "ref_tokens": 14,
+        "mer_err": 4,
+        "ref_zh": 4,
+        "cer_err": 4,
+        "ref_en": 10,
+        "wer_err": 1
+      },
+      "baseline": {
+        "status": 200,
+        "seconds": 0.15,
+        "text": "Kulinais is a municipality in the state of Maranhão, Brazil.",
+        "error": "",
+        "ref_tokens": 14,
+        "mer_err": 4,
+        "ref_zh": 4,
+        "cer_err": 4,
+        "ref_en": 10,
+        "wer_err": 1
+      }
+    },
+    {
+      "id": "cszs-1817",
+      "category": "cszs-mixed",
+      "reference": "Can you pass me the 卢瓦塞屈莱, please?",
+      "candidate": {
+        "status": 200,
+        "seconds": 0.31,
+        "text": "Can you pass me the鲁瓦赛区来，please？",
+        "error": "",
+        "ref_tokens": 11,
+        "mer_err": 4,
+        "ref_zh": 5,
+        "cer_err": 4,
+        "ref_en": 6,
+        "wer_err": 0
+      },
+      "baseline": {
+        "status": 200,
+        "seconds": 0.16,
+        "text": "Can you pass me the 卢瓦賽區來, please?",
+        "error": "",
+        "ref_tokens": 11,
+        "mer_err": 3,
+        "ref_zh": 5,
+        "cer_err": 3,
+        "ref_en": 6,
+        "wer_err": 0
+      }
+    },
+    {
+      "id": "cszs-1896",
+      "category": "cszs-mixed",
+      "reference": "艺术塔也是Sheffield's second tallest building.",
+      "candidate": {
+        "status": 200,
+        "seconds": 0.25,
+        "text": "艺术塔也是Sheffield second tallest building。",
+        "error": "",
+        "ref_tokens": 9,
+        "mer_err": 1,
+        "ref_zh": 5,
+        "cer_err": 0,
+        "ref_en": 4,
+        "wer_err": 1
+      },
+      "baseline": {
+        "status": 200,
+        "seconds": 0.13,
+        "text": "艺术塔也是Sheffield's second tallest building",
+        "error": "",
+        "ref_tokens": 9,
+        "mer_err": 0,
+        "ref_zh": 5,
+        "cer_err": 0,
+        "ref_en": 4,
+        "wer_err": 0
+      }
+    },
+    {
+      "id": "cszs-1975",
+      "category": "cszs-mixed",
+      "reference": "便要往a place without religious teachings进行弘法.",
+      "candidate": {
+        "status": 200,
+        "seconds": 0.36,
+        "text": "便要往 a place without religious teachings 进行弘法。",
+        "error": "",
+        "ref_tokens": 12,
+        "mer_err": 0,
+        "ref_zh": 7,
+        "cer_err": 0,
+        "ref_en": 5,
+        "wer_err": 0
+      },
+      "baseline": {
+        "status": 200,
+        "seconds": 0.14,
+        "text": "便要往A place without religious teachings进行弘法。",
+        "error": "",
+        "ref_tokens": 12,
+        "mer_err": 0,
+        "ref_zh": 7,
+        "cer_err": 0,
+        "ref_en": 5,
+        "wer_err": 0
+      }
+    },
+    {
+      "id": "cszs-2054",
+      "category": "cszs-mixed",
+      "reference": "正模标本是一个almost完整的头颅骨.",
+      "candidate": {
+        "status": 200,
+        "seconds": 0.36,
+        "text": "正模标本是一个 almost 完整的头颅骨。",
+        "error": "",
+        "ref_tokens": 14,
+        "mer_err": 0,
+        "ref_zh": 13,
+        "cer_err": 0,
+        "ref_en": 1,
+        "wer_err": 0
+      },
+      "baseline": {
+        "status": 200,
+        "seconds": 0.16,
+        "text": "这模标本是一个almost完整的头颅骨",
+        "error": "",
+        "ref_tokens": 14,
+        "mer_err": 1,
+        "ref_zh": 13,
+        "cer_err": 1,
+        "ref_en": 1,
+        "wer_err": 0
+      }
+    },
+    {
+      "id": "cszs-2133",
+      "category": "cszs-mixed",
+      "reference": "潭头镇 is a town that falls under the jurisdiction of ChangLe District, Fuzhou City, Fujian Province in China.",
+      "candidate": {
+        "status": 200,
+        "seconds": 0.88,
+        "text": "潭头镇 is a town that falls under the jurisdiction of Chala District, Fuzhou City, Fujian Province in China.",
+        "error": "",
+        "ref_tokens": 20,
+        "mer_err": 1,
+        "ref_zh": 3,
+        "cer_err": 0,
+        "ref_en": 17,
+        "wer_err": 1
+      },
+      "baseline": {
+        "status": 200,
+        "seconds": 0.22,
+        "text": "Tan Touzhen is a town that falls under the jurisdiction of Chen Le District, Fuzhou City, Fuzhen Province in China.",
+        "error": "",
+        "ref_tokens": 20,
+        "mer_err": 6,
+        "ref_zh": 3,
+        "cer_err": 3,
+        "ref_en": 17,
+        "wer_err": 5
+      }
+    },
+    {
+      "id": "cszs-2212",
+      "category": "cszs-mixed",
+      "reference": "国际关系学的研究对象 include both 主权国家 and international organizations.",
+      "candidate": {
+        "status": 200,
+        "seconds": 0.35,
+        "text": "国际关系学的研究对象 include both主权国家 and international organizations.",
+        "error": "",
+        "ref_tokens": 19,
+        "mer_err": 0,
+        "ref_zh": 14,
+        "cer_err": 0,
+        "ref_en": 5,
+        "wer_err": 0
+      },
+      "baseline": {
+        "status": 200,
+        "seconds": 0.19,
+        "text": "国际关系学的研究对象 include both主权国家 and international organizations。",
+        "error": "",
+        "ref_tokens": 19,
+        "mer_err": 0,
+        "ref_zh": 14,
+        "cer_err": 0,
+        "ref_en": 5,
+        "wer_err": 0
+      }
+    },
+    {
+      "id": "cszs-2291",
+      "category": "cszs-mixed",
+      "reference": "祖父李友直 is very friendly!",
+      "candidate": {
+        "status": 200,
+        "seconds": 0.23,
+        "text": "祖父李有植 is very friendly.",
+        "error": "",
+        "ref_tokens": 8,
+        "mer_err": 2,
+        "ref_zh": 5,
+        "cer_err": 2,
+        "ref_en": 3,
+        "wer_err": 0
+      },
+      "baseline": {
+        "status": 200,
+        "seconds": 0.12,
+        "text": "祖父李友志 is very friendly",
+        "error": "",
+        "ref_tokens": 8,
+        "mer_err": 1,
+        "ref_zh": 5,
+        "cer_err": 1,
+        "ref_en": 3,
+        "wer_err": 0
+      }
+    },
+    {
+      "id": "cszs-2370",
+      "category": "cszs-mixed",
+      "reference": "很多people认为爱斯基摩人have a lot of words to describe雪。",
+      "candidate": {
+        "status": 200,
+        "seconds": 0.48,
+        "text": "很多 people 认为爱斯基摩人 have a lot of words to describe 雪。",
+        "error": "",
+        "ref_tokens": 18,
+        "mer_err": 0,
+        "ref_zh": 10,
+        "cer_err": 0,
+        "ref_en": 8,
+        "wer_err": 0
+      },
+      "baseline": {
+        "status": 200,
+        "seconds": 0.16,
+        "text": "很多people认为爱斯基魔人 have a lot of words to describe shit.",
+        "error": "",
+        "ref_tokens": 18,
+        "mer_err": 2,
+        "ref_zh": 10,
+        "cer_err": 2,
+        "ref_en": 8,
+        "wer_err": 1
+      }
+    },
+    {
+      "id": "cszs-2449",
+      "category": "cszs-mixed",
+      "reference": "瑞士近卫队士兵有 the right 持有梵蒂冈城国护照和国籍.",
+      "candidate": {
+        "status": 200,
+        "seconds": 0.42,
+        "text": "瑞士禁卫队士兵有的right持有梵蒂冈城国护照和国籍。",
+        "error": "",
+        "ref_tokens": 22,
+        "mer_err": 2,
+        "ref_zh": 20,
+        "cer_err": 2,
+        "ref_en": 2,
+        "wer_err": 1
+      },
+      "baseline": {
+        "status": 200,
+        "seconds": 0.22,
+        "text": "瑞士近卫队士兵有的right持有梵蒂冈城国护照和国籍",
+        "error": "",
+        "ref_tokens": 22,
+        "mer_err": 1,
+        "ref_zh": 20,
+        "cer_err": 1,
+        "ref_en": 2,
+        "wer_err": 1
+      }
+    },
+    {
+      "id": "cszs-2528",
+      "category": "cszs-mixed",
+      "reference": "明将沐晟 ready to enter the Mufan River for preparation and attack.",
+      "candidate": {
+        "status": 200,
+        "seconds": 0.42,
+        "text": "明将木胜，ready to enter the move方，before preparation and attack.",
+        "error": "",
+        "ref_tokens": 14,
+        "mer_err": 5,
+        "ref_zh": 4,
+        "cer_err": 3,
+        "ref_en": 10,
+        "wer_err": 3
+      },
+      "baseline": {
+        "status": 200,
+        "seconds": 0.15,
+        "text": "您将木圣 ready to enter the move on before preparation and attack.",
+        "error": "",
+        "ref_tokens": 14,
+        "mer_err": 6,
+        "ref_zh": 4,
+        "cer_err": 3,
+        "ref_en": 10,
+        "wer_err": 3
+      }
+    },
+    {
+      "id": "cszs-2607",
+      "category": "cszs-mixed",
+      "reference": "马尔松 is a great challenge that requires both physical and mental endurance.",
+      "candidate": {
+        "status": 200,
+        "seconds": 0.44,
+        "text": "马尔松是一项巨大的挑战，它需要两者：身体和精神的耐力。",
+        "error": "",
+        "ref_tokens": 14,
+        "mer_err": 21,
+        "ref_zh": 3,
+        "cer_err": 21,
+        "ref_en": 11,
+        "wer_err": 11
+      },
+      "baseline": {
+        "status": 200,
+        "seconds": 0.15,
+        "text": "MARZONE is a great challenge that requires both physical and mental endurance.",
+        "error": "",
+        "ref_tokens": 14,
+        "mer_err": 3,
+        "ref_zh": 3,
+        "cer_err": 3,
+        "ref_en": 11,
+        "wer_err": 1
+      }
+    },
+    {
+      "id": "cszs-2686",
+      "category": "cszs-mixed",
+      "reference": "安峰山 is the Vice Director of the Press Office.",
+      "candidate": {
+        "status": 200,
+        "seconds": 0.3,
+        "text": "安峰山是副部长，是新闻办公室。",
+        "error": "",
+        "ref_tokens": 11,
+        "mer_err": 10,
+        "ref_zh": 3,
+        "cer_err": 10,
+        "ref_en": 8,
+        "wer_err": 8
+      },
+      "baseline": {
+        "status": 200,
+        "seconds": 0.13,
+        "text": "安 Fengshan is the Vice Director of the Press Office",
+        "error": "",
+        "ref_tokens": 11,
+        "mer_err": 2,
+        "ref_zh": 3,
+        "cer_err": 2,
+        "ref_en": 8,
+        "wer_err": 1
+      }
+    },
+    {
+      "id": "cszs-2765",
+      "category": "cszs-mixed",
+      "reference": "此后，she partnered with two teammates Burksar and Jordan respectively to win the first European Badminton Championship women's doubles and mixed doubles championships.",
+      "candidate": {
+        "status": 200,
+        "seconds": 0.82,
+        "text": "此后，She partnered with two teammates, Botsford and Rutter, respectively, to win the first European Badminton Championship, Women's Doubles, Mixed Doubles championships.",
+        "error": "",
+        "ref_tokens": 24,
+        "mer_err": 3,
+        "ref_zh": 2,
+        "cer_err": 0,
+        "ref_en": 22,
+        "wer_err": 3
+      },
+      "baseline": {
+        "status": 200,
+        "seconds": 0.23,
+        "text": "此后,她 partnered with two teammates, Borussia and Jordan respectively, win the first European badminton championship, women's doubles and mixed doubles championships.",
+        "error": "",
+        "ref_tokens": 24,
+        "mer_err": 3,
+        "ref_zh": 2,
+        "cer_err": 1,
+        "ref_en": 22,
+        "wer_err": 3
+      }
+    },
+    {
+      "id": "cszs-2844",
+      "category": "cszs-mixed",
+      "reference": "之后 I will enroll in the police training academy.",
+      "candidate": {
+        "status": 200,
+        "seconds": 0.31,
+        "text": "之后，I will enroll in the police training academy.",
+        "error": "",
+        "ref_tokens": 10,
+        "mer_err": 0,
+        "ref_zh": 2,
+        "cer_err": 0,
+        "ref_en": 8,
+        "wer_err": 0
+      },
+      "baseline": {
+        "status": 200,
+        "seconds": 0.12,
+        "text": "之后 I will enroll in the police training academy.",
+        "error": "",
+        "ref_tokens": 10,
+        "mer_err": 0,
+        "ref_zh": 2,
+        "cer_err": 0,
+        "ref_en": 8,
+        "wer_err": 0
+      }
+    },
+    {
+      "id": "cszs-2923",
+      "category": "cszs-mixed",
+      "reference": "为此single做的music video被很多学者认为是有pioneering意义的.",
+      "candidate": {
+        "status": 200,
+        "seconds": 0.55,
+        "text": "为此，Single 做的 music video 被很多学者认为是有 pioneering 意义的。",
+        "error": "",
+        "ref_tokens": 20,
+        "mer_err": 0,
+        "ref_zh": 16,
+        "cer_err": 0,
+        "ref_en": 4,
+        "wer_err": 0
+      },
+      "baseline": {
+        "status": 200,
+        "seconds": 0.18,
+        "text": "为此single做的music video被很多学者认为是有pineering意义的",
+        "error": "",
+        "ref_tokens": 20,
+        "mer_err": 1,
+        "ref_zh": 16,
+        "cer_err": 0,
+        "ref_en": 4,
+        "wer_err": 1
+      }
+    },
+    {
+      "id": "cszs-3002",
+      "category": "cszs-mixed",
+      "reference": "玩家 still discovered that the nine heroes in the video represent different directions.",
+      "candidate": {
+        "status": 200,
+        "seconds": 0.36,
+        "text": "玩家 still discovered that the nine heroes in the video represent different directions.",
+        "error": "",
+        "ref_tokens": 14,
+        "mer_err": 0,
+        "ref_zh": 2,
+        "cer_err": 0,
+        "ref_en": 12,
+        "wer_err": 0
+      },
+      "baseline": {
+        "status": 200,
+        "seconds": 0.14,
+        "text": "文家 still discovered that the nine heroes in the video represent different directions",
+        "error": "",
+        "ref_tokens": 14,
+        "mer_err": 1,
+        "ref_zh": 2,
+        "cer_err": 1,
+        "ref_en": 12,
+        "wer_err": 0
+      }
+    }
+  ]
+}
