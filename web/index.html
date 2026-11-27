@@ -84,6 +84,19 @@
     </form>
   </dialog>
 
+  <dialog id="regenerate-dialog" aria-labelledby="regenerate-title">
+    <form method="dialog" id="regenerate-form">
+      <h3 id="regenerate-title">重新產生紀錄草稿</h3>
+      <p>重新產生會用目前的引擎寫一份新草稿。目前草稿會保留在「先前版本」，不會刪除（最多保留最近 3 份）。</p>
+      <label class="field"><input type="checkbox" name="understood" required>
+        <span>我了解新草稿不會帶入我在這份草稿上的修改、確認和理由。</span></label>
+      <div class="dialog-actions">
+        <button type="button" id="regenerate-cancel">取消</button>
+        <button type="submit" class="primary">重新產生</button>
+      </div>
+    </form>
+  </dialog>
+
   <template id="tpl-client">
     <section class="card brief">
       <div class="card-head">
@@ -142,5 +155,6 @@
   <script src="app.js"></script>
   <script src="transcript_edit.js"></script>
   <script src="jobs.js"></script>
+  <script src="regenerate.js"></script>
 </body>
 </html>

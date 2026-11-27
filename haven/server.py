@@ -21,7 +21,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
-from . import accounts, config, crypto, files, human_fields, jobs, llm, signing, store, templates, transcript_edit
+from . import accounts, config, crypto, files, human_fields, jobs, llm, regenerate, signing, store, templates, transcript_edit
 from .agents.verifier import VERIFIER_VERSION, Verifier
 from .models import to_dict
 from .orchestrator import Orchestrator, get_client, load_clients
@@ -678,13 +678,11 @@ class Handler(BaseHTTPRequestHandler):
         template = templates.get(query.get("template", [templates.DEFAULT])[0]).id  # unknown id: 400
         if not (config.SESSIONS_DIR / f"{sid}.json").is_file():
             raise _no_session()
+        payload = self._payload() if self.headers.get("Content-Length") else {}
         with _session_lock(sid):
-            old = store.get_result(sid) or {}
-            ORCH.process_session(sid, template)  # refuses a signed session
-            result = store.get_result(sid)
-            result["revision"] = old.get("revision", 0)
-            _bump(result)
-            store.save_result(sid, result)
+            # Seam for ticket 05: a background job calls regenerate_draft the same way, holding this lock.
+            regenerate.regenerate_draft(sid, template, payload, orch=ORCH, check_revision=_check_revision, need_base=_need_base,
+                                        bump=_bump, refuse=lambda m, zh, **x: Refused(m, zh, **x))
         return self._json(_session_view(sid))
 
     def _verify(self, sid):
@@ -704,6 +702,7 @@ class Handler(BaseHTTPRequestHandler):
             uncovered = signing.uncovered_risk(risk, note)
             result.setdefault("ai_note", result["note"])
             result["note"] = to_dict(note)
+            regenerate.stamp_origins(result["note"], result["ai_note"])  # never the browser's word
             result["verification"] = verification
             result["risk_uncovered"] = uncovered
             result["draft_dismissals"] = [d for d in dismissals if d["segment_id"] in known]
@@ -784,9 +783,21 @@ class Handler(BaseHTTPRequestHandler):
             signed_by = user["display_name"]
         if not isinstance(signed_by, str) or not signed_by.strip() or len(signed_by) > 80 or "note" not in payload:
             return self._error(HTTPStatus.BAD_REQUEST, "signed_by and note are required", "請填寫簽核心理師姓名。")
+        # One at a time with transcript corrections, so the hash recorded below is the
+        # hash of the transcript the draft was reviewed against (spec §9.3 rule 6).
+        with _session_lock(sid):
+            return self._sign_locked(sid, payload, signed_by)
+
+    def _sign_locked(self, sid, payload, signed_by):
         dismissals = signing.parse_dismissals(payload.get("risk_dismissals"))
         result, transcript, measures = _draft(sid)
+        _need_base(payload)
         _check_revision(result, payload)
+        t_rev = transcript_edit.revision(sid)
+        if transcript_edit.review_status(result, t_rev, False) == "needs_review":
+            raise Refused("the transcript was corrected after the draft was last reviewed; mark it reviewed first",
+                          "逐字稿在您上次審閱之後有修改。請先對照逐字稿檢查紀錄，按「已審閱」後再簽核。",
+                          needs_review=True, transcript_revision=t_rev, reviewed_against=transcript_edit.reviewed_against(result))
         # The rule lives here, not in the UI. Sentences the server has not judged
         # before are checked by the rule layers only: fast, and never more lenient
         # than the full check the therapist saw.
@@ -818,6 +829,8 @@ class Handler(BaseHTTPRequestHandler):
                           risk_uncovered=uncovered)
         kept = sum(1 for s in note.sentences() if s.status != "supported" and s.confirmed_by_therapist)
         signed = signing.signed_form(note, dismissals)
+        regenerate.stamp_origins(signed, result.get("ai_note") or result["note"])
+        signed["transcript_revision"] = t_rev
         signature = store.sign_note(
             sid, signed, signed_by.strip(), kept,
             transcript_sha256=signing.transcript_sha256(sid), note_sha256=signing.note_sha256(signed), verifier_version=VERIFIER_VERSION,

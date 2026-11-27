@@ -103,7 +103,7 @@ class QualApiTest(ServerCase, unittest.TestCase):
     """The rule engine (no model): a QUAL draft verifies and signs once the placeholders are replaced."""
 
     def open_qual(self, sid):
-        status, r = self.call(f"/api/sessions/{sid}/process?template=QUAL", {})
+        status, r = self.call(f"/api/sessions/{sid}/process?template=QUAL", {"discard_edits": True})  # earlier tests may have edited it (ticket 07)
         self.assertEqual(status, 200, r)
         return r
 
@@ -183,7 +183,7 @@ class QualApiTest(ServerCase, unittest.TestCase):
         self.assertEqual((added["source"], added["status"]), ("transcript", "unsupported"))
 
     def test_soap_is_unchanged(self):
-        status, r = self.call("/api/sessions/C002-S05/process", {})
+        status, r = self.call("/api/sessions/C002-S05/process", {"discard_edits": True})
         self.assertEqual(r["note"]["template"], "SOAP")
         for items in r["note"]["sections"].values():
             self.assertFalse(any(human_fields.is_placeholder(s["text"]) for s in items))
@@ -206,7 +206,7 @@ class QualWithModelTest(ServerCase, unittest.TestCase):
 
     def test_model_draft_signs_after_placeholders_are_replaced(self):
         sid = "C001-S04"
-        status, r = self.call(f"/api/sessions/{sid}/process?template=QUAL", {})
+        status, r = self.call(f"/api/sessions/{sid}/process?template=QUAL", {"discard_edits": True})  # earlier tests may have edited it (ticket 07)
         self.assertEqual(status, 200, r)
         self.assertNotIn(human_fields.PLACEHOLDER, json.dumps(FakeChat.bodies, ensure_ascii=False))
         self.assertEqual([s["text"] for s in r["note"]["sections"]["FORMULATION"]], [human_fields.PLACEHOLDER])
