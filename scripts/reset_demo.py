@@ -5,7 +5,7 @@
     python3 scripts/reset_demo.py --no-example         # do not plant the example error
 
 What it does:
-1. Moves the current database aside (data/haven.db-backup-<time>); nothing is deleted.
+1. Moves the current database aside (data/haven.db-backup-<time with microseconds>); nothing is deleted.
 2. Starts an empty database, or a copy of --from with its signatures and addenda removed.
 3. Drafts a note for every session that has none, with the engine set by HAVEN_LLM.
 4. When C001-S04 was written by the rule engine, adds one wrong sentence to its
@@ -38,6 +38,16 @@ EXAMPLE_NOTICE = ("示範用：P 計畫欄的「安排下週五提前會談。�
                   "用來示範查核與修改；它不是這次的引擎寫的。")
 
 
+def backup_name(db: Path) -> Path:
+    """A backup name no earlier backup has: microseconds, then a counter, so two resets
+    in the same second never collide (Windows refuses the rename, POSIX would overwrite)."""
+    stem = f"{db.name}-backup-{datetime.now():%Y%m%dT%H%M%S.%f}"
+    candidate, n = db.with_name(stem), 1
+    while candidate.exists() or candidate.with_name(candidate.name + "-wal").exists():
+        candidate, n = db.with_name(f"{stem}-{n}"), n + 1
+    return candidate
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     parser.add_argument("--from", dest="source", type=Path, help="a database prepared earlier (for example data/haven.demo.db)")
@@ -55,8 +65,12 @@ def main() -> int:
         return 1
 
     if config.DB_FILE.exists():
-        backup = config.DB_FILE.with_name(f"{config.DB_FILE.name}-backup-{datetime.now():%Y%m%dT%H%M%S}")
+        backup = backup_name(config.DB_FILE)
         config.DB_FILE.rename(backup)
+        for suffix in ("-wal", "-shm"):  # a WAL database keeps its last writes beside it
+            side = config.DB_FILE.with_name(config.DB_FILE.name + suffix)
+            if side.exists():
+                side.rename(backup.with_name(backup.name + suffix))
         print(f"moved the old database to {backup}")
     for leftover in config.DATA_DIR.glob(f"{config.DB_FILE.name}-journal"):
         leftover.unlink()
