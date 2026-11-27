@@ -26,7 +26,15 @@ class Segment:
     # Who last corrected this line's words or speaker, and when.
     edited_by: str = ""
     edited_at: str = ""
+    # Only with HAVEN_ASR_REFINE (haven/asr_refine.py): which engine's words the text is
+    # ("whisper", or the Qwen3-ASR model name), and Whisper's own words when they were
+    # replaced. None otherwise, and then left out of the saved and served transcript.
+    asr_engine: str | None = None
+    whisper_text: str | None = None
 
+
+# Segment fields that exist only for some transcripts; to_dict leaves them out when unset.
+_OPTIONAL_SEGMENT_FIELDS = ("asr_engine", "whisper_text")
 
 CONFIRMED = ("script", "confirmed")
 
@@ -115,4 +123,9 @@ class RiskReport:
 
 
 def to_dict(obj) -> dict:
-    return asdict(obj)
+    out = asdict(obj)
+    if isinstance(obj, Segment):
+        for k in _OPTIONAL_SEGMENT_FIELDS:
+            if out[k] is None:
+                del out[k]
+    return out
