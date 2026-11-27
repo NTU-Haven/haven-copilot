@@ -5,7 +5,7 @@ from __future__ import annotations
 import json
 import time
 
-from . import config, files, human_fields, signing, store, templates, transcript_edit
+from . import config, files, human_fields, recap, signing, store, templates, transcript_edit
 from .agents.memory import CaseMemory
 from .agents.outcome import OutcomeAgent
 from .agents.risk import RiskAgent
@@ -61,11 +61,13 @@ class Orchestrator:
         """Outcome alerts and charts from the questionnaire data, or None with the clinical aids off."""
         return self.outcome.run(client) if config.CLINICAL_AIDS else None
 
-    def process_session(self, session_id: str, template: str = templates.DEFAULT) -> dict:
+    def process_session(self, session_id: str, template: str | None = None) -> dict:
         # A signed note is the record. Nothing that could replace what the
         # therapist sees for that session runs after signing.
         if store.get_signature(session_id):
             raise store.AlreadySignedError(session_id)
+        # A recap (haven/recap.py) is drafted as QUAL unless the request names a template.
+        template = template or (recap.DEFAULT_TEMPLATE if recap.mode_of(session_id) == recap.RECAP else templates.DEFAULT)
         tpl = templates.get(template)  # UnknownTemplate before anything runs
         timings: dict[str, float] = {}
 

@@ -27,7 +27,7 @@ from __future__ import annotations
 import json
 import re
 
-from .. import human_fields
+from .. import human_fields, recap
 from ..llm import DATA_ONLY
 from ..models import CONFIRMED, Note, Transcript
 from ..textutil import bigrams, clauses, denied, has_negation, overlap
@@ -37,7 +37,7 @@ SUPPORTED = 0.5
 WEAK = 0.25
 # Stored with every signed note and with the cached verdicts. Change it whenever
 # a rule changes, so a verdict from older rules is never reused.
-VERIFIER_VERSION = "2026.11-6"
+VERIFIER_VERSION = "2026.11-7"
 MEASURE_MISMATCH = "量表句與系統依量表資料產生的內容不符。量表句不可修改：請還原，或改寫成引用逐字稿的句子"
 
 _TIME = re.compile(r"這週|下週|上週|本週|今天|明天|昨天|下次|上次|每天|每週|週[一二三四五六日]")
@@ -210,6 +210,9 @@ class Verifier:
             if s.source == "measure":  # an edited score line, or other text passed off as one
                 s.source, s.status, s.support, s.reason = "transcript", "unsupported", 0.0, MEASURE_MISMATCH
                 continue
+            if recap.is_recap(t) and recap.attributes_to_client(s.text):  # a dictation has no client voice to quote
+                s.status, s.support, s.reason = "unsupported", 0.0, recap.CLIENT_SAID_REASON
+                continue
             cited = [segs[e].text for e in s.evidence if e in segs]
             if not s.evidence:
                 s.status, s.support, s.reason = "unsupported", 0.0, "沒有引用任何逐字稿段落"
@@ -267,7 +270,7 @@ class Verifier:
                 continue
             # Uploaded audio: who said a line is the model's guess, so a sentence
             # about what the client said, or about risk, waits for the therapist.
-            guessed = any(segs[e].speaker_source not in CONFIRMED for e in s.evidence if e in segs)
+            guessed = any(recap.speaker_guessed(segs[e]) for e in s.evidence if e in segs)
             if guessed and s.status == "supported" and (_CLIENT_SAID.search(s.text) or _THERAPIST_SAID.search(s.text) or about_risk(s)):
                 s.status, s.reason = "weak", "引用段落的說話者由本機模型推測，請確認是誰說的"
             instructed = any(_INSTRUCTION.search(segs[e].text) for e in s.evidence if e in segs)

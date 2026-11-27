@@ -21,7 +21,7 @@ import os
 import re
 from concurrent.futures import ThreadPoolExecutor
 
-from .. import config, human_fields, templates
+from .. import config, human_fields, recap, templates
 from ..llm import DATA_ONLY
 from ..models import CONFIRMED, Note, NoteSentence, Segment, Transcript
 from ..textutil import third_person
@@ -62,7 +62,7 @@ def _prompt(t: Transcript, template: str, segments: list[Segment] | None = None,
     lines = [json.dumps({"id": s.id, "speaker": who(s), "text": s.text}, ensure_ascii=False) for s in segments]
     tpl = templates.get(template)
     # human_only fields are the therapist's: they are never sent to the model.
-    sections = "\n".join(f'- "{f.key}": {f.instructions}' for f in tpl.generated)
+    sections = "\n".join(f'- "{f.key}": {_instructions(f, t)}' for f in tpl.generated)
     keys = ", ".join(f'"{f.key}": [{{"text": "...", "evidence": [段落編號]}}]' for f in tpl.generated)
     where = f"（全長分成 {part[1]} 段處理，這是第 {part[0]} 段，只寫這一段的內容）" if part else ""
     limited = f"{tpl.risk_field} 以外每欄" if tpl.risk_field else "每欄"
@@ -71,6 +71,13 @@ def _prompt(t: Transcript, template: str, segments: list[Segment] | None = None,
         + f"\n\n請撰寫 {tpl.id if tpl.id in ('SOAP', 'DAP') else tpl.name} 格式紀錄，各欄位意義：\n{sections}\n"
         + f"{limited} {_per_part(part)} 句，每句簡短，只寫這段最重要的內容。只輸出 JSON：{{{keys}}}"
     )
+
+
+def _instructions(f, t: Transcript) -> str:
+    """The field's instructions; for a recap, in the dictation voice."""
+    if not recap.is_recap(t):
+        return f.instructions
+    return f.instructions.replace("以「個案表示…」開頭", "以「心理師口述…」開頭").replace("「個案表示」", "「心理師口述」") + recap.INSTRUCTION_NOTE
 
 
 def _per_part(part: tuple[int, int] | None) -> str:
@@ -163,6 +170,8 @@ def _plan_sentence(clause: str, proposed: bool, seg: Segment, reply: Segment | N
 
 def _quote(seg: Segment) -> NoteSentence:
     """What a line said, attributed to whoever said it."""
+    if seg.speaker_source == recap.SOURCE:  # dictated by the therapist: never put in the client's mouth
+        return NoteSentence(recap.sentence(seg.text), [seg.id])
     if seg.speaker == "client" and seg.speaker_source in CONFIRMED:
         text = third_person(seg.text, "client")
         return NoteSentence(f"個案表示{text[2:] if text.startswith('個案') else text}。", [seg.id])
@@ -192,6 +201,13 @@ def _rule_based(t: Transcript, template: str, segments: list[Segment] | None = N
             # Never subject to the sentence limits below.
             r_items.append(_quote(seg))
             continue
+        if seg.speaker_source == recap.SOURCE:
+            # A dictated line: kept in the dictation voice, with the usual limits per field.
+            if len(seg.text) > 6:
+                s_items.append(_quote(seg))
+            for section, clause, _ in _therapist_clauses(seg.text):
+                (p_items if section == "P" else a_items).append(NoteSentence(recap.sentence(clause), [seg.id]))
+            continue
         text = third_person(seg.text, seg.speaker)
         if seg.speaker == "client":
             body = text[2:] if text.startswith("個案") else text
@@ -215,9 +231,9 @@ class NoteWriter:
     def __init__(self, llm=None):
         self.llm = llm
 
-    def _ask(self, prompt: str):
+    def _ask(self, prompt: str, system: str = SYSTEM_PROMPT):
         try:
-            return self.llm.generate_json(SYSTEM_PROMPT, prompt, max_tokens=MAX_TOKENS)
+            return self.llm.generate_json(system, prompt, max_tokens=MAX_TOKENS)
         except Exception:  # a model fault falls back to the rule engine, and says so
             return None
 
@@ -229,13 +245,14 @@ class NoteWriter:
         failed: list[int] = []
         replies: list[dict | None] = [None] * len(parts)
         if self.llm is not None:
+            system = recap.SYSTEM_PROMPT if recap.is_recap(t) else SYSTEM_PROMPT
             prompts = [_prompt(t, template, segments, (n, len(parts)) if len(parts) > 1 else None)
                        for n, segments in enumerate(parts, start=1)]
             if len(parts) == 1 or PARALLEL == 1:
-                replies = [_parse(self._ask(p), template) for p in prompts]
+                replies = [_parse(self._ask(p, system), template) for p in prompts]
             else:
                 with ThreadPoolExecutor(max_workers=min(PARALLEL, len(parts))) as pool:
-                    replies = list(pool.map(lambda p: _parse(self._ask(p), template), prompts))
+                    replies = list(pool.map(lambda p: _parse(self._ask(p, system), template), prompts))
         # Joined in transcript order whatever order the replies came back in.
         for n, (segments, parsed) in enumerate(zip(parts, replies), start=1):
             if parsed is None and self.llm is not None:
