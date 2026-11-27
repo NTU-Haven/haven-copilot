@@ -178,6 +178,10 @@ class PipelineTest(unittest.TestCase):
         hits = o.memory.ask(get_client("C001"), "哪幾次提到父親")["hits"]
         self.assertTrue(hits and all("爸" in h["text"] for h in hits))
 
+# These tests cover the clinical aids (risk, R quotes, score lines, outcome, Case Memory),
+# which are off by default; they run with HAVEN_CLINICAL_AIDS on, as before the flag existed.
+from helpers import clinical_aids_on as setUpModule, clinical_aids_restore as tearDownModule  # noqa: E402,F401
+
 
 if __name__ == "__main__":
     unittest.main()

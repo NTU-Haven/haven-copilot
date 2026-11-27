@@ -1,0 +1,38 @@
+                                                                                   
+  Metric                       Value                                               
+  Device ID                    1                                                   
+  PCI BDF                      0000:ba:00.0                                        
+  Device Type                  discrete                                            
+  Start Time                   2026-11-27T06:32:18.448Z                            
+  End Time                     2026-11-27T06:32:18.650Z                            
+  Elapsed Time (seconds)       0.20                                                
+  Energy Consumed (J)          13.78                                               
+  GPU Utilization (%)          N/A                                                 
+  Compute Engines Util (%)     N/A                                                 
+  Render Engines Util (%)      N/A                                                 
+  Media Engines Util (%)       N/A                                                 
+  Copy Engines Util (%)        N/A                                                 
+  GPU Power (W)                Tile 0: avg: 68, min: 68, max: 68, current: 68      
+  GPU Frequency (MHz)          Tile 0: avg: 1900, min: 1900, max: 1900, curren...  
+  Media Frequency (MHz)        Tile 0: avg: 400, min: 400, max: 400, current: 400  
+  GPU Core Temperature         N/A                                                 
+  (Degrees Celsius)                                                                
+  GPU Memory Temperature       N/A                                                 
+  (Degrees Celsius)                                                                
+  GPU VR Temperature           N/A                                                 
+  (Degrees Celsius)                                                                
+  Fan Speed (%)                N/A                                                 
+  GPU Memory Read (kB/s)       N/A                                                 
+  GPU Memory Write (kB/s)      N/A                                                 
+  GPU Memory Bandwidth (%)     N/A                                                 
+  GPU Memory Used (MiB)        Tile 0: avg: 16009, min: 16009, max: 16009, cur...  
+  GPU Memory Util (%)          Tile 0: avg: 49, min: 49, max: 49, current: 49      
+  PCIe Read (kB/s)             N/A                                                 
+  PCIe Write (kB/s)            N/A                                                 
+  Compute Engine Util (%)      N/A                                                 
+  Render Engine Util (%)       N/A                                                 
+  Decoder Engine Util (%)      N/A                                                 
+  Encoder Engine Util (%)      N/A                                                 
+  Copy Engine Util (%)         N/A                                                 
+  Media EM Engine Util (%)     N/A                                                 
+                                                                                   

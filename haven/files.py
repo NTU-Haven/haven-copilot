@@ -44,6 +44,14 @@ def temp_dir() -> Path:
     return path
 
 
+def audio_dir() -> Path:
+    """Where original audio is kept after transcription (haven/audio.py): 0700."""
+    path = config.DATA_DIR / "audio"
+    path.mkdir(parents=True, exist_ok=True)
+    os.chmod(path, PRIVATE_DIR)
+    return path
+
+
 def clear_temp() -> int:
     """Deletes recordings left behind by a crash or a power cut. Run at start-up."""
     removed = 0

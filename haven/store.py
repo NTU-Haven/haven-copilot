@@ -34,6 +34,29 @@ CREATE TABLE IF NOT EXISTS verdicts (
     session_id TEXT NOT NULL, transcript_sha256 TEXT NOT NULL, verifier_version TEXT NOT NULL,
     text TEXT NOT NULL, evidence TEXT NOT NULL, verdict TEXT NOT NULL,
     PRIMARY KEY (session_id, transcript_sha256, verifier_version, text, evidence));
+CREATE TABLE IF NOT EXISTS jobs (
+    job_id TEXT PRIMARY KEY, session_id TEXT NOT NULL, kind TEXT NOT NULL,
+    status TEXT NOT NULL, attempt INTEGER NOT NULL DEFAULT 1, error_code TEXT, message_zh TEXT,
+    stage TEXT, params TEXT NOT NULL DEFAULT '{}', created_at TEXT NOT NULL, updated_at TEXT NOT NULL);
+-- One active job per session and kind (haven/jobs.py relies on this to refuse a second one).
+CREATE UNIQUE INDEX IF NOT EXISTS jobs_one_active ON jobs (session_id, kind) WHERE status IN ('queued', 'running');
+CREATE INDEX IF NOT EXISTS jobs_by_session ON jobs (session_id);
+-- Downloads of confirmed notes (haven/export.py). No clinical content.
+CREATE TABLE IF NOT EXISTS exports (
+    export_id TEXT PRIMARY KEY, session_id TEXT NOT NULL, format TEXT NOT NULL, note_sha256 TEXT NOT NULL,
+    exported_by TEXT NOT NULL, exported_at TEXT NOT NULL, status TEXT NOT NULL,
+    archived_by TEXT, archived_at TEXT, archive_ref TEXT);
+CREATE INDEX IF NOT EXISTS exports_by_session ON exports (session_id);
+-- Original audio (haven/audio.py). storage_ref is a file name made by the server under data/audio/.
+CREATE TABLE IF NOT EXISTS audio_assets (
+    audio_id TEXT PRIMARY KEY, session_id TEXT NOT NULL, storage_ref TEXT NOT NULL, mime TEXT NOT NULL,
+    bytes INTEGER, duration_s REAL,
+    status TEXT NOT NULL,  -- processing|available|failed|cleanup_failed|deleted
+    created_at TEXT NOT NULL, expires_at TEXT NOT NULL,
+    cleanup_status TEXT NOT NULL DEFAULT 'none',  -- none|pending|done|failed
+    cleanup_attempts INTEGER NOT NULL DEFAULT 0, last_error TEXT,
+    deleted_at TEXT, delete_reason TEXT, last_attempt_at TEXT);
+CREATE INDEX IF NOT EXISTS audio_by_session ON audio_assets (session_id);
 """
 # Columns added to signed_notes after the first release; older databases get them on first use.
 _SIGNED_COLUMNS = ("transcript_sha256", "note_sha256", "verifier_version")
@@ -85,6 +108,9 @@ def _prepare() -> None:
         config.DATA_DIR.mkdir(parents=True, exist_ok=True)
         conn = sqlite3.connect(config.DB_FILE, timeout=30)
         try:
+            # Readers do not wait for a writer (a job saving a transcript while a page loads).
+            # Persistent: the database file stays in WAL mode.
+            conn.execute("PRAGMA journal_mode=WAL")
             conn.executescript(SCHEMA)
             have = {row[1] for row in conn.execute("PRAGMA table_info(signed_notes)")}
             for column in _SIGNED_COLUMNS:

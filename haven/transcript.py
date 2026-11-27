@@ -11,7 +11,7 @@ import urllib.request
 from pathlib import Path
 
 from . import config
-from .models import Segment, Transcript
+from .models import Segment, Transcript, to_dict
 
 
 def load_transcript(session_id: str) -> Transcript:
@@ -25,6 +25,8 @@ def load_transcript(session_id: str) -> Transcript:
         session_no=raw["session_no"],
         date=raw["date"],
         simulated=raw.get("simulated", True),
+        input_mode=raw.get("input_mode", "session"),
+        timestamps_estimated=bool(raw.get("timestamps_estimated", False)),
         segments=[Segment(**s) for s in raw["segments"]],
     )
 
@@ -82,6 +84,12 @@ def converts_to_traditional() -> bool:
 # Characters per second of conversational Mandarin, used only to estimate
 # timestamps when the transcription server returns text without a duration.
 SPEECH_RATE = 4.0
+
+
+class _Timed(list):
+    """The (start, end, text) list from the ASR server; ``estimated`` is True when the
+    server gave no timestamps and ``_sentences`` made them up."""
+    estimated = False
 
 
 class ASRError(Exception):
@@ -167,7 +175,9 @@ def _openai_server(audio_path: Path) -> list[tuple[float, float, str]]:
             duration = float(out.get("duration") or 0.0)
         except (TypeError, ValueError):
             duration = 0.0
-        return _sentences(out["text"], duration)
+        timed = _Timed(_sentences(out["text"], duration))
+        timed.estimated = True
+        return timed
     raise ASRError("no transcript in the reply")
 
 
@@ -180,7 +190,11 @@ def transcribe_audio(audio_path: Path, session_id: str, client_id: str, session_
         Segment(id=i, start=round(start, 1), end=round(end, 1), speaker="unknown", text=text, speaker_source="none")
         for i, (start, end, text) in enumerate(spoken, start=1)
     ]
-    return Transcript(session_id, client_id, session_no, date, segments, simulated=simulated)
+    if config.ASR_REFINE:  # Qwen3-ASR's words in Whisper's segments (haven/asr_refine.py)
+        from .asr_refine import refine
+        refine(audio_path, segments)
+    return Transcript(session_id, client_id, session_no, date, segments, simulated=simulated,
+                      timestamps_estimated=bool(getattr(raw, "estimated", False)))
 
 
 def save_transcript(t: Transcript) -> Path:
@@ -191,8 +205,12 @@ def save_transcript(t: Transcript) -> Path:
         "session_no": t.session_no,
         "date": t.date,
         "simulated": t.simulated,
-        "segments": [s.__dict__ for s in t.segments],
+        "segments": [to_dict(s) for s in t.segments],
     }
+    if t.input_mode != "session":  # a file without the key is a session
+        payload["input_mode"] = t.input_mode
+    if t.timestamps_estimated:  # a file without the key has real timestamps
+        payload["timestamps_estimated"] = True
     from .files import write_private
 
     write_private(path, json.dumps(payload, ensure_ascii=False, indent=2))
