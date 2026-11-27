@@ -24,3 +24,20 @@ What this run is and is not: one 23-second clip of three utterances shows that t
 
 - A recording of 10 minutes or more: character error rate, real-time factor, and the time from recording to draft note.
 - Speaker guessing on a full session, against the script.
+
+## Alignment hybrid on the 46-minute L50 recording (to run on the B70)
+
+Ticket 12 adds `HAVEN_ASR_REFINE=1` (Whisper's segments and times, Qwen3-ASR's text; see `haven/asr_refine.py`). It was tested only against fake servers; **it has not been run on the B70 or on `~/L50-tts.ogg`**. To compare with the evaluation (`docs/specs/asr-qwen3-evaluation.md` §3.1), run on the B70 with Whisper on :8001 and Qwen3-ASR on :8002 (`scripts/b70-vllm.sh`). `scripts/asr_eval.py` goes through `transcript.transcribe_audio` and computes the character error rate against the script. The reference is all 339 segments of `C002-L50`:
+
+```bash
+# Whisper only (baseline)
+HAVEN_ASR=openai HAVEN_ASR_URL=http://127.0.0.1:8001 HAVEN_LLM=demo \
+  python3 scripts/asr_eval.py ~/L50-tts.ogg --session C002-L50 --segments 1-339 --label b70-L50-whisper-only
+
+# Alignment hybrid
+HAVEN_ASR=openai HAVEN_ASR_URL=http://127.0.0.1:8001 \
+HAVEN_ASR_REFINE=1 HAVEN_ASR_REFINE_URL=http://127.0.0.1:8002 HAVEN_ASR_REFINE_MODEL=qwen3-asr HAVEN_LLM=demo \
+  python3 scripts/asr_eval.py ~/L50-tts.ogg --session C002-L50 --segments 1-339 --label b70-L50-hybrid
+```
+
+Compare `cer` in the two `.md`/`.json` files with the evaluation's figures (Whisper 7.4%, Qwen3-ASR alone 1.1% on L50). The run prints, on stderr, how many segments took Qwen3-ASR's words and how many seam full stops were dropped. Check by eye that no segment is empty or starts with punctuation and that segment times equal the Whisper-only run. `HAVEN_LLM=demo` makes the speaker step rule-based; its speaker count in the report is not meaningful here.

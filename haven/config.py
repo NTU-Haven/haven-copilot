@@ -28,6 +28,13 @@ ASR_MODEL = os.environ.get("HAVEN_ASR_MODEL", "small" if ASR_BACKEND == "faster-
 # with whisper-large-v3-turbo, a prompt made it drop or repeat the last utterance of a clip.
 # Unset means the default for the backend (see transcript.asr_prompt).
 ASR_PROMPT = os.environ.get("HAVEN_ASR_PROMPT")
+# Alignment hybrid (docs/specs/asr-qwen3-evaluation.md §3.1, haven/asr_refine.py). With
+# HAVEN_ASR_REFINE=1 Whisper still gives the segments and times, and a second local server
+# (vLLM serving Qwen3-ASR on the B70, port 8002) transcribes the whole recording again; its
+# text is cut to fit Whisper's segments. If that server fails, Whisper's text is kept.
+ASR_REFINE = os.environ.get("HAVEN_ASR_REFINE") == "1"
+ASR_REFINE_URL = os.environ.get("HAVEN_ASR_REFINE_URL", "http://127.0.0.1:8002")
+ASR_REFINE_MODEL = os.environ.get("HAVEN_ASR_REFINE_MODEL", "qwen3-asr")
 
 HOST = os.environ.get("HAVEN_HOST", "127.0.0.1")
 PORT = int(os.environ.get("HAVEN_PORT", "8765"))
