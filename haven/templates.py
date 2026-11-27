@@ -189,3 +189,25 @@ QUAL = register(Template(
         Field("NEXT", "後續計畫", "", ai_mode=HUMAN_ONLY, hint="由心理師自行撰寫；不會送給模型。"),
     ),
 ))
+
+
+# --- SAFE_SOAP: SOAP where only S and O are drafted --------------------------------
+# Spec §8.6. S and O hold only what the transcript supports, each sentence cited. A and P
+# are where clinical judgement lives, so they are human_only: the model never sees them.
+# No risk or measures field: nothing is added to the note beyond the cited sentences.
+
+_SS_COMMON = "只整理逐字稿裡實際說出口的內容；不做診斷、不評估風險等級、不推測量表分數、不做任何臨床推論；每句都要引用逐字稿段落；"
+SAFE_SOAP = register(Template(
+    id="SAFE_SOAP", version=1, name="安全版 SOAP",
+    fields=(
+        Field("S", "S 主觀資料",
+              "主觀資料（" + _SS_COMMON + "寫個案自述的內容，以「個案表示…」開頭並保留否定語、時間和主詞；沒有就留空陣列）",
+              fallback="subjective", empty="未提及"),
+        Field("O", "O 客觀資料",
+              "客觀資料（" + _SS_COMMON + "只寫逐字稿文字本身看得到的行為，例如逐字稿標註的哭泣、沉默，或心理師說出口的觀察；"
+              "語氣、語速、表情、神情與推測的情緒不要寫；沒有就留空陣列，寧可少寫）",
+              fallback="assessment", empty="未提及"),
+        Field("A", "A 評估", "", ai_mode=HUMAN_ONLY, hint="由心理師自行撰寫；不會送給模型。"),
+        Field("P", "P 計畫", "", ai_mode=HUMAN_ONLY, hint="由心理師自行撰寫；不會送給模型。"),
+    ),
+))
