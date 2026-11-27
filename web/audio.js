@@ -28,7 +28,7 @@ function decorateAudio(r) {
     const left = r.audio_hours_left;
     const btn = el("button", { type: "button", class: "confirm", id: "audio-delete-btn", onclick: () => deleteAudio(btn) }, "刪除原始錄音");
     notice = el("div", { class: "audio-notice", id: "audio-notice", role: "status" },
-      el("span", {}, `主機保留著原始錄音，供核對逐字稿；${r.signed ? "" : "簽核後會自動刪除；"}原音剩餘 ${left == null ? "—" : left} 小時（${fmtAudioTime(r.audio_expires_at)} 到期後刪除）。`),
+      el("span", {}, `主機保留著原始錄音，供核對逐字稿；${r.signed ? "" : "確認後會自動刪除；"}原音剩餘 ${left == null ? "—" : left} 小時（${fmtAudioTime(r.audio_expires_at)} 到期後刪除）。`),
       r.audio_status === "processing" ? null : btn);
   }
   if (notice) box.querySelector("h3").after(notice);

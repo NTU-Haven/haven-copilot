@@ -1,6 +1,6 @@
 "use strict";
 // Shown after an upload: the clinic needs the note, not the recording (interviewed psychologist, 2026-11-17).
-const KEEP_NO_AUDIO = "逐字稿已產生；原始錄音依設定保留到簽核或到期，也可以在會談頁手動刪除。錄音設備上的檔案請自行刪除。";
+const KEEP_NO_AUDIO = "逐字稿已產生；原始錄音依設定保留到確認或到期，也可以在會談頁手動刪除。錄音設備上的檔案請自行刪除。";
 
 // Haven therapist UI. Talks only to the local Haven server (same origin).
 // No inline styles or scripts and nothing from another origin: the server's
@@ -298,7 +298,7 @@ function renderAdmin(data, message) {
   // Accounts
   const userForm = el("form", { class: "admin-form" },
     el("label", { class: "field" }, el("span", {}, "帳號"), el("input", { name: "username", required: true, maxlength: "32", pattern: "[a-z0-9][a-z0-9._\\-]{1,31}", autocapitalize: "none", spellcheck: "false", placeholder: "例如 wang" })),
-    el("label", { class: "field" }, el("span", {}, "顯示名稱（簽核用）"), el("input", { name: "display_name", required: true, maxlength: "40", placeholder: "例如 王心理師" })),
+    el("label", { class: "field" }, el("span", {}, "顯示名稱（確認紀錄用）"), el("input", { name: "display_name", required: true, maxlength: "40", placeholder: "例如 王心理師" })),
     el("label", { class: "field" }, el("span", {}, "角色"), el("select", { name: "role" }, el("option", { value: "therapist" }, "心理師"), el("option", { value: "admin" }, "管理者"))),
     el("label", { class: "field" }, el("span", {}, `密碼（新帳號必填，至少 ${data.password_min} 字；修改時填了就重設）`), el("input", { name: "password", type: "password", autocomplete: "new-password", maxlength: "256" })),
     el("button", { type: "submit", class: "primary" }, "儲存帳號"));
@@ -339,7 +339,7 @@ function renderAdmin(data, message) {
   const accessBox = el("div", { class: "access-box", hidden: true });
   function askAccess(c) {
     const form = el("form", { class: "admin-form" },
-      el("p", { class: "lead" }, `調閱 ${c.id}（${c.alias}）的已簽核紀錄。管理者平常不看紀錄內容；調閱要寫明事由，只能閱讀、不能修改，${data.access_minutes} 分鐘後失效。事由會寫進稽核紀錄，負責心理師也會在個案頁看到。草稿和逐字稿不會顯示。`),
+      el("p", { class: "lead" }, `調閱 ${c.id}（${c.alias}）的已確認紀錄。管理者平常不看紀錄內容；調閱要寫明事由，只能閱讀、不能修改，${data.access_minutes} 分鐘後失效。事由會寫進稽核紀錄，負責心理師也會在個案頁看到。草稿和逐字稿不會顯示。`),
       el("label", { class: "field" }, el("span", {}, "事由"), el("select", { name: "reason", required: true },
         el("option", { value: "" }, "請選擇"), ...Object.entries(data.access_reasons).map(([k, v]) => el("option", { value: k }, v)))),
       el("label", { class: "field" }, el("span", {}, "說明（200 字內，例如公文字號、申請日期；不要寫個案的個人資訊）"), el("input", { name: "note", required: true, maxlength: "200" })),
@@ -382,7 +382,7 @@ function renderAdmin(data, message) {
       userForm),
     el("section", { class: "card" },
       el("h2", {}, "個案與負責心理師"),
-      el("p", { class: "lead" }, unassigned ? `有 ${unassigned} 位個案還沒有指派，登入後沒有人看得到他們。` : "每位個案都已指派。換人時，原本的心理師會立刻看不到這位個案，已簽核的紀錄保留不變。"),
+      el("p", { class: "lead" }, unassigned ? `有 ${unassigned} 位個案還沒有指派，登入後沒有人看得到他們。` : "每位個案都已指派。換人時，原本的心理師會立刻看不到這位個案，已確認的紀錄保留不變。"),
       el("div", { class: "tbl" }, el("table", {}, el("thead", {}, el("tr", {}, ["編號", "化名", "會談數", "負責心理師", ""].map((h) => el("th", {}, h)))), el("tbody", {}, clientRows))),
       accessBox,
       clientForm),
@@ -402,11 +402,11 @@ function renderRecords(data) {
   const items = data.sessions.map((s) => s.signed
     ? el("section", { class: "card record" },
         el("h3", {}, `${s.session_id}（${s.template}）`),
-        el("p", { class: "muted" }, `${s.signed_by} 簽核於 ${fmtDateTime(s.signed_at)}`),
+        el("p", { class: "muted" }, `${s.signed_by} 確認於 ${fmtDateTime(s.signed_at)}`),
         ...Object.entries(s.sections).map(([k, lines]) => el("div", { class: "record-section" }, el("h4", {}, k), ...lines.map((t) => el("p", {}, t)))),
         s.addenda.length ? el("div", { class: "record-section" }, el("h4", {}, "補充說明"),
           ...s.addenda.map((a) => el("p", {}, `${fmtDateTime(a.created_at)} ${a.author}：${a.text}`))) : null)
-    : el("section", { class: "card record" }, el("h3", {}, s.session_id), el("p", { class: "muted" }, "尚未簽核：草稿屬於心理師的工作資料，不在調閱範圍內。")));
+    : el("section", { class: "card record" }, el("h3", {}, s.session_id), el("p", { class: "muted" }, "尚未確認：草稿屬於心理師的工作資料，不在調閱範圍內。")));
   main.replaceChildren(el("div", { class: "admin" },
     el("section", { class: "card" },
       el("h2", { tabindex: "-1" }, `調閱：${c.id}（${c.alias}）`),
@@ -535,7 +535,7 @@ function chart(m) {
 
 function sessionLabel(m) {
   if (m.missing) return `${m.session_id}（找不到逐字稿）`;
-  const state = m.signed ? "已簽核" : m.processed ? "待簽核" : "尚未產生紀錄";
+  const state = m.signed ? "已確認" : m.processed ? "待確認" : "尚未產生紀錄";
   return `第 ${m.session_no} 次・${m.date}・${state}`;
 }
 
@@ -577,7 +577,7 @@ async function openClient(id) {
   }
   for (const r of [...(brief.record_access || [])].reverse()) { // newest ends up first, above the measures
     frag.querySelector(".alerts").prepend(el("div", { class: "alert access" }, el("b", {}, "紀錄調閱　"),
-      `${fmtDateTime(r.ts)}，管理者 ${r.by} 調閱了這位個案的已簽核紀錄。事由：${r.reason}（${r.note}）`));
+      `${fmtDateTime(r.ts)}，管理者 ${r.by} 調閱了這位個案的已確認紀錄。事由：${r.reason}（${r.note}）`));
   }
 
   const plan = frag.querySelector(".last-plan");
@@ -589,7 +589,7 @@ async function openClient(id) {
     plan.append(
       el("div", {}, `最近一次有紀錄的會談：第 ${ls.session_no} 次（${ls.date}）`,
         ls.risk_level ? `，風險線索：${RISK_NAMES[ls.risk_level] ?? ls.risk_level}` : ""),
-      brief.plan.length ? el("div", { class: "plan-title" }, "上次計畫（已簽核的紀錄，或草稿中通過查核的句子）：") : null,
+      brief.plan.length ? el("div", { class: "plan-title" }, "上次計畫（已確認的紀錄，或草稿中通過查核的句子）：") : null,
       brief.plan.length ? el("ul", {}, brief.plan.map((p) => el("li", {}, p))) : null,
     );
   }
@@ -923,7 +923,7 @@ function keep(s) {
     return;
   }
   if (!(s.evidence || []).length) {
-    askReason("保留沒有引用的句子", `「${s.text.trim()}」`, "這句的依據（例如：會談中觀察到的非語言行為、會談外取得的資訊）。會存進簽核紀錄和稽核紀錄。", (reason) => {
+    askReason("保留沒有引用的句子", `「${s.text.trim()}」`, "這句的依據（例如：會談中觀察到的非語言行為、會談外取得的資訊）。會存進確認紀錄和稽核紀錄。", (reason) => {
       keepReasons.set(s.key, reason);
       confirmed.add(s.key);
       markChanged();
@@ -1038,7 +1038,7 @@ function renderSummary() {
   const c = counts();
   const counter = document.getElementById("verify-counter");
   const bar = document.getElementById("verify-summary");
-  const who = session.signed ? "已簽核紀錄" : "AI 草稿";
+  const who = session.signed ? "已確認紀錄" : "AI 草稿";
   if (counter) {
     put(counter,
       el("span", { class: "n" }, `${who} ${c.total} 句`),
@@ -1046,23 +1046,23 @@ function renderSummary() {
       c.weak ? el("span", { class: "n warn" }, `！ ${c.weak} 句支持不足`) : null,
       c.unsupported ? el("span", { class: "n bad" }, `✗ ${c.unsupported} 句未能證實`) : null,
       c.dirty ? el("span", { class: "n" }, `✎ ${c.dirty} 句已修改待驗證`) : null,
-      !session.signed && c.blocking ? el("span", { class: "n bad strong" }, `${c.blocking} 句被攔下，擋住簽核`) : null,
+      !session.signed && c.blocking ? el("span", { class: "n bad strong" }, `${c.blocking} 句被攔下，擋住確認`) : null,
     );
   }
   if (!bar) return;
   if (session.signed) {
-    bar.textContent = "以上是簽核時的查核結果。";
+    bar.textContent = "以上是確認時的查核結果。";
     setStep(5);
     return;
   }
   const cues = openRiskCues().length;
   const parts = [];
   if (verifying) parts.push("重新驗證中…");
-  if (c.total === 0) parts.push("紀錄是空的，不能簽核。");
-  if (c.dirty) parts.push(`有 ${c.dirty} 句修改過，要重新驗證後才能簽核。`);
+  if (c.total === 0) parts.push("紀錄是空的，不能確認。");
+  if (c.dirty) parts.push(`有 ${c.dirty} 句修改過，要重新驗證後才能確認。`);
   if (c.blocking) parts.push(`還差 ${c.blocking} 句：請修改、刪除，或按「保留此句」。`);
   if (cues) parts.push(`還有 ${cues} 則風險線索沒有寫進紀錄。`);
-  if (!parts.length) parts.push(c.kept ? `可以簽核（其中 ${c.kept} 句是您確認保留的標示句）。` : "每一句都通過查核，可以簽核。");
+  if (!parts.length) parts.push(c.kept ? `可以確認（其中 ${c.kept} 句是您確認保留的標示句）。` : "每一句都通過查核，可以確認。");
   if (session.draft_saved_at && !edited) parts.push(`（草稿已存檔 ${session.draft_saved_at.slice(11, 16)}）`);
   bar.textContent = parts.join(" ");
   const blocked = signBlocked();
@@ -1227,8 +1227,8 @@ function renderSession(r, focusSeg) {
 
   const notePanel = el("section", { class: `card note-card${locked ? " locked" : ""}`, "aria-label": "會談紀錄" },
     locked
-      ? el("h3", {}, `已簽核紀錄（${r.note.template}）`, el("small", {}, "唯讀；更正請另寫補充說明"))
-      : el("h3", {}, `紀錄草稿（${r.note.template}）`, el("small", {}, "AI 起草，逐句查核，由心理師修改後簽核")),
+      ? el("h3", {}, `已確認紀錄（${r.note.template}）`, el("small", {}, "唯讀；更正請另寫補充說明"))
+      : el("h3", {}, `紀錄草稿（${r.note.template}）`, el("small", {}, "AI 起草，逐句查核，由心理師修改後確認")),
     locked ? null : templatePicker(r),
     el("div", { class: "counter", id: "verify-counter", role: "status", "aria-live": "polite" }),
     el("div", { class: "legend", "aria-label": "標示說明" },
@@ -1243,7 +1243,7 @@ function renderSession(r, focusSeg) {
         el("button", { type: "button", id: "next-btn", hidden: true, onclick: () => focusNextBlocking() }, "跳到下一句待處理"),
         el("button", { type: "button", onclick: addTestSentence, title: "加入一句逐字稿中沒有的內容，示範查核會把它攔下" }, "示範：插入捏造句"),
         el("button", { type: "button", id: "verify-btn", onclick: () => reverify() }, "重新驗證"),
-        el("button", { type: "button", class: "primary", id: "sign-btn", onclick: sign }, "核對完成，簽核"),
+        el("button", { type: "button", class: "primary", id: "sign-btn", onclick: sign }, "核對完成，確認紀錄"),
       ),
     ),
     el("div", { id: "sign-status", role: "status", "aria-live": "polite" }),
@@ -1361,7 +1361,7 @@ function signedBox(r) {
     el("div", { class: "meta" }, `補充說明・${a.author}・${fmtDateTime(a.created_at)}`), el("div", {}, a.text))));
   draw(r.addenda || []);
   const form = el("form", { class: "addendum-form" },
-    el("textarea", { name: "text", rows: "2", required: true, maxlength: "4000", placeholder: "補充說明（只能新增，不會改動已簽核的紀錄）", "aria-label": "補充說明" }),
+    el("textarea", { name: "text", rows: "2", required: true, maxlength: "4000", placeholder: "補充說明（只能新增，不會改動已確認的紀錄）", "aria-label": "補充說明" }),
     el("input", { type: "text", name: "author", required: true, maxlength: "80", value: me.user ? me.user.display_name : sig.signed_by,
       readOnly: !!me.user, "aria-label": "姓名" }),
     el("button", { type: "submit" }, "新增補充說明"),
@@ -1380,8 +1380,8 @@ function signedBox(r) {
     });
   });
   return el("div", { class: "signed-box" },
-    el("div", { class: "signed" }, `✓ 已由 ${sig.signed_by} 於 ${fmtDateTime(sig.signed_at)} 簽核`),
-    sig.note_sha256 ? el("div", { class: "hashes", title: "簽核時由伺服器計算，用來比對紀錄與逐字稿之後有沒有被改動；不是電子簽章" },
+    el("div", { class: "signed" }, `✓ 已由 ${sig.signed_by} 於 ${fmtDateTime(sig.signed_at)} 確認`),
+    sig.note_sha256 ? el("div", { class: "hashes", title: "確認時由伺服器計算，用來比對紀錄與逐字稿之後有沒有被改動；不是電子簽章" },
       `紀錄雜湊 ${sig.note_sha256.slice(0, 16)}…・逐字稿雜湊 ${sig.transcript_sha256.slice(0, 16)}…・查核規則版本 ${sig.verifier_version}`) : null,
     list, form, exportBox(r)); // web/export.js
 }
@@ -1460,7 +1460,7 @@ async function sign() {
   syncFromDom();
   if (counts().dirty && !(await reverify())) return;
   if (signBlocked()) {
-    showMessage("紀錄還不能簽核：請先處理標示的句子，以及還沒寫進紀錄的風險線索。", true);
+    showMessage("紀錄還不能確認：請先處理標示的句子，以及還沒寫進紀錄的風險線索。", true);
     return;
   }
   const dlg = document.getElementById("sign-dialog");
@@ -1489,7 +1489,7 @@ async function sign() {
     const my = nav, sid = session.session_id;
     const confirmBtn = document.getElementById("sign-confirm");
     try {
-      await busy(confirmBtn, "簽核中", () => post(`/api/sessions/${encodeURIComponent(sid)}/sign`, {
+      await busy(confirmBtn, "確認中", () => post(`/api/sessions/${encodeURIComponent(sid)}/sign`, {
         signed_by: by, note: notePayload().payload, base_revision: session.revision || 0,
         risk_dismissals: [...dismissed].map(([segment_id, reason]) => ({ segment_id, reason })),
       }));
@@ -1505,11 +1505,11 @@ async function sign() {
         return;
       }
       if (err.data && err.data.conflict) { dlg.close(); showConflict(err.message); return; }
-      document.getElementById("sign-error").textContent = `沒有簽核：${err.message}`;
+      document.getElementById("sign-error").textContent = `沒有確認：${err.message}`;
       if (err.data && err.data.risk_uncovered && my === nav) {
         session.risk_uncovered = err.data.risk_uncovered;
         dlg.close();
-        showMessage(`沒有簽核：${err.message}`, true);
+        showMessage(`沒有確認：${err.message}`, true);
         renderRiskGate();
         renderSummary();
       }

@@ -56,7 +56,7 @@ In the review page every sentence points to the lines it came from, and a senten
 
 **ON SCREEN:**
 1. Press **我已依目前逐字稿核對** (the signing is refused by the server until this is done, because a transcript line was changed).
-2. Press **核對完成，簽核**. The dialog lists the sentences kept after review; tick 「我已逐句核對」, enter a name, confirm.
+2. Press **核對完成，確認紀錄**. The dialog lists the sentences kept after review; tick 「我已逐句核對」, enter a name, confirm.
 3. The page shows the signed note, read-only, with its hashes.
 
 **VO:**

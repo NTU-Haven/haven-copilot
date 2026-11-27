@@ -184,7 +184,7 @@ class LockAfterSigningTest(ServerCase, unittest.TestCase):
         before = store.get_result("C001-S03")
         status, body = self.call("/api/sessions/C001-S03/process?template=DAP", {})
         self.assertEqual(status, 409)
-        self.assertIn("簽核", body["message_zh"])
+        self.assertIn("確認", body["message_zh"])
         self.assertEqual(store.get_result("C001-S03"), before)
         with self.assertRaises(store.AlreadySignedError):
             Orchestrator(use_llm=False).process_session("C001-S03", "DAP")

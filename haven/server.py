@@ -209,7 +209,7 @@ def _draft(sid: str) -> tuple[dict, object, list[str]]:
     transcript = _transcript(sid)
     if store.get_signature(sid):
         raise Refused("this session is already signed; signed notes are not overwritten",
-                      "這次會談已經簽核，簽核後的紀錄不能再修改。需要更正時，請新增「補充說明」。")
+                      "這次會談已經確認，確認後的紀錄不能再修改。需要更正時，請新增「補充說明」。")
     result = store.get_result(sid)
     if result is None:
         raise Refused("no draft has been produced for this session yet", "這次會談還沒有產生紀錄草稿，請先開啟會談。")
@@ -513,7 +513,7 @@ class Handler(BaseHTTPRequestHandler):
             self._error(HTTPStatus.CONFLICT, str(e), e.zh, **e.extra)
         except store.AlreadySignedError:
             self._error(HTTPStatus.CONFLICT, "this session is already signed; signed notes are not overwritten",
-                        "這次會談已經簽核，簽核後的紀錄不能再修改。需要更正時，請新增「補充說明」。")
+                        "這次會談已經確認，確認後的紀錄不能再修改。需要更正時，請新增「補充說明」。")
         except (BrokenPipeError, ConnectionResetError):
             self.close_connection = True  # the browser went away; nobody to answer
         except TimeoutError:
@@ -819,7 +819,7 @@ class Handler(BaseHTTPRequestHandler):
         if user:  # with accounts the signer is the account, not a name typed into the dialog
             signed_by = user["display_name"]
         if not isinstance(signed_by, str) or not signed_by.strip() or len(signed_by) > 80 or "note" not in payload:
-            return self._error(HTTPStatus.BAD_REQUEST, "signed_by and note are required", "請填寫簽核心理師姓名。")
+            return self._error(HTTPStatus.BAD_REQUEST, "signed_by and note are required", "請填寫確認者姓名。")
         # One at a time with transcript corrections, so the hash recorded below is the
         # hash of the transcript the draft was reviewed against (spec §9.3 rule 6).
         with _session_lock(sid):
@@ -841,13 +841,13 @@ class Handler(BaseHTTPRequestHandler):
         note, verification, forged = signing.check(sid, transcript, payload["note"], result["note"]["template"], result["note"].get("engine", ""), measures, Verifier(None))
         if forged:
             raise Refused(f"{len(forged)} score line(s) do not match the questionnaire data",
-                          f"有 {len(forged)} 句量表句和量表資料不一致。量表句由系統依量表資料產生，不能修改；請還原後再簽核。", blocking=forged)
+                          f"有 {len(forged)} 句量表句和量表資料不一致。量表句由系統依量表資料產生，不能修改；請還原後再確認。", blocking=forged)
         if verification["total"] == 0:
-            raise Refused("the note has no sentences", "紀錄是空的，不能簽核。請至少寫下一句引用逐字稿的紀錄。")
+            raise Refused("the note has no sentences", "紀錄是空的，不能確認。請至少寫下一句引用逐字稿的紀錄。")
         left = human_fields.placeholders(note)
         if left:  # decided from the text, so a flag from the browser cannot clear it
             raise Refused(f"{len(left)} placeholder sentence(s) are still in the note",
-                          f"還有 {len(left)} 個欄位保留著「{human_fields.PLACEHOLDER}」。請改寫成您的內容，或刪除這一句，再簽核。",
+                          f"還有 {len(left)} 個欄位保留著「{human_fields.PLACEHOLDER}」。請改寫成您的內容，或刪除這一句，再確認。",
                           blocking=[s.text for s in left])
         blocking = signing.blocking_sentences(note)
         if blocking:
@@ -891,7 +891,7 @@ class Handler(BaseHTTPRequestHandler):
         try:
             built = export.build(sid, fmt, user["display_name"] if user else "")
         except export.NotConfirmed:
-            raise Refused("only a confirmed note can be exported", "這次會談的紀錄還沒有簽核確認，不能匯出。請先完成簽核。") from None
+            raise Refused("only a confirmed note can be exported", "這次會談的紀錄還沒有確認，不能匯出。請先完成確認。") from None
         self.send_response(HTTPStatus.OK)
         self.send_header("Content-Type", built.content_type)
         self.send_header("Content-Length", str(len(built.body)))
@@ -924,7 +924,7 @@ class Handler(BaseHTTPRequestHandler):
         try:
             return self._json({"addenda": store.add_addendum(sid, text.strip(), author.strip())})
         except store.NotSignedError:
-            raise Refused("an addendum can only be added to a signed note", "這次會談還沒有簽核，草稿可以直接修改，不需要補充說明。") from None
+            raise Refused("an addendum can only be added to a signed note", "這次會談還沒有確認，草稿可以直接修改，不需要補充說明。") from None
 
     def _upload(self, query):
         client_id = query.get("client", [""])[0]

@@ -41,7 +41,7 @@ class ExportTest(ServerCase, unittest.TestCase):
         self.call("/api/sessions/C001-S50/open", {})
         status, body, _ = self.get("C001-S50")
         self.assertEqual(status, 409)
-        self.assertIn("簽核", json.loads(body)["message_zh"])
+        self.assertIn("確認", json.loads(body)["message_zh"])
         self.assertEqual([r for r in store.audit_rows("export_note", 1000) if "C001-S50" in r["detail"]], [])
 
     def test_bad_format_is_400_and_missing_header_is_refused(self):
