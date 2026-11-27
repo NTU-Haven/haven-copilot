@@ -322,3 +322,11 @@ body.signed-out .status { visibility: hidden; }
 .admin .record-section h4 { margin: .75rem 0 .25rem; }
 .admin .record-section p { margin: .2rem 0; }
 .admin .access-box .lead { grid-column: 1 / -1; }
+
+/* Transcript corrections (web/transcript_edit.js) */
+.seg .seg-edit { font-size: .75rem; padding: 0 6px; margin-left: 4px; }
+.seg .seg-edited { font-size: .75rem; color: var(--warn); background: var(--warn-soft); border-radius: 4px; padding: 0 4px; cursor: help; }
+.seg .seg-input { display: block; padding: 2px 4px; border: 1px solid var(--accent); border-radius: 4px; background: var(--panel); }
+.seg .seg-hint { font-size: .75rem; color: var(--muted); }
+.review-banner { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: space-between; margin: 0 0 8px; padding: 8px 10px; border-radius: 6px; background: var(--warn-soft); color: var(--ink); font-size: .9rem; }
+.sentence .reason.source-changed { background: var(--warn-soft); color: var(--ink); border-radius: 4px; padding: 2px 6px; }

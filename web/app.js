@@ -867,7 +867,8 @@ function sentenceRow(sectionKey, s) {
   row.append(
     badge(s, state),
     el("div", { class: "body" }, txt, reason,
-      state === "dirty" ? el("div", { class: "reason" }, "這句修改過，離開輸入框後會自動重新驗證。") : null),
+      state === "dirty" ? el("div", { class: "reason" }, "這句修改過，離開輸入框後會自動重新驗證。") : null,
+      sourceChangedNote(s)), // web/transcript_edit.js
     el("div", { class: "side" },
       isMeasure ? el("span", { class: "ev-none" }, "量表")
         : (s.evidence || []).length
@@ -1254,6 +1255,7 @@ function renderSession(r, focusSeg) {
   const warnings = (r.warnings || []).length && !locked
     ? el("div", { class: "warnings", id: "warnings", role: "alert" }, r.warnings.map((w) => el("div", { "data-quote": demoQuote(w) }, w))) : null;
   main.replaceChildren(head, warnings || "", el("div", { class: "workspace" }, transcript, notePanel));
+  decorateTranscript(r); // web/transcript_edit.js: line editing, confirmed speakers, review banner
   renderRiskGate();
   renderNote();
   if (focusSeg) highlight([focusSeg]);

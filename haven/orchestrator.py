@@ -5,7 +5,7 @@ from __future__ import annotations
 import json
 import time
 
-from . import config, files, signing, store
+from . import config, files, signing, store, transcript_edit
 from .agents.memory import CaseMemory
 from .agents.outcome import OutcomeAgent
 from .agents.risk import RiskAgent
@@ -98,6 +98,7 @@ class Orchestrator:
             "outcome": outcome,
             "timings_ms": timings,
         }
+        transcript_edit.start_draft(result, session_id)  # generated_from / reviewed_against transcript_revision
         store.save_result(session_id, result)
         signing.remember(session_id, note, verification.get("llm_failed", False), by_model=self.verifier.llm is not None)
         store.audit("process_session", f"{session_id} engine={note.engine}" + (f" configured={self.engine}" if note.engine != self.engine else "")
