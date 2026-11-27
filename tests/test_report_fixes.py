@@ -165,7 +165,7 @@ class SpeakerConfirmTest(ServerCase, unittest.TestCase):
         self.assertEqual(before["risk"]["screening_asked"], [])  # guessed speakers are not counted
         self.assertFalse(before["risk"]["speakers_confirmed"])
         status, after = self.call("/api/sessions/C001-S10/speakers",
-                                  {"speakers": {"1": "client", "2": "therapist", "3": "client", "4": "therapist"}})
+                                  {"speakers": {"1": "client", "2": "therapist", "3": "client", "4": "therapist"}, "base_revision": before["revision"]})
         self.assertEqual(status, 200)
         self.assertIn(2, after["risk"]["screening_asked"])
         self.assertIn(4, after["risk"]["safety_actions"])
@@ -175,14 +175,15 @@ class SpeakerConfirmTest(ServerCase, unittest.TestCase):
 
     def test_bad_requests(self):
         self.data.add_session("C001-S11", self.LINES, session_no=11, source="model")
-        self.call("/api/sessions/C001-S11/open", {})
-        self.assertEqual(self.call("/api/sessions/C001-S11/speakers", {"speakers": {"99": "client"}})[0], 400)
-        self.assertEqual(self.call("/api/sessions/C001-S11/speakers", {"speakers": {"1": "boss"}})[0], 400)
-        self.assertEqual(self.call("/api/sessions/C001-S11/speakers", {"speakers": {}})[0], 400)
+        base = self.call("/api/sessions/C001-S11/open", {})[1]["revision"]
+        self.assertEqual(self.call("/api/sessions/C001-S11/speakers", {"speakers": {"99": "client"}, "base_revision": base})[0], 400)
+        self.assertEqual(self.call("/api/sessions/C001-S11/speakers", {"speakers": {"1": "boss"}, "base_revision": base})[0], 400)
+        self.assertEqual(self.call("/api/sessions/C001-S11/speakers", {"speakers": {}, "base_revision": base})[0], 400)
+        self.assertEqual(self.call("/api/sessions/C001-S11/speakers", {"speakers": {"1": "client"}})[0], 400)  # no base_revision
 
     def test_prepared_transcript_is_refused(self):
-        self.draft("C002-S05")
-        self.assertEqual(self.call("/api/sessions/C002-S05/speakers", {"speakers": {"1": "client"}})[0], 409)
+        base = self.draft("C002-S05")[0]["revision"]
+        self.assertEqual(self.call("/api/sessions/C002-S05/speakers", {"speakers": {"1": "client"}, "base_revision": base})[0], 409)
 
 
 class ClientPronounTest(unittest.TestCase):
@@ -221,6 +222,10 @@ class ClientPronounTest(unittest.TestCase):
         self.assertEqual(status("client", "confirmed").status, "supported")
         self.assertIn("代名詞", status("client", "model").reason)
         self.assertEqual(status("therapist", "confirmed").status, "unsupported")  # caught one rule earlier
+
+# These tests cover the clinical aids (risk, R quotes, score lines, outcome, Case Memory),
+# which are off by default; they run with HAVEN_CLINICAL_AIDS on, as before the flag existed.
+from helpers import clinical_aids_on as setUpModule, clinical_aids_restore as tearDownModule  # noqa: E402,F401
 
 
 if __name__ == "__main__":

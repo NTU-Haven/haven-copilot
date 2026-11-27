@@ -18,7 +18,7 @@ from unittest import mock
 
 from helpers import ServerCase
 
-from haven import config, server, store, transcript  # noqa: E402
+from haven import config, jobs, server, store, transcript  # noqa: E402
 from haven.models import Segment, Transcript  # noqa: E402
 from haven.orchestrator import get_client  # noqa: E402
 
@@ -34,15 +34,32 @@ def fake_transcribe(delay=0.0):
 
 
 class UploadMixin:
-    def upload(self, session_id, text, client="C001", extra="&simulated=1", headers=None):
+    def upload(self, session_id, text, client="C001", extra="&simulated=1", headers=None, wait=True):
+        """Uploads and, with ``wait`` (the synchronous mode tests use), waits for the
+        background job: (200, session page) when it succeeded, (job status, job) when not.
+        A request refused before any job started keeps its HTTP status."""
         req = urllib.request.Request(f"{self.base}/api/upload?client={client}&session_id={session_id}&consent=1{extra}",
                                      data=text.encode(), headers={"X-Haven": "1", "X-Filename": "a.wav", **(headers or {})}, method="POST")
         try:
             with urllib.request.urlopen(req) as r:
-                return r.status, json.load(r)
+                status, body = r.status, json.load(r)
         except urllib.error.HTTPError as e:
             with e:
                 return e.code, json.load(e)
+        if status != 202 or not wait:
+            return status, body
+        return settle_job(self.base, body["job_id"])
+
+
+def settle_job(base, job_id, cookie=None):
+    """Waits for a job; (200, session page) when it succeeded, (status, job) otherwise."""
+    job = jobs.wait(job_id)
+    if job["status"] != "succeeded":
+        return job["status"], job
+    headers = {"X-Haven": "1", "Content-Type": "application/json", **({"Cookie": cookie} if cookie else {})}
+    req = urllib.request.Request(f"{base}/api/sessions/{job['session_id']}/open", data=b"{}", headers=headers, method="POST")
+    with urllib.request.urlopen(req) as r:
+        return r.status, json.load(r)
 
 
 class MalformedRequestTest(ServerCase, unittest.TestCase):
@@ -226,7 +243,7 @@ class ConcurrentUploadTest(UploadMixin, ServerCase, unittest.TestCase):
     def test_failed_upload_releases_the_id(self):
         with mock.patch.object(server, "transcribe_audio", side_effect=transcript.ASRError("HTTP 400")):
             status, r = self.upload("C001-S84", "x")
-        self.assertEqual(status, 502)
+        self.assertEqual((status, r["error_code"]), ("failed", "asr_failed"))  # a 502 before uploads became jobs
         self.assertIn("message_zh", r)
         self.assertEqual(server.UPLOADING, {})
         self.assertEqual(self.upload("C001-S84", "這週過得怎麼樣？\n不太好。")[0], 200)
@@ -236,7 +253,7 @@ class ConcurrentUploadTest(UploadMixin, ServerCase, unittest.TestCase):
         err = transcript.ASRError("HTTP 400: Audio exceeds maximum allowed duration of 600s (file contains 2701.2s at 16000Hz).")
         with mock.patch.object(server, "transcribe_audio", side_effect=err):
             status, r = self.upload("C001-S85", "x")
-        self.assertEqual(status, 502)
+        self.assertEqual((status, r["error_code"]), ("failed", "asr_too_long"))
         self.assertIn("長度", r["message_zh"])
 
 
@@ -256,7 +273,7 @@ class EmptyUploadTest(UploadMixin, ServerCase, unittest.TestCase):
 
     def test_recording_with_no_speech_creates_no_session(self):
         status, r = self.upload("C001-S91", "\n  \n")
-        self.assertEqual(status, 422)
+        self.assertEqual((status, r["error_code"]), ("failed", "no_speech"))
         self.assertIn("語音", r["message_zh"])
         self.assertFalse((config.SESSIONS_DIR / "C001-S91.json").exists())
         self.assertNotIn("C001-S91", get_client("C001")["sessions"])
@@ -312,6 +329,10 @@ class BriefTest(ServerCase, unittest.TestCase):
         self.assertEqual(status, 200)
         self.assertEqual(brief["last_session"]["session_id"], "C002-S05")
         self.assertEqual(brief["not_processed"], ["C002-S06"])
+
+# These tests cover the clinical aids (risk, R quotes, score lines, outcome, Case Memory),
+# which are off by default; they run with HAVEN_CLINICAL_AIDS on, as before the flag existed.
+from helpers import clinical_aids_on as setUpModule, clinical_aids_restore as tearDownModule  # noqa: E402,F401
 
 
 if __name__ == "__main__":

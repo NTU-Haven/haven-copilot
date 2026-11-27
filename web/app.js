@@ -1,19 +1,25 @@
 "use strict";
 // Shown after an upload: the clinic needs the note, not the recording (interviewed psychologist, 2026-11-17).
-const KEEP_NO_AUDIO = "逐字稿已產生；原始錄音若不再需要，請從錄音設備和這台電腦上刪除。";
+const KEEP_NO_AUDIO = "逐字稿已產生；原始錄音依設定保留到簽核或到期，也可以在會談頁手動刪除。錄音設備上的檔案請自行刪除。";
 
 // Haven therapist UI. Talks only to the local Haven server (same origin).
 // No inline styles or scripts and nothing from another origin: the server's
 // Content-Security-Policy would block them.
 
-const SECTION_NAMES = {
-  S: "S 主觀資料", O: "O 客觀資料", A: "A 評估", P: "P 計畫", D: "D 資料", R: "R 風險與安全",
-};
-// Shown under a section title: what the draft cannot contain and the therapist adds.
-const SECTION_HINTS = {
-  O: "量表分數由系統填入。精神狀態觀察（外觀、情感、思考、定向、風險行為）逐字稿看不出來，請心理師自行補寫。",
-  R: "逐字稿中的風險線索、保護因子與安全措施；不受句數限制。提議而未完成的安全計畫會寫成「心理師提議」。",
-};
+// Section titles and hints come from the note's template definition (server Template
+// Registry, sent as session.template). The hint is what the draft cannot contain.
+function templateField(key) {
+  const fields = (session && session.template && session.template.fields) || [];
+  return fields.find((f) => f.key === key) || null;
+}
+function sectionName(key) {
+  const f = templateField(key);
+  return (f && f.label) || key;
+}
+function sectionHint(key) {
+  const f = templateField(key);
+  return (f && f.hint) || "";
+}
 // Describes the cues found in the transcript, not the client's risk level.
 const RISK_NAMES = {
   none: "未偵測到風險線索", info: "有背景線索（非個案本人的意念）", review: "有需留意的線索", high: "有自殺或自傷等高關注線索",
@@ -30,6 +36,7 @@ const STATES = {
   dirty: { mark: "✎", name: "已修改，尚未驗證" },
   confirmed: { mark: "✓", name: "已由您確認保留" },
   measure: { mark: "＃", name: "量表分數（系統填入）" },
+  therapist: { mark: "✎", name: "心理師自行撰寫（無逐字稿引用）" },
 };
 const AGENT_NAMES = { asr: "載入逐字稿", writer: "撰寫", verifier: "查核", risk: "風險", outcome: "成效" };
 const SHOWN_PER_GROUP = 3;
@@ -48,7 +55,7 @@ let verifying = false;
 let verifyAgain = false;
 let verifyTimer = null;
 let serverStatus = null;
-let me = { login_required: false, user: null, idle_minutes: 15 }; // who is signed in (GET /api/me)
+let me = { login_required: false, user: null, idle_minutes: 15, clinical_aids: false }; // who is signed in (GET /api/me)
 let rec = null;              // the recording in progress, or null
 let leaving = false;         // signing out on purpose: no "unsaved changes" prompt
 const confirmed = new Set(); // keys of flagged sentences the therapist checked and kept
@@ -176,6 +183,7 @@ function engineName(engine) {
 
 function speakerName(s) {
   const name = s.speaker === "client" ? "個案" : s.speaker === "therapist" ? "心理師" : "說話者未標示";
+  if (s.speaker_source === "recap") return `${name}（口述）`;
   return name + (s.speaker_source === "model" ? "（推測）" : s.speaker_source === "confirmed" ? " ✓" : "");
 }
 
@@ -556,14 +564,17 @@ async function openClient(id) {
   const meta = brief.sessions_meta || [];
   setSimNote(meta.some((m) => m.simulated === false) ? "real" : "simulated");
 
-  const alerts = brief.outcome.alerts;
-  frag.querySelector(".alerts").append(...(alerts.length
-    ? alerts.map((a) => el("div", { class: `alert ${a.status}` }, el("b", {}, `${a.label || "提醒"}　`), `${a.name}：${a.message}`))
-    : [el("div", { class: "alert ok" }, "量表追蹤：目前沒有提醒")]));
-  // One prompt for all not-improving measures, so it is read rather than skimmed.
-  const review = alerts.find((a) => a.review);
-  if (review) frag.querySelector(".alerts").append(el("div", { class: "review" }, `建議：${review.review}`));
-  frag.querySelector(".charts").append(...brief.outcome.measures.map(chart));
+  // Outcome alerts and charts are clinical aids: off by default, and the server then sends none.
+  if (brief.outcome) {
+    const alerts = brief.outcome.alerts;
+    frag.querySelector(".alerts").append(...(alerts.length
+      ? alerts.map((a) => el("div", { class: `alert ${a.status}` }, el("b", {}, `${a.label || "提醒"}　`), `${a.name}：${a.message}`))
+      : [el("div", { class: "alert ok" }, "量表追蹤：目前沒有提醒")]));
+    // One prompt for all not-improving measures, so it is read rather than skimmed.
+    const review = alerts.find((a) => a.review);
+    if (review) frag.querySelector(".alerts").append(el("div", { class: "review" }, `建議：${review.review}`));
+    frag.querySelector(".charts").append(...brief.outcome.measures.map(chart));
+  }
   for (const r of [...(brief.record_access || [])].reverse()) { // newest ends up first, above the measures
     frag.querySelector(".alerts").prepend(el("div", { class: "alert access" }, el("b", {}, "紀錄調閱　"),
       `${fmtDateTime(r.ts)}，管理者 ${r.by} 調閱了這位個案的已簽核紀錄。事由：${r.reason}（${r.note}）`));
@@ -576,13 +587,14 @@ async function openClient(id) {
   if (brief.last_session) {
     const ls = brief.last_session;
     plan.append(
-      el("div", {}, `最近一次有紀錄的會談：第 ${ls.session_no} 次（${ls.date}），風險線索：${RISK_NAMES[ls.risk_level] ?? ls.risk_level}`),
+      el("div", {}, `最近一次有紀錄的會談：第 ${ls.session_no} 次（${ls.date}）`,
+        ls.risk_level ? `，風險線索：${RISK_NAMES[ls.risk_level] ?? ls.risk_level}` : ""),
       brief.plan.length ? el("div", { class: "plan-title" }, "上次計畫（已簽核的紀錄，或草稿中通過查核的句子）：") : null,
       brief.plan.length ? el("ul", {}, brief.plan.map((p) => el("li", {}, p))) : null,
     );
   }
 
-  frag.querySelector(".session-buttons").append(...meta.map((m) =>
+  frag.querySelector(".session-buttons").append(...jobButtons(brief.jobs), ...meta.map((m) =>
     el("button", { type: "button", title: m.session_id, disabled: !!m.missing,
       onclick: (e) => openSession(m.session_id, null, e.currentTarget) }, sessionLabel(m))));
 
@@ -591,25 +603,25 @@ async function openClient(id) {
   const numbers = meta.map((m) => m.session_no || 0);
   upForm.session_id.value = `${id}-S${String(Math.max(0, ...numbers) + 1).padStart(2, "0")}`;
   setUpRecording(frag.querySelector(".record-form"), id, upForm.session_id.value);
+  bindInputMode(upForm);
+  bindInputMode(frag.querySelector(".record-form"));
   upForm.addEventListener("submit", async (e) => {
     e.preventDefault();
     const file = upForm.audio.files[0];
     const btn = upForm.querySelector("button[type=submit]");
     upMsg.className = "upload-msg";
-    upMsg.textContent = "本機轉寫與產生紀錄中，請不要關閉這個頁面。長錄音需要幾分鐘。";
-    await busy(btn, "轉寫中", async () => {
+    upMsg.textContent = "正在送出錄音…";
+    await busy(btn, "送出中", async () => {
       try {
-        const q = new URLSearchParams({ client: id, session_id: upForm.session_id.value, consent: upForm.consent.checked ? "1" : "0", simulated: upForm.simulated.checked ? "1" : "0" });
+        const q = new URLSearchParams({ client: id, session_id: upForm.session_id.value, consent: upForm.consent.checked ? "1" : "0", simulated: upForm.simulated.checked ? "1" : "0", input_mode: inputMode(upForm) });
         const r = await api(`/api/upload?${q}`, { method: "POST", headers: { "X-Filename": encodeURIComponent(file.name) }, body: file });
-        await loadClients();
         markActive(id);
-        if (my !== nav) { // the therapist went elsewhere while it ran: say so, do not take the screen
-          toast(`${r.session_id} 已轉寫完成，可以從個案頁開啟。${KEEP_NO_AUDIO}`);
+        if (my !== nav) { // the therapist went elsewhere: the job runs on; it is listed on the client page
+          toast(`${r.session_id} 已開始在主機上處理，完成後可從個案頁開啟。`);
           return;
         }
-        upMsg.textContent = `完成。Haven 不保存錄音，暫存檔已刪除。${KEEP_NO_AUDIO}`;
-        ++nav;
-        renderSession(r);
+        upMsg.textContent = "錄音已送到主機，開始處理。";
+        showJob(r); // background job: the processing screen polls and opens the draft
       } catch (err) {
         upMsg.className = "upload-msg problem";
         upMsg.textContent = `沒有完成：${err.message}`;
@@ -619,6 +631,7 @@ async function openClient(id) {
 
   const askForm = frag.querySelector(".ask-form");
   const askOut = frag.querySelector(".ask-result");
+  askForm.closest("section").hidden = !me.clinical_aids; // Case Memory is a clinical aid, off by default
   askForm.addEventListener("submit", async (e) => {
     e.preventDefault();
     await busy(askForm.querySelector("button"), "查詢中", async () => {
@@ -743,7 +756,7 @@ function isBlocking(s) {
 }
 
 function counts() {
-  const claims = allSentences().filter((s) => s.source !== "measure" && s.text.trim());
+  const claims = allSentences().filter((s) => s.source !== "measure" && !(s.source === "therapist" && !isDirty(s)) && s.text.trim());
   const clean = claims.filter((s) => !isDirty(s));
   return {
     total: claims.length,
@@ -820,6 +833,7 @@ function rowState(s) {
   const locked = !!session.signed;
   if (s.source === "measure") return "measure";
   if (!locked && isDirty(s)) return "dirty";
+  if (s.source === "therapist" && s.status === "supported") return "therapist";
   const flagged = s.status === "weak" || s.status === "unsupported";
   if (flagged && (locked ? !!s.confirmed_by_therapist : confirmed.has(s.key))) return "confirmed";
   return STATES[s.status] ? s.status : "unchecked";
@@ -846,7 +860,7 @@ function sentenceRow(sectionKey, s) {
   const txt = el("span", {
     class: "txt", contenteditable: editable ? EDITABLE : "false",
     role: editable ? "textbox" : null, "aria-multiline": editable ? "false" : null,
-    "aria-label": editable ? `${SECTION_NAMES[sectionKey] || sectionKey} 的紀錄句子，可以修改` : null,
+    "aria-label": editable ? `${sectionName(sectionKey)} 的紀錄句子，可以修改` : null,
     "aria-describedby": flagged ? reasonId : null,
     "data-placeholder": editable ? "（點這裡輸入句子；新句子沒有引用逐字稿，保留時要寫下依據）" : null,
     onpaste: editable ? pastePlain : null,
@@ -860,14 +874,15 @@ function sentenceRow(sectionKey, s) {
     state === "confirmed" ? `已由您確認保留。原因：${s.reason}` : s.reason,
     state === "confirmed" && (locked ? s.keep_reason : keepReasons.get(s.key))
       ? el("div", {}, `依據：${locked ? s.keep_reason : keepReasons.get(s.key)}`) : null,
-    state === "confirmed" || locked ? null
+    state === "confirmed" || locked || isPlaceholder(s.text) ? null
       : el("button", { type: "button", class: "confirm", onclick: () => keep(s) },
         (s.evidence || []).length ? "保留此句（我已核對）" : "保留此句（寫下依據）"),
   ) : null;
   row.append(
     badge(s, state),
     el("div", { class: "body" }, txt, reason,
-      state === "dirty" ? el("div", { class: "reason" }, "這句修改過，離開輸入框後會自動重新驗證。") : null),
+      state === "dirty" ? el("div", { class: "reason" }, "這句修改過，離開輸入框後會自動重新驗證。") : null,
+      sourceChangedNote(s)), // web/transcript_edit.js
     el("div", { class: "side" },
       isMeasure ? el("span", { class: "ev-none" }, "量表")
         : (s.evidence || []).length
@@ -984,10 +999,10 @@ function renderNote() {
   box.replaceChildren(
     ...Object.entries(sentences).map(([key, items]) => el("div", { class: "note-section", "data-key": key },
       el("div", { class: "section-head" },
-        el("h4", {}, SECTION_NAMES[key] || key),
+        el("h4", {}, sectionName(key)),
         locked ? null : el("button", { type: "button", class: "add", onclick: () => addSentence(key) }, "＋ 新增句子")),
-      SECTION_HINTS[key] && !locked ? el("div", { class: "section-hint" }, SECTION_HINTS[key]) : null,
-      items.length ? items.map((s) => sentenceRow(key, s)) : el("div", { class: "sentence empty-section" }, locked ? "（無）" : "（這一欄目前沒有句子）"),
+      sectionHint(key) && !locked ? el("div", { class: "section-hint" }, sectionHint(key)) : null,
+      items.length ? items.map((s) => sentenceRow(key, s)) : el("div", { class: "sentence empty-section" }, emptyText(key, locked)),
     )),
   );
   if (activeKey) {
@@ -1114,7 +1129,7 @@ function flagLine(f) {
     f.negated ? el("span", { class: "flag-tag" }, "含否定語，請確認") : null,
     // Only a question with 你 from an unconfirmed speaker is likely the therapist asking.
     f.maybe_therapist ? el("span", { class: "flag-tag" }, "說話者未確認，可能是心理師的提問")
-      : f.speaker_unconfirmed ? el("span", { class: "flag-tag" }, "說話者由模型推測，請對照錄音") : null,
+      : f.speaker_unconfirmed ? el("span", { class: "flag-tag" }, session && session.input_mode === "recap" ? "會後口述內容，請對照個案實際情況" : "說話者由模型推測，請對照錄音") : null,
     f.note ? el("div", { class: "flag-note" }, f.note) : null);
 }
 
@@ -1189,13 +1204,14 @@ function renderSession(r, focusSeg) {
   const locked = !!r.signed;
   setSimNote(r.simulated === false ? "real" : "simulated");
   const main = document.getElementById("main");
-  const riskSegs = new Set(r.risk.flags.map((f) => f.segment_id));
+  const riskSegs = new Set(r.risk ? r.risk.flags.map((f) => f.segment_id) : []); // no risk report with the clinical aids off
 
   const unconfirmed = locked ? [] : r.transcript.filter((s) => s.speaker_source === "model" || s.speaker_source === "none");
   const transcript = el("section", { class: "card transcript", "aria-label": "逐字稿" },
-    el("h3", {}, "逐字稿 ", el("small", { lang: "en" }, "Transcript")),
+    el("h3", {}, "逐字稿 ", el("small", { lang: "en" }, "Transcript"), r.input_mode === "recap" ? el("span", { class: "recap-tag" }, " 口述") : null),
+    r.input_mode === "recap" ? el("p", { class: "muted" }, "會後口述：只有心理師一人的聲音，不需要確認說話者。") : null,
     unconfirmed.length ? el("div", { class: "speaker-bar" },
-      el("span", {}, `${unconfirmed.length} 段的說話者是推測的。請對照錄音更正，再按確認；確認後風險判讀和查核會重算。`),
+      el("span", {}, `${unconfirmed.length} 段的說話者是推測的。請對照錄音更正，再按確認；確認後${r.risk ? "風險判讀和" : ""}查核會重算。`),
       el("button", { type: "button", class: "confirm", id: "speakers-btn", onclick: (e) => confirmSpeakers(e.currentTarget) }, "確認說話者")) : null,
     el("div", { class: "transcript-lines", tabindex: "0" },
       r.transcript.map((s) => el("div", { class: `seg${riskSegs.has(s.id) ? " risk" : ""}`, id: `seg-${s.id}` },
@@ -1213,11 +1229,12 @@ function renderSession(r, focusSeg) {
     locked
       ? el("h3", {}, `已簽核紀錄（${r.note.template}）`, el("small", {}, "唯讀；更正請另寫補充說明"))
       : el("h3", {}, `紀錄草稿（${r.note.template}）`, el("small", {}, "AI 起草，逐句查核，由心理師修改後簽核")),
+    locked ? null : templatePicker(r),
     el("div", { class: "counter", id: "verify-counter", role: "status", "aria-live": "polite" }),
     el("div", { class: "legend", "aria-label": "標示說明" },
       ["supported", "weak", "unsupported", "dirty", "confirmed"].map((k) =>
         el("span", { class: `key ${k}` }, el("span", { "aria-hidden": "true" }, STATES[k].mark), ` ${STATES[k].name}`))),
-    riskPanel(r.risk),
+    r.risk ? riskPanel(r.risk) : null,
     el("div", { id: "risk-gate" }),
     el("div", { id: "note-box" }),
     el("div", { class: "verify-bar" },
@@ -1254,22 +1271,27 @@ function renderSession(r, focusSeg) {
   const warnings = (r.warnings || []).length && !locked
     ? el("div", { class: "warnings", id: "warnings", role: "alert" }, r.warnings.map((w) => el("div", { "data-quote": demoQuote(w) }, w))) : null;
   main.replaceChildren(head, warnings || "", el("div", { class: "workspace" }, transcript, notePanel));
+  decorateTranscript(r); // web/transcript_edit.js: line editing, confirmed speakers, review banner
+  decorateAudio(r); // web/audio.js: original audio notice and delete button
   renderRiskGate();
   renderNote();
   if (focusSeg) highlight([focusSeg]);
   head.querySelector("h2").focus({ preventScroll: true });
 }
 
-async function regenerate(btn) {
-  if (!confirm("重新產生會丟掉這份草稿和您在這一頁做的修改。確定要重新產生？")) return;
-  const my = nav, sid = session.session_id, template = session.note.template;
+async function regenerate(btn, chosen) {
+  if (!(await confirmRegenerate())) return; // web/regenerate.js: the old draft is kept under "先前版本"
+  const my = nav, sid = session.session_id, template = chosen || session.note.template;
   await busy(btn, "重新產生中", async () => {
     try {
-      const r = await post(`/api/sessions/${encodeURIComponent(sid)}/process?template=${encodeURIComponent(template)}`);
+      const r = await post(`/api/sessions/${encodeURIComponent(sid)}/process?template=${encodeURIComponent(template)}`,
+        { base_revision: session.revision || 0, discard_edits: true });
       if (my !== nav) return;
-      renderSession(r);
+      if (r.job_id) showJob(r); // 202: drafted in the background (web/jobs.js), opens the draft when done
+      else renderSession(r);
     } catch (err) {
-      if (my === nav) showMessage(`沒有重新產生：${err.message}`, true);
+      if (my === nav && err.data && err.data.conflict) showConflict(err.message);
+      else if (my === nav) showMessage(`沒有重新產生：${err.message}`, true);
     }
   });
 }
@@ -1287,7 +1309,7 @@ async function confirmSpeakers(btn) {
       const r = await post(`/api/sessions/${encodeURIComponent(sid)}/speakers`, { speakers, base_revision: session.revision || 0 });
       if (my !== nav) return;
       renderSession(r);
-      showMessage(left ? `已確認 ${Object.keys(speakers).length} 段；還有 ${left} 段未確認。` : "說話者已全部確認，風險判讀和查核已重算。");
+      showMessage(left ? `已確認 ${Object.keys(speakers).length} 段；還有 ${left} 段未確認。` : `說話者已全部確認，${session && session.risk ? "風險判讀和" : ""}查核已重算。`);
     } catch (err) {
       if (my === nav && err.data && err.data.conflict) showConflict(err.message);
       else if (my === nav) showMessage(`沒有更新說話者：${err.message}`, true);
@@ -1360,7 +1382,7 @@ function signedBox(r) {
     el("div", { class: "signed" }, `✓ 已由 ${sig.signed_by} 於 ${fmtDateTime(sig.signed_at)} 簽核`),
     sig.note_sha256 ? el("div", { class: "hashes", title: "簽核時由伺服器計算，用來比對紀錄與逐字稿之後有沒有被改動；不是電子簽章" },
       `紀錄雜湊 ${sig.note_sha256.slice(0, 16)}…・逐字稿雜湊 ${sig.transcript_sha256.slice(0, 16)}…・查核規則版本 ${sig.verifier_version}`) : null,
-    list, form);
+    list, form, exportBox(r)); // web/export.js
 }
 
 // ----- verifying and signing -----
@@ -1526,6 +1548,7 @@ function recordingUi(form, on) {
   form.querySelector(".record-stop").hidden = !on;
   form.querySelector(".record-cancel").hidden = !on;
   for (const name of ["session_id", "consent", "simulated"]) form[name].disabled = on;
+  lockInputMode(form, on);
   const t = form.querySelector(".record-time");
   t.classList.toggle("live", on);
   if (!on) t.textContent = "";
@@ -1550,7 +1573,7 @@ async function startRecording(form, clientId) {
   let started;
   try {
     started = await post("/api/recordings", { client: clientId, session_id: form.session_id.value, consent: form.consent.checked,
-      simulated: form.simulated.checked, mime });
+      simulated: form.simulated.checked, mime, input_mode: inputMode(form) });
   } catch (err) {
     stream.getTracks().forEach((t) => t.stop());
     recordingStatus(form, `沒有開始錄音：${err.message}`, true);
@@ -1628,16 +1651,13 @@ async function finishRecording(form) {
       recordingUi(form, false);
       return;
     }
-    recordingStatus(form, "錄音已全部送到主機，正在轉寫與產生紀錄。長錄音需要幾分鐘，請不要關閉這個頁面。");
+    recordingStatus(form, "錄音已全部送到主機，開始處理。");
     try {
       const out = await post(`/api/recordings/${encodeURIComponent(r.id)}/finish`);
       rec = null;
       recordingUi(form, false);
-      await loadClients();
       markActive(r.clientId);
-      ++nav;
-      renderSession(out);
-      toast(`${out.session_id} 已轉寫完成。主機上的錄音已刪除，這台設備沒有留下錄音檔。`);
+      showJob(out);
     } catch (err) {
       rec = null;
       recordingUi(form, false);

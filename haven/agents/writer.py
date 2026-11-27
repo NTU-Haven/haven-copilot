@@ -1,12 +1,17 @@
-"""Note-writer agent: drafts a SOAP / DAP progress note with evidence links.
+"""Note-writer agent: drafts a progress note (SOAP, DAP or any template in
+``haven.templates``) with evidence links.
 
 Every sentence carries the transcript segment ids it is based on, so the
 verifier agent and the therapist can check it against what was said.
 
-Risk content has its own section, R (風險與安全), in both templates. Whatever
-engine wrote the note, a transcript line with a high-level risk cue that no
-sentence cites is added to R as a quote, so a disclosure cannot be dropped by a
-sentence limit or by the model.
+The template's fields and their instructions come from the Template Registry;
+only ``ai_mode="generate"`` fields are sent to the model. Risk content has its
+own field (``risk_field``, R 風險與安全 in SOAP and DAP). Whatever engine wrote
+the note, a transcript line with a high-level risk cue that no sentence cites is
+added there as a quote, so a disclosure cannot be dropped by a sentence limit or
+by the model.
+That routing and the forced quotes run only with config.CLINICAL_AIDS; by
+default the risk field is written like any other field.
 """
 
 from __future__ import annotations
@@ -16,40 +21,11 @@ import os
 import re
 from concurrent.futures import ThreadPoolExecutor
 
+from .. import config, human_fields, recap, templates
 from ..llm import DATA_ONLY
 from ..models import CONFIRMED, Note, NoteSentence, Segment, Transcript
 from ..textutil import third_person
 from .risk import RiskAgent
-
-_A = "評估（只寫心理師在會談中說出口的觀察、概念化與介入重點，並引用心理師說的段落；心理師沒說出口的評估不要寫，寧可少寫）"
-_P = ("計畫（會談中談定的作業、下次會談安排、轉介、安全措施；個案自己提出的計畫寫「個案計畫…」，心理師提出的才寫「心理師建議…」；"
-      "心理師只是提議、逐字稿中沒有完成的事寫「心理師提議…」）")
-_R = ("風險與安全（逐字稿中凡是提到自殺、自傷、傷害他人、受暴或受虐、物質使用，都必須寫在這一欄，不受句數限制；"
-      "保留否定語、時間和主詞：他人的事寫明是誰，過去的事寫明時間；也寫保護因子與談到的安全措施；沒有這類內容就留空陣列）")
-TEMPLATES = {
-    "SOAP": {
-        "S": "主觀資料（個案自述的困擾、感受、症狀、睡眠、體重、作業完成情形）",
-        # SOAP's O is what the clinician observes. The transcript is all the model has, so
-        # each observation still cites the lines it shows in; the rest the therapist adds.
-        # Batch 9: with 「語速」 as an example, Qwen3-32B wrote up to 35 lines like
-        # 「語氣中透露出成就感」「表現出思索的神情」 per 50-minute note; a transcript
-        # shows neither, and the verifier rightly held them all.
-        "O": ("客觀資料（只寫逐字稿文字本身看得到的行為：逐字稿標註的哭泣、沉默、笑，或心理師說出口的觀察，"
-              "例如心理師說「我注意到你講到這裡停了很久」；語氣、語速、表情、神情、肢體動作，"
-              "以及從說話內容推測的情緒（例如「語氣中透露出…」）一律不要寫，這些由心理師自己補；"
-              "每句都要引用那個段落；量表分數由系統自動填入，不要寫；沒有就留空陣列，寧可少寫）"),
-        "A": _A,
-        "P": _P,
-        "R": _R,
-    },
-    "DAP": {
-        "D": ("資料（個案自述，以及逐字稿文字本身看得到的行為：逐字稿標註的哭泣、沉默，或心理師說出口的觀察；"
-              "語氣、語速、表情、神情與推測的情緒不要寫；量表分數由系統自動填入，不要寫）"),
-        "A": _A,
-        "P": _P,
-        "R": _R,
-    },
-}
 
 SYSTEM_PROMPT = (
     "你是協助台灣心理師撰寫會談紀錄的助理。只能根據逐字稿內容撰寫，不可加入逐字稿沒有的資訊，"
@@ -84,14 +60,24 @@ def _prompt(t: Transcript, template: str, segments: list[Segment] | None = None,
     # One JSON object per line. A line of speech cannot forge another line, a
     # section heading or an instruction: its quotes and line breaks are escaped.
     lines = [json.dumps({"id": s.id, "speaker": who(s), "text": s.text}, ensure_ascii=False) for s in segments]
-    sections = "\n".join(f'- "{k}": {v}' for k, v in TEMPLATES[template].items())
-    keys = ", ".join(f'"{k}": [{{"text": "...", "evidence": [段落編號]}}]' for k in TEMPLATES[template])
+    tpl = templates.get(template)
+    # human_only fields are the therapist's: they are never sent to the model.
+    sections = "\n".join(f'- "{f.key}": {_instructions(f, t)}' for f in tpl.generated)
+    keys = ", ".join(f'"{f.key}": [{{"text": "...", "evidence": [段落編號]}}]' for f in tpl.generated)
     where = f"（全長分成 {part[1]} 段處理，這是第 {part[0]} 段，只寫這一段的內容）" if part else ""
+    limited = f"{tpl.risk_field} 以外每欄" if tpl.risk_field else "每欄"
     return (
         f"第 {t.session_no} 次會談逐字稿{where}，每行一段（id 是段落編號）：\n" + "\n".join(lines)
-        + f"\n\n請撰寫 {template} 格式紀錄，各欄位意義：\n{sections}\n"
-        + f"R 以外每欄 {_per_part(part)} 句，每句簡短，只寫這段最重要的內容。只輸出 JSON：{{{keys}}}"
+        + f"\n\n請撰寫 {tpl.id if tpl.id in ('SOAP', 'DAP') else tpl.name} 格式紀錄，各欄位意義：\n{sections}\n"
+        + f"{limited} {_per_part(part)} 句，每句簡短，只寫這段最重要的內容。只輸出 JSON：{{{keys}}}"
     )
+
+
+def _instructions(f, t: Transcript) -> str:
+    """The field's instructions; for a recap, in the dictation voice."""
+    if not recap.is_recap(t):
+        return f.instructions
+    return f.instructions.replace("以「個案表示…」開頭", "以「心理師口述…」開頭").replace("「個案表示」", "「心理師口述」") + recap.INSTRUCTION_NOTE
 
 
 def _per_part(part: tuple[int, int] | None) -> str:
@@ -121,7 +107,7 @@ def _parse(raw: dict | None, template: str) -> dict[str, list[NoteSentence]] | N
     if not isinstance(raw, dict):
         return None
     out: dict[str, list[NoteSentence]] = {}
-    for key in TEMPLATES[template]:
+    for key in (f.key for f in templates.get(template).generated):  # a human_only field the model filled is dropped
         items = raw.get(key)
         if isinstance(items, dict):
             items = [items]
@@ -184,6 +170,8 @@ def _plan_sentence(clause: str, proposed: bool, seg: Segment, reply: Segment | N
 
 def _quote(seg: Segment) -> NoteSentence:
     """What a line said, attributed to whoever said it."""
+    if seg.speaker_source == recap.SOURCE:  # dictated by the therapist: never put in the client's mouth
+        return NoteSentence(recap.sentence(seg.text), [seg.id])
     if seg.speaker == "client" and seg.speaker_source in CONFIRMED:
         text = third_person(seg.text, "client")
         return NoteSentence(f"個案表示{text[2:] if text.startswith('個案') else text}。", [seg.id])
@@ -193,7 +181,10 @@ def _quote(seg: Segment) -> NoteSentence:
 
 
 def _risk_segments(t: Transcript) -> tuple[set[int], set[int], set[int]]:
-    """(lines with a risk cue for R, of those the high-level ones, lines with a protective factor)."""
+    """(lines with a risk cue for R, of those the high-level ones, lines with a protective factor).
+    Empty with the clinical aids off: no line is routed to R or force-quoted there."""
+    if not config.CLINICAL_AIDS:
+        return set(), set(), set()
     report = RiskAgent().run(t)
     flags = [f for f in report.flags if f.category not in _NOT_IN_R]
     return ({f.segment_id for f in flags}, {f.segment_id for f in flags if f.level in ("high", "critical")},
@@ -210,6 +201,13 @@ def _rule_based(t: Transcript, template: str, segments: list[Segment] | None = N
             # Never subject to the sentence limits below.
             r_items.append(_quote(seg))
             continue
+        if seg.speaker_source == recap.SOURCE:
+            # A dictated line: kept in the dictation voice, with the usual limits per field.
+            if len(seg.text) > 6:
+                s_items.append(_quote(seg))
+            for section, clause, _ in _therapist_clauses(seg.text):
+                (p_items if section == "P" else a_items).append(NoteSentence(recap.sentence(clause), [seg.id]))
+            continue
         text = third_person(seg.text, seg.speaker)
         if seg.speaker == "client":
             body = text[2:] if text.startswith("個案") else text
@@ -223,35 +221,38 @@ def _rule_based(t: Transcript, template: str, segments: list[Segment] | None = N
                     p_items.append(_plan_sentence(clause, proposed, seg, reply))
                 else:
                     a_items.append(NoteSentence(f"心理師指出：{third_person(clause, 'therapist')}。", [seg.id]))
-    if template == "DAP":
-        return {"D": s_items[:6], "A": a_items[:4], "P": p_items[:5], "R": r_items}
-    return {"S": s_items[:6], "O": [], "A": a_items[:4], "P": p_items[:5], "R": r_items}
+    # Each field takes what its template's ``fallback`` names; the others stay empty.
+    found = {"subjective": s_items[:6], "assessment": a_items[:4], "plan": p_items[:5], "risk": r_items,
+             "therapist": a_items[:4] + p_items[:5]}
+    return {f.key: list(found.get(f.fallback, [])) for f in templates.get(template).generated}
 
 
 class NoteWriter:
     def __init__(self, llm=None):
         self.llm = llm
 
-    def _ask(self, prompt: str):
+    def _ask(self, prompt: str, system: str = SYSTEM_PROMPT):
         try:
-            return self.llm.generate_json(SYSTEM_PROMPT, prompt, max_tokens=MAX_TOKENS)
+            return self.llm.generate_json(system, prompt, max_tokens=MAX_TOKENS)
         except Exception:  # a model fault falls back to the rule engine, and says so
             return None
 
-    def run(self, t: Transcript, template: str = "SOAP") -> Note:
+    def run(self, t: Transcript, template: str = templates.DEFAULT) -> Note:
+        tpl = templates.get(template)  # an unknown id raises before any model call
         # Long sessions are written in parts and joined, so the note covers the whole hour.
         parts = [t.segments[i : i + CHUNK] for i in range(0, len(t.segments), CHUNK)] or [[]]
-        sections: dict[str, list[NoteSentence]] = {k: [] for k in TEMPLATES[template]}
+        sections: dict[str, list[NoteSentence]] = {k: [] for k in tpl.keys}
         failed: list[int] = []
         replies: list[dict | None] = [None] * len(parts)
         if self.llm is not None:
+            system = recap.SYSTEM_PROMPT if recap.is_recap(t) else SYSTEM_PROMPT
             prompts = [_prompt(t, template, segments, (n, len(parts)) if len(parts) > 1 else None)
                        for n, segments in enumerate(parts, start=1)]
             if len(parts) == 1 or PARALLEL == 1:
-                replies = [_parse(self._ask(p), template) for p in prompts]
+                replies = [_parse(self._ask(p, system), template) for p in prompts]
             else:
                 with ThreadPoolExecutor(max_workers=min(PARALLEL, len(parts))) as pool:
-                    replies = list(pool.map(lambda p: _parse(self._ask(p), template), prompts))
+                    replies = list(pool.map(lambda p: _parse(self._ask(p, system), template), prompts))
         # Joined in transcript order whatever order the replies came back in.
         for n, (segments, parsed) in enumerate(zip(parts, replies), start=1):
             if parsed is None and self.llm is not None:
@@ -273,8 +274,13 @@ class NoteWriter:
             engine = f"{self.llm.label}＋規則引擎（第 {where} 段本機模型未回應）"
             warnings.append(f"逐字稿分成 {len(parts)} 段撰寫，其中第 {where} 段本機模型未回應，該段改由規則引擎摘錄原句。")
         # A high-level risk cue that no sentence cites is added as a quote.
-        cited = {e for items in sections.values() for s in items for e in s.evidence}
-        _, must_have, _ = _risk_segments(t)
-        by_id = t.by_id()
-        sections["R"].extend(_quote(by_id[i]) for i in sorted(must_have - cited))
-        return Note(template, sections, engine=engine, warnings=warnings)
+        if tpl.risk_field:
+            cited = {e for items in sections.values() for s in items for e in s.evidence}
+            _, must_have, _ = _risk_segments(t)
+            by_id = t.by_id()
+            sections[tpl.risk_field].extend(_quote(by_id[i]) for i in sorted(must_have - cited))
+        # A human_only field starts with the placeholder; the therapist rewrites or deletes it.
+        for f in tpl.fields:
+            if f.ai_mode == templates.HUMAN_ONLY:
+                sections[f.key] = [human_fields.placeholder_sentence()]
+        return Note(tpl.id, sections, engine=engine, warnings=warnings)

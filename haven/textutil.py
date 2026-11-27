@@ -5,7 +5,7 @@ import re
 _PUNCT = re.compile(r"[\s，。、！？：；「」『』（）()…,.!?:;\"'\-—]+")
 # Words that change between a quote and a note ("我" becomes "個案") or are
 # note scaffolding; ignored when comparing a note sentence with its evidence.
-_NEUTRAL = ["個案表示", "個案自述", "心理師", "計畫", "個案", "我們", "我", "你", "他", "她", "嗯", "好像", "就是"]
+_NEUTRAL = ["心理師口述", "個案表示", "個案自述", "心理師", "計畫", "個案", "我們", "我", "你", "他", "她", "嗯", "好像", "就是"]
 
 
 def normalize(text: str) -> str:

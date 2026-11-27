@@ -11,7 +11,7 @@ import urllib.request
 from pathlib import Path
 
 from . import config
-from .models import Segment, Transcript
+from .models import Segment, Transcript, to_dict
 
 
 def load_transcript(session_id: str) -> Transcript:
@@ -25,6 +25,7 @@ def load_transcript(session_id: str) -> Transcript:
         session_no=raw["session_no"],
         date=raw["date"],
         simulated=raw.get("simulated", True),
+        input_mode=raw.get("input_mode", "session"),
         segments=[Segment(**s) for s in raw["segments"]],
     )
 
@@ -180,6 +181,9 @@ def transcribe_audio(audio_path: Path, session_id: str, client_id: str, session_
         Segment(id=i, start=round(start, 1), end=round(end, 1), speaker="unknown", text=text, speaker_source="none")
         for i, (start, end, text) in enumerate(spoken, start=1)
     ]
+    if config.ASR_REFINE:  # Qwen3-ASR's words in Whisper's segments (haven/asr_refine.py)
+        from .asr_refine import refine
+        refine(audio_path, segments)
     return Transcript(session_id, client_id, session_no, date, segments, simulated=simulated)
 
 
@@ -191,8 +195,10 @@ def save_transcript(t: Transcript) -> Path:
         "session_no": t.session_no,
         "date": t.date,
         "simulated": t.simulated,
-        "segments": [s.__dict__ for s in t.segments],
+        "segments": [to_dict(s) for s in t.segments],
     }
+    if t.input_mode != "session":  # a file without the key is a session
+        payload["input_mode"] = t.input_mode
     from .files import write_private
 
     write_private(path, json.dumps(payload, ensure_ascii=False, indent=2))

@@ -1,6 +1,7 @@
 """Shared test set-up: a throwaway copy of the demo data and an in-process server."""
 
 import json
+import re
 import os
 import shutil
 import socket
@@ -18,6 +19,21 @@ from haven.orchestrator import Orchestrator  # noqa: E402
 
 REPO_DATA = Path(__file__).resolve().parent.parent / "data"
 H = {"X-Haven": "1", "Content-Type": "application/json"}
+
+
+_saved_aids: list[bool] = []
+
+
+def clinical_aids_on():
+    """Turns on HAVEN_CLINICAL_AIDS (risk scan and gate, R quotes, score lines, outcome,
+    Case Memory; off by default). Modules that test those features use
+    ``setUpModule = clinical_aids_on`` and ``tearDownModule = clinical_aids_restore``."""
+    _saved_aids.append(config.CLINICAL_AIDS)
+    config.CLINICAL_AIDS = True
+
+
+def clinical_aids_restore():
+    config.CLINICAL_AIDS = _saved_aids.pop()
 
 
 class IsolatedData:
@@ -76,15 +92,45 @@ class ServerCase:
 
     @classmethod
     def call(self, path, body=None, headers=None, method=None):
+        body = self._with_base(path, body)
         data = json.dumps(body).encode() if body is not None else None
         req = urllib.request.Request(self.base + path, data=data, headers=H if headers is None else headers,
                                      method=method or ("POST" if data is not None else "GET"))
         try:
             with urllib.request.urlopen(req) as r:
-                return r.status, json.load(r)
+                status, answer = r.status, json.load(r)
         except urllib.error.HTTPError as e:
             with e:
                 return e.code, json.load(e)
+        if status == 202 and re.fullmatch(r"/api/sessions/[^/?]+/process(\?.*)?", path) and "job_id" in answer:
+            return self._settled(answer["job_id"], headers)
+        return status, answer
+
+    @classmethod
+    def _settled(self, job_id, headers=None):
+        """A regenerate is a background job (202, ticket 05/07). Most tests only care about
+        the draft, so this waits for the job: (200, session view) on success, (job status, job)
+        otherwise. A test about the 202 itself calls the route with its own request."""
+        from haven import jobs
+        job = jobs.wait(job_id)
+        if job["status"] != "succeeded":
+            return job["status"], job
+        req = urllib.request.Request(f"{self.base}/api/sessions/{job['session_id']}", headers=H if headers is None else headers)
+        with urllib.request.urlopen(req) as r:
+            return r.status, json.load(r)
+
+    @classmethod
+    def _with_base(cls, path, body):
+        """/sign and /process of an existing draft need base_revision (ticket 07). Most tests are
+        not about that, so the current revision is filled in unless the test sets the key itself
+        (``"base_revision": None`` sends none)."""
+        import re
+        from haven import store
+        m = re.fullmatch(r"/api/sessions/([^/?]+)/(sign|process)(\?.*)?", path)
+        if not m or not isinstance(body, dict) or "base_revision" in body:
+            return body
+        result = store.get_result(m.group(1).upper())
+        return dict(body, base_revision=result.get("revision", 0)) if result else body
 
     @classmethod
     def draft(self, sid):
