@@ -5,7 +5,7 @@ from __future__ import annotations
 import json
 import time
 
-from . import config, files, human_fields, signing, store, templates, transcript_edit
+from . import config, export, files, human_fields, signing, store, templates, transcript_edit
 from .agents.memory import CaseMemory
 from .agents.outcome import OutcomeAgent
 from .agents.risk import RiskAgent
@@ -164,6 +164,7 @@ class Orchestrator:
             out.append({
                 "session_id": session_id, "session_no": t.session_no, "date": t.date, "simulated": t.simulated,
                 "processed": result is not None, "signed": store.get_signature(session_id) is not None,
+                "export_status": export.status(session_id),
                 "risk_level": (result.get("risk") or {}).get("level") if result and config.CLINICAL_AIDS else None,
             })
         return out

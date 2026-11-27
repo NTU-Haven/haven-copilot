@@ -41,6 +41,12 @@ CREATE TABLE IF NOT EXISTS jobs (
 -- One active job per session and kind (haven/jobs.py relies on this to refuse a second one).
 CREATE UNIQUE INDEX IF NOT EXISTS jobs_one_active ON jobs (session_id, kind) WHERE status IN ('queued', 'running');
 CREATE INDEX IF NOT EXISTS jobs_by_session ON jobs (session_id);
+-- Downloads of confirmed notes (haven/export.py). No clinical content.
+CREATE TABLE IF NOT EXISTS exports (
+    export_id TEXT PRIMARY KEY, session_id TEXT NOT NULL, format TEXT NOT NULL, note_sha256 TEXT NOT NULL,
+    exported_by TEXT NOT NULL, exported_at TEXT NOT NULL, status TEXT NOT NULL,
+    archived_by TEXT, archived_at TEXT, archive_ref TEXT);
+CREATE INDEX IF NOT EXISTS exports_by_session ON exports (session_id);
 """
 # Columns added to signed_notes after the first release; older databases get them on first use.
 _SIGNED_COLUMNS = ("transcript_sha256", "note_sha256", "verifier_version")
