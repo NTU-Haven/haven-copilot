@@ -6,14 +6,20 @@ const KEEP_NO_AUDIO = "逐字稿已產生；原始錄音若不再需要，請從
 // No inline styles or scripts and nothing from another origin: the server's
 // Content-Security-Policy would block them.
 
-const SECTION_NAMES = {
-  S: "S 主觀資料", O: "O 客觀資料", A: "A 評估", P: "P 計畫", D: "D 資料", R: "R 風險與安全",
-};
-// Shown under a section title: what the draft cannot contain and the therapist adds.
-const SECTION_HINTS = {
-  O: "量表分數由系統填入。精神狀態觀察（外觀、情感、思考、定向、風險行為）逐字稿看不出來，請心理師自行補寫。",
-  R: "逐字稿中的風險線索、保護因子與安全措施；不受句數限制。提議而未完成的安全計畫會寫成「心理師提議」。",
-};
+// Section titles and hints come from the note's template definition (server Template
+// Registry, sent as session.template). The hint is what the draft cannot contain.
+function templateField(key) {
+  const fields = (session && session.template && session.template.fields) || [];
+  return fields.find((f) => f.key === key) || null;
+}
+function sectionName(key) {
+  const f = templateField(key);
+  return (f && f.label) || key;
+}
+function sectionHint(key) {
+  const f = templateField(key);
+  return (f && f.hint) || "";
+}
 // Describes the cues found in the transcript, not the client's risk level.
 const RISK_NAMES = {
   none: "未偵測到風險線索", info: "有背景線索（非個案本人的意念）", review: "有需留意的線索", high: "有自殺或自傷等高關注線索",
@@ -846,7 +852,7 @@ function sentenceRow(sectionKey, s) {
   const txt = el("span", {
     class: "txt", contenteditable: editable ? EDITABLE : "false",
     role: editable ? "textbox" : null, "aria-multiline": editable ? "false" : null,
-    "aria-label": editable ? `${SECTION_NAMES[sectionKey] || sectionKey} 的紀錄句子，可以修改` : null,
+    "aria-label": editable ? `${sectionName(sectionKey)} 的紀錄句子，可以修改` : null,
     "aria-describedby": flagged ? reasonId : null,
     "data-placeholder": editable ? "（點這裡輸入句子；新句子沒有引用逐字稿，保留時要寫下依據）" : null,
     onpaste: editable ? pastePlain : null,
@@ -984,9 +990,9 @@ function renderNote() {
   box.replaceChildren(
     ...Object.entries(sentences).map(([key, items]) => el("div", { class: "note-section", "data-key": key },
       el("div", { class: "section-head" },
-        el("h4", {}, SECTION_NAMES[key] || key),
+        el("h4", {}, sectionName(key)),
         locked ? null : el("button", { type: "button", class: "add", onclick: () => addSentence(key) }, "＋ 新增句子")),
-      SECTION_HINTS[key] && !locked ? el("div", { class: "section-hint" }, SECTION_HINTS[key]) : null,
+      sectionHint(key) && !locked ? el("div", { class: "section-hint" }, sectionHint(key)) : null,
       items.length ? items.map((s) => sentenceRow(key, s)) : el("div", { class: "sentence empty-section" }, locked ? "（無）" : "（這一欄目前沒有句子）"),
     )),
   );

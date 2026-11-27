@@ -21,7 +21,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
-from . import accounts, config, crypto, files, llm, signing, store
+from . import accounts, config, crypto, files, llm, signing, store, templates
 from .agents.verifier import VERIFIER_VERSION, Verifier
 from .models import to_dict
 from .orchestrator import Orchestrator, get_client, load_clients
@@ -250,8 +250,12 @@ def _session_view(sid: str) -> dict:
         result["client_alias"], result["therapist"] = "", ""
     result["addenda"] = store.get_addenda(sid) if signature else []
     if signature:
-        note = store.get_signed_note(sid)
-        result["note"] = note
+        result["note"] = store.get_signed_note(sid)
+    # Field labels and hints for the page; None for a template no longer registered.
+    tpl = templates.find(result["note"].get("template"))
+    result["template"] = tpl.public() if tpl else None
+    if signature:
+        note = result["note"]
         result["verification"] = signing.summarize(note)
         result["risk_dismissals"] = note.get("risk_dismissals", [])
         result["risk_uncovered"] = []
@@ -473,6 +477,8 @@ class Handler(BaseHTTPRequestHandler):
         an unexpected error is a 500 with no detail, never a dropped connection."""
         try:
             return route()
+        except templates.UnknownTemplate as e:
+            self._error(HTTPStatus.BAD_REQUEST, str(e), "沒有這個紀錄模板，請重新選擇模板。")
         except (BadRequest, signing.BadNote) as e:
             self._error(HTTPStatus.BAD_REQUEST, str(e), "送出的資料格式不正確。")
         except HttpError as e:
@@ -533,6 +539,8 @@ class Handler(BaseHTTPRequestHandler):
         # GET only reads. Drafting a note, re-checking one and asking the model are POSTs.
         if parts == ["api", "status"]:
             return self._json(_status())
+        if parts == ["api", "templates"]:
+            return self._json([t.public() for t in templates.all_templates()])
         if parts == ["api", "clients"]:
             store.audit("list_clients", "")
             return self._json([_client_summary(c) for c in load_clients() if accounts.may_open(_user(), c)])
@@ -640,9 +648,7 @@ class Handler(BaseHTTPRequestHandler):
         return self._json(ORCH.memory.ask(client, q.strip()))
 
     def _process(self, sid, query):
-        template = query.get("template", ["SOAP"])[0]
-        if template not in ("SOAP", "DAP"):
-            return self._error(HTTPStatus.BAD_REQUEST, "template must be SOAP or DAP")
+        template = templates.get(query.get("template", [templates.DEFAULT])[0]).id  # unknown id: 400
         if not (config.SESSIONS_DIR / f"{sid}.json").is_file():
             raise _no_session()
         with _session_lock(sid):

@@ -5,7 +5,7 @@ from __future__ import annotations
 import json
 import time
 
-from . import config, files, signing, store
+from . import config, files, signing, store, templates
 from .agents.memory import CaseMemory
 from .agents.outcome import OutcomeAgent
 from .agents.risk import RiskAgent
@@ -51,11 +51,12 @@ class Orchestrator:
         are the only sentences accepted as source="measure"."""
         return self.outcome.note_sentences(client, session_no)
 
-    def process_session(self, session_id: str, template: str = "SOAP") -> dict:
+    def process_session(self, session_id: str, template: str = templates.DEFAULT) -> dict:
         # A signed note is the record. Nothing that could replace what the
         # therapist sees for that session runs after signing.
         if store.get_signature(session_id):
             raise store.AlreadySignedError(session_id)
+        tpl = templates.get(template)  # UnknownTemplate before anything runs
         timings: dict[str, float] = {}
 
         def timed(name, fn, *args):
@@ -67,13 +68,13 @@ class Orchestrator:
         transcript = timed("asr", load_transcript, session_id)
         client = get_client(transcript.client_id)
         transcript.client_age = client.get("age")
-        note = timed("writer", self.writer.run, transcript, template)
-        # Scores go into the objective section from the questionnaire data itself,
-        # so the model never restates (and never misstates) a number.
+        note = timed("writer", self.writer.run, transcript, tpl.id)
+        # Scores go into the template's measures field from the questionnaire data
+        # itself, so the model never restates (and never misstates) a number.
         measures = self.measure_sentences(client, transcript.session_no)
-        scores = [NoteSentence(text, [], source="measure") for text in measures]
-        objective = "O" if template == "SOAP" else "D"
-        note.sections[objective] = scores + note.sections.get(objective, [])
+        if tpl.measures_field:
+            scores = [NoteSentence(text, [], source="measure") for text in measures]
+            note.sections[tpl.measures_field] = scores + note.sections.get(tpl.measures_field, [])
         verification = timed("verifier", self.verifier.run, note, transcript, measures)
         risk = timed("risk", self.risk.run, transcript)
         outcome = timed("outcome", self.outcome.run, client)
@@ -86,6 +87,9 @@ class Orchestrator:
             "session_no": transcript.session_no,
             "date": transcript.date,
             "simulated": transcript.simulated,
+            # Which template definition the draft was written from (the note itself carries the id too).
+            "template_id": tpl.id,
+            "template_version": tpl.version,
             # What actually wrote this draft: the model's name, or the rule engine when the model did not answer.
             "engine": note.engine,
             "warnings": short + note.warnings + verification.get("warnings", []),
