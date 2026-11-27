@@ -560,11 +560,11 @@ Export Status（獨立於上面）：`not_exported → downloaded → archived`�
 
 ### ADR-005 ASR Model（2026-11-27 修訂）
 - Context：Haven 依賴段落時間戳。Qwen3-ASR 在 vLLM v0.26.0 只輸出文字；第三方數據顯示它在台灣華語和中英混用明顯優於 Whisper。
-- Options：(a) 只用 Whisper；(b) 直接換成 Qwen3-ASR；(c) Hybrid（Whisper 切段，Qwen3-ASR 逐段重新轉寫）；(d) Qwen3-ASR＋ForcedAligner。
-- Decision：預設 (a)，條件式升級到 (c)，依 [asr-qwen3-evaluation.md](asr-qwen3-evaluation.md) §5 決定。不採 (b)：沒有時間戳。不採 (d)：5 分鐘上限、需要 transformers on XPU、不支援閩南語。
+- Options：(a) 只用 Whisper；(b) 直接換成 Qwen3-ASR；(c) 對齊式 Hybrid（Whisper 的段落與時間戳，Qwen3-ASR 的全文按字對齊切回各段）；(d) Qwen3-ASR＋ForcedAligner。
+- Decision：預設 (a)，條件式升級到 (c)，依 [asr-qwen3-evaluation.md](asr-qwen3-evaluation.md) §5 決定。11/27 B70 實測：華語 CER 8.1% vs 17.8%（ASCEND）、1.1% vs 7.4%（L50），否定詞與時間詞錯誤較少；中英混用只改善 15%。Go/No-Go 以華語為準（11/27 決定，標準在看到結果後修改），只剩 L50 Hybrid 切點重跑一項（evaluation §0.1）。不採 (b)：沒有時間戳。不採 (d)：5 分鐘上限、需要 transformers on XPU、不支援閩南語。
 - Rationale：(c) 保留已驗證的時間軸，下游的引用、回放、說話者都不用改；每段失敗時可以退回 Whisper 的文字。
-- Trade-offs：需要 ffmpeg 正規化音訊（和回放共用）；請求數變多。
-- Risks：XPU 不相容、映像檔缺模型類別、台語沒有改善、跨段落有字重複或遺漏。
+- Trade-offs：每次轉寫要送兩個請求（Whisper＋Qwen3-ASR，46 分鐘約多 8 秒）；兩個模型共用 card 1 的記憶體。不需要 ffmpeg。
+- Risks：跨段落有字重複或遺漏；`language=zh` 時英文被翻成中文，有時意思會變；台語沒有評估。（XPU 相容與映像檔模型類別已在 Step 0 確認。）
 - Reconsider：Qwen3-ASR 原生支援時間戳，或 ForcedAligner 支援 XPU 和更長音訊時。
 
 ### ADR-006 LLM & Inference
@@ -679,7 +679,7 @@ T19 Small fixes (reset_demo, sign lock)  (parallel, any time)
 | T14 | 模型品質 golden set | ≥ 10 段腳本＋人工標註；擴充 verifier_eval 案例；在 B70 跑並人工審閱 | 統計顯著評估 | T03, T15 | data/（新案例檔）、scripts/ | AC-01 Model Quality | P0 | 1d | 中 |
 | T15 | B70 部署與雙卡 Gate | 記錄 driver、image digest、啟動指令；嘗試 Qwen card0／Whisper card1；SSH tunnel 說明 | NGINX、LAN 模式 | – | scripts/（新啟動說明或參數）、docs | 兩個 vLLM 服務可用、配置記錄完整 | P0 | 0.5d | 中 |
 | T16a | Qwen3-ASR 可行性煙霧測試 | 確認映像檔有這個模型、XPU 能啟動、`verbose_json` 和 `json` 的行為、10 與 46 分鐘音檔不截斷、記憶體擺得下 | 準確度評測 | T15 | scripts/（啟動參數）、docs/asr-eval | asr-qwen3-evaluation.md §5 Step 0 | P0 | 0.5d | 中 |
-| T16b | ASR 對照評測＋Go/No-Go | 用 `scripts/asr_benchmark.py` 評 ASCEND 60 句、CSZS 40 句加 L50；Qwen3（json）vs Whisper（verbose_json）；L50 加做對齊式 Hybrid 抽樣；人工抽查否定與時間句；決策紀錄。**不評台語** | 整合；自製素材 | T16a（✅ 11/27 通過） | docs/asr-eval | asr-qwen3-evaluation.md §5 Step 2，11/29 中午前決策 | P0 | 0.5d | 低 |
+| T16b | ASR 對照評測＋Go/No-Go | 用 `scripts/asr_benchmark.py` 評 ASCEND 60 句、CSZS 40 句加 L50；Qwen3（json）vs Whisper（verbose_json）；L50 加做對齊式 Hybrid 抽樣；人工抽查否定與時間句；決策紀錄。**不評台語**。11/27 已跑完，只剩 L50 Hybrid 重跑 | 整合；自製素材 | T16a（✅ 11/27 通過） | docs/asr-eval | asr-qwen3-evaluation.md §5 Step 2，11/29 中午前決策 | P0 | 0.5d | 低 |
 | T07a | 音訊正規化（只給回放用） | 用 ffmpeg 把瀏覽器錄的 webm 轉成可拖動播放的格式；衍生檔依 §11.2 管理 | 新 pip 依賴；ASR 前處理 | T07 | audio 模組 | 轉檔成功與失敗都會清理；webm 能拖動播放 | P0（只在 T08 的 seek Gate 失敗時做） | 0.5d | 中（ffmpeg 不一定有） |
 | T16c | 對齊式 Hybrid ASR 整合（只在 Go 時做） | Whisper `verbose_json` 段落＋Qwen3-ASR `json` 全文，用 `align()`（從 scripts/asr_benchmark.py 移入）切回段落；某段對不上或 Qwen 失敗時保留 Whisper 文字；段落記錄 `asr_engine` 與 Whisper 原文；`HAVEN_ASR_REFINE` flag；`_openai_server` 依模型選擇 response_format | ForcedAligner；切音訊 | T16b（Go） | transcript、新 asr_refine 模組、config | 段落 id 和時間不變；fake 伺服器測試＋B70 實測 | P0（條件式） | 1d | 中 |
 | T17 | 真實 E2E Release Gate | AC-12、AC-13；performance 紀錄；錄製備援影片並標示 | – | T03, T06, T08, T10, T11, T12, T15 | docs（結果） | AC-12 通過或記錄失敗與限制 | P0 | 1d | 高 |
