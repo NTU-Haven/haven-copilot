@@ -144,7 +144,7 @@ class WriterWithNewTemplateTest(unittest.TestCase):
         self.assertNotIn(PRIVATE, prompt)
         self.assertNotIn('"H"', prompt)
         self.assertNotIn("主觀資料", prompt)
-        self.assertEqual(note.sections["H"], [])  # the model's H line is not kept
+        self.assertEqual([s.text for s in note.sections["H"]], ["待心理師填寫"])  # the model's H line is not kept; the placeholder is
         self.assertEqual([s.text for s in note.sections["G"]], ["個案表示想要改善睡眠。"])
 
     def test_rule_engine_fills_fields_by_their_fallback(self):
@@ -155,7 +155,7 @@ class WriterWithNewTemplateTest(unittest.TestCase):
         self.assertEqual(list(note.sections), ["G", "W", "H", "K"])
         self.assertTrue(note.sections["G"])
         self.assertTrue(note.sections["K"])  # risk lines go to the template's risk field
-        self.assertEqual(note.sections["H"], [])
+        self.assertEqual([s.text for s in note.sections["H"]], ["待心理師填寫"])
 
     def test_unknown_template_raises(self):
         with self.assertRaises(templates.UnknownTemplate):

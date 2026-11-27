@@ -21,7 +21,7 @@ import os
 import re
 from concurrent.futures import ThreadPoolExecutor
 
-from .. import config, templates
+from .. import config, human_fields, templates
 from ..llm import DATA_ONLY
 from ..models import CONFIRMED, Note, NoteSentence, Segment, Transcript
 from ..textutil import third_person
@@ -68,7 +68,7 @@ def _prompt(t: Transcript, template: str, segments: list[Segment] | None = None,
     limited = f"{tpl.risk_field} 以外每欄" if tpl.risk_field else "每欄"
     return (
         f"第 {t.session_no} 次會談逐字稿{where}，每行一段（id 是段落編號）：\n" + "\n".join(lines)
-        + f"\n\n請撰寫 {tpl.id} 格式紀錄，各欄位意義：\n{sections}\n"
+        + f"\n\n請撰寫 {tpl.id if tpl.id in ('SOAP', 'DAP') else tpl.name} 格式紀錄，各欄位意義：\n{sections}\n"
         + f"{limited} {_per_part(part)} 句，每句簡短，只寫這段最重要的內容。只輸出 JSON：{{{keys}}}"
     )
 
@@ -206,7 +206,8 @@ def _rule_based(t: Transcript, template: str, segments: list[Segment] | None = N
                 else:
                     a_items.append(NoteSentence(f"心理師指出：{third_person(clause, 'therapist')}。", [seg.id]))
     # Each field takes what its template's ``fallback`` names; the others stay empty.
-    found = {"subjective": s_items[:6], "assessment": a_items[:4], "plan": p_items[:5], "risk": r_items}
+    found = {"subjective": s_items[:6], "assessment": a_items[:4], "plan": p_items[:5], "risk": r_items,
+             "therapist": a_items[:4] + p_items[:5]}
     return {f.key: list(found.get(f.fallback, [])) for f in templates.get(template).generated}
 
 
@@ -261,4 +262,8 @@ class NoteWriter:
             _, must_have, _ = _risk_segments(t)
             by_id = t.by_id()
             sections[tpl.risk_field].extend(_quote(by_id[i]) for i in sorted(must_have - cited))
+        # A human_only field starts with the placeholder; the therapist rewrites or deletes it.
+        for f in tpl.fields:
+            if f.ai_mode == templates.HUMAN_ONLY:
+                sections[f.key] = [human_fields.placeholder_sentence()]
         return Note(tpl.id, sections, engine=engine, warnings=warnings)

@@ -8,8 +8,9 @@ the server read everything they need about a template from this registry.
 
 ``ai_mode``:
   "generate":   the model (or, without one, the rule engine) drafts the field.
-  "human_only": the field is never sent to the model and starts empty; the
-                therapist writes it. (A placeholder for it is a later ticket.)
+  "human_only": the field is never sent to the model. The writer starts it with the
+                placeholder sentence 「待心理師填寫」 (haven/human_fields.py), which
+                blocks signing until the therapist rewrites or deletes it.
 
 Template-level settings:
   measures_field: where the server puts the questionnaire score lines (None: no scores).
@@ -18,8 +19,8 @@ Template-level settings:
 
 ``Field.fallback`` names what the rule engine (no model, or a part the model did
 not answer) fills the field with: "subjective" (what the client said about
-feelings and measures), "assessment" and "plan" (therapist lines), "risk" (risk
-and protective lines). None: the rule engine leaves the field empty.
+feelings and measures), "assessment" and "plan" (therapist lines), "therapist"
+(both of those), "risk" (risk and protective lines). None: the rule engine leaves the field empty.
 """
 
 from __future__ import annotations
@@ -29,7 +30,7 @@ from dataclasses import dataclass, field
 GENERATE = "generate"
 HUMAN_ONLY = "human_only"
 AI_MODES = (GENERATE, HUMAN_ONLY)
-FALLBACKS = ("subjective", "assessment", "plan", "risk")
+FALLBACKS = ("subjective", "assessment", "plan", "therapist", "risk")
 DEFAULT = "SOAP"
 
 
@@ -50,6 +51,8 @@ class Field:
     fallback: str | None = None
     # Shown under the section title in the UI: what the draft cannot contain.
     hint: str = ""
+    # What the page shows when a generated field has no sentence (None: the usual "no sentences" line).
+    empty: str | None = None
 
 
 @dataclass(frozen=True)
@@ -72,7 +75,7 @@ class Template:
     def public(self) -> dict:
         """What the browser needs: ids, labels and hints, not the model instructions."""
         return {"id": self.id, "version": self.version, "name": self.name,
-                "fields": [{"key": f.key, "label": f.label, "ai_mode": f.ai_mode, "hint": f.hint} for f in self.fields]}
+                "fields": [{"key": f.key, "label": f.label, "ai_mode": f.ai_mode, "hint": f.hint, "empty": f.empty} for f in self.fields]}
 
 
 _REGISTRY: dict[str, Template] = {}
@@ -159,4 +162,30 @@ DAP = register(Template(
         ASSESSMENT, PLAN, RISK,
     ),
     measures_field="D", risk_field="R",
+))
+
+
+# --- QUAL: single-session qualitative record ---------------------------------------
+# Spec §8.6. Only what was said and done in the room, nothing inferred. The two
+# fields where clinical judgement lives are human_only: the model never sees them.
+
+_Q_COMMON = "只整理逐字稿裡實際說出口的內容；不做診斷、不評估風險等級、不推測量表分數、不做任何臨床推論；每句都要引用逐字稿段落；"
+QUAL = register(Template(
+    id="QUAL", version=1, name="單次晤談質化紀錄",
+    fields=(
+        Field("TOPIC", "晤談主題與個案陳述重點",
+              "晤談主題與個案陳述重點（" + _Q_COMMON + "寫個案說了什麼，以「個案表示…」開頭並保留否定語、時間和主詞；沒有就留空陣列）",
+              fallback="subjective", empty="未提及"),
+        Field("INTERACTION", "晤談中的互動與處遇",
+              "晤談中的互動與處遇（" + _Q_COMMON + "寫心理師在會談中說了或做了什麼，例如提問、反映、練習、回饋、約定；以「心理師…」開頭，引用的段落必須是心理師說的；沒有就留空陣列）",
+              fallback="therapist", empty="未提及"),
+        Field("SAFETY", "安全相關敘述（僅原文整理，不評估）",
+              "安全相關敘述（逐字稿中提到自殺、自傷、傷害他人、受暴或受虐、物質使用，以及保護因子與安全措施，" + _Q_COMMON
+              + "只整理說了什麼，保留否定語、時間和主詞；不要評估嚴重程度；沒有提到就留空陣列）",
+              fallback="risk", empty="未提及",
+              hint="只整理逐字稿裡說到的安全相關內容，不是風險評估；沒有內容時顯示「未提及」。"),
+        Field("FORMULATION", "心理師評估與概念化", "", ai_mode=HUMAN_ONLY,
+              hint="由心理師自行撰寫；不會送給模型。"),
+        Field("NEXT", "後續計畫", "", ai_mode=HUMAN_ONLY, hint="由心理師自行撰寫；不會送給模型。"),
+    ),
 ))

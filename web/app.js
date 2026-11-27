@@ -36,6 +36,7 @@ const STATES = {
   dirty: { mark: "✎", name: "已修改，尚未驗證" },
   confirmed: { mark: "✓", name: "已由您確認保留" },
   measure: { mark: "＃", name: "量表分數（系統填入）" },
+  therapist: { mark: "✎", name: "心理師自行撰寫（無逐字稿引用）" },
 };
 const AGENT_NAMES = { asr: "載入逐字稿", writer: "撰寫", verifier: "查核", risk: "風險", outcome: "成效" };
 const SHOWN_PER_GROUP = 3;
@@ -752,7 +753,7 @@ function isBlocking(s) {
 }
 
 function counts() {
-  const claims = allSentences().filter((s) => s.source !== "measure" && s.text.trim());
+  const claims = allSentences().filter((s) => s.source !== "measure" && !(s.source === "therapist" && !isDirty(s)) && s.text.trim());
   const clean = claims.filter((s) => !isDirty(s));
   return {
     total: claims.length,
@@ -829,6 +830,7 @@ function rowState(s) {
   const locked = !!session.signed;
   if (s.source === "measure") return "measure";
   if (!locked && isDirty(s)) return "dirty";
+  if (s.source === "therapist" && s.status === "supported") return "therapist";
   const flagged = s.status === "weak" || s.status === "unsupported";
   if (flagged && (locked ? !!s.confirmed_by_therapist : confirmed.has(s.key))) return "confirmed";
   return STATES[s.status] ? s.status : "unchecked";
@@ -869,7 +871,7 @@ function sentenceRow(sectionKey, s) {
     state === "confirmed" ? `已由您確認保留。原因：${s.reason}` : s.reason,
     state === "confirmed" && (locked ? s.keep_reason : keepReasons.get(s.key))
       ? el("div", {}, `依據：${locked ? s.keep_reason : keepReasons.get(s.key)}`) : null,
-    state === "confirmed" || locked ? null
+    state === "confirmed" || locked || isPlaceholder(s.text) ? null
       : el("button", { type: "button", class: "confirm", onclick: () => keep(s) },
         (s.evidence || []).length ? "保留此句（我已核對）" : "保留此句（寫下依據）"),
   ) : null;
@@ -997,7 +999,7 @@ function renderNote() {
         el("h4", {}, sectionName(key)),
         locked ? null : el("button", { type: "button", class: "add", onclick: () => addSentence(key) }, "＋ 新增句子")),
       sectionHint(key) && !locked ? el("div", { class: "section-hint" }, sectionHint(key)) : null,
-      items.length ? items.map((s) => sentenceRow(key, s)) : el("div", { class: "sentence empty-section" }, locked ? "（無）" : "（這一欄目前沒有句子）"),
+      items.length ? items.map((s) => sentenceRow(key, s)) : el("div", { class: "sentence empty-section" }, emptyText(key, locked)),
     )),
   );
   if (activeKey) {
@@ -1223,6 +1225,7 @@ function renderSession(r, focusSeg) {
     locked
       ? el("h3", {}, `已簽核紀錄（${r.note.template}）`, el("small", {}, "唯讀；更正請另寫補充說明"))
       : el("h3", {}, `紀錄草稿（${r.note.template}）`, el("small", {}, "AI 起草，逐句查核，由心理師修改後簽核")),
+    locked ? null : templatePicker(r),
     el("div", { class: "counter", id: "verify-counter", role: "status", "aria-live": "polite" }),
     el("div", { class: "legend", "aria-label": "標示說明" },
       ["supported", "weak", "unsupported", "dirty", "confirmed"].map((k) =>
@@ -1271,9 +1274,9 @@ function renderSession(r, focusSeg) {
   head.querySelector("h2").focus({ preventScroll: true });
 }
 
-async function regenerate(btn) {
+async function regenerate(btn, chosen) {
   if (!confirm("重新產生會丟掉這份草稿和您在這一頁做的修改。確定要重新產生？")) return;
-  const my = nav, sid = session.session_id, template = session.note.template;
+  const my = nav, sid = session.session_id, template = chosen || session.note.template;
   await busy(btn, "重新產生中", async () => {
     try {
       const r = await post(`/api/sessions/${encodeURIComponent(sid)}/process?template=${encodeURIComponent(template)}`);
