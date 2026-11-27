@@ -1,0 +1,131 @@
+{
+ "session_id": "G012-S01",
+ "client_id": "G012",
+ "session_no": 2,
+ "date": "2026-11-10",
+ "simulated": true,
+ "note": "模擬會談，內容為團隊撰寫的腳本，非真實個案，也不是錄音。",
+ "segments": [
+  {
+   "id": 1,
+   "start": 0.0,
+   "end": 7.1,
+   "speaker": "therapist",
+   "text": "十一月十日會後口述，個案G012，第二次晤談。",
+   "speaker_source": "recap"
+  },
+  {
+   "id": 2,
+   "start": 7.6,
+   "end": 16.9,
+   "speaker": "therapist",
+   "text": "個案提到有時候會想消失，但沒有想過方法，也沒有計畫，我有直接問過。",
+   "speaker_source": "recap"
+  },
+  {
+   "id": 3,
+   "start": 17.4,
+   "end": 25.8,
+   "speaker": "therapist",
+   "text": "個案說自己的情緒大概五分，這是個案自己講的，我沒有用量表。",
+   "speaker_source": "recap"
+  },
+  {
+   "id": 4,
+   "start": 26.3,
+   "end": 33.6,
+   "speaker": "therapist",
+   "text": "個案的母親說個案「太敏感」，個案說聽了很不舒服。",
+   "speaker_source": "recap"
+  },
+  {
+   "id": 5,
+   "start": 34.1,
+   "end": 38.5,
+   "speaker": "therapist",
+   "text": "個案不同意母親的說法。",
+   "speaker_source": "recap"
+  },
+  {
+   "id": 6,
+   "start": 39.0,
+   "end": 46.1,
+   "speaker": "therapist",
+   "text": "這週個案上班遲到兩次，個案說是因為早上起不來。",
+   "speaker_source": "recap"
+  },
+  {
+   "id": 7,
+   "start": 46.6,
+   "end": 52.1,
+   "speaker": "therapist",
+   "text": "個案沒有請假，也沒有被主管警告。",
+   "speaker_source": "recap"
+  },
+  {
+   "id": 8,
+   "start": 52.6,
+   "end": 60.3,
+   "speaker": "therapist",
+   "text": "個案提到上個月曾經跟前男友見面一次，之後心情不太好。",
+   "speaker_source": "recap"
+  },
+  {
+   "id": 9,
+   "start": 60.8,
+   "end": 67.9,
+   "speaker": "therapist",
+   "text": "我反映了個案的感受，也問個案接下來想怎麼處理。",
+   "speaker_source": "recap"
+  },
+  {
+   "id": 10,
+   "start": 68.4,
+   "end": 73.0,
+   "speaker": "therapist",
+   "text": "個案說不確定，想再想想。",
+   "speaker_source": "recap"
+  },
+  {
+   "id": 11,
+   "start": 73.5,
+   "end": 80.3,
+   "speaker": "therapist",
+   "text": "我提供了社區心理諮詢專線的資訊，個案收下了。",
+   "speaker_source": "recap"
+  },
+  {
+   "id": 12,
+   "start": 80.8,
+   "end": 86.5,
+   "speaker": "therapist",
+   "text": "個案這週沒有喝酒，也沒有吃安眠藥。",
+   "speaker_source": "recap"
+  },
+  {
+   "id": 13,
+   "start": 87.0,
+   "end": 95.6,
+   "speaker": "therapist",
+   "text": "我自己覺得個案的風險不高，但這是我的主觀感覺，沒有正式評估。",
+   "speaker_source": "recap"
+  },
+  {
+   "id": 14,
+   "start": 96.1,
+   "end": 101.6,
+   "speaker": "therapist",
+   "text": "下次約在十一月十七日，下午三點。",
+   "speaker_source": "recap"
+  },
+  {
+   "id": 15,
+   "start": 102.1,
+   "end": 105.2,
+   "speaker": "therapist",
+   "text": "口述結束。",
+   "speaker_source": "recap"
+  }
+ ],
+ "input_mode": "recap"
+}

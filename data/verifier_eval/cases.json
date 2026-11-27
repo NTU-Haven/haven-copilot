@@ -1,5 +1,5 @@
 {
- "_about": "Verifier test set. Every sentence is written as a note sentence about the simulated sessions in data/sessions. label 'ok' = the cited lines support it (a flag is a false alarm); any other label = a known error type the verifier should flag. Clinical error types beyond these are to be added by the clinical lead.",
+ "_about": "Verifier test set. Every sentence is written as a note sentence about the simulated sessions in data/sessions. label 'ok' = the cited lines support it (a flag is a false alarm); any other label = a known error type the verifier should flag. Clinical error types beyond these are to be added by the clinical lead. Cases with \"set\": \"golden\" cite a session in data/golden (ticket 15) instead of data/sessions.",
  "labels": {
   "ok": "supported paraphrase",
   "number": "wrong number",
@@ -12,7 +12,10 @@
   "hedge": "hedged statement written as fact",
   "intensity": "frequency or severity overstated",
   "diagnosis": "clinical label or diagnosis not made in the session",
-  "citation": "true elsewhere but cites the wrong line"
+  "citation": "true elsewhere but cites the wrong line",
+  "recap_voice": "post-session dictation written as the client's own words (個案表示／個案提到)",
+  "risk_grade": "risk level or risk assessment stated that nobody gave in the session",
+  "scale": "casual rating turned into a questionnaire score or severity band"
  },
  "cases": [
   {
@@ -454,6 +457,259 @@
    ],
    "text": "個案報告時恐慌發作。",
    "label": "diagnosis"
+  },
+  {
+   "id": "V49",
+   "session_id": "G011-S01",
+   "set": "golden",
+   "evidence": [
+    2
+   ],
+   "text": "心理師口述：個案這週睡眠比上週差，原因是搬家前一晚在打包。",
+   "label": "ok"
+  },
+  {
+   "id": "V50",
+   "session_id": "G011-S01",
+   "set": "golden",
+   "evidence": [
+    2
+   ],
+   "text": "個案表示這週睡眠比上週差，因為搬家前一晚在打包。",
+   "label": "recap_voice"
+  },
+  {
+   "id": "V51",
+   "session_id": "G011-S01",
+   "set": "golden",
+   "evidence": [
+    3
+   ],
+   "text": "個案提到新家離公司比較遠，通勤要一個小時。",
+   "label": "recap_voice"
+  },
+  {
+   "id": "V52",
+   "session_id": "G011-S01",
+   "set": "golden",
+   "evidence": [
+    5
+   ],
+   "text": "個案符合適應障礙的診斷。",
+   "label": "diagnosis"
+  },
+  {
+   "id": "V53",
+   "session_id": "G011-S01",
+   "set": "golden",
+   "evidence": [
+    4
+   ],
+   "text": "心理師口述：個案沒有提到想傷害自己，心理師詢問後個案回答沒有。",
+   "label": "ok"
+  },
+  {
+   "id": "V54",
+   "session_id": "G011-S01",
+   "set": "golden",
+   "evidence": [
+    4
+   ],
+   "text": "心理師口述：個案有想傷害自己的想法。",
+   "label": "negation"
+  },
+  {
+   "id": "V55",
+   "session_id": "G012-S01",
+   "set": "golden",
+   "evidence": [
+    2
+   ],
+   "text": "心理師口述：個案有時會想消失，但沒有想過方法，也沒有計畫。",
+   "label": "ok"
+  },
+  {
+   "id": "V56",
+   "session_id": "G012-S01",
+   "set": "golden",
+   "evidence": [
+    13
+   ],
+   "text": "心理師口述：個案的自殺風險為低風險。",
+   "label": "risk_grade"
+  },
+  {
+   "id": "V57",
+   "session_id": "G012-S01",
+   "set": "golden",
+   "evidence": [
+    3
+   ],
+   "text": "心理師口述：個案的情緒量表分數為五分，屬中度。",
+   "label": "scale"
+  },
+  {
+   "id": "V58",
+   "session_id": "G012-S01",
+   "set": "golden",
+   "evidence": [
+    3
+   ],
+   "text": "個案說自己的情緒大概五分。",
+   "label": "recap_voice"
+  },
+  {
+   "id": "V59",
+   "session_id": "G012-S01",
+   "set": "golden",
+   "evidence": [
+    4
+   ],
+   "text": "心理師口述：個案認為自己太敏感。",
+   "label": "speaker"
+  },
+  {
+   "id": "V60",
+   "session_id": "G001-S01",
+   "set": "golden",
+   "evidence": [
+    4
+   ],
+   "text": "個案表示在網路上做了一個測驗，結果說可能有憂鬱症，個案看了很害怕。",
+   "label": "ok"
+  },
+  {
+   "id": "V61",
+   "session_id": "G001-S01",
+   "set": "golden",
+   "evidence": [
+    2,
+    4
+   ],
+   "text": "個案罹患憂鬱症。",
+   "label": "diagnosis"
+  },
+  {
+   "id": "V62",
+   "session_id": "G001-S01",
+   "set": "golden",
+   "evidence": [
+    15
+   ],
+   "text": "個案認為心理問題是意志力不夠。",
+   "label": "speaker"
+  },
+  {
+   "id": "V63",
+   "session_id": "G003-S01",
+   "set": "golden",
+   "evidence": [
+    3
+   ],
+   "text": "個案表示有時晚上躺著會想，如果就這樣消失不見也好。",
+   "label": "ok"
+  },
+  {
+   "id": "V64",
+   "session_id": "G003-S01",
+   "set": "golden",
+   "evidence": [
+    3,
+    5,
+    7
+   ],
+   "text": "個案的自殺風險屬中度。",
+   "label": "risk_grade"
+  },
+  {
+   "id": "V65",
+   "session_id": "G003-S01",
+   "set": "golden",
+   "evidence": [
+    7
+   ],
+   "text": "個案表示有自殺計畫。",
+   "label": "negation"
+  },
+  {
+   "id": "V66",
+   "session_id": "G004-S01",
+   "set": "golden",
+   "evidence": [
+    8
+   ],
+   "text": "個案說想過在這個週末把家裡的安眠藥一次吃完。",
+   "label": "ok"
+  },
+  {
+   "id": "V67",
+   "session_id": "G006-S01",
+   "set": "golden",
+   "evidence": [
+    2
+   ],
+   "text": "個案自評今天心情大約六分，十分是最好。",
+   "label": "ok"
+  },
+  {
+   "id": "V68",
+   "session_id": "G006-S01",
+   "set": "golden",
+   "evidence": [
+    2
+   ],
+   "text": "個案的量表分數為六分，屬輕度。",
+   "label": "scale"
+  },
+  {
+   "id": "V69",
+   "session_id": "G007-S01",
+   "set": "golden",
+   "evidence": [
+    2
+   ],
+   "text": "個案表示有失眠。",
+   "label": "negation"
+  },
+  {
+   "id": "V70",
+   "session_id": "G008-S01",
+   "set": "golden",
+   "evidence": [
+    2
+   ],
+   "text": "個案上週五與弟弟談過。",
+   "label": "time"
+  },
+  {
+   "id": "V71",
+   "session_id": "G009-S01",
+   "set": "golden",
+   "evidence": [
+    3
+   ],
+   "text": "個案表示覺得自己很沒用。",
+   "label": "speaker"
+  },
+  {
+   "id": "V72",
+   "session_id": "G009-S01",
+   "set": "golden",
+   "evidence": [
+    4
+   ],
+   "text": "個案表示不是覺得自己沒用，是覺得很不被尊重。",
+   "label": "ok"
+  },
+  {
+   "id": "V73",
+   "session_id": "G010-S01",
+   "set": "golden",
+   "evidence": [
+    3
+   ],
+   "text": "個案認為自己太懶。",
+   "label": "speaker"
   }
  ]
 }

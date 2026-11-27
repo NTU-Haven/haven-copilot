@@ -1,0 +1,170 @@
+{
+ "session_id": "G008-S01",
+ "client_id": "G008",
+ "session_no": 3,
+ "date": "2026-11-12",
+ "simulated": true,
+ "note": "模擬會談，內容為團隊撰寫的腳本，非真實個案，也不是錄音。",
+ "segments": [
+  {
+   "id": 1,
+   "start": 0.0,
+   "end": 6.0,
+   "speaker": "therapist",
+   "text": "上週你說要跟弟弟談租屋的事，後來呢？",
+   "speaker_source": "script"
+  },
+  {
+   "id": 2,
+   "start": 6.5,
+   "end": 14.0,
+   "speaker": "client",
+   "text": "上週六我跟弟弟談了，他答應下個月開始分擔一半房租。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 3,
+   "start": 14.5,
+   "end": 18.0,
+   "speaker": "therapist",
+   "text": "聽起來有進展。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 4,
+   "start": 18.5,
+   "end": 24.5,
+   "speaker": "client",
+   "text": "但是他三年前也答應過，後來沒有做到。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 5,
+   "start": 25.0,
+   "end": 29.0,
+   "speaker": "therapist",
+   "text": "三年前發生了什麼？",
+   "speaker_source": "script"
+  },
+  {
+   "id": 6,
+   "start": 29.5,
+   "end": 37.9,
+   "speaker": "client",
+   "text": "三年前我替他還過一筆卡費，大概兩萬，他說會還我，一直沒有。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 7,
+   "start": 38.4,
+   "end": 43.3,
+   "speaker": "therapist",
+   "text": "所以這次你會擔心同樣的事。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 8,
+   "start": 43.8,
+   "end": 48.9,
+   "speaker": "client",
+   "text": "對，所以我這次要他寫在紙上。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 9,
+   "start": 49.4,
+   "end": 53.4,
+   "speaker": "therapist",
+   "text": "接下來有什麼安排？",
+   "speaker_source": "script"
+  },
+  {
+   "id": 10,
+   "start": 53.9,
+   "end": 59.9,
+   "speaker": "client",
+   "text": "這週五我們會一起去房東那裡簽新的約。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 11,
+   "start": 60.4,
+   "end": 65.9,
+   "speaker": "therapist",
+   "text": "這週五是明天，你覺得準備好了嗎？",
+   "speaker_source": "script"
+  },
+  {
+   "id": 12,
+   "start": 66.4,
+   "end": 70.8,
+   "speaker": "client",
+   "text": "還沒，文件我還沒整理。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 13,
+   "start": 71.3,
+   "end": 77.5,
+   "speaker": "client",
+   "text": "我今天晚上會把身分證影本跟存摺準備好。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 14,
+   "start": 78.0,
+   "end": 82.0,
+   "speaker": "therapist",
+   "text": "好。其他的事情呢？",
+   "speaker_source": "script"
+  },
+  {
+   "id": 15,
+   "start": 82.5,
+   "end": 90.4,
+   "speaker": "client",
+   "text": "去年底我換工作之後，收入比較穩定，所以我才敢談這件事。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 16,
+   "start": 90.9,
+   "end": 95.5,
+   "speaker": "therapist",
+   "text": "收入穩定讓你比較有底氣。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 17,
+   "start": 96.0,
+   "end": 101.3,
+   "speaker": "client",
+   "text": "嗯，而且我下個月底就轉正職了。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 18,
+   "start": 101.8,
+   "end": 104.7,
+   "speaker": "therapist",
+   "text": "恭喜你。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 19,
+   "start": 105.2,
+   "end": 111.4,
+   "speaker": "client",
+   "text": "謝謝，下週我還要去健檢，是公司安排的。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 20,
+   "start": 111.9,
+   "end": 116.3,
+   "speaker": "therapist",
+   "text": "好，下週三我們再繼續。",
+   "speaker_source": "script"
+  }
+ ]
+}

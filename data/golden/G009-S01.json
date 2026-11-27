@@ -1,0 +1,170 @@
+{
+ "session_id": "G009-S01",
+ "client_id": "G009",
+ "session_no": 2,
+ "date": "2026-10-30",
+ "simulated": true,
+ "note": "模擬會談，內容為團隊撰寫的腳本，非真實個案，也不是錄音。",
+ "segments": [
+  {
+   "id": 1,
+   "start": 0.0,
+   "end": 6.8,
+   "speaker": "therapist",
+   "text": "上次你提到跟主管開會的事，這週有發生什麼嗎？",
+   "speaker_source": "script"
+  },
+  {
+   "id": 2,
+   "start": 7.3,
+   "end": 13.0,
+   "speaker": "client",
+   "text": "這週主管又當著大家的面改我的簡報。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 3,
+   "start": 13.5,
+   "end": 19.0,
+   "speaker": "therapist",
+   "text": "所以你覺得自己很沒用，是這樣嗎？",
+   "speaker_source": "script"
+  },
+  {
+   "id": 4,
+   "start": 19.5,
+   "end": 26.6,
+   "speaker": "client",
+   "text": "不是，我不是覺得自己沒用，我是覺得很不被尊重。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 5,
+   "start": 27.1,
+   "end": 32.0,
+   "speaker": "therapist",
+   "text": "謝謝你糾正我，是不被尊重。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 6,
+   "start": 32.5,
+   "end": 37.1,
+   "speaker": "client",
+   "text": "對，而且他沒有先跟我說。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 7,
+   "start": 37.6,
+   "end": 42.7,
+   "speaker": "therapist",
+   "text": "我聽到的是，你想離職，對嗎？",
+   "speaker_source": "script"
+  },
+  {
+   "id": 8,
+   "start": 43.2,
+   "end": 49.4,
+   "speaker": "client",
+   "text": "我沒有說要離職，我只是想要他改變做法。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 9,
+   "start": 49.9,
+   "end": 55.0,
+   "speaker": "therapist",
+   "text": "好，你想要的是他先跟你溝通。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 10,
+   "start": 55.5,
+   "end": 57.9,
+   "speaker": "client",
+   "text": "對。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 11,
+   "start": 58.4,
+   "end": 64.8,
+   "speaker": "therapist",
+   "text": "上次你說過，如果再發生一次你就要爆炸了。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 12,
+   "start": 65.3,
+   "end": 72.6,
+   "speaker": "client",
+   "text": "我有這樣講過嗎？我印象中我說的是「我會很生氣」。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 13,
+   "start": 73.1,
+   "end": 79.3,
+   "speaker": "therapist",
+   "text": "你說得對，我記錯了，你說的是會很生氣。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 14,
+   "start": 79.8,
+   "end": 86.2,
+   "speaker": "client",
+   "text": "所以我這週有跟主管約十五分鐘，想當面講。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 15,
+   "start": 86.7,
+   "end": 92.0,
+   "speaker": "therapist",
+   "text": "你約了時間，這是很具體的行動。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 16,
+   "start": 92.5,
+   "end": 96.7,
+   "speaker": "client",
+   "text": "他答應週四下午兩點。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 17,
+   "start": 97.2,
+   "end": 104.0,
+   "speaker": "therapist",
+   "text": "我們來練習一下你要怎麼開頭，你可以先說說看。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 18,
+   "start": 104.5,
+   "end": 113.8,
+   "speaker": "client",
+   "text": "我會說，我想了解我的簡報哪裡需要修改，也希望修改前可以先讓我知道。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 19,
+   "start": 114.3,
+   "end": 119.6,
+   "speaker": "therapist",
+   "text": "這樣的說法很清楚、很尊重對方。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 20,
+   "start": 120.1,
+   "end": 124.1,
+   "speaker": "client",
+   "text": "謝謝，我會再練習。",
+   "speaker_source": "script"
+  }
+ ]
+}

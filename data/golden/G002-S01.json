@@ -1,0 +1,146 @@
+{
+ "session_id": "G002-S01",
+ "client_id": "G002",
+ "session_no": 1,
+ "date": "2026-10-14",
+ "simulated": true,
+ "note": "模擬會談，內容為團隊撰寫的腳本，非真實個案，也不是錄音。",
+ "segments": [
+  {
+   "id": 1,
+   "start": 0.0,
+   "end": 4.2,
+   "speaker": "therapist",
+   "text": "這週有比較好一點嗎？",
+   "speaker_source": "script"
+  },
+  {
+   "id": 2,
+   "start": 4.7,
+   "end": 10.7,
+   "speaker": "client",
+   "text": "還是一樣，一緊張就心跳很快，手會抖。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 3,
+   "start": 11.2,
+   "end": 21.1,
+   "speaker": "therapist",
+   "text": "聽起來有點像焦慮症的樣子，不過這只是我隨口講，還需要更完整的評估才知道。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 4,
+   "start": 21.6,
+   "end": 26.7,
+   "speaker": "client",
+   "text": "焦慮症喔……那是不是很嚴重？",
+   "speaker_source": "script"
+  },
+  {
+   "id": 5,
+   "start": 27.2,
+   "end": 33.4,
+   "speaker": "therapist",
+   "text": "我們先不貼標籤，先看你什麼時候會這樣。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 6,
+   "start": 33.9,
+   "end": 41.8,
+   "speaker": "client",
+   "text": "主要是要上台報告的前一天，還有主管叫我進辦公室的時候。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 7,
+   "start": 42.3,
+   "end": 47.8,
+   "speaker": "client",
+   "text": "其他時間還好，回家看影集就不會。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 8,
+   "start": 48.3,
+   "end": 53.4,
+   "speaker": "therapist",
+   "text": "所以大部分是在特定場合出現。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 9,
+   "start": 53.9,
+   "end": 60.5,
+   "speaker": "client",
+   "text": "對，這週三報告的時候我手抖到拿不穩簡報筆。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 10,
+   "start": 61.0,
+   "end": 65.2,
+   "speaker": "therapist",
+   "text": "那當下你怎麼處理的？",
+   "speaker_source": "script"
+  },
+  {
+   "id": 11,
+   "start": 65.7,
+   "end": 72.1,
+   "speaker": "client",
+   "text": "我把筆放在桌上，深呼吸了幾次，就講完了。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 12,
+   "start": 72.6,
+   "end": 77.0,
+   "speaker": "therapist",
+   "text": "你當下有做了一些調整。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 13,
+   "start": 77.5,
+   "end": 84.1,
+   "speaker": "client",
+   "text": "嗯，但是結束後我整個人很累，回家直接睡了。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 14,
+   "start": 84.6,
+   "end": 93.0,
+   "speaker": "therapist",
+   "text": "我們今天先練習一個呼吸的方法，你試試看吸氣四秒、吐氣六秒。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 15,
+   "start": 93.5,
+   "end": 98.1,
+   "speaker": "client",
+   "text": "這樣嗎？好像有比較放鬆。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 16,
+   "start": 98.6,
+   "end": 105.2,
+   "speaker": "therapist",
+   "text": "回去每天睡前練習五分鐘，下週再告訴我情況。",
+   "speaker_source": "script"
+  },
+  {
+   "id": 17,
+   "start": 105.7,
+   "end": 110.8,
+   "speaker": "client",
+   "text": "好，我下週三同一個時間再來。",
+   "speaker_source": "script"
+  }
+ ]
+}
