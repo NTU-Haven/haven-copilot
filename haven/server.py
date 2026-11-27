@@ -679,11 +679,14 @@ class Handler(BaseHTTPRequestHandler):
         if not (config.SESSIONS_DIR / f"{sid}.json").is_file():
             raise _no_session()
         payload = self._payload() if self.headers.get("Content-Length") else {}
+        params = {"template": template, "payload": {k: payload[k] for k in ("base_revision", "discard_edits") if k in payload}}
         with _session_lock(sid):
-            # Seam for ticket 05: a background job calls regenerate_draft the same way, holding this lock.
-            regenerate.regenerate_draft(sid, template, payload, orch=ORCH, check_revision=_check_revision, need_base=_need_base,
-                                        bump=_bump, refuse=lambda m, zh, **x: Refused(m, zh, **x))
-        return self._json(_session_view(sid))
+            regenerate.precheck(sid, params["payload"], **_REGENERATE_CHECKS)  # 409s now, not in the job
+            try:
+                job = jobs.create(sid, "regenerate", params)
+            except jobs.Busy:
+                raise Refused("this session is already being processed", "這次會談已經在處理中，請等它完成。") from None
+        return self._json(jobs.public(job), HTTPStatus.ACCEPTED)
 
     def _verify(self, sid):
         """Re-checks the note as the therapist has edited it. Only the sentence
@@ -1262,6 +1265,19 @@ def _transcribe_job(job: dict, audio: Path | None) -> None:
     _open_session(session_id)
 
 
+_REGENERATE_CHECKS = {"check_revision": _check_revision, "need_base": _need_base,
+                      "refuse": lambda m, zh, **x: Refused(m, zh, **x)}
+
+
+def _regenerate_job(job: dict, audio: Path | None) -> None:
+    """The "regenerate" job (POST .../process): a new draft, guarded again under the session lock."""
+    sid, p = job["session_id"], job["params"]
+    jobs.stage(job, "draft")
+    with _session_lock(sid):
+        regenerate.regenerate_draft(sid, p["template"], p["payload"], orch=ORCH, bump=_bump, **_REGENERATE_CHECKS)
+
+
+jobs.register("regenerate", _regenerate_job)
 jobs.register("transcribe", _transcribe_job,
               needs_audio=lambda job: not (config.SESSIONS_DIR / f"{job['session_id']}.json").is_file())
 

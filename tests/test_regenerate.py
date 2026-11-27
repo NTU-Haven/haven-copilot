@@ -5,7 +5,7 @@ import sqlite3
 import threading
 import unittest
 
-from helpers import ServerCase
+from helpers import H, ServerCase
 
 from haven import config, signing, store
 
@@ -173,3 +173,19 @@ class RegenerateGuardTest(ServerCase, unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class RegenerateIsAJobTest(ServerCase, unittest.TestCase):
+    """POST .../process answers 202 with a "regenerate" job (spec §10 G1); guards answer at once."""
+
+    def test_process_answers_202_and_the_job_drafts(self):
+        import urllib.request
+        from haven import jobs
+        self.data.add_session("C001-S40", LINES, session_no=40)
+        req = urllib.request.Request(self.base + "/api/sessions/C001-S40/process", data=b"{}", headers=H, method="POST")
+        with urllib.request.urlopen(req) as r:
+            self.assertEqual(r.status, 202)
+            job = json.load(r)
+        self.assertEqual((job["kind"], job["session_id"]), ("regenerate", "C001-S40"))
+        self.assertEqual(jobs.wait(job["job_id"])["status"], "succeeded")
+        self.assertIsNotNone(store.get_result("C001-S40"))

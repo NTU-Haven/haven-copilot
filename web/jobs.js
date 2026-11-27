@@ -16,8 +16,9 @@ function jobStatusText(job) {
 }
 
 function jobSteps(job) {
-  const at = JOB_STEPS.findIndex(([k]) => k === job.stage);
-  return el("ol", { class: "job-steps" }, JOB_STEPS.map(([, label], i) => {
+  const steps = job.kind === "regenerate" ? JOB_STEPS.slice(2) : JOB_STEPS; // a regenerate only drafts
+  const at = steps.findIndex(([k]) => k === job.stage);
+  return el("ol", { class: "job-steps" }, steps.map(([, label], i) => {
     const state = job.status === "succeeded" || (at >= 0 && i < at) ? "done"
       : i === at && job.status === "running" ? "current" : "pending";
     return el("li", { class: state }, label);

@@ -1,6 +1,7 @@
 """Shared test set-up: a throwaway copy of the demo data and an in-process server."""
 
 import json
+import re
 import os
 import shutil
 import socket
@@ -97,10 +98,26 @@ class ServerCase:
                                      method=method or ("POST" if data is not None else "GET"))
         try:
             with urllib.request.urlopen(req) as r:
-                return r.status, json.load(r)
+                status, answer = r.status, json.load(r)
         except urllib.error.HTTPError as e:
             with e:
                 return e.code, json.load(e)
+        if status == 202 and re.fullmatch(r"/api/sessions/[^/?]+/process(\?.*)?", path) and "job_id" in answer:
+            return self._settled(answer["job_id"], headers)
+        return status, answer
+
+    @classmethod
+    def _settled(self, job_id, headers=None):
+        """A regenerate is a background job (202, ticket 05/07). Most tests only care about
+        the draft, so this waits for the job: (200, session view) on success, (job status, job)
+        otherwise. A test about the 202 itself calls the route with its own request."""
+        from haven import jobs
+        job = jobs.wait(job_id)
+        if job["status"] != "succeeded":
+            return job["status"], job
+        req = urllib.request.Request(f"{self.base}/api/sessions/{job['session_id']}", headers=H if headers is None else headers)
+        with urllib.request.urlopen(req) as r:
+            return r.status, json.load(r)
 
     @classmethod
     def _with_base(cls, path, body):

@@ -1282,7 +1282,8 @@ async function regenerate(btn, chosen) {
       const r = await post(`/api/sessions/${encodeURIComponent(sid)}/process?template=${encodeURIComponent(template)}`,
         { base_revision: session.revision || 0, discard_edits: true });
       if (my !== nav) return;
-      renderSession(r);
+      if (r.job_id) showJob(r); // 202: drafted in the background (web/jobs.js), opens the draft when done
+      else renderSession(r);
     } catch (err) {
       if (my === nav && err.data && err.data.conflict) showConflict(err.message);
       else if (my === nav) showMessage(`沒有重新產生：${err.message}`, true);

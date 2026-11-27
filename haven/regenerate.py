@@ -6,8 +6,9 @@
 - Regenerating a draft that has human edits is refused (409 ``has_edits``) unless
   the request says ``discard_edits: true``. The old working draft is then kept in
   ``superseded_drafts`` (at most MAX_SUPERSEDED, newest last), never deleted.
-- ``regenerate_draft`` is the one function the synchronous route calls today and a
-  background job (ticket 05) can call later: the caller holds the session lock.
+- ``POST .../process`` runs ``precheck`` under the session lock (409s come back at
+  once), then queues a "regenerate" job (202); the job calls ``regenerate_draft``,
+  which checks again, holding the same lock.
 """
 
 from __future__ import annotations
@@ -48,23 +49,29 @@ def has_edits(result: dict) -> bool:
     return bool(edited_sentences(result) or result.get("edited_by"))
 
 
-def regenerate_draft(sid: str, template: str, payload: dict, *, orch, check_revision, need_base, bump, refuse) -> dict:
-    """Writes a new draft for ``sid``. The caller holds the session lock.
-    ``check_revision(result, payload)`` and ``need_base(payload)`` raise on a stale or
-    missing base_revision, ``refuse(message, zh, **extra)`` builds the 409, ``bump(result)``
-    raises the draft's revision. Returns the new stored result."""
+def precheck(sid: str, payload: dict, *, check_revision, need_base, refuse) -> dict | None:
+    """The guards alone, so the route can answer 409 before queueing a job (and the
+    job checks again when it runs). Returns the current result, or None for a first draft."""
     old = store.get_result(sid)
-    edits = False
     if old is not None:
         if store.get_signature(sid):
             raise store.AlreadySignedError(sid)
         need_base(payload)
         check_revision(old, payload)
-        edits = has_edits(old)
-        if edits and payload.get("discard_edits") is not True:
+        if has_edits(old) and payload.get("discard_edits") is not True:
             raise refuse("the draft has edits; send discard_edits to regenerate it (the old draft is kept under superseded_drafts)",
                          "這份草稿有您修改過的內容。重新產生後，目前的草稿會保留在「先前版本」，不會刪除；請確認要重新產生。",
                          has_edits=True, edited_sentences=edited_sentences(old), revision=old.get("revision", 0))
+    return old
+
+
+def regenerate_draft(sid: str, template: str, payload: dict, *, orch, check_revision, need_base, bump, refuse) -> dict:
+    """Writes a new draft for ``sid``. The caller holds the session lock.
+    ``check_revision(result, payload)`` and ``need_base(payload)`` raise on a stale or
+    missing base_revision, ``refuse(message, zh, **extra)`` builds the 409, ``bump(result)``
+    raises the draft's revision. Returns the new stored result."""
+    old = precheck(sid, payload, check_revision=check_revision, need_base=need_base, refuse=refuse)
+    edits = old is not None and has_edits(old)
     orch.process_session(sid, template)  # refuses a signed session
     result = store.get_result(sid)
     kept = list((old or {}).get("superseded_drafts", []))
