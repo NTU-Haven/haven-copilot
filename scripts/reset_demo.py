@@ -107,7 +107,7 @@ def main() -> int:
                     store.audit("demo_example_planted", f"{session_id} P: one wrong sentence citing #19, for demonstration")
                     made += ", example error planted"
             v = result["verification"]
-            print(f"{session_id}: {made}; {v['supported']}/{v['total']} supported, {v['unsupported']} unsupported, risk={result['risk']['level']}")
+            print(f"{session_id}: {made}; {v['supported']}/{v['total']} supported, {v['unsupported']} unsupported, risk={(result['risk'] or {}).get('level', 'off')}")
     print("ready: no session is signed.")
     return 0
 

@@ -141,6 +141,10 @@ class CaseMemoryTest(ServerCase, unittest.TestCase):
         self.assertEqual(expand("主管"), [])
         self.assertTrue(self.ask("被主管罵")["hits"])
 
+# These tests cover the clinical aids (risk, R quotes, score lines, outcome, Case Memory),
+# which are off by default; they run with HAVEN_CLINICAL_AIDS on, as before the flag existed.
+from helpers import clinical_aids_on as setUpModule, clinical_aids_restore as tearDownModule  # noqa: E402,F401
+
 
 if __name__ == "__main__":
     unittest.main()

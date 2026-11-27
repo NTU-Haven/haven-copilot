@@ -148,7 +148,10 @@ class WriterWithNewTemplateTest(unittest.TestCase):
         self.assertEqual([s.text for s in note.sections["G"]], ["個案表示想要改善睡眠。"])
 
     def test_rule_engine_fills_fields_by_their_fallback(self):
-        note = NoteWriter().run(load_transcript("C001-S04"), "TESTGOALS")
+        from unittest import mock
+        from haven import config
+        with mock.patch.object(config, "CLINICAL_AIDS", True):  # risk routing is a clinical aid (ticket 01)
+            note = NoteWriter().run(load_transcript("C001-S04"), "TESTGOALS")
         self.assertEqual(list(note.sections), ["G", "W", "H", "K"])
         self.assertTrue(note.sections["G"])
         self.assertTrue(note.sections["K"])  # risk lines go to the template's risk field

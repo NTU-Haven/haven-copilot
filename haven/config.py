@@ -29,6 +29,12 @@ ASR_MODEL = os.environ.get("HAVEN_ASR_MODEL", "small" if ASR_BACKEND == "faster-
 # Unset means the default for the backend (see transcript.asr_prompt).
 ASR_PROMPT = os.environ.get("HAVEN_ASR_PROMPT")
 
+# Clinical aids derived from the transcript: the risk-cue scan, checklist and risk gate on
+# signing, forced quotes of high-level risk lines in R, score lines, outcome alerts and
+# charts, and Case Memory. Off by default (MVP Safety Boundary); the code is kept. Read as
+# config.CLINICAL_AIDS at call time, so tests can switch it.
+CLINICAL_AIDS = os.environ.get("HAVEN_CLINICAL_AIDS") == "1"
+
 HOST = os.environ.get("HAVEN_HOST", "127.0.0.1")
 PORT = int(os.environ.get("HAVEN_PORT", "8765"))
 

@@ -261,7 +261,9 @@ def _session_view(sid: str) -> dict:
         result["risk_uncovered"] = []
     else:
         result["needs_refresh"] = _stale(result)
-        result.setdefault("risk_uncovered", signing.uncovered_risk(result["risk"], result["note"]))
+        result.setdefault("risk_uncovered", signing.uncovered_risk(result.get("risk"), result["note"]))
+    if not config.CLINICAL_AIDS:  # also for a draft made while the aids were on
+        result["risk"], result["outcome"], result["risk_uncovered"] = None, None, []
     return result
 
 
@@ -281,6 +283,7 @@ def _status() -> dict:
         "llm": dict(llm.describe(ORCH.llm.url), model=ORCH.llm.model) if ORCH.llm else None,
         "asr_backend": config.ASR_BACKEND,
         "asr": asr,  # None: Whisper runs inside this process
+        "clinical_aids": config.CLINICAL_AIDS,
         "refused_connections": len(llm.REFUSED),
         # Said plainly so nobody reads the page as a measurement of network traffic.
         "note": "addresses are resolved now; refused_connections counts refusals by Haven's endpoint check since start; this is not a packet capture, and it cannot see what the model server itself connects to",
@@ -288,7 +291,8 @@ def _status() -> dict:
 
 
 def _client_summary(c: dict) -> dict:
-    alerts = ORCH.outcome.run(c)["alerts"]
+    outcome = ORCH.outcome_report(c)
+    alerts = outcome["alerts"] if outcome else []
     return {
         "id": c["id"],
         "alias": c["alias"],
@@ -427,7 +431,7 @@ class Handler(BaseHTTPRequestHandler):
     def _me(self):
         user = _user()
         return self._json({"login_required": accounts.required(), "user": user, "idle_minutes": accounts.IDLE_SECONDS // 60,
-                           "tls": isinstance(self.connection, ssl.SSLSocket)})
+                           "tls": isinstance(self.connection, ssl.SSLSocket), "clinical_aids": config.CLINICAL_AIDS})
 
     def _login(self):
         p = self._payload()
@@ -623,8 +627,8 @@ class Handler(BaseHTTPRequestHandler):
                 return self._sign(sid)
             if parts[3] == "addendum":
                 return self._addendum(sid)
-        if len(parts) == 4 and parts[1] == "clients" and parts[3] == "ask":
-            return self._ask(parts[2])
+        if len(parts) == 4 and parts[1] == "clients" and parts[3] == "ask" and config.CLINICAL_AIDS:
+            return self._ask(parts[2])  # Case Memory; with the clinical aids off the endpoint does not exist
         if parts == ["api", "upload"]:
             return self._upload(query)
         return self._error(HTTPStatus.NOT_FOUND, "unknown endpoint")
@@ -672,8 +676,9 @@ class Handler(BaseHTTPRequestHandler):
             _check_revision(result, payload)
             note, verification, _ = signing.check(sid, transcript, payload, result["note"]["template"], result["note"].get("engine", ""), measures, ORCH.verifier)
             signing.remember(sid, note, verification.get("llm_failed", False), by_model=ORCH.verifier.llm is not None)
-            known = {f["segment_id"] for f in result["risk"].get("flags", [])}
-            uncovered = signing.uncovered_risk(result["risk"], note)
+            risk = result.get("risk") if config.CLINICAL_AIDS else None
+            known = {f["segment_id"] for f in (risk or {}).get("flags", [])}
+            uncovered = signing.uncovered_risk(risk, note)
             result.setdefault("ai_note", result["note"])
             result["note"] = to_dict(note)
             result["verification"] = verification
@@ -761,8 +766,8 @@ class Handler(BaseHTTPRequestHandler):
                           f"還有 {len(blocking)} 句沒有通過驗證（無支持證據、與風險有關而支持不足，或被本機模型否決）。請先修改、刪除，或逐句按「保留此句」"
                           "（沒有引用逐字稿的句子要寫下依據），再重新驗證。",
                           blocking=[s.text for s in blocking])
-        risk = to_dict(ORCH.risk.run(transcript))
-        known = {f["segment_id"] for f in risk["flags"]}
+        risk = ORCH.scan_risk(transcript)  # None with the clinical aids off: no risk gate
+        known = {f["segment_id"] for f in (risk or {}).get("flags", [])}
         dismissals = [d for d in dismissals if d["segment_id"] in known]
         uncovered = signing.uncovered_risk(risk, note, dismissals)
         if uncovered:
