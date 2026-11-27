@@ -833,7 +833,7 @@ class Handler(BaseHTTPRequestHandler):
         t_rev = transcript_edit.revision(sid)
         if transcript_edit.review_status(result, t_rev, False) == "needs_review":
             raise Refused("the transcript was corrected after the draft was last reviewed; mark it reviewed first",
-                          "逐字稿在您上次審閱之後有修改。請先對照逐字稿檢查紀錄，按「已審閱」後再簽核。",
+                          "逐字稿在您上次審閱之後有修改。請先對照逐字稿檢查紀錄，按「我已依目前逐字稿核對」後再確認。",
                           needs_review=True, transcript_revision=t_rev, reviewed_against=transcript_edit.reviewed_against(result))
         # The rule lives here, not in the UI. Sentences the server has not judged
         # before are checked by the rule layers only: fast, and never more lenient
