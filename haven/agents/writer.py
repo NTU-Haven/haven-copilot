@@ -6,7 +6,8 @@ verifier agent and the therapist can check it against what was said.
 Risk content has its own section, R (風險與安全), in both templates. Whatever
 engine wrote the note, a transcript line with a high-level risk cue that no
 sentence cites is added to R as a quote, so a disclosure cannot be dropped by a
-sentence limit or by the model.
+sentence limit or by the model. That routing and the forced quotes run only with
+config.CLINICAL_AIDS; by default R is written like any other section.
 """
 
 from __future__ import annotations
@@ -16,6 +17,7 @@ import os
 import re
 from concurrent.futures import ThreadPoolExecutor
 
+from .. import config
 from ..llm import DATA_ONLY
 from ..models import CONFIRMED, Note, NoteSentence, Segment, Transcript
 from ..textutil import third_person
@@ -193,7 +195,10 @@ def _quote(seg: Segment) -> NoteSentence:
 
 
 def _risk_segments(t: Transcript) -> tuple[set[int], set[int], set[int]]:
-    """(lines with a risk cue for R, of those the high-level ones, lines with a protective factor)."""
+    """(lines with a risk cue for R, of those the high-level ones, lines with a protective factor).
+    Empty with the clinical aids off: no line is routed to R or force-quoted there."""
+    if not config.CLINICAL_AIDS:
+        return set(), set(), set()
     report = RiskAgent().run(t)
     flags = [f for f in report.flags if f.category not in _NOT_IN_R]
     return ({f.segment_id for f in flags}, {f.segment_id for f in flags if f.level in ("high", "critical")},

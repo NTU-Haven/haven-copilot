@@ -48,7 +48,7 @@ let verifying = false;
 let verifyAgain = false;
 let verifyTimer = null;
 let serverStatus = null;
-let me = { login_required: false, user: null, idle_minutes: 15 }; // who is signed in (GET /api/me)
+let me = { login_required: false, user: null, idle_minutes: 15, clinical_aids: false }; // who is signed in (GET /api/me)
 let rec = null;              // the recording in progress, or null
 let leaving = false;         // signing out on purpose: no "unsaved changes" prompt
 const confirmed = new Set(); // keys of flagged sentences the therapist checked and kept
@@ -556,14 +556,17 @@ async function openClient(id) {
   const meta = brief.sessions_meta || [];
   setSimNote(meta.some((m) => m.simulated === false) ? "real" : "simulated");
 
-  const alerts = brief.outcome.alerts;
-  frag.querySelector(".alerts").append(...(alerts.length
-    ? alerts.map((a) => el("div", { class: `alert ${a.status}` }, el("b", {}, `${a.label || "提醒"}　`), `${a.name}：${a.message}`))
-    : [el("div", { class: "alert ok" }, "量表追蹤：目前沒有提醒")]));
-  // One prompt for all not-improving measures, so it is read rather than skimmed.
-  const review = alerts.find((a) => a.review);
-  if (review) frag.querySelector(".alerts").append(el("div", { class: "review" }, `建議：${review.review}`));
-  frag.querySelector(".charts").append(...brief.outcome.measures.map(chart));
+  // Outcome alerts and charts are clinical aids: off by default, and the server then sends none.
+  if (brief.outcome) {
+    const alerts = brief.outcome.alerts;
+    frag.querySelector(".alerts").append(...(alerts.length
+      ? alerts.map((a) => el("div", { class: `alert ${a.status}` }, el("b", {}, `${a.label || "提醒"}　`), `${a.name}：${a.message}`))
+      : [el("div", { class: "alert ok" }, "量表追蹤：目前沒有提醒")]));
+    // One prompt for all not-improving measures, so it is read rather than skimmed.
+    const review = alerts.find((a) => a.review);
+    if (review) frag.querySelector(".alerts").append(el("div", { class: "review" }, `建議：${review.review}`));
+    frag.querySelector(".charts").append(...brief.outcome.measures.map(chart));
+  }
   for (const r of [...(brief.record_access || [])].reverse()) { // newest ends up first, above the measures
     frag.querySelector(".alerts").prepend(el("div", { class: "alert access" }, el("b", {}, "紀錄調閱　"),
       `${fmtDateTime(r.ts)}，管理者 ${r.by} 調閱了這位個案的已簽核紀錄。事由：${r.reason}（${r.note}）`));
@@ -576,7 +579,8 @@ async function openClient(id) {
   if (brief.last_session) {
     const ls = brief.last_session;
     plan.append(
-      el("div", {}, `最近一次有紀錄的會談：第 ${ls.session_no} 次（${ls.date}），風險線索：${RISK_NAMES[ls.risk_level] ?? ls.risk_level}`),
+      el("div", {}, `最近一次有紀錄的會談：第 ${ls.session_no} 次（${ls.date}）`,
+        ls.risk_level ? `，風險線索：${RISK_NAMES[ls.risk_level] ?? ls.risk_level}` : ""),
       brief.plan.length ? el("div", { class: "plan-title" }, "上次計畫（已簽核的紀錄，或草稿中通過查核的句子）：") : null,
       brief.plan.length ? el("ul", {}, brief.plan.map((p) => el("li", {}, p))) : null,
     );
@@ -619,6 +623,7 @@ async function openClient(id) {
 
   const askForm = frag.querySelector(".ask-form");
   const askOut = frag.querySelector(".ask-result");
+  askForm.closest("section").hidden = !me.clinical_aids; // Case Memory is a clinical aid, off by default
   askForm.addEventListener("submit", async (e) => {
     e.preventDefault();
     await busy(askForm.querySelector("button"), "查詢中", async () => {
@@ -1189,13 +1194,13 @@ function renderSession(r, focusSeg) {
   const locked = !!r.signed;
   setSimNote(r.simulated === false ? "real" : "simulated");
   const main = document.getElementById("main");
-  const riskSegs = new Set(r.risk.flags.map((f) => f.segment_id));
+  const riskSegs = new Set(r.risk ? r.risk.flags.map((f) => f.segment_id) : []); // no risk report with the clinical aids off
 
   const unconfirmed = locked ? [] : r.transcript.filter((s) => s.speaker_source === "model" || s.speaker_source === "none");
   const transcript = el("section", { class: "card transcript", "aria-label": "逐字稿" },
     el("h3", {}, "逐字稿 ", el("small", { lang: "en" }, "Transcript")),
     unconfirmed.length ? el("div", { class: "speaker-bar" },
-      el("span", {}, `${unconfirmed.length} 段的說話者是推測的。請對照錄音更正，再按確認；確認後風險判讀和查核會重算。`),
+      el("span", {}, `${unconfirmed.length} 段的說話者是推測的。請對照錄音更正，再按確認；確認後${r.risk ? "風險判讀和" : ""}查核會重算。`),
       el("button", { type: "button", class: "confirm", id: "speakers-btn", onclick: (e) => confirmSpeakers(e.currentTarget) }, "確認說話者")) : null,
     el("div", { class: "transcript-lines", tabindex: "0" },
       r.transcript.map((s) => el("div", { class: `seg${riskSegs.has(s.id) ? " risk" : ""}`, id: `seg-${s.id}` },
@@ -1217,7 +1222,7 @@ function renderSession(r, focusSeg) {
     el("div", { class: "legend", "aria-label": "標示說明" },
       ["supported", "weak", "unsupported", "dirty", "confirmed"].map((k) =>
         el("span", { class: `key ${k}` }, el("span", { "aria-hidden": "true" }, STATES[k].mark), ` ${STATES[k].name}`))),
-    riskPanel(r.risk),
+    r.risk ? riskPanel(r.risk) : null,
     el("div", { id: "risk-gate" }),
     el("div", { id: "note-box" }),
     el("div", { class: "verify-bar" },
@@ -1287,7 +1292,7 @@ async function confirmSpeakers(btn) {
       const r = await post(`/api/sessions/${encodeURIComponent(sid)}/speakers`, { speakers, base_revision: session.revision || 0 });
       if (my !== nav) return;
       renderSession(r);
-      showMessage(left ? `已確認 ${Object.keys(speakers).length} 段；還有 ${left} 段未確認。` : "說話者已全部確認，風險判讀和查核已重算。");
+      showMessage(left ? `已確認 ${Object.keys(speakers).length} 段；還有 ${left} 段未確認。` : `說話者已全部確認，${session && session.risk ? "風險判讀和" : ""}查核已重算。`);
     } catch (err) {
       if (my === nav && err.data && err.data.conflict) showConflict(err.message);
       else if (my === nav) showMessage(`沒有更新說話者：${err.message}`, true);

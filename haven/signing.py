@@ -114,7 +114,10 @@ def note_from_payload(session_id: str, payload, template: str, engine: str, meas
 def uncovered_risk(risk: dict, note: Note | dict, dismissals: list[dict] = ()) -> list[dict]:
     """High-level risk cues that no note sentence cites and the therapist has not
     left out with a reason. A note that leaves a disclosure out can read as if
-    the therapist never heard it, so these block signing."""
+    the therapist never heard it, so these block signing. No report (the clinical
+    aids are off) means nothing to cover."""
+    if not risk:
+        return []
     if isinstance(note, Note):
         cited = {e for s in note.sentences() for e in s.evidence}
     else:

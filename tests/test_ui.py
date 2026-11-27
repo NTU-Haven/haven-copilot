@@ -138,9 +138,14 @@ class DemoWalkthroughTest(ServerCase, unittest.TestCase):
             self.assertIsNone(store.get_signature(sid))
         self.assertTrue(store.verify_audit()["ok"])
 
-    def test_2_brief_shows_five_alerts(self):
+    def test_2_brief_has_no_alerts_by_default_and_five_with_the_clinical_aids(self):
         _, brief = self.call("/api/clients/C001/brief")
-        self.assertEqual(len(brief["outcome"]["alerts"]), 5)
+        self.assertIsNone(brief["outcome"])  # HAVEN_CLINICAL_AIDS is off by default
+        saved, config.CLINICAL_AIDS = config.CLINICAL_AIDS, True
+        try:
+            self.assertEqual(len(self.call("/api/clients/C001/brief")[1]["outcome"]["alerts"]), 5)
+        finally:
+            config.CLINICAL_AIDS = saved
         self.assertEqual([m["signed"] for m in brief["sessions_meta"]], [False, False])
         self.assertTrue(all(m["simulated"] and m["processed"] for m in brief["sessions_meta"]))
 
