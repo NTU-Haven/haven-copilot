@@ -5,7 +5,7 @@ from __future__ import annotations
 import json
 import time
 
-from . import config, files, signing, store
+from . import config, files, signing, store, templates, transcript_edit
 from .agents.memory import CaseMemory
 from .agents.outcome import OutcomeAgent
 from .agents.risk import RiskAgent
@@ -48,14 +48,25 @@ class Orchestrator:
 
     def measure_sentences(self, client: dict, session_no: int) -> list[str]:
         """The score lines for one session, built from the questionnaire data. These
-        are the only sentences accepted as source="measure"."""
+        are the only sentences accepted as source="measure". None with the clinical aids off."""
+        if not config.CLINICAL_AIDS:
+            return []
         return self.outcome.note_sentences(client, session_no)
 
-    def process_session(self, session_id: str, template: str = "SOAP") -> dict:
+    def scan_risk(self, transcript) -> dict | None:
+        """The risk-cue report for a transcript, or None with the clinical aids off."""
+        return to_dict(self.risk.run(transcript)) if config.CLINICAL_AIDS else None
+
+    def outcome_report(self, client: dict) -> dict | None:
+        """Outcome alerts and charts from the questionnaire data, or None with the clinical aids off."""
+        return self.outcome.run(client) if config.CLINICAL_AIDS else None
+
+    def process_session(self, session_id: str, template: str = templates.DEFAULT) -> dict:
         # A signed note is the record. Nothing that could replace what the
         # therapist sees for that session runs after signing.
         if store.get_signature(session_id):
             raise store.AlreadySignedError(session_id)
+        tpl = templates.get(template)  # UnknownTemplate before anything runs
         timings: dict[str, float] = {}
 
         def timed(name, fn, *args):
@@ -67,16 +78,17 @@ class Orchestrator:
         transcript = timed("asr", load_transcript, session_id)
         client = get_client(transcript.client_id)
         transcript.client_age = client.get("age")
-        note = timed("writer", self.writer.run, transcript, template)
-        # Scores go into the objective section from the questionnaire data itself,
-        # so the model never restates (and never misstates) a number.
+        note = timed("writer", self.writer.run, transcript, tpl.id)
+        # Scores go into the template's measures field from the questionnaire data
+        # itself, so the model never restates (and never misstates) a number.
         measures = self.measure_sentences(client, transcript.session_no)
-        scores = [NoteSentence(text, [], source="measure") for text in measures]
-        objective = "O" if template == "SOAP" else "D"
-        note.sections[objective] = scores + note.sections.get(objective, [])
+        if tpl.measures_field and measures:
+            scores = [NoteSentence(text, [], source="measure") for text in measures]
+            note.sections[tpl.measures_field] = scores + note.sections.get(tpl.measures_field, [])
         verification = timed("verifier", self.verifier.run, note, transcript, measures)
-        risk = timed("risk", self.risk.run, transcript)
-        outcome = timed("outcome", self.outcome.run, client)
+        # With the clinical aids off these do not run and the result holds None.
+        risk = timed("risk", self.scan_risk, transcript) if config.CLINICAL_AIDS else None
+        outcome = timed("outcome", self.outcome_report, client) if config.CLINICAL_AIDS else None
 
         spoken = sum(len(s.text) for s in transcript.segments)
         short = [f"逐字稿很短（{len(transcript.segments)} 段、{spoken} 字），請確認這是完整的會談錄音。"] if spoken < SHORT_TRANSCRIPT else []
@@ -86,18 +98,22 @@ class Orchestrator:
             "session_no": transcript.session_no,
             "date": transcript.date,
             "simulated": transcript.simulated,
+            # Which template definition the draft was written from (the note itself carries the id too).
+            "template_id": tpl.id,
+            "template_version": tpl.version,
             # What actually wrote this draft: the model's name, or the rule engine when the model did not answer.
             "engine": note.engine,
             "warnings": short + note.warnings + verification.get("warnings", []),
             "transcript": [to_dict(s) for s in transcript.segments],
             "note": to_dict(note),
             "verification": verification,
-            "risk": to_dict(risk),
+            "risk": risk,
             # High-level risk cues no note sentence cites yet; signing waits for them.
-            "risk_uncovered": signing.uncovered_risk(to_dict(risk), note),
+            "risk_uncovered": signing.uncovered_risk(risk, note),
             "outcome": outcome,
             "timings_ms": timings,
         }
+        transcript_edit.start_draft(result, session_id)  # generated_from / reviewed_against transcript_revision
         store.save_result(session_id, result)
         signing.remember(session_id, note, verification.get("llm_failed", False), by_model=self.verifier.llm is not None)
         store.audit("process_session", f"{session_id} engine={note.engine}" + (f" configured={self.engine}" if note.engine != self.engine else "")
@@ -124,7 +140,7 @@ class Orchestrator:
         }, stored.get("engine", ""), stored.get("warnings", []))
         result["verification"] = self.verifier.run(note, transcript, measures)
         result["note"] = to_dict(note)
-        result["risk"] = to_dict(self.risk.run(transcript))
+        result["risk"] = self.scan_risk(transcript)
         result["risk_uncovered"] = signing.uncovered_risk(result["risk"], note)
         result["warnings"] = stored.get("warnings", []) + result["verification"].get("warnings", [])
         store.save_result(session_id, result)
@@ -146,7 +162,7 @@ class Orchestrator:
             out.append({
                 "session_id": session_id, "session_no": t.session_no, "date": t.date, "simulated": t.simulated,
                 "processed": result is not None, "signed": store.get_signature(session_id) is not None,
-                "risk_level": result["risk"]["level"] if result else None,
+                "risk_level": (result.get("risk") or {}).get("level") if result and config.CLINICAL_AIDS else None,
             })
         return out
 
@@ -174,11 +190,11 @@ class Orchestrator:
                 "session_id": last["session_id"],
                 "session_no": last["session_no"],
                 "date": last["date"],
-                "risk_level": last["risk"]["level"],
+                "risk_level": (last.get("risk") or {}).get("level") if config.CLINICAL_AIDS else None,
             },
             "plan": plan,
             "sessions_meta": self.sessions_meta(client),
             # Sessions after ``last_session`` with no note yet; the brief does not cover them.
             "not_processed": not_processed,
-            "outcome": self.outcome.run(client),
+            "outcome": self.outcome_report(client),
         }

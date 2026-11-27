@@ -6,14 +6,20 @@ const KEEP_NO_AUDIO = "逐字稿已產生；原始錄音若不再需要，請從
 // No inline styles or scripts and nothing from another origin: the server's
 // Content-Security-Policy would block them.
 
-const SECTION_NAMES = {
-  S: "S 主觀資料", O: "O 客觀資料", A: "A 評估", P: "P 計畫", D: "D 資料", R: "R 風險與安全",
-};
-// Shown under a section title: what the draft cannot contain and the therapist adds.
-const SECTION_HINTS = {
-  O: "量表分數由系統填入。精神狀態觀察（外觀、情感、思考、定向、風險行為）逐字稿看不出來，請心理師自行補寫。",
-  R: "逐字稿中的風險線索、保護因子與安全措施；不受句數限制。提議而未完成的安全計畫會寫成「心理師提議」。",
-};
+// Section titles and hints come from the note's template definition (server Template
+// Registry, sent as session.template). The hint is what the draft cannot contain.
+function templateField(key) {
+  const fields = (session && session.template && session.template.fields) || [];
+  return fields.find((f) => f.key === key) || null;
+}
+function sectionName(key) {
+  const f = templateField(key);
+  return (f && f.label) || key;
+}
+function sectionHint(key) {
+  const f = templateField(key);
+  return (f && f.hint) || "";
+}
 // Describes the cues found in the transcript, not the client's risk level.
 const RISK_NAMES = {
   none: "未偵測到風險線索", info: "有背景線索（非個案本人的意念）", review: "有需留意的線索", high: "有自殺或自傷等高關注線索",
@@ -48,7 +54,7 @@ let verifying = false;
 let verifyAgain = false;
 let verifyTimer = null;
 let serverStatus = null;
-let me = { login_required: false, user: null, idle_minutes: 15 }; // who is signed in (GET /api/me)
+let me = { login_required: false, user: null, idle_minutes: 15, clinical_aids: false }; // who is signed in (GET /api/me)
 let rec = null;              // the recording in progress, or null
 let leaving = false;         // signing out on purpose: no "unsaved changes" prompt
 const confirmed = new Set(); // keys of flagged sentences the therapist checked and kept
@@ -556,14 +562,17 @@ async function openClient(id) {
   const meta = brief.sessions_meta || [];
   setSimNote(meta.some((m) => m.simulated === false) ? "real" : "simulated");
 
-  const alerts = brief.outcome.alerts;
-  frag.querySelector(".alerts").append(...(alerts.length
-    ? alerts.map((a) => el("div", { class: `alert ${a.status}` }, el("b", {}, `${a.label || "提醒"}　`), `${a.name}：${a.message}`))
-    : [el("div", { class: "alert ok" }, "量表追蹤：目前沒有提醒")]));
-  // One prompt for all not-improving measures, so it is read rather than skimmed.
-  const review = alerts.find((a) => a.review);
-  if (review) frag.querySelector(".alerts").append(el("div", { class: "review" }, `建議：${review.review}`));
-  frag.querySelector(".charts").append(...brief.outcome.measures.map(chart));
+  // Outcome alerts and charts are clinical aids: off by default, and the server then sends none.
+  if (brief.outcome) {
+    const alerts = brief.outcome.alerts;
+    frag.querySelector(".alerts").append(...(alerts.length
+      ? alerts.map((a) => el("div", { class: `alert ${a.status}` }, el("b", {}, `${a.label || "提醒"}　`), `${a.name}：${a.message}`))
+      : [el("div", { class: "alert ok" }, "量表追蹤：目前沒有提醒")]));
+    // One prompt for all not-improving measures, so it is read rather than skimmed.
+    const review = alerts.find((a) => a.review);
+    if (review) frag.querySelector(".alerts").append(el("div", { class: "review" }, `建議：${review.review}`));
+    frag.querySelector(".charts").append(...brief.outcome.measures.map(chart));
+  }
   for (const r of [...(brief.record_access || [])].reverse()) { // newest ends up first, above the measures
     frag.querySelector(".alerts").prepend(el("div", { class: "alert access" }, el("b", {}, "紀錄調閱　"),
       `${fmtDateTime(r.ts)}，管理者 ${r.by} 調閱了這位個案的已簽核紀錄。事由：${r.reason}（${r.note}）`));
@@ -576,7 +585,8 @@ async function openClient(id) {
   if (brief.last_session) {
     const ls = brief.last_session;
     plan.append(
-      el("div", {}, `最近一次有紀錄的會談：第 ${ls.session_no} 次（${ls.date}），風險線索：${RISK_NAMES[ls.risk_level] ?? ls.risk_level}`),
+      el("div", {}, `最近一次有紀錄的會談：第 ${ls.session_no} 次（${ls.date}）`,
+        ls.risk_level ? `，風險線索：${RISK_NAMES[ls.risk_level] ?? ls.risk_level}` : ""),
       brief.plan.length ? el("div", { class: "plan-title" }, "上次計畫（已簽核的紀錄，或草稿中通過查核的句子）：") : null,
       brief.plan.length ? el("ul", {}, brief.plan.map((p) => el("li", {}, p))) : null,
     );
@@ -619,6 +629,7 @@ async function openClient(id) {
 
   const askForm = frag.querySelector(".ask-form");
   const askOut = frag.querySelector(".ask-result");
+  askForm.closest("section").hidden = !me.clinical_aids; // Case Memory is a clinical aid, off by default
   askForm.addEventListener("submit", async (e) => {
     e.preventDefault();
     await busy(askForm.querySelector("button"), "查詢中", async () => {
@@ -846,7 +857,7 @@ function sentenceRow(sectionKey, s) {
   const txt = el("span", {
     class: "txt", contenteditable: editable ? EDITABLE : "false",
     role: editable ? "textbox" : null, "aria-multiline": editable ? "false" : null,
-    "aria-label": editable ? `${SECTION_NAMES[sectionKey] || sectionKey} 的紀錄句子，可以修改` : null,
+    "aria-label": editable ? `${sectionName(sectionKey)} 的紀錄句子，可以修改` : null,
     "aria-describedby": flagged ? reasonId : null,
     "data-placeholder": editable ? "（點這裡輸入句子；新句子沒有引用逐字稿，保留時要寫下依據）" : null,
     onpaste: editable ? pastePlain : null,
@@ -867,7 +878,8 @@ function sentenceRow(sectionKey, s) {
   row.append(
     badge(s, state),
     el("div", { class: "body" }, txt, reason,
-      state === "dirty" ? el("div", { class: "reason" }, "這句修改過，離開輸入框後會自動重新驗證。") : null),
+      state === "dirty" ? el("div", { class: "reason" }, "這句修改過，離開輸入框後會自動重新驗證。") : null,
+      sourceChangedNote(s)), // web/transcript_edit.js
     el("div", { class: "side" },
       isMeasure ? el("span", { class: "ev-none" }, "量表")
         : (s.evidence || []).length
@@ -984,9 +996,9 @@ function renderNote() {
   box.replaceChildren(
     ...Object.entries(sentences).map(([key, items]) => el("div", { class: "note-section", "data-key": key },
       el("div", { class: "section-head" },
-        el("h4", {}, SECTION_NAMES[key] || key),
+        el("h4", {}, sectionName(key)),
         locked ? null : el("button", { type: "button", class: "add", onclick: () => addSentence(key) }, "＋ 新增句子")),
-      SECTION_HINTS[key] && !locked ? el("div", { class: "section-hint" }, SECTION_HINTS[key]) : null,
+      sectionHint(key) && !locked ? el("div", { class: "section-hint" }, sectionHint(key)) : null,
       items.length ? items.map((s) => sentenceRow(key, s)) : el("div", { class: "sentence empty-section" }, locked ? "（無）" : "（這一欄目前沒有句子）"),
     )),
   );
@@ -1189,13 +1201,13 @@ function renderSession(r, focusSeg) {
   const locked = !!r.signed;
   setSimNote(r.simulated === false ? "real" : "simulated");
   const main = document.getElementById("main");
-  const riskSegs = new Set(r.risk.flags.map((f) => f.segment_id));
+  const riskSegs = new Set(r.risk ? r.risk.flags.map((f) => f.segment_id) : []); // no risk report with the clinical aids off
 
   const unconfirmed = locked ? [] : r.transcript.filter((s) => s.speaker_source === "model" || s.speaker_source === "none");
   const transcript = el("section", { class: "card transcript", "aria-label": "逐字稿" },
     el("h3", {}, "逐字稿 ", el("small", { lang: "en" }, "Transcript")),
     unconfirmed.length ? el("div", { class: "speaker-bar" },
-      el("span", {}, `${unconfirmed.length} 段的說話者是推測的。請對照錄音更正，再按確認；確認後風險判讀和查核會重算。`),
+      el("span", {}, `${unconfirmed.length} 段的說話者是推測的。請對照錄音更正，再按確認；確認後${r.risk ? "風險判讀和" : ""}查核會重算。`),
       el("button", { type: "button", class: "confirm", id: "speakers-btn", onclick: (e) => confirmSpeakers(e.currentTarget) }, "確認說話者")) : null,
     el("div", { class: "transcript-lines", tabindex: "0" },
       r.transcript.map((s) => el("div", { class: `seg${riskSegs.has(s.id) ? " risk" : ""}`, id: `seg-${s.id}` },
@@ -1217,7 +1229,7 @@ function renderSession(r, focusSeg) {
     el("div", { class: "legend", "aria-label": "標示說明" },
       ["supported", "weak", "unsupported", "dirty", "confirmed"].map((k) =>
         el("span", { class: `key ${k}` }, el("span", { "aria-hidden": "true" }, STATES[k].mark), ` ${STATES[k].name}`))),
-    riskPanel(r.risk),
+    r.risk ? riskPanel(r.risk) : null,
     el("div", { id: "risk-gate" }),
     el("div", { id: "note-box" }),
     el("div", { class: "verify-bar" },
@@ -1254,6 +1266,7 @@ function renderSession(r, focusSeg) {
   const warnings = (r.warnings || []).length && !locked
     ? el("div", { class: "warnings", id: "warnings", role: "alert" }, r.warnings.map((w) => el("div", { "data-quote": demoQuote(w) }, w))) : null;
   main.replaceChildren(head, warnings || "", el("div", { class: "workspace" }, transcript, notePanel));
+  decorateTranscript(r); // web/transcript_edit.js: line editing, confirmed speakers, review banner
   renderRiskGate();
   renderNote();
   if (focusSeg) highlight([focusSeg]);
@@ -1287,7 +1300,7 @@ async function confirmSpeakers(btn) {
       const r = await post(`/api/sessions/${encodeURIComponent(sid)}/speakers`, { speakers, base_revision: session.revision || 0 });
       if (my !== nav) return;
       renderSession(r);
-      showMessage(left ? `已確認 ${Object.keys(speakers).length} 段；還有 ${left} 段未確認。` : "說話者已全部確認，風險判讀和查核已重算。");
+      showMessage(left ? `已確認 ${Object.keys(speakers).length} 段；還有 ${left} 段未確認。` : `說話者已全部確認，${session && session.risk ? "風險判讀和" : ""}查核已重算。`);
     } catch (err) {
       if (my === nav && err.data && err.data.conflict) showConflict(err.message);
       else if (my === nav) showMessage(`沒有更新說話者：${err.message}`, true);

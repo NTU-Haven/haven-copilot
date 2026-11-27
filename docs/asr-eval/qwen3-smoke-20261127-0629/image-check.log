@@ -1,0 +1,4 @@
+/opt/venv/lib/python3.12/site-packages/torch/xpu/__init__.py:74: UserWarning: XPU device count is zero! (Triggered internally at /pytorch/c10/xpu/XPUFunctions.cpp:113.)
+  return torch._C._xpu_getDeviceCount()
+INFO 11-27 06:29:27 [importing.py:53] Triton is installed but 0 active driver(s) found (expected 1). Disabling Triton to prevent runtime errors.
+INFO 11-27 06:29:27 [importing.py:88] Triton not installed or not compatible; certain GPU-related functions will not be available.

@@ -12,12 +12,10 @@ from __future__ import annotations
 import hashlib
 import json
 
-from . import config, store
+from . import config, store, templates
 from .agents.verifier import VERIFIER_VERSION, Verifier
-from .agents.writer import TEMPLATES
 from .models import Note, NoteSentence, Transcript, to_dict
 
-SECTION_KEYS = {name: tuple(sections) for name, sections in TEMPLATES.items()}
 GATED_LEVELS = ("high", "critical")
 MAX_TEXT = 2000
 MAX_REASON = 500
@@ -68,10 +66,12 @@ def note_from_payload(session_id: str, payload, template: str, engine: str, meas
     "supported") is set aside so the model gets its turn."""
     if not isinstance(payload, dict) or not isinstance(payload.get("sections"), dict):
         raise BadNote("note.sections must be an object")
-    if payload.get("template") in SECTION_KEYS:
-        template = payload["template"]
+    if payload.get("template") is not None:
+        template = payload["template"]  # an id that is not registered is a 400, never a silent fallback
+    tpl = templates.get(template)
+    template = tpl.id
     known = store.get_verdicts(session_id, transcript_sha256(session_id), VERIFIER_VERSION)
-    sections: dict[str, list[NoteSentence]] = {k: [] for k in SECTION_KEYS[template]}
+    sections: dict[str, list[NoteSentence]] = {k: [] for k in tpl.keys}
     forged: list[str] = []
     for key, items in payload["sections"].items():
         if key not in sections:
@@ -114,7 +114,10 @@ def note_from_payload(session_id: str, payload, template: str, engine: str, meas
 def uncovered_risk(risk: dict, note: Note | dict, dismissals: list[dict] = ()) -> list[dict]:
     """High-level risk cues that no note sentence cites and the therapist has not
     left out with a reason. A note that leaves a disclosure out can read as if
-    the therapist never heard it, so these block signing."""
+    the therapist never heard it, so these block signing. No report (the clinical
+    aids are off) means nothing to cover."""
+    if not risk:
+        return []
     if isinstance(note, Note):
         cited = {e for s in note.sentences() for e in s.evidence}
     else:

@@ -20,6 +20,21 @@ REPO_DATA = Path(__file__).resolve().parent.parent / "data"
 H = {"X-Haven": "1", "Content-Type": "application/json"}
 
 
+_saved_aids: list[bool] = []
+
+
+def clinical_aids_on():
+    """Turns on HAVEN_CLINICAL_AIDS (risk scan and gate, R quotes, score lines, outcome,
+    Case Memory; off by default). Modules that test those features use
+    ``setUpModule = clinical_aids_on`` and ``tearDownModule = clinical_aids_restore``."""
+    _saved_aids.append(config.CLINICAL_AIDS)
+    config.CLINICAL_AIDS = True
+
+
+def clinical_aids_restore():
+    config.CLINICAL_AIDS = _saved_aids.pop()
+
+
 class IsolatedData:
     """Points config at a temp copy of data/sessions and clients.json, with an empty
     database, so a test can sign, upload or add sessions without touching the repo."""

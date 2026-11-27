@@ -20,6 +20,12 @@ class Segment:
     #                usable answer); ``speaker`` is then "unknown".
     # Agents treat only CONFIRMED sources as known.
     speaker_source: str = "script"
+    # Set by the first correction of the words (haven/transcript_edit.py): what the
+    # ASR heard, never changed afterwards. None for a line never corrected.
+    asr_text: str | None = None
+    # Who last corrected this line's words or speaker, and when.
+    edited_by: str = ""
+    edited_at: str = ""
 
 
 CONFIRMED = ("script", "confirmed")

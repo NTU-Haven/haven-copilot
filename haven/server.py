@@ -21,7 +21,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
-from . import accounts, config, crypto, files, llm, signing, store
+from . import accounts, config, crypto, files, llm, signing, store, templates, transcript_edit
 from .agents.verifier import VERIFIER_VERSION, Verifier
 from .models import to_dict
 from .orchestrator import Orchestrator, get_client, load_clients
@@ -144,6 +144,17 @@ def _check_revision(result: dict, payload: dict | None) -> None:
                       "請重新載入這次會談再修改。", conflict=True, revision=result.get("revision", 0))
 
 
+def _need_base(payload: dict) -> None:
+    """Transcript corrections and reviews must say which draft they were made on."""
+    if payload.get("base_revision") is None:
+        raise BadRequest("base_revision is required")
+
+
+def _editor() -> str:
+    user = _user()
+    return user["display_name"] if user else ""
+
+
 def _bump(result: dict) -> None:
     result["revision"] = result.get("revision", 0) + 1
     user = _user()
@@ -250,14 +261,21 @@ def _session_view(sid: str) -> dict:
         result["client_alias"], result["therapist"] = "", ""
     result["addenda"] = store.get_addenda(sid) if signature else []
     if signature:
-        note = store.get_signed_note(sid)
-        result["note"] = note
+        result["note"] = store.get_signed_note(sid)
+    # Field labels and hints for the page; None for a template no longer registered.
+    tpl = templates.find(result["note"].get("template"))
+    result["template"] = tpl.public() if tpl else None
+    if signature:
+        note = result["note"]
         result["verification"] = signing.summarize(note)
         result["risk_dismissals"] = note.get("risk_dismissals", [])
         result["risk_uncovered"] = []
     else:
         result["needs_refresh"] = _stale(result)
-        result.setdefault("risk_uncovered", signing.uncovered_risk(result["risk"], result["note"]))
+        result.setdefault("risk_uncovered", signing.uncovered_risk(result.get("risk"), result["note"]))
+    if not config.CLINICAL_AIDS:  # also for a draft made while the aids were on
+        result["risk"], result["outcome"], result["risk_uncovered"] = None, None, []
+    transcript_edit.annotate(sid, result, bool(signature))  # transcript_revision, review_status, source_changed
     return result
 
 
@@ -277,6 +295,7 @@ def _status() -> dict:
         "llm": dict(llm.describe(ORCH.llm.url), model=ORCH.llm.model) if ORCH.llm else None,
         "asr_backend": config.ASR_BACKEND,
         "asr": asr,  # None: Whisper runs inside this process
+        "clinical_aids": config.CLINICAL_AIDS,
         "refused_connections": len(llm.REFUSED),
         # Said plainly so nobody reads the page as a measurement of network traffic.
         "note": "addresses are resolved now; refused_connections counts refusals by Haven's endpoint check since start; this is not a packet capture, and it cannot see what the model server itself connects to",
@@ -284,7 +303,8 @@ def _status() -> dict:
 
 
 def _client_summary(c: dict) -> dict:
-    alerts = ORCH.outcome.run(c)["alerts"]
+    outcome = ORCH.outcome_report(c)
+    alerts = outcome["alerts"] if outcome else []
     return {
         "id": c["id"],
         "alias": c["alias"],
@@ -423,7 +443,7 @@ class Handler(BaseHTTPRequestHandler):
     def _me(self):
         user = _user()
         return self._json({"login_required": accounts.required(), "user": user, "idle_minutes": accounts.IDLE_SECONDS // 60,
-                           "tls": isinstance(self.connection, ssl.SSLSocket)})
+                           "tls": isinstance(self.connection, ssl.SSLSocket), "clinical_aids": config.CLINICAL_AIDS})
 
     def _login(self):
         p = self._payload()
@@ -473,8 +493,12 @@ class Handler(BaseHTTPRequestHandler):
         an unexpected error is a 500 with no detail, never a dropped connection."""
         try:
             return route()
-        except (BadRequest, signing.BadNote) as e:
+        except templates.UnknownTemplate as e:
+            self._error(HTTPStatus.BAD_REQUEST, str(e), "沒有這個紀錄模板，請重新選擇模板。")
+        except (BadRequest, signing.BadNote, transcript_edit.BadEdit) as e:
             self._error(HTTPStatus.BAD_REQUEST, str(e), "送出的資料格式不正確。")
+        except transcript_edit.EditRefused as e:
+            self._error(HTTPStatus.CONFLICT, str(e), e.zh)
         except HttpError as e:
             self._error(e.status, str(e), e.zh)
         except Refused as e:
@@ -533,6 +557,8 @@ class Handler(BaseHTTPRequestHandler):
         # GET only reads. Drafting a note, re-checking one and asking the model are POSTs.
         if parts == ["api", "status"]:
             return self._json(_status())
+        if parts == ["api", "templates"]:
+            return self._json([t.public() for t in templates.all_templates()])
         if parts == ["api", "clients"]:
             store.audit("list_clients", "")
             return self._json([_client_summary(c) for c in load_clients() if accounts.may_open(_user(), c)])
@@ -611,12 +637,16 @@ class Handler(BaseHTTPRequestHandler):
                 return self._restore(sid)
             if parts[3] == "speakers":
                 return self._speakers(sid)
+            if parts[3] == "transcript":
+                return self._transcript_edit(sid)
+            if parts[3] == "reviewed":
+                return self._reviewed(sid)
             if parts[3] == "sign":
                 return self._sign(sid)
             if parts[3] == "addendum":
                 return self._addendum(sid)
-        if len(parts) == 4 and parts[1] == "clients" and parts[3] == "ask":
-            return self._ask(parts[2])
+        if len(parts) == 4 and parts[1] == "clients" and parts[3] == "ask" and config.CLINICAL_AIDS:
+            return self._ask(parts[2])  # Case Memory; with the clinical aids off the endpoint does not exist
         if parts == ["api", "upload"]:
             return self._upload(query)
         return self._error(HTTPStatus.NOT_FOUND, "unknown endpoint")
@@ -640,9 +670,7 @@ class Handler(BaseHTTPRequestHandler):
         return self._json(ORCH.memory.ask(client, q.strip()))
 
     def _process(self, sid, query):
-        template = query.get("template", ["SOAP"])[0]
-        if template not in ("SOAP", "DAP"):
-            return self._error(HTTPStatus.BAD_REQUEST, "template must be SOAP or DAP")
+        template = templates.get(query.get("template", [templates.DEFAULT])[0]).id  # unknown id: 400
         if not (config.SESSIONS_DIR / f"{sid}.json").is_file():
             raise _no_session()
         with _session_lock(sid):
@@ -666,52 +694,66 @@ class Handler(BaseHTTPRequestHandler):
             _check_revision(result, payload)
             note, verification, _ = signing.check(sid, transcript, payload, result["note"]["template"], result["note"].get("engine", ""), measures, ORCH.verifier)
             signing.remember(sid, note, verification.get("llm_failed", False), by_model=ORCH.verifier.llm is not None)
-            known = {f["segment_id"] for f in result["risk"].get("flags", [])}
-            uncovered = signing.uncovered_risk(result["risk"], note)
+            risk = result.get("risk") if config.CLINICAL_AIDS else None
+            known = {f["segment_id"] for f in (risk or {}).get("flags", [])}
+            uncovered = signing.uncovered_risk(risk, note)
             result.setdefault("ai_note", result["note"])
             result["note"] = to_dict(note)
             result["verification"] = verification
             result["risk_uncovered"] = uncovered
             result["draft_dismissals"] = [d for d in dismissals if d["segment_id"] in known]
             result["draft_saved_at"] = store.now()
+            transcript_edit.mark_sources(result)
             _bump(result)
             store.save_result(sid, result)
         store.audit("verify", f"{sid} {verification['supported']}/{verification['total']} supported; draft saved"
                     + ("; local model did not answer" if verification.get("llm_failed") else ""))
-        return self._json({"note": to_dict(note), "verification": verification, "risk_uncovered": uncovered,
+        return self._json({"note": result["note"], "verification": verification, "risk_uncovered": uncovered,
                            "draft_saved_at": result["draft_saved_at"], "revision": result["revision"]})
 
     def _speakers(self, sid):
         """The therapist sets who said each line of an uploaded recording, from
-        listening to it. Labels become "confirmed", and the risk scan, the
-        checklist and every sentence of the draft are checked again under them."""
+        listening to it, also for lines already confirmed (AC-06). Labels become
+        "confirmed", and the risk scan, the checklist and every sentence of the
+        draft are checked again under them. Logic: haven/transcript_edit.py."""
         payload = self._payload()
-        changes = payload.get("speakers")
-        if not isinstance(changes, dict) or not changes:
-            raise BadRequest("speakers must map segment numbers to therapist or client")
+        _need_base(payload)
         with _session_lock(sid):
-            result, transcript, _ = _draft(sid)
+            result, _, _ = _draft(sid)
             _check_revision(result, payload)
-            segs = transcript.by_id()
-            wanted = {}
-            for key, who in changes.items():
-                try:
-                    seg_id = int(key)
-                except (TypeError, ValueError):
-                    raise BadRequest("segment numbers must be integers") from None
-                if seg_id not in segs or who not in ("therapist", "client"):
-                    raise BadRequest(f"segment {key}: unknown segment or speaker")
-                if segs[seg_id].speaker_source == "script":
-                    raise Refused("prepared transcripts already carry their speakers", "這份逐字稿的說話者已由原稿標好，不需要更正。")
-                wanted[seg_id] = who
-            changed = sum(1 for i, who in wanted.items() if segs[i].speaker != who)
-            for i, who in wanted.items():
-                segs[i].speaker, segs[i].speaker_source = who, "confirmed"
-            save_transcript(transcript)
-            result["transcript"] = [to_dict(s) for s in transcript.segments]
+            count, changed = transcript_edit.edit_speakers(sid, payload.get("speakers"), _editor())
             _bump(result)
-            ORCH.refresh(result)  # risk, checklist and sentences under the confirmed labels
-            store.audit("speakers_confirmed", f"{sid}: {len(wanted)} line(s) confirmed, {changed} changed")
+            transcript_edit.commit(sid, result, changed, ORCH.refresh)
+            store.audit("speakers_confirmed", f"{sid}: {count} line(s) confirmed, {len(changed)} changed, "
+                        f"transcript_revision={transcript_edit.revision(sid)}")
+        return self._json(_session_view(sid))
+
+    def _transcript_edit(self, sid):
+        """Corrects the words of transcript lines; ids and times stay (AC-05)."""
+        payload = self._payload()
+        _need_base(payload)
+        with _session_lock(sid):
+            result, _, _ = _draft(sid)
+            _check_revision(result, payload)
+            changed = transcript_edit.edit_text(sid, payload.get("segments"), _editor())
+            if changed:
+                _bump(result)
+                transcript_edit.commit(sid, result, changed, ORCH.refresh)
+            store.audit("transcript_edited", f"{sid}: {len(changed)} line(s) corrected, "
+                        f"transcript_revision={transcript_edit.revision(sid)}")
+        return self._json(_session_view(sid))
+
+    def _reviewed(self, sid):
+        """The therapist has read the draft against the transcript as it is now."""
+        payload = self._payload()
+        _need_base(payload)
+        with _session_lock(sid):
+            result, _, _ = _draft(sid)
+            _check_revision(result, payload)
+            transcript_edit.mark_reviewed(sid, result)
+            _bump(result)
+            store.save_result(sid, result)
+            store.audit("transcript_reviewed", f"{sid}: transcript_revision={transcript_edit.revision(sid)}")
         return self._json(_session_view(sid))
 
     def _restore(self, sid):
@@ -755,8 +797,8 @@ class Handler(BaseHTTPRequestHandler):
                           f"還有 {len(blocking)} 句沒有通過驗證（無支持證據、與風險有關而支持不足，或被本機模型否決）。請先修改、刪除，或逐句按「保留此句」"
                           "（沒有引用逐字稿的句子要寫下依據），再重新驗證。",
                           blocking=[s.text for s in blocking])
-        risk = to_dict(ORCH.risk.run(transcript))
-        known = {f["segment_id"] for f in risk["flags"]}
+        risk = ORCH.scan_risk(transcript)  # None with the clinical aids off: no risk gate
+        known = {f["segment_id"] for f in (risk or {}).get("flags", [])}
         dismissals = [d for d in dismissals if d["segment_id"] in known]
         uncovered = signing.uncovered_risk(risk, note, dismissals)
         if uncovered:
