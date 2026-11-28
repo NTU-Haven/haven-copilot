@@ -137,11 +137,13 @@ class RecapRulesTest(unittest.TestCase):
         self.assertEqual(note.sections["TOPIC"][0].text, "心理師口述：個案睡眠變差。")
 
     def test_verifier_blocks_client_attribution_in_a_recap_only(self):
-        sentences = lambda: [NoteSentence("個案表示這週睡得很差。", [1]), NoteSentence("心理師口述：個案這週睡得很差。", [1])]
+        sentences = lambda: [NoteSentence("個案表示這週睡得很差。", [1]), NoteSentence("心理師口述：個案這週睡得很差。", [1]),
+                             NoteSentence("心理師口述：個案提到這週睡得很差。", [1])]  # the therapist reporting it: allowed
         t = recap_transcript("個案這週睡得很差，常常半夜醒來。")
         note = Note("QUAL", {"TOPIC": sentences()}, "test")
         Verifier(None).run(note, t)
-        bad, good = note.sections["TOPIC"]
+        bad, good, reported = note.sections["TOPIC"]
+        self.assertNotEqual(reported.status, "unsupported", reported.reason)
         self.assertEqual(bad.status, "unsupported")
         self.assertIn("口述", bad.reason)
         self.assertNotEqual(good.status, "unsupported", good.reason)

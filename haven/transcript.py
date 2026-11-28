@@ -181,11 +181,32 @@ def _openai_server(audio_path: Path) -> list[tuple[float, float, str]]:
     raise ASRError("no transcript in the reply")
 
 
+# Sign-offs Whisper writes over silence or noise, learned from video captions. Measured on the
+# B70 (2026-11-27, L50): 「請不吝點贊 訂閱 轉發 打賞支援明鏡與點點欄目」 at the end of a recording,
+# 216 characters of the hybrid's remaining errors. Only whole known phrases are removed, so
+# real speech is never cut; a segment left with nothing but punctuation is dropped.
+HALLUCINATIONS = [re.compile(p) for p in (
+    r"請不吝[點点][贊赞讚]\s*[訂订][閱阅]\s*[轉转][發发]\s*打[賞赏]支[持援]明[鏡镜][與与][點点][點点][欄栏]目",
+    r"明[鏡镜][與与][點点][點点][欄栏]目",
+    r"字幕由\s*Amara\.org\s*社[群区區]提供",
+    r"[優优]{2}[獨独][播]劇場.*?YoYo\s*Television\s*Series\s*Exclusive",
+)]
+
+
+def drop_hallucinations(text: str) -> str:
+    """``text`` without known Whisper hallucinations; "" when nothing but punctuation is left."""
+    for p in HALLUCINATIONS:
+        text = p.sub("", text)
+    text = text.strip()
+    return text if re.search(r"[^\s\W_]", text) else ""
+
+
 def transcribe_audio(audio_path: Path, session_id: str, client_id: str, session_no: int, date: str, simulated: bool = True) -> Transcript:
     """Speech to timestamped segments. Speakers are left "unknown" for the speaker agent."""
     raw = _openai_server(audio_path) if config.ASR_BACKEND == "openai" else _faster_whisper(audio_path)
-    # Number only the segments with words, so ids stay 1, 2, 3… for citations.
-    spoken = [(start, end, _clean(text)) for start, end, text in raw if text.strip()]
+    # Number only the segments with words, so ids stay 1, 2, 3… for citations. Known Whisper
+    # hallucinations (video-caption sign-offs it writes over silence) are cut first.
+    spoken = [(start, end, t) for start, end, text in raw if (t := drop_hallucinations(_clean(text)))]
     segments = [
         Segment(id=i, start=round(start, 1), end=round(end, 1), speaker="unknown", text=text, speaker_source="none")
         for i, (start, end, text) in enumerate(spoken, start=1)

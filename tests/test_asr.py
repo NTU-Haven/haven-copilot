@@ -80,6 +80,16 @@ class OpenAITranscriptionTest(unittest.TestCase):
             transcript.transcribe_audio(self.audio, "T-S01", "C001", 1, "2026-11-08")
         self.assertEqual(str(cm.exception), "HTTP 500")
 
+    def test_known_whisper_hallucinations_are_dropped(self):  # B70 L50, 2026-11-27
+        FakeWhisper.reply = (200, {"text": "x", "segments": [
+            {"start": 0.0, "end": 2.0, "text": "最近睡得還好。"},
+            {"start": 2.0, "end": 4.0, "text": "好的，謝謝。請不吝點贊 訂閱 轉發 打賞支援明鏡與點點欄目"},
+            {"start": 4.0, "end": 9.0, "text": "請不吝點贊 訂閱 轉發 打賞支援明鏡與點點欄目"},
+            {"start": 9.0, "end": 11.0, "text": "我想訂閱一份雜誌。"}]})
+        t = transcript.transcribe_audio(self.audio, "T-S01", "C001", 1, "2026-11-08")
+        self.assertEqual([(s.id, s.text) for s in t.segments], [(1, "最近睡得還好。"), (2, "好的，謝謝。"), (3, "我想訂閱一份雜誌。")])
+        self.assertEqual(t.segments[2].start, 9.0)
+
     def test_text_without_timestamps_is_split_into_sentences(self):
         FakeWhisper.reply = (200, {"text": "最近睡不好。這些想法多常出現？大概每天晚上。", "duration": 12.0})
         t = transcript.transcribe_audio(self.audio, "T-S01", "C001", 1, "2026-11-08")

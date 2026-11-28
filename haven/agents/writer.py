@@ -237,7 +237,8 @@ class NoteWriter:
         except Exception:  # a model fault falls back to the rule engine, and says so
             return None
 
-    def run(self, t: Transcript, template: str = templates.DEFAULT) -> Note:
+    def run(self, t: Transcript, template: str | None = None) -> Note:
+        template = template or templates.default_id()
         tpl = templates.get(template)  # an unknown id raises before any model call
         # Long sessions are written in parts and joined, so the note covers the whole hour.
         parts = [t.segments[i : i + CHUNK] for i in range(0, len(t.segments), CHUNK)] or [[]]

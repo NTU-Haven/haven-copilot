@@ -67,7 +67,7 @@ class Orchestrator:
         if store.get_signature(session_id):
             raise store.AlreadySignedError(session_id)
         # A recap (haven/recap.py) is drafted as QUAL unless the request names a template.
-        template = template or (recap.DEFAULT_TEMPLATE if recap.mode_of(session_id) == recap.RECAP else templates.DEFAULT)
+        template = template or (recap.DEFAULT_TEMPLATE if recap.mode_of(session_id) == recap.RECAP else templates.default_id())
         tpl = templates.get(template)  # UnknownTemplate before anything runs
         timings: dict[str, float] = {}
 

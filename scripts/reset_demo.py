@@ -34,7 +34,7 @@ from haven.orchestrator import Orchestrator, load_clients  # noqa: E402
 
 EXAMPLE_SESSION = "C001-S04"
 EXAMPLE = {"text": "安排下週五提前會談。", "evidence": [19]}
-EXAMPLE_NOTICE = ("示範用：P 計畫欄的「安排下週五提前會談。」是 scripts/reset_demo.py 放進去的錯誤句（逐字稿 #19 說的是這週五），"
+EXAMPLE_NOTICE = ("示範用：「安排下週五提前會談。」是 scripts/reset_demo.py 放進去的錯誤句（逐字稿 #19 說的是這週五），"
                   "用來示範查核與修改；它不是這次的引擎寫的。")
 
 
@@ -100,7 +100,9 @@ def main() -> int:
                 result = orch.refresh(result)  # drafts from an older database are checked under today's rules
                 made = "kept, re-verified"
             if session_id == EXAMPLE_SESSION and not args.no_example and result["engine"] in ("rule-based demo", FALLBACK_ENGINE):
-                plan = result["note"]["sections"].setdefault("P", [])
+                # SOAP/DAP: the plan section; QUAL (the default): the interaction field, since its plan is human_only.
+                sections = result["note"]["sections"]
+                plan = sections.setdefault("P" if "P" in sections else "INTERACTION", [])
                 if not any(s["text"] == EXAMPLE["text"] for s in plan):
                     plan.append(dict(EXAMPLE))
                     result["note"].setdefault("warnings", []).append(EXAMPLE_NOTICE)

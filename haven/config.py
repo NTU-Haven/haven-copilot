@@ -62,6 +62,11 @@ JOB_WORKERS = max(1, int(os.environ.get("HAVEN_JOB_WORKERS", "2")))
 # removed when the note is signed (HAVEN_AUDIO_DELETE_ON_CONFIRM=0 keeps it until it expires),
 # when this many hours have passed, or when the therapist deletes it. 72 hours is a TEST
 # setting: it has not been checked against any legal or professional retention rule.
+# The note template a draft uses when the request names none (a recap always defaults to QUAL).
+# QUAL (單次晤談質化紀錄) leaves the judgement fields to the therapist; SOAP and DAP have the
+# model draft A and P. Read at call time (templates.default_id()).
+DEFAULT_TEMPLATE = os.environ.get("HAVEN_DEFAULT_TEMPLATE", "QUAL")
+
 # Read at call time (config.AUDIO_TTL_HOURS), so tests can change them.
 AUDIO_TTL_HOURS = float(os.environ.get("HAVEN_AUDIO_TTL_HOURS", "72"))
 AUDIO_DELETE_ON_CONFIRM = os.environ.get("HAVEN_AUDIO_DELETE_ON_CONFIRM", "1") != "0"

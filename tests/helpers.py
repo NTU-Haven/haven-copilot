@@ -13,8 +13,13 @@ from http.server import ThreadingHTTPServer
 from pathlib import Path
 
 os.environ["HAVEN_LLM"] = "demo"
+# Most tests were written against SOAP (its R section, score lines, the demo's planted P
+# sentence). The product default is QUAL (config.DEFAULT_TEMPLATE); test_default_template
+# checks that. Tests that want SOAP drafts by default get it here.
+os.environ["HAVEN_DEFAULT_TEMPLATE"] = "SOAP"
 
 from haven import config, server  # noqa: E402
+config.DEFAULT_TEMPLATE = "SOAP"  # in case haven.config was imported before this module
 from haven.orchestrator import Orchestrator  # noqa: E402
 
 REPO_DATA = Path(__file__).resolve().parent.parent / "data"

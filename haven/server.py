@@ -706,7 +706,7 @@ class Handler(BaseHTTPRequestHandler):
         return self._json(ORCH.memory.ask(client, q.strip()))
 
     def _process(self, sid, query):
-        default = recap.DEFAULT_TEMPLATE if recap.mode_of(sid) == recap.RECAP else templates.DEFAULT  # QUAL for a recap
+        default = recap.DEFAULT_TEMPLATE if recap.mode_of(sid) == recap.RECAP else templates.default_id()  # QUAL for a recap
         template = templates.get(query.get("template", [default])[0]).id  # unknown id: 400
         if not (config.SESSIONS_DIR / f"{sid}.json").is_file():
             raise _no_session()

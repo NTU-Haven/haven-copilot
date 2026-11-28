@@ -31,7 +31,14 @@ GENERATE = "generate"
 HUMAN_ONLY = "human_only"
 AI_MODES = (GENERATE, HUMAN_ONLY)
 FALLBACKS = ("subjective", "assessment", "plan", "therapist", "risk")
-DEFAULT = "SOAP"
+DEFAULT = "SOAP"  # the template of the original demo data; the product default is default_id()
+
+
+def default_id() -> str:
+    """The template a draft uses when the request names none: config.DEFAULT_TEMPLATE
+    (HAVEN_DEFAULT_TEMPLATE, QUAL unless set)."""
+    from . import config
+    return config.DEFAULT_TEMPLATE
 
 
 class UnknownTemplate(ValueError):
