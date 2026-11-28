@@ -757,6 +757,7 @@ T19 Small fixes (reset_demo, sign lock)  (parallel, any time)
 - **Open Question**：確認後是否立即刪音檔，或保留到 TTL？預設立即刪除（較保守），可用 flag 調整。
 - **Validation Gate**：webm seek（T08）、雙卡配置（T15）、Qwen3-ASR（T16）、golden set（T14）、真實 E2E（T17）。
 - **Deferred Decision**：音檔加密、正式保存期限、工作資料自動清除政策、組織層級資料模型。
+- **Deferred Decision（2026-11-28）**：全 Qwen3-ASR 轉寫（L50 實測 CER：Qwen3-ASR 單獨 1.1%、Hybrid 4.8%、Whisper 7.5%），需要先解決時間戳；取捨與候選做法見 [asr-qwen3-evaluation.md §8](asr-qwen3-evaluation.md)。下一階段再決定。
 
 ## 27. Final Review
 

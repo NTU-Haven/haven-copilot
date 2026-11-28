@@ -229,6 +229,40 @@ Step 0 顯示 Qwen3-ASR 能一次完整轉寫 46 分鐘，不會截斷，所以�
 - ffmpeg 是否可用。
 - TEA-ASR-1.1 能不能用 vLLM 載入。
 
+## 8. 下一階段：全 Qwen3-ASR 路線（Deferred Decision，2026-11-28 記錄）
+
+**狀態：** 不在 MVP 實作，下一階段開發再決定。
+
+**為什麼要記下來：** B70 的 L50 實測（46 分鐘合成語音）中，Qwen3-ASR 單獨的 CER 是 1.1%，目前的對齊式 Hybrid 是 4.8%，只用 Whisper 是 7.5%。只看文字，全用 Qwen3-ASR 表現最好。
+
+**為什麼 MVP 不採用：** Qwen3-ASR 在 vLLM v0.26.0 只輸出文字，沒有時間戳。Haven 有三個功能依賴段落和起訖時間：
+- 逐句引用：段落編號；
+- 段落回放：起點和終點；
+- 說話者推測：逐段判斷。
+
+Hybrid 把 Qwen3-ASR 的字對齊、填回 Whisper 的段落，保留時間軸，但有兩種損失：
+1. Whisper 的幻覺段沒有 Qwen 的字可以替換（L50 有一段，約 2 個百分點；已用 `transcript.HALLUCINATIONS` 過濾已知句型）；
+2. Whisper 漏掉整句的地方，Qwen 的字補不回去。
+
+**全 Qwen3-ASR 需要先解決時間戳。** 候選做法：
+
+| 做法 | 好處 | 未解的問題 |
+|---|---|---|
+| Qwen3-ForcedAligner 對 Qwen 全文做強制對齊 | 時間戳和 Qwen 文字一致，沒有 Whisper 的幻覺或漏句 | 單次上限 5 分鐘（需切段後拼接）；要在 XPU 上跑 transformers（未驗證）；不支援閩南語 |
+| 先用 VAD／靜音偵測切段，每段分別送 Qwen3-ASR | 段落時間來自切點，準確度接近 Qwen 單獨 | 需要 ffmpeg 或 VAD 模型（不得新增 pip 依賴的限制要重新評估）；段長與斷句品質要調；請求數變多 |
+| Qwen3-ASR 原生支援時間戳（等上游） | 不用自己做 | 時程不明 |
+
+**決定時要量的東西：**
+- 段落起點誤差（抽 20 段人工量，對照 Whisper）；
+- CER；
+- 46 分鐘的總轉寫時間；
+- XPU 記憶體；
+- 與說話者推測、引用、回放的相容性。
+
+前提是在台灣華語真實模擬晤談素材上測，不能只用合成語音。台語仍需另外評估。
+
+**觸發條件：** MVP 之後；或 Hybrid 在真實素材上的錯誤明顯高於 Qwen3-ASR 單獨（例如差距超過 2 個百分點）；或上游提供時間戳。
+
 ## Sources
 - Qwen3-ASR-1.7B 模型卡：https://huggingface.co/Qwen/Qwen3-ASR-1.7B
 - Qwen3-ASR GitHub：https://github.com/QwenLM/Qwen3-ASR
