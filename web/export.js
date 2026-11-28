@@ -9,7 +9,7 @@ const EXPORT_STATUS = { not_exported: "尚未匯出", downloaded: "已下載（�
 async function downloadExport(sid, fmt) {
   let res;
   try {
-    res = await fetch(`/api/sessions/${encodeURIComponent(sid)}/export?format=${fmt}`, { headers: { "X-Haven": "1" }, cache: "no-store" });
+    res = await fetch(appUrl(`/api/sessions/${encodeURIComponent(sid)}/export?format=${fmt}`), { headers: { "X-Haven": "1" }, cache: "no-store" });
   } catch (err) {
     throw new Error("連不上本機的 Haven 伺服器，請確認程式還在執行。");
   }

@@ -56,7 +56,7 @@ async function playTicket(state) {
   const t = await post(`/api/sessions/${encodeURIComponent(state.sid)}/audio/ticket`);
   state.ticket = t;
   state.fetchedAt = Date.now();
-  state.audio.src = t.url;
+  state.audio.src = appUrl(t.url); // relative to the page (works under a path prefix)
   state.estimated = !!t.timestamps_estimated;
   state.note.textContent = state.estimated ? "時間位置為估計值，播放位置可能與逐字稿有幾秒落差。" : "點段落前的 ▶ 從該段開始播放。";
   return t;

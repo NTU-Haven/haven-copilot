@@ -93,12 +93,18 @@ const HTTP_MESSAGES = {
   500: "伺服器發生錯誤，請看終端機的訊息。",
 };
 
+// Server paths are written from the root ("/api/..."); they are requested relative to the
+// page, so Haven also works under a path prefix (JupyterLab's /proxy/8765/ on the B70).
+function appUrl(path) {
+  return path.replace(/^\//, "");
+}
+
 async function api(path, opts = {}) {
   // The server refuses any API request without this header (cross-site request protection).
   opts.headers = { ...(opts.headers || {}), "X-Haven": "1" };
   let res, data = {};
   try {
-    res = await fetch(path, opts);
+    res = await fetch(appUrl(path), opts);
   } catch (err) {
     throw new Error("連不上本機的 Haven 伺服器，請確認程式還在執行。");
   }
