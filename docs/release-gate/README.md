@@ -51,8 +51,7 @@ B70 上已裝 `jupyter_server_proxy 4.6.0`。Haven 仍綁 127.0.0.1:8765，瀏�
 `https://<JupyterLab 主機>/proxy/8765/`（**結尾的 `/` 不能省**），先過 Jupyter 的登入。
 網頁的 API、匯出、回放都用相對路徑，所以可以在 `/proxy/8765/` 底下運作（本機以模擬 proxy 驗證過）。
 proxy 會把 JupyterLab 的主機名稱放在 Host header，Haven 啟動時要把它加進 `HAVEN_HOSTNAMES`
-（只放寬這一個名稱的 DNS-rebinding 檢查，Haven 仍只聽 loopback）。注意：這不是 secure context 以外的問題，
-HTTPS 由 JupyterLab 提供，瀏覽器錄音可用；但 cookie 沒有 Secure 旗標（Haven 自己是 HTTP）。結果表的「tunnel 方式」請寫 jupyter-server-proxy。
+（只放寬這一個名稱的 DNS-rebinding 檢查，Haven 仍只聽 loopback）。HTTPS 由 JupyterLab 提供，所以是 secure context，瀏覽器錄音可用；但 cookie 沒有 Secure 旗標（Haven 自己是 HTTP）。結果表的「tunnel 方式」請寫 jupyter-server-proxy。
 
 ## 3. 流程（兩段錄音都做一次）
 
