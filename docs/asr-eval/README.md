@@ -51,6 +51,10 @@ Compare `cer` in the two `.md`/`.json` files with the evaluation's figures (Whis
 | (evaluation) Qwen3-ASR alone, no timestamps | 1.1% | 7.5 s | `b70-asr-bench-l50-snap.md` |
 
 - Segment ids and start/end times are identical in both runs (553 segments); no segment is empty or starts with punctuation. 371 of 553 segment texts changed.
-- The hybrid does not reach Qwen3-ASR's own 1.1%. About 2 of the 2.7 remaining points (216 of ~530 character errors) come from **one Whisper hallucination at the end of the recording** (「請不吝點贊 訂閱 轉發 打賞支援明鏡與點點欄目」), a segment Qwen3-ASR has no words for, so the hybrid keeps Whisper's text by design. Most of the rest is in a few places where Whisper dropped whole sentences (its segments cannot hold text it did not hear).
+- The hybrid does not reach Qwen3-ASR's own 1.1%. Where the ~530 character errors are (difflib over the whole text, punctuation removed):
+  - **Speech Whisper did not segment.** Where Whisper dropped whole sentences (53 and 42 characters in two places), and at the end of the recording, where Whisper wrote a caption hallucination (「請不吝點贊 訂閱 轉發 打賞支援明鏡與點點欄目」) *over* about 200 characters of real speech, Qwen3-ASR heard the words, but the alignment only fills Whisper's own segments, so they are lost.
+  - **One duplicated passage** of 80 characters (「…我最近也很忙…我們可以一起找時間」) appears in two segments.
+  - The rest: ordinary word errors and Qwen3-ASR's own mistakes.
+- **Rerun with the hallucination filter (2026-11-28, `b70-L50-hybrid-v2`, commit 9f60477): CER 4.8%, unchanged.** The hallucinated segment is gone (552 segments), but the ~200 characters it covered are still missing, so the error only changes kind (wrong text → missing text). An earlier note here said the hallucination accounted for ~2 points; that was a misreading of the diff. The real gain is to place Qwen3-ASR words that fall between or under unusable Whisper segments, not to delete the hallucination.
 - Seen once: a full stop inside a word (「跟他對。抗」), and Qwen3-ASR's own semantic error from the evaluation (「覺察到這一點」→「覺得查到九一點」).
-- Conclusion: consistent with the evaluation (hybrid between Whisper and Qwen3-ASR alone, times unchanged), with the hallucinated segment as the main known gap.
+- Conclusion: consistent with the evaluation (hybrid between Whisper and Qwen3-ASR alone, times unchanged). The known gap is Qwen3-ASR words with no Whisper segment to go into (dropped or hallucinated stretches), plus one seam duplicate.

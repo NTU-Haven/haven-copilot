@@ -241,7 +241,7 @@ Step 0 顯示 Qwen3-ASR 能一次完整轉寫 46 分鐘，不會截斷，所以�
 - 說話者推測：逐段判斷。
 
 Hybrid 把 Qwen3-ASR 的字對齊、填回 Whisper 的段落，保留時間軸，但有兩種損失：
-1. Whisper 的幻覺段沒有 Qwen 的字可以替換（L50 有一段，約 2 個百分點；已用 `transcript.HALLUCINATIONS` 過濾已知句型）；
+1. Whisper 的幻覺段蓋住了真實語音（L50 結尾約 200 字），Qwen 聽到的字沒有段落可以放。過濾掉幻覺句（`transcript.HALLUCINATIONS`）只是刪掉錯字，漏掉的字仍然漏掉，CER 不變（2026-11-28 重跑仍是 4.8%）；
 2. Whisper 漏掉整句的地方，Qwen 的字補不回去。
 
 **全 Qwen3-ASR 需要先解決時間戳。** 候選做法：
