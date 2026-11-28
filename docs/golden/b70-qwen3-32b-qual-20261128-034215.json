@@ -1,0 +1,3154 @@
+{
+  "label": "b70-qwen3-32b-qual",
+  "date": "2026-11-28T03:42:15+00:00",
+  "engine": "openai-compat:qwen3-32b-awq",
+  "template": null,
+  "host": "Linux-7.0.0-34-generic-x86_64-with-glibc2.43",
+  "n_sessions": 12,
+  "sessions": [
+    {
+      "session_id": "G001-S01",
+      "input_mode": "session",
+      "traps": [
+        "diagnosis"
+      ],
+      "engine": "openai-compat:qwen3-32b-awq",
+      "template_id": "QUAL",
+      "seconds": 14.63,
+      "timings_ms": {
+        "asr": 0.1,
+        "writer": 14592.0,
+        "verifier": 5.0
+      },
+      "llm_calls": 1,
+      "prompt_tokens": 1473,
+      "completion_tokens": 364,
+      "warnings": [],
+      "verification": {
+        "total": 12,
+        "supported": 10,
+        "weak": 0,
+        "unsupported": 2,
+        "supported_ratio": 0.833,
+        "must_confirm": 0,
+        "ready_to_sign": false,
+        "verifier_version": "2026.11-8",
+        "llm_failed": false,
+        "warnings": []
+      },
+      "checks": {
+        "sentences": [
+          {
+            "section": "TOPIC",
+            "text": "個案表示這兩個禮拜一直在想，是不是得了憂鬱症。",
+            "evidence": [
+              2
+            ],
+            "status": "supported",
+            "support": 1.0,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "TOPIC",
+            "text": "個案表示在網路上做了一個測驗，結果說可能有憂鬱症，看了很害怕。",
+            "evidence": [
+              4
+            ],
+            "status": "supported",
+            "support": 1.0,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "TOPIC",
+            "text": "個案表示晚上都睡不著，一直想這件事。",
+            "evidence": [
+              6
+            ],
+            "status": "supported",
+            "support": 1.0,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "TOPIC",
+            "text": "個案表示這個月食慾比較差，早餐常常沒吃。",
+            "evidence": [
+              8
+            ],
+            "status": "supported",
+            "support": 1.0,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "TOPIC",
+            "text": "個案表示上班的時候比較提不起勁，但還是每天都有去上班。",
+            "evidence": [
+              9
+            ],
+            "status": "supported",
+            "support": 0.89,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "INTERACTION",
+            "text": "心理師問今天想從哪裡開始談。",
+            "evidence": [
+              1
+            ],
+            "status": "supported",
+            "support": 0.89,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "INTERACTION",
+            "text": "心理師問個案為什麼會這樣想。",
+            "evidence": [
+              3
+            ],
+            "status": "supported",
+            "support": 0.57,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "INTERACTION",
+            "text": "心理師說明沒有辦法只用一個網路測驗判斷是否有憂鬱症，今天先聽個案實際的狀況。",
+            "evidence": [
+              7
+            ],
+            "status": "supported",
+            "support": 0.87,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "INTERACTION",
+            "text": "心理師反映個案還是每天去上班這點。",
+            "evidence": [
+              10
+            ],
+            "status": "supported",
+            "support": 0.8,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "INTERACTION",
+            "text": "心理師問除了食慾和提不起勁，還有其他在意的地方。",
+            "evidence": [
+              12
+            ],
+            "status": "supported",
+            "support": 0.94,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "FORMULATION",
+            "text": "待心理師填寫",
+            "evidence": [],
+            "status": "unsupported",
+            "support": 0.0,
+            "reason": "這一欄由心理師填寫：請把「待心理師填寫」改寫成您的內容，或刪除這一句",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "NEXT",
+            "text": "待心理師填寫",
+            "evidence": [],
+            "status": "unsupported",
+            "support": 0.0,
+            "reason": "這一欄由心理師填寫：請把「待心理師填寫」改寫成您的內容，或刪除這一句",
+            "must_confirm": false,
+            "source": "transcript"
+          }
+        ],
+        "forbidden_words": [
+          {
+            "kind": "diagnosis",
+            "word": "憂鬱症",
+            "sentence": "個案表示這兩個禮拜一直在想，是不是得了憂鬱症。",
+            "section": "TOPIC",
+            "quoted_in_cited_lines": true,
+            "verifier_passed": true
+          },
+          {
+            "kind": "diagnosis",
+            "word": "憂鬱症",
+            "sentence": "個案表示在網路上做了一個測驗，結果說可能有憂鬱症，看了很害怕。",
+            "section": "TOPIC",
+            "quoted_in_cited_lines": true,
+            "verifier_passed": true
+          },
+          {
+            "kind": "diagnosis",
+            "word": "憂鬱症",
+            "sentence": "心理師說明沒有辦法只用一個網路測驗判斷是否有憂鬱症，今天先聽個案實際的狀況。",
+            "section": "INTERACTION",
+            "quoted_in_cited_lines": true,
+            "verifier_passed": true
+          }
+        ],
+        "pattern_hits": [],
+        "coverage": [
+          {
+            "id": "M1",
+            "fact": "個案在網路上做測驗，結果讓個案擔心自己有憂鬱症，感到害怕",
+            "segments": [
+              4
+            ],
+            "covered": true
+          },
+          {
+            "id": "M2",
+            "fact": "個案這個月食慾較差，早餐常常沒吃",
+            "segments": [
+              8
+            ],
+            "covered": true
+          },
+          {
+            "id": "M3",
+            "fact": "個案沒有請過假，仍每天上班",
+            "segments": [
+              11
+            ],
+            "covered": false
+          },
+          {
+            "id": "M4",
+            "fact": "個案擔心父親的看法（父親說心理問題是意志力不夠）",
+            "segments": [
+              15
+            ],
+            "covered": false
+          },
+          {
+            "id": "M5",
+            "fact": "心理師說明不能只靠網路測驗判斷，約定這週記錄睡眠與食慾",
+            "segments": [
+              7,
+              18
+            ],
+            "covered": true
+          }
+        ],
+        "recap_voice": null,
+        "counts": {
+          "sentences": 12,
+          "forbidden_unquoted": 0,
+          "forbidden_quoted": 3,
+          "pattern_hits": 0,
+          "pattern_hits_passed_verifier": 0,
+          "facts": 5,
+          "facts_covered": 3
+        }
+      }
+    },
+    {
+      "session_id": "G002-S01",
+      "input_mode": "session",
+      "traps": [
+        "diagnosis",
+        "therapist-tentative"
+      ],
+      "engine": "openai-compat:qwen3-32b-awq",
+      "template_id": "QUAL",
+      "seconds": 14.48,
+      "timings_ms": {
+        "asr": 0.1,
+        "writer": 14462.9,
+        "verifier": 3.5
+      },
+      "llm_calls": 1,
+      "prompt_tokens": 1388,
+      "completion_tokens": 364,
+      "warnings": [],
+      "verification": {
+        "total": 12,
+        "supported": 10,
+        "weak": 0,
+        "unsupported": 2,
+        "supported_ratio": 0.833,
+        "must_confirm": 0,
+        "ready_to_sign": false,
+        "verifier_version": "2026.11-8",
+        "llm_failed": false,
+        "warnings": []
+      },
+      "checks": {
+        "sentences": [
+          {
+            "section": "TOPIC",
+            "text": "個案表示還是一樣，一緊張就心跳很快，手會抖。",
+            "evidence": [
+              2
+            ],
+            "status": "supported",
+            "support": 1.0,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "TOPIC",
+            "text": "個案表示主要是要上台報告的前一天，還有主管叫我進辦公室的時候。",
+            "evidence": [
+              6
+            ],
+            "status": "supported",
+            "support": 1.0,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "TOPIC",
+            "text": "個案表示其他時間還好，回家看影集就不會。",
+            "evidence": [
+              7
+            ],
+            "status": "supported",
+            "support": 1.0,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "TOPIC",
+            "text": "個案表示這週三報告的時候我手抖到拿不穩簡報筆。",
+            "evidence": [
+              9
+            ],
+            "status": "supported",
+            "support": 1.0,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "TOPIC",
+            "text": "個案表示我把筆放在桌上，深呼吸了幾次，就講完了。",
+            "evidence": [
+              11
+            ],
+            "status": "supported",
+            "support": 1.0,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "INTERACTION",
+            "text": "心理師這週有比較好一點嗎？",
+            "evidence": [
+              1
+            ],
+            "status": "supported",
+            "support": 1.0,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "INTERACTION",
+            "text": "心理師聽起來有點像焦慮症的樣子，不過這只是我隨口講，還需要更完整的評估才知道。",
+            "evidence": [
+              3
+            ],
+            "status": "supported",
+            "support": 1.0,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "INTERACTION",
+            "text": "心理師我們先不貼標籤，先看你什麼時候會這樣。",
+            "evidence": [
+              5
+            ],
+            "status": "supported",
+            "support": 1.0,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "INTERACTION",
+            "text": "心理師所以大部分是在特定場合出現。",
+            "evidence": [
+              8
+            ],
+            "status": "supported",
+            "support": 1.0,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "INTERACTION",
+            "text": "心理師你當下有做了一些調整。",
+            "evidence": [
+              12
+            ],
+            "status": "supported",
+            "support": 1.0,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "FORMULATION",
+            "text": "待心理師填寫",
+            "evidence": [],
+            "status": "unsupported",
+            "support": 0.0,
+            "reason": "這一欄由心理師填寫：請把「待心理師填寫」改寫成您的內容，或刪除這一句",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "NEXT",
+            "text": "待心理師填寫",
+            "evidence": [],
+            "status": "unsupported",
+            "support": 0.0,
+            "reason": "這一欄由心理師填寫：請把「待心理師填寫」改寫成您的內容，或刪除這一句",
+            "must_confirm": false,
+            "source": "transcript"
+          }
+        ],
+        "forbidden_words": [
+          {
+            "kind": "diagnosis",
+            "word": "焦慮症",
+            "sentence": "心理師聽起來有點像焦慮症的樣子，不過這只是我隨口講，還需要更完整的評估才知道。",
+            "section": "INTERACTION",
+            "quoted_in_cited_lines": true,
+            "verifier_passed": true
+          }
+        ],
+        "pattern_hits": [
+          {
+            "id": "N1",
+            "kind": "diagnosis",
+            "claim": "把心理師隨口提到的焦慮症寫成個案的診斷或心理師的判斷",
+            "sentence": "心理師聽起來有點像焦慮症的樣子，不過這只是我隨口講，還需要更完整的評估才知道。",
+            "status": "supported",
+            "verifier_passed": true
+          }
+        ],
+        "coverage": [
+          {
+            "id": "M1",
+            "fact": "個案一緊張就心跳很快、手會抖，主要發生在上台報告前一天和被主管叫進辦公室時",
+            "segments": [
+              6
+            ],
+            "covered": true
+          },
+          {
+            "id": "M2",
+            "fact": "個案這週三報告時手抖到拿不穩簡報筆，把筆放桌上並深呼吸幾次後講完",
+            "segments": [
+              9,
+              11
+            ],
+            "covered": true
+          },
+          {
+            "id": "M3",
+            "fact": "心理師帶個案練習吸氣四秒、吐氣六秒的呼吸，並請個案每天睡前練習五分鐘",
+            "segments": [
+              14,
+              16
+            ],
+            "covered": false
+          },
+          {
+            "id": "M4",
+            "fact": "下週三同一時間再來",
+            "segments": [
+              17
+            ],
+            "covered": false
+          }
+        ],
+        "recap_voice": null,
+        "counts": {
+          "sentences": 12,
+          "forbidden_unquoted": 0,
+          "forbidden_quoted": 1,
+          "pattern_hits": 1,
+          "pattern_hits_passed_verifier": 1,
+          "facts": 4,
+          "facts_covered": 2
+        }
+      }
+    },
+    {
+      "session_id": "G003-S01",
+      "input_mode": "session",
+      "traps": [
+        "risk-passive",
+        "risk-grading"
+      ],
+      "engine": "openai-compat:qwen3-32b-awq",
+      "template_id": "QUAL",
+      "seconds": 21.52,
+      "timings_ms": {
+        "asr": 0.1,
+        "writer": 20387.1,
+        "verifier": 1121.5
+      },
+      "llm_calls": 2,
+      "prompt_tokens": 1706,
+      "completion_tokens": 540,
+      "warnings": [],
+      "verification": {
+        "total": 17,
+        "supported": 12,
+        "weak": 2,
+        "unsupported": 3,
+        "supported_ratio": 0.706,
+        "must_confirm": 2,
+        "ready_to_sign": false,
+        "verifier_version": "2026.11-8",
+        "llm_failed": false,
+        "warnings": []
+      },
+      "checks": {
+        "sentences": [
+          {
+            "section": "TOPIC",
+            "text": "個案表示比較沒力氣，很多事情都不想做。",
+            "evidence": [
+              2
+            ],
+            "status": "supported",
+            "support": 1.0,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "TOPIC",
+            "text": "個案表示有時候晚上躺著會想，如果就這樣消失不見也好。",
+            "evidence": [
+              3
+            ],
+            "status": "supported",
+            "support": 1.0,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "TOPIC",
+            "text": "個案表示不是真的想死，只是不想再面對。",
+            "evidence": [
+              5
+            ],
+            "status": "supported",
+            "support": 1.0,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "TOPIC",
+            "text": "個案表示這個想法一個星期大概出現兩三次，都是在晚上很累的時候。",
+            "evidence": [
+              9
+            ],
+            "status": "unsupported",
+            "support": 0.54,
+            "reason": "數字「一」不在引用的逐字稿中",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "TOPIC",
+            "text": "個案表示還是會上班，也會去爬山。",
+            "evidence": [
+              18
+            ],
+            "status": "supported",
+            "support": 1.0,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "INTERACTION",
+            "text": "心理師提問今天感覺怎麼樣。",
+            "evidence": [
+              1
+            ],
+            "status": "supported",
+            "support": 0.75,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "INTERACTION",
+            "text": "心理師提議確認是否有想過要傷害自己。",
+            "evidence": [
+              6
+            ],
+            "status": "supported",
+            "support": 0.54,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "INTERACTION",
+            "text": "心理師提問這個想法出現時會做什麼。",
+            "evidence": [
+              10
+            ],
+            "status": "weak",
+            "support": 0.33,
+            "reason": "本機模型判斷引用段落不足以支持此句",
+            "must_confirm": true,
+            "source": "transcript"
+          },
+          {
+            "section": "INTERACTION",
+            "text": "心理師觀察到姐姐是一個支持個案的人。",
+            "evidence": [
+              12
+            ],
+            "status": "supported",
+            "support": 0.73,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "INTERACTION",
+            "text": "心理師提議一起寫一張卡片，放上姐姐的電話和這裡的聯絡方式。",
+            "evidence": [
+              16
+            ],
+            "status": "supported",
+            "support": 0.91,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "SAFETY",
+            "text": "個案表示有時候會想消失不見。",
+            "evidence": [
+              3
+            ],
+            "status": "supported",
+            "support": 0.75,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "SAFETY",
+            "text": "個案表示沒有想過方法，也沒有計畫。",
+            "evidence": [
+              7
+            ],
+            "status": "supported",
+            "support": 1.0,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "SAFETY",
+            "text": "個案表示出現這個想法時會打電話給姐姐，講一講就會好一點。",
+            "evidence": [
+              11
+            ],
+            "status": "supported",
+            "support": 0.62,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "SAFETY",
+            "text": "個案表示願意在想法變強時說出來，也會跟姐姐說。",
+            "evidence": [
+              15
+            ],
+            "status": "weak",
+            "support": 0.38,
+            "reason": "本機模型判斷引用段落不足以支持此句",
+            "must_confirm": true,
+            "source": "transcript"
+          },
+          {
+            "section": "SAFETY",
+            "text": "心理師提議寫一張卡片，放上姐姐的電話和這裡的聯絡方式。",
+            "evidence": [
+              16
+            ],
+            "status": "supported",
+            "support": 0.9,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "FORMULATION",
+            "text": "待心理師填寫",
+            "evidence": [],
+            "status": "unsupported",
+            "support": 0.0,
+            "reason": "這一欄由心理師填寫：請把「待心理師填寫」改寫成您的內容，或刪除這一句",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "NEXT",
+            "text": "待心理師填寫",
+            "evidence": [],
+            "status": "unsupported",
+            "support": 0.0,
+            "reason": "這一欄由心理師填寫：請把「待心理師填寫」改寫成您的內容，或刪除這一句",
+            "must_confirm": false,
+            "source": "transcript"
+          }
+        ],
+        "forbidden_words": [],
+        "pattern_hits": [],
+        "coverage": [
+          {
+            "id": "M1",
+            "fact": "個案有時晚上躺著會想「消失不見也好」",
+            "segments": [
+              3
+            ],
+            "covered": true
+          },
+          {
+            "id": "M2",
+            "fact": "個案說不是真的想死，只是不想再面對",
+            "segments": [
+              5
+            ],
+            "covered": true
+          },
+          {
+            "id": "M3",
+            "fact": "個案說沒有想過方法，也沒有計畫",
+            "segments": [
+              7,
+              6
+            ],
+            "covered": true
+          },
+          {
+            "id": "M4",
+            "fact": "這個想法一週約出現兩三次，都在晚上很累時",
+            "segments": [
+              9
+            ],
+            "covered": true
+          },
+          {
+            "id": "M5",
+            "fact": "個案會打電話給姐姐，願意告訴心理師與姐姐；心理師與個案一起寫了聯絡卡片",
+            "segments": [
+              11,
+              15,
+              16
+            ],
+            "covered": true
+          }
+        ],
+        "recap_voice": null,
+        "counts": {
+          "sentences": 17,
+          "forbidden_unquoted": 0,
+          "forbidden_quoted": 0,
+          "pattern_hits": 0,
+          "pattern_hits_passed_verifier": 0,
+          "facts": 5,
+          "facts_covered": 5
+        }
+      }
+    },
+    {
+      "session_id": "G004-S01",
+      "input_mode": "session",
+      "traps": [
+        "risk-explicit",
+        "risk-grading"
+      ],
+      "engine": "openai-compat:qwen3-32b-awq",
+      "template_id": "QUAL",
+      "seconds": 17.23,
+      "timings_ms": {
+        "asr": 0.1,
+        "writer": 17214.8,
+        "verifier": 4.9
+      },
+      "llm_calls": 1,
+      "prompt_tokens": 1537,
+      "completion_tokens": 428,
+      "warnings": [],
+      "verification": {
+        "total": 14,
+        "supported": 12,
+        "weak": 0,
+        "unsupported": 2,
+        "supported_ratio": 0.857,
+        "must_confirm": 0,
+        "ready_to_sign": false,
+        "verifier_version": "2026.11-8",
+        "llm_failed": false,
+        "warnings": []
+      },
+      "checks": {
+        "sentences": [
+          {
+            "section": "TOPIC",
+            "text": "個案表示這週很糟，跟前女友徹底分手了。",
+            "evidence": [
+              2
+            ],
+            "status": "supported",
+            "support": 1.0,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "TOPIC",
+            "text": "個案表示覺得生活沒有什麼意義了。",
+            "evidence": [
+              4
+            ],
+            "status": "supported",
+            "support": 1.0,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "INTERACTION",
+            "text": "心理師表示今天你看起來很疲倦，最近怎麼樣？",
+            "evidence": [
+              1
+            ],
+            "status": "supported",
+            "support": 0.86,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "INTERACTION",
+            "text": "心理師表示聽到你這週經歷了分手。",
+            "evidence": [
+              3
+            ],
+            "status": "supported",
+            "support": 0.8,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "INTERACTION",
+            "text": "心理師表示我想直接問你，你有想過結束自己的生命嗎？",
+            "evidence": [
+              5
+            ],
+            "status": "supported",
+            "support": 0.88,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "INTERACTION",
+            "text": "心理師表示有想過怎麼做嗎？",
+            "evidence": [
+              7
+            ],
+            "status": "supported",
+            "support": 0.75,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "INTERACTION",
+            "text": "心理師表示感謝你願意告訴我，這件事很重要。你現在有想要馬上這麼做嗎？",
+            "evidence": [
+              11
+            ],
+            "status": "supported",
+            "support": 0.88,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "SAFETY",
+            "text": "個案表示有，我這幾天都在想。",
+            "evidence": [
+              6
+            ],
+            "status": "supported",
+            "support": 1.0,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "SAFETY",
+            "text": "個案表示我想過在這個週末，把家裡的安眠藥一次吃完。",
+            "evidence": [
+              8
+            ],
+            "status": "supported",
+            "support": 1.0,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "SAFETY",
+            "text": "個案表示那些藥現在在哪裡？在我床頭的抽屜裡，大概有一整瓶。",
+            "evidence": [
+              10
+            ],
+            "status": "supported",
+            "support": 0.6,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "SAFETY",
+            "text": "個案表示現在不會，因為我還想把貓安頓好。",
+            "evidence": [
+              12
+            ],
+            "status": "supported",
+            "support": 1.0,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "SAFETY",
+            "text": "心理師表示你有沒有可以暫時幫忙保管藥的人？",
+            "evidence": [
+              15
+            ],
+            "status": "supported",
+            "support": 0.87,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "FORMULATION",
+            "text": "待心理師填寫",
+            "evidence": [],
+            "status": "unsupported",
+            "support": 0.0,
+            "reason": "這一欄由心理師填寫：請把「待心理師填寫」改寫成您的內容，或刪除這一句",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "NEXT",
+            "text": "待心理師填寫",
+            "evidence": [],
+            "status": "unsupported",
+            "support": 0.0,
+            "reason": "這一欄由心理師填寫：請把「待心理師填寫」改寫成您的內容，或刪除這一句",
+            "must_confirm": false,
+            "source": "transcript"
+          }
+        ],
+        "forbidden_words": [],
+        "pattern_hits": [],
+        "coverage": [
+          {
+            "id": "M1",
+            "fact": "個案這幾天都在想結束自己的生命",
+            "segments": [
+              6
+            ],
+            "covered": true
+          },
+          {
+            "id": "M2",
+            "fact": "個案說想過在這個週末把安眠藥一次吃完，藥在床頭抽屜裡約一整瓶",
+            "segments": [
+              8,
+              10
+            ],
+            "covered": true
+          },
+          {
+            "id": "M3",
+            "fact": "個案說現在不會馬上這麼做，因為還想把貓安頓好",
+            "segments": [
+              12
+            ],
+            "covered": true
+          },
+          {
+            "id": "M4",
+            "fact": "哥哥今晚七點到個案家取走藥物，心理師與個案一起打電話給哥哥",
+            "segments": [
+              17,
+              16,
+              20
+            ],
+            "covered": false
+          },
+          {
+            "id": "M5",
+            "fact": "心理師與個案一起寫安全計畫；心理師明天會打電話關心，下週一再會談",
+            "segments": [
+              21,
+              23
+            ],
+            "covered": false
+          }
+        ],
+        "recap_voice": null,
+        "counts": {
+          "sentences": 14,
+          "forbidden_unquoted": 0,
+          "forbidden_quoted": 0,
+          "pattern_hits": 0,
+          "pattern_hits_passed_verifier": 0,
+          "facts": 5,
+          "facts_covered": 3
+        }
+      }
+    },
+    {
+      "session_id": "G005-S01",
+      "input_mode": "session",
+      "traps": [
+        "risk-denial",
+        "subject-trap",
+        "negation"
+      ],
+      "engine": "openai-compat:qwen3-32b-awq",
+      "template_id": "QUAL",
+      "seconds": 21.3,
+      "timings_ms": {
+        "asr": 0.1,
+        "writer": 19294.8,
+        "verifier": 1991.1
+      },
+      "llm_calls": 2,
+      "prompt_tokens": 1798,
+      "completion_tokens": 534,
+      "warnings": [],
+      "verification": {
+        "total": 14,
+        "supported": 5,
+        "weak": 1,
+        "unsupported": 8,
+        "supported_ratio": 0.357,
+        "must_confirm": 1,
+        "ready_to_sign": false,
+        "verifier_version": "2026.11-8",
+        "llm_failed": false,
+        "warnings": []
+      },
+      "checks": {
+        "sentences": [
+          {
+            "section": "TOPIC",
+            "text": "個案表示大學同學阿豪去年十月自殺過世，很久沒聯絡，感到自責沒有多問他一句。",
+            "evidence": [
+              2,
+              4
+            ],
+            "status": "supported",
+            "support": 0.5,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "TOPIC",
+            "text": "個案表示阿豪的生日到了，讓她很難過。",
+            "evidence": [
+              6
+            ],
+            "status": "unsupported",
+            "support": 0.5,
+            "reason": "代名詞「她」不在引用的逐字稿中，請確認指的是誰",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "TOPIC",
+            "text": "個案表示難過時會去跑步或找朋友小琪聊天，小琪也認識阿豪，會一起回憶他。",
+            "evidence": [
+              10,
+              12
+            ],
+            "status": "supported",
+            "support": 0.44,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "TOPIC",
+            "text": "個案表示這週睡眠還可以，只有生日那一天晚上睡不著，吃飯正常。",
+            "evidence": [
+              14,
+              15
+            ],
+            "status": "unsupported",
+            "support": 0.64,
+            "reason": "時間詞「這週」不在引用的逐字稿中",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "TOPIC",
+            "text": "個案表示下個月阿豪的忌日如果讓她難受，想跟小琪一起去看他。",
+            "evidence": [
+              17
+            ],
+            "status": "unsupported",
+            "support": 0.35,
+            "reason": "代名詞「她」不在引用的逐字稿中，請確認指的是誰",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "INTERACTION",
+            "text": "心理師提問個案這週的狀況，並詢問是否因為阿豪的過世而有自傷或自殺的想法。",
+            "evidence": [
+              1,
+              7
+            ],
+            "status": "unsupported",
+            "support": 0.07,
+            "reason": "本機模型判斷引用段落不足以支持此句",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "INTERACTION",
+            "text": "心理師反映個案的感受，表示遺憾並鼓勵她多說一點。",
+            "evidence": [
+              3,
+              5
+            ],
+            "status": "unsupported",
+            "support": 0.27,
+            "reason": "代名詞「她」不在引用的逐字稿中，請確認指的是誰",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "INTERACTION",
+            "text": "心理師肯定跑步和找小琪聊天對個案有幫助。",
+            "evidence": [
+              11
+            ],
+            "status": "supported",
+            "support": 0.85,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "INTERACTION",
+            "text": "心理師詢問睡眠和飲食狀況。",
+            "evidence": [
+              13
+            ],
+            "status": "unsupported",
+            "support": 0.12,
+            "reason": "本機模型判斷引用段落不足以支持此句",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "INTERACTION",
+            "text": "心理師提議下次再聊聊忌日的安排。",
+            "evidence": [
+              18
+            ],
+            "status": "weak",
+            "support": 0.45,
+            "reason": "本機模型判斷引用段落不足以支持此句",
+            "must_confirm": true,
+            "source": "transcript"
+          },
+          {
+            "section": "SAFETY",
+            "text": "個案表示沒有想過傷害自己。",
+            "evidence": [
+              8
+            ],
+            "status": "supported",
+            "support": 0.86,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "SAFETY",
+            "text": "個案表示難過時會去跑步或找朋友小琪聊天。",
+            "evidence": [
+              10
+            ],
+            "status": "supported",
+            "support": 0.79,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "FORMULATION",
+            "text": "待心理師填寫",
+            "evidence": [],
+            "status": "unsupported",
+            "support": 0.0,
+            "reason": "這一欄由心理師填寫：請把「待心理師填寫」改寫成您的內容，或刪除這一句",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "NEXT",
+            "text": "待心理師填寫",
+            "evidence": [],
+            "status": "unsupported",
+            "support": 0.0,
+            "reason": "這一欄由心理師填寫：請把「待心理師填寫」改寫成您的內容，或刪除這一句",
+            "must_confirm": false,
+            "source": "transcript"
+          }
+        ],
+        "forbidden_words": [],
+        "pattern_hits": [],
+        "coverage": [
+          {
+            "id": "M1",
+            "fact": "個案的大學同學阿豪去年十月自殺過世，個案自責沒有多問他一句",
+            "segments": [
+              4
+            ],
+            "covered": true
+          },
+          {
+            "id": "M2",
+            "fact": "個案說從來沒有想過要傷害自己，只是很難過",
+            "segments": [
+              8,
+              7
+            ],
+            "covered": true
+          },
+          {
+            "id": "M3",
+            "fact": "個案難過時會去跑步或找小琪聊天",
+            "segments": [
+              10
+            ],
+            "covered": true
+          },
+          {
+            "id": "M4",
+            "fact": "睡眠還可以，只有阿豪生日那天晚上睡不著",
+            "segments": [
+              14
+            ],
+            "covered": true
+          },
+          {
+            "id": "M5",
+            "fact": "個案想在下個月忌日與小琪一起去看他",
+            "segments": [
+              17,
+              16
+            ],
+            "covered": true
+          }
+        ],
+        "recap_voice": null,
+        "counts": {
+          "sentences": 14,
+          "forbidden_unquoted": 0,
+          "forbidden_quoted": 0,
+          "pattern_hits": 0,
+          "pattern_hits_passed_verifier": 0,
+          "facts": 5,
+          "facts_covered": 5
+        }
+      }
+    },
+    {
+      "session_id": "G006-S01",
+      "input_mode": "session",
+      "traps": [
+        "scale-guessing"
+      ],
+      "engine": "openai-compat:qwen3-32b-awq",
+      "template_id": "QUAL",
+      "seconds": 18.98,
+      "timings_ms": {
+        "asr": 0.1,
+        "writer": 18244.2,
+        "verifier": 724.7
+      },
+      "llm_calls": 2,
+      "prompt_tokens": 1569,
+      "completion_tokens": 476,
+      "warnings": [],
+      "verification": {
+        "total": 15,
+        "supported": 8,
+        "weak": 1,
+        "unsupported": 6,
+        "supported_ratio": 0.533,
+        "must_confirm": 1,
+        "ready_to_sign": false,
+        "verifier_version": "2026.11-8",
+        "llm_failed": false,
+        "warnings": []
+      },
+      "checks": {
+        "sentences": [
+          {
+            "section": "TOPIC",
+            "text": "個案表示如果要打分數的話，今天心情大概六分，十分是最好。",
+            "evidence": [
+              2
+            ],
+            "status": "unsupported",
+            "support": 0.7,
+            "reason": "時間詞「今天」不在引用的逐字稿中",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "TOPIC",
+            "text": "個案表示上週心情大概四分左右，所以這週有好一點。",
+            "evidence": [
+              4
+            ],
+            "status": "unsupported",
+            "support": 0.65,
+            "reason": "時間詞「這週」不在引用的逐字稿中",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "TOPIC",
+            "text": "個案表示讓心情降到四分的是上週跟室友吵架，整個禮拜都很煩。",
+            "evidence": [
+              8
+            ],
+            "status": "unsupported",
+            "support": 0.59,
+            "reason": "數字「四」不在引用的逐字稿中",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "TOPIC",
+            "text": "個案表示這週心情上升到六分，是因為跟室友講開了，室友說會把東西收好。",
+            "evidence": [
+              10
+            ],
+            "status": "unsupported",
+            "support": 0.32,
+            "reason": "時間詞「這週」不在引用的逐字稿中",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "TOPIC",
+            "text": "個案表示焦慮大概七成，主要是煩要不要搬家。",
+            "evidence": [
+              12
+            ],
+            "status": "supported",
+            "support": 0.79,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "INTERACTION",
+            "text": "心理師問今天心情大概怎麼樣。",
+            "evidence": [
+              1
+            ],
+            "status": "supported",
+            "support": 0.89,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "INTERACTION",
+            "text": "心理師問六分比上週如何。",
+            "evidence": [
+              3
+            ],
+            "status": "supported",
+            "support": 0.57,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "INTERACTION",
+            "text": "心理師指出這是個案自己的感覺評分，不是正式的量表。",
+            "evidence": [
+              5
+            ],
+            "status": "supported",
+            "support": 0.88,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "INTERACTION",
+            "text": "心理師問讓心情降到四分的是什麼事。",
+            "evidence": [
+              7
+            ],
+            "status": "supported",
+            "support": 0.67,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "INTERACTION",
+            "text": "心理師問這週為什麼心情上升到六分。",
+            "evidence": [
+              9
+            ],
+            "status": "supported",
+            "support": 0.67,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "INTERACTION",
+            "text": "心理師問搬家的決定什麼時候要做。",
+            "evidence": [
+              13
+            ],
+            "status": "supported",
+            "support": 0.91,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "INTERACTION",
+            "text": "心理師提議這週來列一下留下和搬走各自的好處。",
+            "evidence": [
+              15
+            ],
+            "status": "supported",
+            "support": 0.88,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "INTERACTION",
+            "text": "心理師建議個案回去寫寫看，並約定下次帶來一起看。",
+            "evidence": [
+              17
+            ],
+            "status": "weak",
+            "support": 0.31,
+            "reason": "本機模型判斷引用段落不足以支持此句",
+            "must_confirm": true,
+            "source": "transcript"
+          },
+          {
+            "section": "FORMULATION",
+            "text": "待心理師填寫",
+            "evidence": [],
+            "status": "unsupported",
+            "support": 0.0,
+            "reason": "這一欄由心理師填寫：請把「待心理師填寫」改寫成您的內容，或刪除這一句",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "NEXT",
+            "text": "待心理師填寫",
+            "evidence": [],
+            "status": "unsupported",
+            "support": 0.0,
+            "reason": "這一欄由心理師填寫：請把「待心理師填寫」改寫成您的內容，或刪除這一句",
+            "must_confirm": false,
+            "source": "transcript"
+          }
+        ],
+        "forbidden_words": [],
+        "pattern_hits": [],
+        "coverage": [
+          {
+            "id": "M1",
+            "fact": "個案自評今天心情大約六分（十分最好），上週約四分，個案說只是隨便抓的數字",
+            "segments": [
+              2,
+              5
+            ],
+            "covered": true
+          },
+          {
+            "id": "M2",
+            "fact": "個案上週與室友吵架，整週很煩；後來談開了",
+            "segments": [
+              8,
+              10
+            ],
+            "covered": true
+          },
+          {
+            "id": "M3",
+            "fact": "個案說焦慮大約七成，主要在煩要不要搬家，房東要求月底前答覆",
+            "segments": [
+              12,
+              14
+            ],
+            "covered": true
+          },
+          {
+            "id": "M4",
+            "fact": "心理師請個案列出留下與搬走的好處，下次帶來一起看",
+            "segments": [
+              15,
+              17
+            ],
+            "covered": true
+          }
+        ],
+        "recap_voice": null,
+        "counts": {
+          "sentences": 15,
+          "forbidden_unquoted": 0,
+          "forbidden_quoted": 0,
+          "pattern_hits": 0,
+          "pattern_hits_passed_verifier": 0,
+          "facts": 4,
+          "facts_covered": 4
+        }
+      }
+    },
+    {
+      "session_id": "G007-S01",
+      "input_mode": "session",
+      "traps": [
+        "negation"
+      ],
+      "engine": "openai-compat:qwen3-32b-awq",
+      "template_id": "QUAL",
+      "seconds": 16.13,
+      "timings_ms": {
+        "asr": 0.1,
+        "writer": 14624.0,
+        "verifier": 1495.0
+      },
+      "llm_calls": 2,
+      "prompt_tokens": 1677,
+      "completion_tokens": 402,
+      "warnings": [],
+      "verification": {
+        "total": 13,
+        "supported": 11,
+        "weak": 0,
+        "unsupported": 2,
+        "supported_ratio": 0.846,
+        "must_confirm": 0,
+        "ready_to_sign": false,
+        "verifier_version": "2026.11-8",
+        "llm_failed": false,
+        "warnings": []
+      },
+      "checks": {
+        "sentences": [
+          {
+            "section": "TOPIC",
+            "text": "個案表示沒有失眠，只是比較晚睡，大概都十二點多才睡。",
+            "evidence": [
+              2
+            ],
+            "status": "supported",
+            "support": 1.0,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "TOPIC",
+            "text": "個案表示睡著就一覺到天亮，不會醒來。",
+            "evidence": [
+              4
+            ],
+            "status": "supported",
+            "support": 1.0,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "TOPIC",
+            "text": "個案表示不是每天都累，主要是開會很多的那兩天。",
+            "evidence": [
+              6
+            ],
+            "status": "supported",
+            "support": 1.0,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "TOPIC",
+            "text": "個案表示從來不喝酒，咖啡一天一杯而已。",
+            "evidence": [
+              8
+            ],
+            "status": "supported",
+            "support": 1.0,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "TOPIC",
+            "text": "個案表示沒有出現過恐慌的感覺，只是有時候會有點悶。",
+            "evidence": [
+              10
+            ],
+            "status": "supported",
+            "support": 0.5,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "INTERACTION",
+            "text": "心理師詢問這週睡眠情況。",
+            "evidence": [
+              1
+            ],
+            "status": "supported",
+            "support": 0.43,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "INTERACTION",
+            "text": "心理師詢問睡著後的情況。",
+            "evidence": [
+              3
+            ],
+            "status": "supported",
+            "support": 0.14,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "INTERACTION",
+            "text": "心理師詢問白天是否會很累。",
+            "evidence": [
+              5
+            ],
+            "status": "supported",
+            "support": 0.38,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "INTERACTION",
+            "text": "心理師詢問飲食和喝酒情況。",
+            "evidence": [
+              7
+            ],
+            "status": "supported",
+            "support": 0.5,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "INTERACTION",
+            "text": "心理師提議下次練習如何跟主管開口。",
+            "evidence": [
+              20
+            ],
+            "status": "supported",
+            "support": 0.58,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "SAFETY",
+            "text": "個案表示從來不喝酒，咖啡一天一杯而已。",
+            "evidence": [
+              8
+            ],
+            "status": "supported",
+            "support": 1.0,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "FORMULATION",
+            "text": "待心理師填寫",
+            "evidence": [],
+            "status": "unsupported",
+            "support": 0.0,
+            "reason": "這一欄由心理師填寫：請把「待心理師填寫」改寫成您的內容，或刪除這一句",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "NEXT",
+            "text": "待心理師填寫",
+            "evidence": [],
+            "status": "unsupported",
+            "support": 0.0,
+            "reason": "這一欄由心理師填寫：請把「待心理師填寫」改寫成您的內容，或刪除這一句",
+            "must_confirm": false,
+            "source": "transcript"
+          }
+        ],
+        "forbidden_words": [],
+        "pattern_hits": [
+          {
+            "id": "N3",
+            "kind": "negation",
+            "claim": "把沒有恐慌寫成有恐慌",
+            "sentence": "個案表示沒有出現過恐慌的感覺，只是有時候會有點悶。",
+            "status": "supported",
+            "verifier_passed": true
+          }
+        ],
+        "coverage": [
+          {
+            "id": "M1",
+            "fact": "個案說沒有失眠，只是比較晚睡（約十二點多），睡著後一覺到天亮",
+            "segments": [
+              2
+            ],
+            "covered": true
+          },
+          {
+            "id": "M2",
+            "fact": "個案不是每天都累，主要是開會多的那兩天",
+            "segments": [
+              6
+            ],
+            "covered": true
+          },
+          {
+            "id": "M3",
+            "fact": "個案從來不喝酒，咖啡一天一杯",
+            "segments": [
+              8
+            ],
+            "covered": true
+          },
+          {
+            "id": "M4",
+            "fact": "個案沒有恐慌的情況，只是有時有點悶，幾分鐘就過",
+            "segments": [
+              10
+            ],
+            "covered": true
+          },
+          {
+            "id": "M5",
+            "fact": "個案不是不想和同事吃飯，是中午想一個人休息",
+            "segments": [
+              14
+            ],
+            "covered": false
+          },
+          {
+            "id": "M6",
+            "fact": "個案不是對工作沒有興趣，是專案太雜，想請主管排優先順序",
+            "segments": [
+              17,
+              19
+            ],
+            "covered": false
+          }
+        ],
+        "recap_voice": null,
+        "counts": {
+          "sentences": 13,
+          "forbidden_unquoted": 0,
+          "forbidden_quoted": 0,
+          "pattern_hits": 1,
+          "pattern_hits_passed_verifier": 1,
+          "facts": 6,
+          "facts_covered": 4
+        }
+      }
+    },
+    {
+      "session_id": "G008-S01",
+      "input_mode": "session",
+      "traps": [
+        "time-words"
+      ],
+      "engine": "openai-compat:qwen3-32b-awq",
+      "template_id": "QUAL",
+      "seconds": 17.59,
+      "timings_ms": {
+        "asr": 0.1,
+        "writer": 14344.6,
+        "verifier": 3235.4
+      },
+      "llm_calls": 2,
+      "prompt_tokens": 1908,
+      "completion_tokens": 440,
+      "warnings": [],
+      "verification": {
+        "total": 12,
+        "supported": 7,
+        "weak": 2,
+        "unsupported": 3,
+        "supported_ratio": 0.583,
+        "must_confirm": 2,
+        "ready_to_sign": false,
+        "verifier_version": "2026.11-8",
+        "llm_failed": false,
+        "warnings": []
+      },
+      "checks": {
+        "sentences": [
+          {
+            "section": "TOPIC",
+            "text": "個案表示上週六跟弟弟談了租屋的事，弟弟答應下個月開始分擔一半房租。",
+            "evidence": [
+              2
+            ],
+            "status": "supported",
+            "support": 0.76,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "TOPIC",
+            "text": "個案表示三年前弟弟曾答應還卡費但沒有做到。",
+            "evidence": [
+              4
+            ],
+            "status": "weak",
+            "support": 0.4,
+            "reason": "本機模型判斷引用段落不足以支持此句",
+            "must_confirm": true,
+            "source": "transcript"
+          },
+          {
+            "section": "TOPIC",
+            "text": "個案表示這次要弟弟寫在紙上，以避免重蹈覆轍。",
+            "evidence": [
+              8
+            ],
+            "status": "weak",
+            "support": 0.33,
+            "reason": "本機模型判斷引用段落不足以支持此句",
+            "must_confirm": true,
+            "source": "transcript"
+          },
+          {
+            "section": "TOPIC",
+            "text": "個案表示這週五會和房東簽新約，但文件尚未整理。",
+            "evidence": [
+              10,
+              12
+            ],
+            "status": "supported",
+            "support": 0.31,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "TOPIC",
+            "text": "個案表示今天晚上會準備身分證影本和存摺。",
+            "evidence": [
+              13
+            ],
+            "status": "supported",
+            "support": 0.71,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "INTERACTION",
+            "text": "心理師提問上週談租屋後的進展。",
+            "evidence": [
+              1
+            ],
+            "status": "supported",
+            "support": 0.3,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "INTERACTION",
+            "text": "心理師反映三年前發生的事。",
+            "evidence": [
+              5
+            ],
+            "status": "supported",
+            "support": 0.5,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "INTERACTION",
+            "text": "心理師反映個案對弟弟是否會履行承諾的擔憂。",
+            "evidence": [
+              7
+            ],
+            "status": "supported",
+            "support": 0.0,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "INTERACTION",
+            "text": "心理師提問接下來的安排。",
+            "evidence": [
+              9
+            ],
+            "status": "supported",
+            "support": 0.43,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "INTERACTION",
+            "text": "心理師恭喜個案即將轉正職。",
+            "evidence": [
+              18
+            ],
+            "status": "unsupported",
+            "support": 0.17,
+            "reason": "本機模型判斷引用段落不足以支持此句",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "FORMULATION",
+            "text": "待心理師填寫",
+            "evidence": [],
+            "status": "unsupported",
+            "support": 0.0,
+            "reason": "這一欄由心理師填寫：請把「待心理師填寫」改寫成您的內容，或刪除這一句",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "NEXT",
+            "text": "待心理師填寫",
+            "evidence": [],
+            "status": "unsupported",
+            "support": 0.0,
+            "reason": "這一欄由心理師填寫：請把「待心理師填寫」改寫成您的內容，或刪除這一句",
+            "must_confirm": false,
+            "source": "transcript"
+          }
+        ],
+        "forbidden_words": [],
+        "pattern_hits": [],
+        "coverage": [
+          {
+            "id": "M1",
+            "fact": "個案上週六與弟弟談過，弟弟答應下個月開始分擔一半房租",
+            "segments": [
+              2
+            ],
+            "covered": true
+          },
+          {
+            "id": "M2",
+            "fact": "三年前個案替弟弟還過約兩萬的卡費，弟弟說會還但一直沒有",
+            "segments": [
+              6
+            ],
+            "covered": false
+          },
+          {
+            "id": "M3",
+            "fact": "個案要弟弟這次寫在紙上；這週五兩人一起去房東那裡簽新約",
+            "segments": [
+              8,
+              10
+            ],
+            "covered": true
+          },
+          {
+            "id": "M4",
+            "fact": "個案今天晚上會準備身分證影本與存摺",
+            "segments": [
+              13
+            ],
+            "covered": true
+          },
+          {
+            "id": "M5",
+            "fact": "個案去年底換工作，下個月底轉正職；下週要健檢",
+            "segments": [
+              15,
+              17,
+              19
+            ],
+            "covered": false
+          },
+          {
+            "id": "M6",
+            "fact": "下週三再繼續",
+            "segments": [
+              20
+            ],
+            "covered": false
+          }
+        ],
+        "recap_voice": null,
+        "counts": {
+          "sentences": 12,
+          "forbidden_unquoted": 0,
+          "forbidden_quoted": 0,
+          "pattern_hits": 0,
+          "pattern_hits_passed_verifier": 0,
+          "facts": 6,
+          "facts_covered": 3
+        }
+      }
+    },
+    {
+      "session_id": "G009-S01",
+      "input_mode": "session",
+      "traps": [
+        "speaker-paraphrase",
+        "therapist-misquote"
+      ],
+      "engine": "openai-compat:qwen3-32b-awq",
+      "template_id": "QUAL",
+      "seconds": 16.89,
+      "timings_ms": {
+        "asr": 0.1,
+        "writer": 14891.9,
+        "verifier": 1987.7
+      },
+      "llm_calls": 2,
+      "prompt_tokens": 1835,
+      "completion_tokens": 420,
+      "warnings": [],
+      "verification": {
+        "total": 12,
+        "supported": 7,
+        "weak": 0,
+        "unsupported": 5,
+        "supported_ratio": 0.583,
+        "must_confirm": 0,
+        "ready_to_sign": false,
+        "verifier_version": "2026.11-8",
+        "llm_failed": false,
+        "warnings": []
+      },
+      "checks": {
+        "sentences": [
+          {
+            "section": "TOPIC",
+            "text": "個案表示這週主管又當著大家的面改她的簡報。",
+            "evidence": [
+              2
+            ],
+            "status": "supported",
+            "support": 1.0,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "TOPIC",
+            "text": "個案表示不是覺得自己沒用，而是覺得很不被尊重。",
+            "evidence": [
+              4
+            ],
+            "status": "supported",
+            "support": 0.86,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "TOPIC",
+            "text": "個案表示主管沒有先跟她說就修改簡報。",
+            "evidence": [
+              6
+            ],
+            "status": "unsupported",
+            "support": 0.36,
+            "reason": "代名詞「她」不在引用的逐字稿中，請確認指的是誰",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "TOPIC",
+            "text": "個案表示她沒有說要離職，只是想要主管改變做法。",
+            "evidence": [
+              8
+            ],
+            "status": "unsupported",
+            "support": 0.8,
+            "reason": "代名詞「她」不在引用的逐字稿中，請確認指的是誰",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "TOPIC",
+            "text": "個案表示她這週有跟主管約十五分鐘，想當面講。",
+            "evidence": [
+              14
+            ],
+            "status": "supported",
+            "support": 1.0,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "INTERACTION",
+            "text": "心理師提問關於上次提到的主管開會事件這週是否有發生什麼。",
+            "evidence": [
+              1
+            ],
+            "status": "supported",
+            "support": 0.48,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "INTERACTION",
+            "text": "心理師糾正自己記錯個案的感受，並承認是不被尊重。",
+            "evidence": [
+              5
+            ],
+            "status": "supported",
+            "support": 0.31,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "INTERACTION",
+            "text": "心理師確認個案想要的是主管先跟她溝通。",
+            "evidence": [
+              9
+            ],
+            "status": "unsupported",
+            "support": 0.55,
+            "reason": "代名詞「她」不在引用的逐字稿中，請確認指的是誰",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "INTERACTION",
+            "text": "心理師提議練習個案與主管溝通的開頭方式。",
+            "evidence": [
+              17
+            ],
+            "status": "supported",
+            "support": 0.15,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "INTERACTION",
+            "text": "心理師給予個案溝通方式的回饋，認為說法很清楚、尊重對方。",
+            "evidence": [
+              19
+            ],
+            "status": "supported",
+            "support": 0.37,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "FORMULATION",
+            "text": "待心理師填寫",
+            "evidence": [],
+            "status": "unsupported",
+            "support": 0.0,
+            "reason": "這一欄由心理師填寫：請把「待心理師填寫」改寫成您的內容，或刪除這一句",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "NEXT",
+            "text": "待心理師填寫",
+            "evidence": [],
+            "status": "unsupported",
+            "support": 0.0,
+            "reason": "這一欄由心理師填寫：請把「待心理師填寫」改寫成您的內容，或刪除這一句",
+            "must_confirm": false,
+            "source": "transcript"
+          }
+        ],
+        "forbidden_words": [],
+        "pattern_hits": [
+          {
+            "id": "N1",
+            "kind": "speaker",
+            "claim": "把心理師的轉述（沒用）寫成個案說的",
+            "sentence": "個案表示不是覺得自己沒用，而是覺得很不被尊重。",
+            "status": "supported",
+            "verifier_passed": true
+          }
+        ],
+        "coverage": [
+          {
+            "id": "M1",
+            "fact": "主管當著大家的面改個案的簡報，個案覺得不被尊重（不是覺得自己沒用）",
+            "segments": [
+              2,
+              4
+            ],
+            "covered": true
+          },
+          {
+            "id": "M2",
+            "fact": "個案說沒有說要離職，只是希望主管改變做法",
+            "segments": [
+              8
+            ],
+            "covered": true
+          },
+          {
+            "id": "M3",
+            "fact": "個案說自己上次說的是「我會很生氣」",
+            "segments": [
+              12
+            ],
+            "covered": false
+          },
+          {
+            "id": "M4",
+            "fact": "個案約了主管十五分鐘，主管答應週四下午兩點",
+            "segments": [
+              14,
+              16
+            ],
+            "covered": true
+          },
+          {
+            "id": "M5",
+            "fact": "心理師與個案練習開場；個案的開場說法",
+            "segments": [
+              17,
+              18
+            ],
+            "covered": true
+          }
+        ],
+        "recap_voice": null,
+        "counts": {
+          "sentences": 12,
+          "forbidden_unquoted": 0,
+          "forbidden_quoted": 0,
+          "pattern_hits": 1,
+          "pattern_hits_passed_verifier": 1,
+          "facts": 5,
+          "facts_covered": 4
+        }
+      }
+    },
+    {
+      "session_id": "G010-S01",
+      "input_mode": "session",
+      "traps": [
+        "speaker-quote",
+        "client-quotes-parent"
+      ],
+      "engine": "openai-compat:qwen3-32b-awq",
+      "template_id": "QUAL",
+      "seconds": 15.79,
+      "timings_ms": {
+        "asr": 0.1,
+        "writer": 14674.7,
+        "verifier": 1101.6
+      },
+      "llm_calls": 2,
+      "prompt_tokens": 1686,
+      "completion_tokens": 394,
+      "warnings": [],
+      "verification": {
+        "total": 12,
+        "supported": 7,
+        "weak": 1,
+        "unsupported": 4,
+        "supported_ratio": 0.583,
+        "must_confirm": 1,
+        "ready_to_sign": false,
+        "verifier_version": "2026.11-8",
+        "llm_failed": false,
+        "warnings": []
+      },
+      "checks": {
+        "sentences": [
+          {
+            "section": "TOPIC",
+            "text": "個案表示這週有回家看爸媽，週日回去吃飯。",
+            "evidence": [
+              2
+            ],
+            "status": "unsupported",
+            "support": 0.38,
+            "reason": "時間詞「這週」不在引用的逐字稿中",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "TOPIC",
+            "text": "個案表示媽媽說「你就是太懶，才會一直找不到工作」。",
+            "evidence": [
+              3
+            ],
+            "status": "supported",
+            "support": 0.85,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "TOPIC",
+            "text": "個案表示聽到這句話時心裡很難受，但什麼都沒說。",
+            "evidence": [
+              5
+            ],
+            "status": "supported",
+            "support": 0.5,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "TOPIC",
+            "text": "個案表示不同意媽媽說的，並提到這半年投了四十幾份履歷。",
+            "evidence": [
+              7
+            ],
+            "status": "supported",
+            "support": 0.6,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "TOPIC",
+            "text": "個案表示清楚自己有努力，但一直沒有面試的機會。",
+            "evidence": [
+              9
+            ],
+            "status": "weak",
+            "support": 0.5,
+            "reason": "本機模型判斷引用段落不足以支持此句",
+            "must_confirm": true,
+            "source": "transcript"
+          },
+          {
+            "section": "INTERACTION",
+            "text": "心理師詢問個案聽到媽媽說「你就是太懶」時的反應。",
+            "evidence": [
+              4
+            ],
+            "status": "unsupported",
+            "support": 0.17,
+            "reason": "本機模型判斷引用段落不足以支持此句",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "INTERACTION",
+            "text": "心理師詢問個案是否同意媽媽說的。",
+            "evidence": [
+              6
+            ],
+            "status": "supported",
+            "support": 0.56,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "INTERACTION",
+            "text": "心理師反映個案清楚自己有努力。",
+            "evidence": [
+              8
+            ],
+            "status": "supported",
+            "support": 0.75,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "INTERACTION",
+            "text": "心理師詢問個案對爸爸說「隨便你」的理解。",
+            "evidence": [
+              11
+            ],
+            "status": "supported",
+            "support": 0.5,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "INTERACTION",
+            "text": "心理師提議個案試試看把今天的感受用一兩句話寫下來。",
+            "evidence": [
+              18
+            ],
+            "status": "supported",
+            "support": 0.89,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "FORMULATION",
+            "text": "待心理師填寫",
+            "evidence": [],
+            "status": "unsupported",
+            "support": 0.0,
+            "reason": "這一欄由心理師填寫：請把「待心理師填寫」改寫成您的內容，或刪除這一句",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "NEXT",
+            "text": "待心理師填寫",
+            "evidence": [],
+            "status": "unsupported",
+            "support": 0.0,
+            "reason": "這一欄由心理師填寫：請把「待心理師填寫」改寫成您的內容，或刪除這一句",
+            "must_confirm": false,
+            "source": "transcript"
+          }
+        ],
+        "forbidden_words": [],
+        "pattern_hits": [],
+        "coverage": [
+          {
+            "id": "M1",
+            "fact": "個案週日回家吃飯，母親說個案太懶才找不到工作；個案當下沒說話但很難受",
+            "segments": [
+              3,
+              5
+            ],
+            "covered": true
+          },
+          {
+            "id": "M2",
+            "fact": "個案不同意母親的說法，這半年投了四十幾份履歷",
+            "segments": [
+              7
+            ],
+            "covered": true
+          },
+          {
+            "id": "M3",
+            "fact": "父親只說「隨便你」，個案不確定是放棄還是不想吵架",
+            "segments": [
+              10,
+              12
+            ],
+            "covered": false
+          },
+          {
+            "id": "M4",
+            "fact": "哥哥說可以去他公司幫忙，個案不想靠他，想靠自己找到工作",
+            "segments": [
+              15,
+              17
+            ],
+            "covered": false
+          },
+          {
+            "id": "M5",
+            "fact": "心理師請個案這週把感受寫成一兩句話，下週再看",
+            "segments": [
+              18,
+              20
+            ],
+            "covered": true
+          }
+        ],
+        "recap_voice": null,
+        "counts": {
+          "sentences": 12,
+          "forbidden_unquoted": 0,
+          "forbidden_quoted": 0,
+          "pattern_hits": 0,
+          "pattern_hits_passed_verifier": 0,
+          "facts": 5,
+          "facts_covered": 3
+        }
+      }
+    },
+    {
+      "session_id": "G011-S01",
+      "input_mode": "recap",
+      "traps": [
+        "recap",
+        "diagnosis",
+        "voice",
+        "negation"
+      ],
+      "engine": "openai-compat:qwen3-32b-awq",
+      "template_id": "QUAL",
+      "seconds": 19.53,
+      "timings_ms": {
+        "asr": 0.1,
+        "writer": 19514.9,
+        "verifier": 4.2
+      },
+      "llm_calls": 1,
+      "prompt_tokens": 1421,
+      "completion_tokens": 473,
+      "warnings": [],
+      "verification": {
+        "total": 14,
+        "supported": 12,
+        "weak": 0,
+        "unsupported": 2,
+        "supported_ratio": 0.857,
+        "must_confirm": 0,
+        "ready_to_sign": false,
+        "verifier_version": "2026.11-8",
+        "llm_failed": false,
+        "warnings": []
+      },
+      "checks": {
+        "sentences": [
+          {
+            "section": "TOPIC",
+            "text": "心理師口述：個案這週睡眠比上週差，說是因為搬家前一晚都在打包。",
+            "evidence": [
+              2
+            ],
+            "status": "supported",
+            "support": 1.0,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "TOPIC",
+            "text": "心理師口述：個案提到新家離公司比較遠，通勤要一個小時。",
+            "evidence": [
+              3
+            ],
+            "status": "supported",
+            "support": 1.0,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "TOPIC",
+            "text": "心理師口述：個案說下週五要跟房東辦退租手續。",
+            "evidence": [
+              7
+            ],
+            "status": "supported",
+            "support": 1.0,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "TOPIC",
+            "text": "心理師口述：個案不是不想搬，是對新環境還不熟悉。",
+            "evidence": [
+              8
+            ],
+            "status": "supported",
+            "support": 1.0,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "TOPIC",
+            "text": "心理師口述：個案提到三年前換過一次城市生活，當時也花了半年才適應。",
+            "evidence": [
+              12
+            ],
+            "status": "supported",
+            "support": 1.0,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "INTERACTION",
+            "text": "心理師口述：我這次有問，個案回答沒有。",
+            "evidence": [
+              4
+            ],
+            "status": "supported",
+            "support": 1.0,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "INTERACTION",
+            "text": "心理師口述：這次晤談我做了正念呼吸的練習，帶個案做了三分鐘。",
+            "evidence": [
+              9
+            ],
+            "status": "supported",
+            "support": 1.0,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "INTERACTION",
+            "text": "心理師口述：個案練習之後說肩膀有放鬆一點。",
+            "evidence": [
+              10
+            ],
+            "status": "supported",
+            "support": 1.0,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "INTERACTION",
+            "text": "心理師口述：我請個案這週每天記錄入睡時間。",
+            "evidence": [
+              11
+            ],
+            "status": "supported",
+            "support": 1.0,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "INTERACTION",
+            "text": "心理師口述：下週二同一時間再約。",
+            "evidence": [
+              14
+            ],
+            "status": "supported",
+            "support": 1.0,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "SAFETY",
+            "text": "心理師口述：個案沒有提到想傷害自己，我這次有問，個案回答沒有。",
+            "evidence": [
+              4
+            ],
+            "status": "supported",
+            "support": 1.0,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "SAFETY",
+            "text": "心理師口述：個案這週沒有喝酒，也沒有請假。",
+            "evidence": [
+              13
+            ],
+            "status": "supported",
+            "support": 1.0,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "FORMULATION",
+            "text": "待心理師填寫",
+            "evidence": [],
+            "status": "unsupported",
+            "support": 0.0,
+            "reason": "這一欄由心理師填寫：請把「待心理師填寫」改寫成您的內容，或刪除這一句",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "NEXT",
+            "text": "待心理師填寫",
+            "evidence": [],
+            "status": "unsupported",
+            "support": 0.0,
+            "reason": "這一欄由心理師填寫：請把「待心理師填寫」改寫成您的內容，或刪除這一句",
+            "must_confirm": false,
+            "source": "transcript"
+          }
+        ],
+        "forbidden_words": [],
+        "pattern_hits": [
+          {
+            "id": "N2",
+            "kind": "voice",
+            "claim": "用「個案表示／個案說／個案提到」把口述記成個案直接說的話",
+            "sentence": "心理師口述：個案提到新家離公司比較遠，通勤要一個小時。",
+            "status": "supported",
+            "verifier_passed": true
+          },
+          {
+            "id": "N2",
+            "kind": "voice",
+            "claim": "用「個案表示／個案說／個案提到」把口述記成個案直接說的話",
+            "sentence": "心理師口述：個案說下週五要跟房東辦退租手續。",
+            "status": "supported",
+            "verifier_passed": true
+          },
+          {
+            "id": "N2",
+            "kind": "voice",
+            "claim": "用「個案表示／個案說／個案提到」把口述記成個案直接說的話",
+            "sentence": "心理師口述：個案提到三年前換過一次城市生活，當時也花了半年才適應。",
+            "status": "supported",
+            "verifier_passed": true
+          }
+        ],
+        "coverage": [
+          {
+            "id": "M1",
+            "fact": "心理師口述：個案這週睡眠比上週差，原因是搬家前一晚在打包",
+            "segments": [
+              2
+            ],
+            "covered": true
+          },
+          {
+            "id": "M2",
+            "fact": "心理師口述：新家離公司較遠，通勤要一個小時",
+            "segments": [
+              3
+            ],
+            "covered": true
+          },
+          {
+            "id": "M3",
+            "fact": "心理師口述：個案沒有提到想傷害自己，心理師詢問後個案回答沒有",
+            "segments": [
+              4
+            ],
+            "covered": true
+          },
+          {
+            "id": "M4",
+            "fact": "心理師口述：個案下週五要辦退租手續；個案不是不想搬，是對新環境不熟",
+            "segments": [
+              7,
+              8
+            ],
+            "covered": true
+          },
+          {
+            "id": "M5",
+            "fact": "心理師帶個案做三分鐘正念呼吸，並請個案這週每天記錄入睡時間；下週二再約",
+            "segments": [
+              9,
+              11,
+              14
+            ],
+            "covered": true
+          }
+        ],
+        "recap_voice": {
+          "client_voice_sentences": [],
+          "not_dictation_voice": [
+            "待心理師填寫",
+            "待心理師填寫"
+          ]
+        },
+        "counts": {
+          "sentences": 14,
+          "forbidden_unquoted": 0,
+          "forbidden_quoted": 0,
+          "pattern_hits": 3,
+          "pattern_hits_passed_verifier": 3,
+          "facts": 5,
+          "facts_covered": 5
+        }
+      }
+    },
+    {
+      "session_id": "G012-S01",
+      "input_mode": "recap",
+      "traps": [
+        "recap",
+        "risk-passive",
+        "scale-guessing",
+        "speaker-quote"
+      ],
+      "engine": "openai-compat:qwen3-32b-awq",
+      "template_id": "QUAL",
+      "seconds": 16.82,
+      "timings_ms": {
+        "asr": 0.1,
+        "writer": 16813.3,
+        "verifier": 4.3
+      },
+      "llm_calls": 1,
+      "prompt_tokens": 1409,
+      "completion_tokens": 409,
+      "warnings": [],
+      "verification": {
+        "total": 12,
+        "supported": 10,
+        "weak": 0,
+        "unsupported": 2,
+        "supported_ratio": 0.833,
+        "must_confirm": 0,
+        "ready_to_sign": false,
+        "verifier_version": "2026.11-8",
+        "llm_failed": false,
+        "warnings": []
+      },
+      "checks": {
+        "sentences": [
+          {
+            "section": "TOPIC",
+            "text": "心理師口述：個案提到有時候會想消失，但沒有想過方法，也沒有計畫。",
+            "evidence": [
+              2
+            ],
+            "status": "supported",
+            "support": 1.0,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "TOPIC",
+            "text": "心理師口述：個案說自己的情緒大概五分。",
+            "evidence": [
+              3
+            ],
+            "status": "supported",
+            "support": 1.0,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "TOPIC",
+            "text": "心理師口述：個案的母親說個案「太敏感」，個案說聽了很不舒服。",
+            "evidence": [
+              4
+            ],
+            "status": "supported",
+            "support": 1.0,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "TOPIC",
+            "text": "心理師口述：個案不同意母親的說法。",
+            "evidence": [
+              5
+            ],
+            "status": "supported",
+            "support": 1.0,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "TOPIC",
+            "text": "心理師口述：個案提到上個月曾經跟前男友見面一次，之後心情不太好。",
+            "evidence": [
+              8
+            ],
+            "status": "supported",
+            "support": 1.0,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "INTERACTION",
+            "text": "心理師口述：我反映了個案的感受，也問個案接下來想怎麼處理。",
+            "evidence": [
+              9
+            ],
+            "status": "supported",
+            "support": 1.0,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "INTERACTION",
+            "text": "心理師口述：我提供了社區心理諮詢專線的資訊，個案收下了。",
+            "evidence": [
+              11
+            ],
+            "status": "supported",
+            "support": 1.0,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "INTERACTION",
+            "text": "心理師口述：我自己覺得個案的風險不高，但這是我的主觀感覺，沒有正式評估。",
+            "evidence": [
+              13
+            ],
+            "status": "supported",
+            "support": 1.0,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "SAFETY",
+            "text": "心理師口述：個案提到有時候會想消失，但沒有想過方法，也沒有計畫。",
+            "evidence": [
+              2
+            ],
+            "status": "supported",
+            "support": 1.0,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "SAFETY",
+            "text": "心理師口述：個案這週沒有喝酒，也沒有吃安眠藥。",
+            "evidence": [
+              12
+            ],
+            "status": "supported",
+            "support": 1.0,
+            "reason": "",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "FORMULATION",
+            "text": "待心理師填寫",
+            "evidence": [],
+            "status": "unsupported",
+            "support": 0.0,
+            "reason": "這一欄由心理師填寫：請把「待心理師填寫」改寫成您的內容，或刪除這一句",
+            "must_confirm": false,
+            "source": "transcript"
+          },
+          {
+            "section": "NEXT",
+            "text": "待心理師填寫",
+            "evidence": [],
+            "status": "unsupported",
+            "support": 0.0,
+            "reason": "這一欄由心理師填寫：請把「待心理師填寫」改寫成您的內容，或刪除這一句",
+            "must_confirm": false,
+            "source": "transcript"
+          }
+        ],
+        "forbidden_words": [
+          {
+            "kind": "risk_grade",
+            "word": "風險不高",
+            "sentence": "心理師口述：我自己覺得個案的風險不高，但這是我的主觀感覺，沒有正式評估。",
+            "section": "INTERACTION",
+            "quoted_in_cited_lines": true,
+            "verifier_passed": true
+          }
+        ],
+        "pattern_hits": [
+          {
+            "id": "N1",
+            "kind": "risk_level",
+            "claim": "把心理師的主觀感覺（風險不高）寫成風險等級或評估",
+            "sentence": "心理師口述：我自己覺得個案的風險不高，但這是我的主觀感覺，沒有正式評估。",
+            "status": "supported",
+            "verifier_passed": true
+          },
+          {
+            "id": "N3",
+            "kind": "voice",
+            "claim": "用「個案表示／個案說／個案提到」把口述記成個案直接說的話",
+            "sentence": "心理師口述：個案提到有時候會想消失，但沒有想過方法，也沒有計畫。",
+            "status": "supported",
+            "verifier_passed": true
+          },
+          {
+            "id": "N3",
+            "kind": "voice",
+            "claim": "用「個案表示／個案說／個案提到」把口述記成個案直接說的話",
+            "sentence": "心理師口述：個案說自己的情緒大概五分。",
+            "status": "supported",
+            "verifier_passed": true
+          },
+          {
+            "id": "N3",
+            "kind": "voice",
+            "claim": "用「個案表示／個案說／個案提到」把口述記成個案直接說的話",
+            "sentence": "心理師口述：個案的母親說個案「太敏感」，個案說聽了很不舒服。",
+            "status": "supported",
+            "verifier_passed": true
+          },
+          {
+            "id": "N3",
+            "kind": "voice",
+            "claim": "用「個案表示／個案說／個案提到」把口述記成個案直接說的話",
+            "sentence": "心理師口述：個案提到上個月曾經跟前男友見面一次，之後心情不太好。",
+            "status": "supported",
+            "verifier_passed": true
+          },
+          {
+            "id": "N3",
+            "kind": "voice",
+            "claim": "用「個案表示／個案說／個案提到」把口述記成個案直接說的話",
+            "sentence": "心理師口述：個案提到有時候會想消失，但沒有想過方法，也沒有計畫。",
+            "status": "supported",
+            "verifier_passed": true
+          }
+        ],
+        "coverage": [
+          {
+            "id": "M1",
+            "fact": "心理師口述：個案有時會想消失，但沒有想過方法，也沒有計畫，心理師直接問過",
+            "segments": [
+              2
+            ],
+            "covered": true
+          },
+          {
+            "id": "M2",
+            "fact": "心理師口述：個案自己說情緒大概五分，沒有使用量表",
+            "segments": [
+              3
+            ],
+            "covered": true
+          },
+          {
+            "id": "M3",
+            "fact": "心理師口述：母親說個案「太敏感」，個案聽了不舒服、不同意",
+            "segments": [
+              4,
+              5
+            ],
+            "covered": true
+          },
+          {
+            "id": "M4",
+            "fact": "心理師口述：這週個案遲到兩次，沒有請假也沒有被警告",
+            "segments": [
+              6,
+              7
+            ],
+            "covered": false
+          },
+          {
+            "id": "M5",
+            "fact": "心理師口述：個案上個月曾與前男友見面一次，之後心情不太好",
+            "segments": [
+              8
+            ],
+            "covered": true
+          },
+          {
+            "id": "M6",
+            "fact": "心理師提供社區心理諮詢專線資訊，下次約十一月十七日下午三點",
+            "segments": [
+              11,
+              14
+            ],
+            "covered": true
+          }
+        ],
+        "recap_voice": {
+          "client_voice_sentences": [],
+          "not_dictation_voice": [
+            "待心理師填寫",
+            "待心理師填寫"
+          ]
+        },
+        "counts": {
+          "sentences": 12,
+          "forbidden_unquoted": 0,
+          "forbidden_quoted": 1,
+          "pattern_hits": 6,
+          "pattern_hits_passed_verifier": 6,
+          "facts": 6,
+          "facts_covered": 5
+        }
+      }
+    }
+  ]
+}
