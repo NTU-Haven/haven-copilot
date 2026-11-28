@@ -200,10 +200,13 @@ class AudioLifecycleTest(UploadMixin, ServerCase, unittest.TestCase):
         left.write_bytes(b"audio")
         stray = files.audio_dir() / "job-stray.wav"  # a file no row names
         stray.write_bytes(b"x")
+        keep = files.audio_dir() / ".gitkeep"  # tracked by git; start-up must leave it (seen on the B70)
+        keep.write_bytes(b"")
         self.assertEqual(files.clear_temp(), 1)
         self.assertEqual(jobs.startup(), 0)
         self.assertEqual(audio.clean_orphans(), 1)
         self.assertFalse(left.exists() or stray.exists())
+        self.assertTrue(keep.exists())
         self.assertTrue((files.audio_dir() / a["storage_ref"]).is_file())
         self.assertEqual(audio.for_session("C001-S79")["status"], "available")
 

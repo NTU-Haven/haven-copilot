@@ -281,7 +281,8 @@ def clean_orphans() -> int:
         known = {r[0] for r in c.execute("SELECT storage_ref FROM audio_assets WHERE status != 'deleted'")}
     removed = 0
     for f in files.audio_dir().iterdir():
-        if f.is_file() and f.name not in known:
+        # Dotfiles are not recordings (data/audio/.gitkeep is tracked by git).
+        if f.is_file() and not f.name.startswith(".") and f.name not in known:
             try:
                 f.unlink()
                 removed += 1
